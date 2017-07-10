@@ -218,7 +218,7 @@ class RRZE_Video_Widget extends \WP_Widget {
     public function form( $instance ) {
         $title      = ! empty( $instance['title'] ) ? $instance['title'] : '';
         $id         = ! empty( $instance['id'] ) ? $instance['id'] : '';     
-        $url        = ! empty( $instance['url'] ) ? $instance['url'] : 13950;
+        $url        = ! empty( $instance['url'] ) ? $instance['url'] : '';
         $width      = ! empty( $instance['width'] ) ? $instance['width'] : 270;
         $height     = ! empty( $instance['height'] ) ? $instance['height'] : 150;
         $showtitle  = $instance['showtitle'];   
