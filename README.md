@@ -30,6 +30,7 @@ Das Plugin unterscheidet zwischen zwei Möglichkeiten Videos auf einer Seite aus
 
 ```
 [fauvideo id="398" width-video="30" showtitle="1" showinfo="0" titletag="h2"]
+```
 
 Die zweite Möglichkeit ist die Übergabe einer Url.
 
@@ -54,9 +55,9 @@ Für eine Video aus dem FAU Videoportal
 
 ```
 [fauvideo url="https://www.video.uni-erlangen.de/webplayer/id/13950" width="30" showtitle="1" showinfo="1" titletag="h4" rand="Neuigkeiten"]
-
+```
 oder
-
+```
 [fauvideo url="13950" width="30" showtitle="1" showinfo="1" titletag="h4" rand="Neuigkeiten"]
 ```
 
@@ -64,13 +65,17 @@ Für ein Youtube Video
 
 ```
 [fauvideo url="https://www.youtube.com/watch?v=DF2aRrr21-M" width="50" showtitle="1" showinfo="1" titletag="h2"]
+```
 
 oder
 
+```
 [fauvideo url="https://youtu.be/DF2aRrr21-M" width="50" showtitle="1" showinfo="1" titletag="h2"]
+```
 
 oder
 
+```
 [fauvideo url="DF2aRrr21-M" width="30" showtitle="1" showinfo="1" titletag="h2"]
 ```
 
