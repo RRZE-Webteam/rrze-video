@@ -12,7 +12,7 @@
     }
 
 });' ); ?>
-<h2 class="widget-title"><?php echo wordwrap($showtitle, 50, "<br/>") ?></h2>
+<h2 class="small"><?php echo wordwrap($showtitle, 50, "<br/>") ?></h2>
 <div class="box-widget<?php echo $box_id ?>">
     <?php if($thumbnail) {     
         //echo $picture;
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <p class="description"><?php echo (!$form_url) ? 'Beschreibung: ' . $description : '' ?></p><br/>
+                <p class="description"><?php echo (!empty($description)) ? 'Beschreibung: ' . $description : '' ?></p><br/>
                  <?php if($meta == 1) { ?>
                     <span class="meta_heading">Author: </span><span class="meta_content"><?php echo $author ?></span><br/>
                     <span class="meta_heading">Quelle: </span><span class="meta_content">

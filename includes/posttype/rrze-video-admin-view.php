@@ -9,11 +9,9 @@ function video_columns( $columns ) {
             'title'         => __( 'Title', 'rrze-video' ),
             'id'            => __( 'ID', 'rrze-video'),
             'url'           => __( 'Url', 'rrze-video' ),
-            'video'         => __( 'Video ID', 'rrze-video' ),
-            'youtube'       => __( 'Youtube ID', 'rrze-video' ),
+            'thumbnail'     => __( 'Thumbnail', 'rrze-video' ),
             'description'   => __( 'Beschreibung', 'rrze-video' ),
             'genre'         => __( 'Genre', 'rrze-video' ),
-            'thumbnail'     => __( 'Thumbnail', 'rrze-video' ),
             'date'          => __( 'Datum', 'rrze-video' ),
 	);
 

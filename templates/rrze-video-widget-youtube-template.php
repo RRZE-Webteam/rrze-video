@@ -12,7 +12,7 @@
     }
 
 });' ); ?>
-<h2 class="widget-title"><?php echo wordwrap($showtitle, 30, "<br/>") ?></h2>
+<h2 class="small"><?php echo wordwrap($showtitle, 30, "<br/>") ?></h2>
 <div class="box-widget<?php echo $box_id ?>">
    <img alt="" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"  src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/></a> <!-- width="100%" responsive  -->
     <div class="overlay-widget">
