@@ -126,7 +126,7 @@ function show_video_on_page( $atts ) {
                 $oembed_url         = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de/webplayer/id/' . $video_id . '&format=json';
                 $video_url          = json_decode(wp_remote_retrieve_body(wp_safe_remote_get($oembed_url)), true);       
                 $video_file         = $video_url['file'];
-                $preview_image      = 'https://cdn.video.uni-erlangen.de/Images/player_previews/'. ($video_id - 1) .'_preview.img';
+                $preview_image      = 'https://cdn.video.uni-erlangen.de/Images/player_previews/'. $video_id .'_preview.img';
                 $picture            = (!$thumbnail) ? $preview_image : $thumbnail;
                 $showtitle          = ($rrze_video_shortcode['showtitle'] == 1) ? $video_url['title'] : '';
                 $modaltitle         = $video_url['title'];

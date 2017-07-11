@@ -120,11 +120,11 @@ iframe {
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     text-decoration: none;
-    opacity:0.5;
+    opacity:0.7;
 }
 
 .yt-icon-widget:hover {
-    opacity:0.8;
+    opacity:1.0;
 }
 
 .mejs-container {
@@ -162,4 +162,10 @@ iframe {
 
 .description {
     margin-bottom: 0px;
+}
+
+@media (max-width: 767px) {
+  h2.small {
+    margin: 40px 0px 0px 0px !important;
+  }
 }
