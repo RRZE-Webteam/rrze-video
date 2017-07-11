@@ -4,7 +4,7 @@
 Plugin Name: RRZE Video Plugin
 Plugin URI: https://github.com/RRZE-Webteam/rrze-video
 Description: This is a video plugin to show videos on pages and in the social media footer.
-Version: 1.0.0
+Version: 1.0.1
 Author: RRZE-Webteam
 Author URI: http://blogs.fau.de/webworking/
 License: GNU GPLv2
