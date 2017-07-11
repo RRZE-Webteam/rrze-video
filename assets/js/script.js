@@ -14,7 +14,7 @@ $('.player')
         $frame.attr("src", $frame.attr("src"));
     });
     
-    $("[class*=box]").click(function() {
+    $(".yt-icon-widget").click(function() {
         $(window).scrollTop(0);
     });
 });
