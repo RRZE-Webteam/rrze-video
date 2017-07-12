@@ -17,6 +17,14 @@ $('.player')
     $(".yt-icon-widget").click(function() {
         $(window).scrollTop(0);
     });
+    
+    $(".yt-icon").click(function() {
+        $(window).scrollTop(0);
+    });
+    
+    $(".yt-icon-shortcode").click(function() {
+        $(window).scrollTop(0);
+    });
 });
 
 $(document).keyup(function(e) { 

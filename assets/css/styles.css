@@ -123,6 +123,17 @@ iframe {
     opacity:0.7;
 }
 
+.yt-icon-shortcode {
+    color: #6e7881;
+    font-size: 80px; 
+    position: absolute;
+    top: 43%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-decoration: none;
+}
+
 .yt-icon-widget:hover {
     opacity:1.0;
 }
@@ -168,4 +179,8 @@ iframe {
   h2.small {
     margin: 40px 0px 0px 0px !important;
   }
+}
+
+.colored {
+    color: #cc222b;
 }

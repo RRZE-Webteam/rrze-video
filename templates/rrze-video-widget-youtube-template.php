@@ -14,7 +14,17 @@
 });' ); ?>
 <h2 class="small"><?php echo wordwrap($showtitle, 30, "<br/>") ?></h2>
 <div class="box-widget<?php echo $box_id ?>">
-   <img alt="" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"  src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/></a> <!-- width="100%" responsive  -->
+    <?php if( $youtube_resolution == 1 ) { ?>
+    <img alt="" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/></a> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
+    <?php } elseif( $youtube_resolution == 2 ) { ?>
+    <img alt="" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/default.jpg"/></a>
+    <?php } elseif( $youtube_resolution == 3 ) { ?>
+    <img alt="" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/hqdefault.jpg"/></a>
+    <?php } elseif( $youtube_resolution == 4 ) { ?>
+    <img alt=""width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/></a>
+    <?php } else { ?>
+    <img alt="" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/sddefault.jpg"/></a>
+    <?php } ?>
     <div class="overlay-widget">
         <div class="text">
             <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">

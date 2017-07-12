@@ -48,7 +48,7 @@ function show_video_columns($column_name) {
             echo $description;
             break;
         case 'thumbnail':
-            $thumbnail = get_the_post_thumbnail($post->ID, 'thumbnail');
+            $thumbnail = get_the_post_thumbnail($post->ID,  array( 80, 45));
             echo $thumbnail;
             break;
          case 'genre':

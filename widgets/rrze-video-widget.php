@@ -39,6 +39,7 @@ class RRZE_Video_Widget extends \WP_Widget {
         $form_showtitle         = $instance['showtitle'];    
         $meta                   = $instance['meta']; 
         $taxonomy_genre         = $instance['genre'];
+        $youtube_resolution     = $instance['resolution'];
         
         $argumentsID = array(
             'post_type'         =>  'Video',
@@ -223,7 +224,8 @@ class RRZE_Video_Widget extends \WP_Widget {
         $height     = ! empty( $instance['height'] ) ? $instance['height'] : 150;
         $showtitle  = $instance['showtitle'];   
         $meta       = $instance['meta'];   
-        $genre      = $instance['genre'];   
+        $genre      = $instance['genre'];
+        $resolution = ! empty( $instance['resolution'] ) ? $instance['resolution'] : 4;
         ?>
         
          <p>
@@ -311,7 +313,29 @@ class RRZE_Video_Widget extends \WP_Widget {
         }
         ?>
         </select>                
-        </p>    
+        </p>
+        <p>
+        <label for="<?php echo $this->get_field_id( 'resolution' ); ?>"><?php _e('Auflösung des Youtube-Bildes:' ) ?></label>
+        <select class='widefat' id="<?php echo $this->get_field_id( 'resolution' ); ?>"
+        name="<?php echo $this->get_field_name( 'resolution' ); ?>" type="text">
+        <option value="" selected="selected"><?php _e('Auswählen') ?></option> 
+        <option value='1'<?php echo ( $resolution == '1' ) ? 'selected' : ''; ?>>
+            maxresultion
+          </option>
+          <option value='2'<?php echo ( $resolution == '2' ) ? 'selected' : ''; ?>>
+            default
+          </option>
+           <option value='3'<?php echo ( $resolution == '3' ) ? 'selected' : ''; ?>>
+            hqdefault
+          </option> 
+           <option value='4'<?php echo ( $resolution == '4' ) ? 'selected' : ''; ?>>
+            mqdefault
+          </option>
+           <option value='5'<?php echo ( $resolution == '5' ) ? 'selected' : ''; ?>>
+            sddefault
+          </option> 
+        </select>                
+        </p> 
         <?php
     }
 
@@ -330,6 +354,7 @@ class RRZE_Video_Widget extends \WP_Widget {
         $instance[ 'showtitle' ]    = strip_tags( $new_instance[ 'showtitle' ] );
         $instance[ 'meta' ]         = strip_tags( $new_instance[ 'meta' ] );
         $instance[ 'genre' ]        = strip_tags( $new_instance[ 'genre' ] );
+        $instance[ 'resolution' ]   = strip_tags( $new_instance[ 'resolution' ] );
         
         return $instance;
     } 

@@ -1,10 +1,22 @@
 <h3><?php echo wordwrap($showtitle, 30, "<br/>") ?></h3>
 <div class="box<?php echo $box_id ?>">
-    <img alt="" class="image_reponsive" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/></a> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
+    <?php if( $youtube_resolution == 1 ) { ?>
+    <img alt="" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/></a> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
+    <?php } elseif( $youtube_resolution == 2 ) { ?>
+    <img alt="" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/default.jpg"/></a>
+    <?php } elseif( $youtube_resolution == 3 ) { ?>
+    <img alt="" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/hqdefault.jpg"/></a>
+    <?php } elseif( $youtube_resolution == 4 ) { ?>
+    <img alt="" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/></a>
+    <?php } else { ?>
+    <img alt="" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/sddefault.jpg"/></a>
+    <?php } ?>
     <div class="overlay">
         <div class="text">
             <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
-                <span class="yt-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></span>
+                <span class="yt-icon-shortcode">
+                    <i class="fa fa-play-circle-o colored" aria-hidden="true"></i>
+                </span>
             </a>
         </div>
     </div>

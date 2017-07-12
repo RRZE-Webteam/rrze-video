@@ -14,13 +14,15 @@ function show_video_on_page( $atts ) {
         'showinfo'      => '1',
         'showtitle'     => '1',
         'titletag'      => 'h2',
+        'youtube-res'   => '1',
         'rand'          => ''
     ), $atts );
     
-    $url_shortcode      = $rrze_video_shortcode['url'];
-    $id_shortcode       = $rrze_video_shortcode['id'];
-    $width_shortcode    = $rrze_video_shortcode['width-video'];
-    $taxonomy_genre     = $rrze_video_shortcode['rand'];
+    $url_shortcode          = $rrze_video_shortcode['url'];
+    $id_shortcode           = $rrze_video_shortcode['id'];
+    $width_shortcode        = $rrze_video_shortcode['width-video'];
+    $taxonomy_genre         = $rrze_video_shortcode['rand'];
+    $youtube_resolution     = $rrze_video_shortcode['youtube-res'];
     
     $args_video = array(
         'post_type'         =>  'Video',
