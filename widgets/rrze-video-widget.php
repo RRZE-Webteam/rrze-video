@@ -286,9 +286,13 @@ class RRZE_Video_Widget extends \WP_Widget {
         </select>                
         </p>  
         
-        <?php $terms = get_terms( 'genre', array(
-                 'hide_empty' => false,
-             ) ); 
+        <?php 
+        
+        $terms = get_terms( array(
+            'taxonomy' => 'genre',
+            'hide_empty' => true,
+        ) );
+        
         ?>
         
         <p>
