@@ -1,0 +1,193 @@
+/***************************************************************************
+* base
+***************************************************************************/
+
+$color_1: black;
+$color_2: #fff;
+$color_3: #6e7881;
+$color_4: lightgray;
+$color_5: grey;
+$background_color_1: transparent;
+
+
+.rrze-video {
+    
+
+    .modal-dialog {
+            padding-top: 50%;
+    }
+    .modal-footer {
+            text-align: left;
+            color: $color_1;
+    }
+    a {
+            outline: none !important;
+    }
+    .close-modal {
+            position: absolute;
+            width: 75px;
+            height: 75px;
+            background-color: $background_color_1;
+            top: 10px;
+            right: 1px;
+            cursor: pointer;
+    }
+    .videocontent {
+            width: 100%;
+            max-width: 640px;
+            margin: 0 auto;
+    }
+    .modal-content {
+            border-radius: 0px;
+            width: 100%;
+            margin: 0 auto;
+    }
+    .center-block {
+            display: block;
+            margin-left: auto;
+            margin-right: 0;
+    }
+    iframe {
+            width: 100% !important;
+            height: 100% !important;
+    }
+    [class^=box] {
+            position: relative;
+            &:hover {
+                    .overlay {
+                            opacity: 1.0;
+                            color: $color_2;
+                    }
+            }
+    }
+    .image_responsive {
+            display: block;
+            width: 100%;
+            height: auto;
+    }
+    .overlay {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+            transition: .5s ease;
+            background-color: $background_color_1;
+            opacity: 1.0;
+    }
+    .overlay-widget {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+            transition: .5s ease;
+            background-color: $background_color_1;
+            opacity: 1.0;
+    }
+    .yt-icon {
+            color: $color_3;
+            font-size: 80px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-decoration: none;
+    }
+    .yt-icon-widget {
+            color: $color_2;
+            font-size: 80px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-decoration: none;
+            opacity: 0.7;
+            &:hover {
+                    opacity: 1.0;
+            }
+    }
+    .yt-icon-shortcode {
+            color: $color_2;
+            font-size: 80px;
+            position: absolute;
+            top: 43%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-decoration: none;
+            opacity: 0.7;
+            &:hover {
+                    opacity: 1.0;
+            }
+    }
+    .mejs-container {
+            width: 100% !important;
+            height: auto !important;
+            padding-top: 56.3%;
+    }
+    .mejs-overlay {
+            width: 100% !important;
+            height: 100% !important;
+    }
+    .mejs-poster {
+            width: 100% !important;
+            height: 100% !important;
+    }
+    .mejs-mediaelement {
+            video {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    width: 100% !important;
+                    height: 100% !important;
+            }
+    }
+    .fa.fa-times {
+            font-size: 40px;
+            padding-top: 0px;
+            padding-left: 20px;
+            color: $color_4;
+    }
+    .meta_heading {
+            font-size: 14px;
+            font-weight: bold;
+            color: $color_5;
+    }
+    .meta_content {
+            font-size: 14px;
+            color: $color_5;
+    }
+    .description {
+            margin-bottom: 0px;
+    }
+}
+@media screen and (min-width: 768px) {
+    .rrze-video {
+	.modal-dialog {
+		padding-top: 10%;
+	}
+    }    
+}
+@media (max-width: 767px) {
+    
+	
+        .rrze-video {
+            [class^=box] {
+		max-width: 100%;
+	}
+            h2.small {
+                    margin: 40px 0px 0px 0px !important;
+            }
+        }
+}

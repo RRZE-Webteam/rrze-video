@@ -1,3 +1,4 @@
+<div class="rrze-video">
 <?php  wp_enqueue_script( 'jquery' ); wp_add_inline_script( 'jquery', 
 'jQuery(document).ready(function(){ 
 
@@ -13,26 +14,28 @@
 
 });' ); ?>
 <h2 class="small"><?php echo wordwrap($showtitle, 30, "<br/>") ?></h2>
+<a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
 <div class="box-widget<?php echo $box_id ?>">
     <?php if( $youtube_resolution == 1 ) { ?>
-    <img alt="" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/></a> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
+    <img alt="" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
     <?php } elseif( $youtube_resolution == 2 ) { ?>
-    <img alt="" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/default.jpg"/></a>
+    <img alt="" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/default.jpg"/>
     <?php } elseif( $youtube_resolution == 3 ) { ?>
-    <img alt="" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/hqdefault.jpg"/></a>
+    <img alt="" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/hqdefault.jpg"/>
     <?php } elseif( $youtube_resolution == 4 ) { ?>
-    <img alt=""width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/></a>
+    <img alt=""width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
     <?php } else { ?>
-    <img alt="" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/sddefault.jpg"/></a>
+    <img alt="" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/sddefault.jpg"/>
     <?php } ?>
     <div class="overlay-widget">
         <div class="text">
-            <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
-                <span class="yt-icon-widget"><i class="fa fa-play-circle-o" aria-hidden="true"></i></span>
-            </a>
+            <span class="yt-icon-widget">
+                <i class="fa fa-play-circle-o" aria-hidden="true"></i>
+            </span>
         </div>
     </div>
-</div>  
+</div>
+</a>
 <div class="modal fade" id="videoModal<?php echo $id ?>" role="dialog" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -54,4 +57,5 @@
             </div>
         </div>
     </div>
+</div>
 </div>

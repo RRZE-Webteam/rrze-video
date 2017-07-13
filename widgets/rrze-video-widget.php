@@ -37,9 +37,9 @@ class RRZE_Video_Widget extends \WP_Widget {
         $form_url               = $instance['url'];
         $form_title             = $instance['title'];
         $form_showtitle         = $instance['showtitle'];    
-        $meta                   = $instance['meta']; 
-        $taxonomy_genre         = $instance['genre'];
-        $youtube_resolution     = $instance['resolution'];
+        $meta                   = (!empty($instance['meta'])) ? $instance['meta'] :'';
+        $taxonomy_genre         = (!empty($instance['genre'])) ? $instance['genre'] :'';
+        $youtube_resolution     = (!empty($instance['resolution'])) ? $instance['resolution'] :'';
         
         $argumentsID = array(
             'post_type'         =>  'Video',
@@ -222,10 +222,10 @@ class RRZE_Video_Widget extends \WP_Widget {
         $url        = ! empty( $instance['url'] ) ? $instance['url'] : '';
         $width      = ! empty( $instance['width'] ) ? $instance['width'] : 270;
         $height     = ! empty( $instance['height'] ) ? $instance['height'] : 150;
-        $showtitle  = $instance['showtitle'];   
-        $meta       = $instance['meta'];   
-        $genre      = $instance['genre'];
-        $resolution = ! empty( $instance['resolution'] ) ? $instance['resolution'] : 4;
+        $showtitle  = ! empty( $instance['showtitle']) ? $instance['showtitle'] : '';   
+        $meta       = ! empty( $instance['meta'] ) ? $instance['meta'] : '';   
+        $genre      = ! empty( $instance['genre'] ) ? $instance['genre'] :'';
+        $resolution = ! empty( $instance['resolution'] ) ? $instance['resolution'] : '';
         ?>
         
          <p>

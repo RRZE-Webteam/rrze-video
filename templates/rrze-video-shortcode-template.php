@@ -1,19 +1,21 @@
-<<?php echo $rrze_video_shortcode['titletag'] ?>><?php echo $showtitle ?></<?php echo $rrze_video_shortcode['titletag'] ?>>
+<div class="rrze-video">
+<<?php echo $rrze_video_shortcode['titletag'] ?>><?php echo (!empty($showtitle)) ? $showtitle : '' ?></<?php echo $rrze_video_shortcode['titletag'] ?>>
+<div><a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
 <div class="box<?php echo $box_id ?>">
-    <?php if($thumbnail) {     
+    <?php if(!empty($thumbnail)) {     
     echo '<img src="' . $thumbnail[0]  . '" width="100%"  />'; // width="100%" responsive
-    echo '</a>';
     } else { ?>
-    <img alt="<?php echo $showtitle ?>"width="100%"  src="<?php echo $picture ?>"/></a> <!-- width="100%" responsive  -->
+    <img alt="<?php echo $showtitle ?>"width="100%"  src="<?php echo $picture ?>"/> <!-- width="100%" responsive  -->
     <?php }?>
     <div class="overlay">
         <div class="text">
-            <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
-                <span class="yt-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></span>
-            </a>
+            <span class="yt-icon-shortcode">
+                <i class="fa fa-play-circle-o" aria-hidden="true"></i>
+            </span>
         </div>
     </div>
-</div>    
+</div>
+    </a></div>    
 <div class="modal fade" id="videoModal<?php echo $id ?>" role="dialog" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -40,4 +42,5 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
+</div>

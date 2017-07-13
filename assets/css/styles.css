@@ -1,3 +1,4 @@
+
 .modal-dialog {
     padding-top: 50%;
 }
@@ -78,7 +79,8 @@ iframe {
     width: 100%;
     opacity: 0;
     transition: .5s ease;
-    background-color: #d2d4d8;
+    background-color: transparent;
+    opacity: 1.0;
 }
 
 .overlay-widget {
@@ -124,7 +126,7 @@ iframe {
 }
 
 .yt-icon-shortcode {
-    color: #6e7881;
+    color: #fff;
     font-size: 80px; 
     position: absolute;
     top: 43%;
@@ -132,9 +134,14 @@ iframe {
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     text-decoration: none;
+    opacity:0.7;
 }
 
 .yt-icon-widget:hover {
+    opacity:1.0;
+}
+
+.yt-icon-shortcode:hover {
     opacity:1.0;
 }
 
@@ -179,8 +186,4 @@ iframe {
   h2.small {
     margin: 40px 0px 0px 0px !important;
   }
-}
-
-.colored {
-    color: #cc222b;
 }

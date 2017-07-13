@@ -1,3 +1,4 @@
+<div class="rrze-video">
 <?php  wp_enqueue_script( 'jquery' ); wp_add_inline_script( 'jquery', 
 'jQuery(document).ready(function(){ 
 
@@ -12,23 +13,24 @@
     }
 
 });' ); ?>
-<h2 class="small"><?php echo wordwrap($showtitle, 50, "<br/>") ?></h2>
+<h2><?php echo wordwrap($showtitle, 50, "<br/>") ?></h2>
+<a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
 <div class="box-widget<?php echo $box_id ?>">
     <?php if($thumbnail) {     
         //echo $picture;
         echo '<img src="' . $thumbnail[0]  . '" width="'. $instance['width'] . '" height="' . $instance['height']  . '"  />'; // width="100%" responsive
-        echo '</a>';
     } else { ?>
-        <img alt="<?php echo $showtitle ?>"width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"  src="<?php echo $picture ?>"/></a> <!-- width="100%" responsive  -->
+        <img alt="<?php echo $showtitle ?>"width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"  src="<?php echo $picture ?>"/> <!-- width="100%" responsive  -->
     <?php }?>
     <div class="overlay-widget">
         <div class="text">
-            <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
-                <span class="yt-icon-widget"><i class="fa fa-play-circle-o" aria-hidden="true"></i></span>
-            </a>
+            <span class="yt-icon-widget">
+                <i class="fa fa-play-circle-o" aria-hidden="true"></i>
+            </span>
         </div>
     </div>
 </div>
+</a>
 <div class="modal fade" id="videoModal<?php echo $id ?>" role="dialog" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -58,4 +60,5 @@
             </div>
         </div>
     </div>
+</div>
 </div>
