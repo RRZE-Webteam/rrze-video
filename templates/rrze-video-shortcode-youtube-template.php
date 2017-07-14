@@ -35,10 +35,15 @@
         </div>
         <div class="modal-body">
             <div class="videocontent">
+                <?php if(!$show_youtube_player) { ?>
                 <video width="640" height="360" class="player" preload="none">
                     <source type="video/youtube" src="https://www.youtube.com/watch?v=<?php echo $youtube_id ?>" />
                 </video>
-                <!-- <iframe width="1280" height="720" src=""></iframe> -->
+                <?php } else { ?>
+                <div class="embed-container">
+                    <iframe frameborder="0" allowfullscreen width="640" height="360" src="https://www.youtube.com/embed/<?php echo $youtube_id ?>?rel=0"></iframe>
+                </div>
+                <?php } ?>
             </div>
         </div>
         <div class="modal-footer">

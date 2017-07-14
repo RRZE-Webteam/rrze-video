@@ -29,6 +29,9 @@ class RRZE_Video_Widget extends \WP_Widget {
              
         global $post;
         
+        $yt_options             =   get_option('rrze_video_plugin_options');
+        $show_youtube_player    =   (!empty($yt_options['youtube_activate_checkbox'])) ? $yt_options['youtube_activate_checkbox'] : 0;
+        
         extract( $args );
         
         echo $before_widget;

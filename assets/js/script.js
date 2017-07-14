@@ -1,7 +1,11 @@
 jQuery(document).ready(function($) {
 $('.player')
     .mediaelementplayer({
-        features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen']
+        alwaysShowControls: true,
+        features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
+        iPadUseNativeControls: true,
+        iPhoneUseNativeControls: true,
+        AndroidUseNativeControls: true
     });
     
     $('body').on('hidden.bs.modal', '.modal', function() {
@@ -18,33 +22,11 @@ $('.player')
         $(window).scrollTop(0);
     });
     
-    $(document).keyup(function(e) { 
-        if (e.keyCode == 27) { 
-           $('.modal-overlay').hide();
-           $('.modal').hide();
-        } 
+     $(document).keydown(function (e) {
+        if (e.keyCode > 36 && e.keyCode < 41) {
+            $('.modal-overlay').hide();
+            $('.modal').hide();
+            $('video').trigger('pause');
+        }
     });
-
-
-    /*function autoPlayYouTubeModal() {
-         var trigger = $("body").find('[data-toggle="modal"]');
-         trigger.click(function () {
-             var theModal = $(this).data("target"),
-                 videoSRC = $(this).attr("data-theVideo"),
-                 videoSRCauto = videoSRC + "?rel=0";
-             $(theModal + ' iframe').attr('src', videoSRCauto);
-             $(theModal + ' button.close').click(function () {
-                 $(theModal + ' iframe').attr('src', videoSRC);
-             });
-         });
-     }
-    autoPlayYouTubeModal();*/
-
 });
-
-/*$(document).keyup(function(e) { 
-    if (e.keyCode == 27) { 
-       $('.modal-overlay').hide();
-       $('.modal').hide();
-    } 
-});*/

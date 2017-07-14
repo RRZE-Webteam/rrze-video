@@ -67,7 +67,7 @@ button.close { padding: 0; cursor: pointer; background: transparent; border: 0; 
 .rrze-video .videocontent { width: 100%; max-width: 640px; margin: 0 auto; }
 .rrze-video .modal-content { border-radius: 0px; width: 100%; margin: 0 auto; }
 .rrze-video .center-block { display: block; margin-left: auto; margin-right: 0; }
-.rrze-video iframe { width: 100% !important; height: 100% !important; }
+.rrze-video .player iframe { width: 100% !important; height: 100% !important; }
 .rrze-video [class^=box] { position: relative; }
 .rrze-video [class^=box]:hover .overlay { opacity: 1.0; color: #fff; }
 .rrze-video .image_responsive { display: block; width: 100%; height: auto; }
@@ -86,6 +86,9 @@ button.close { padding: 0; cursor: pointer; background: transparent; border: 0; 
 .rrze-video .meta_heading { font-size: 14px; font-weight: bold; color: grey; }
 .rrze-video .meta_content { font-size: 14px; color: grey; }
 .rrze-video .description { margin-bottom: 0px; }
+.rrze-video .embed-container { position: relative; padding-bottom: 56.25%; /* ratio 16x9 */ height: 0; overflow: hidden; width: 100%; height: auto; }
+.rrze-video .embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.rrze-video .embed-container.ratio4x3 { padding-bottom: 75%; }
 
 @media screen and (min-width: 768px) { .rrze-video .modal-dialog { padding-top: 10%; } }
 @media (max-width: 767px) { .rrze-video [class^=box] { max-width: 100%; }
