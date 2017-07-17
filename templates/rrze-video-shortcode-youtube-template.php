@@ -1,29 +1,27 @@
 <div class="rrze-video">
-<<?php echo $rrze_video_shortcode['titletag'] ?>><?php echo (!empty($showtitle)) ? $showtitle : '' ?></<?php echo $rrze_video_shortcode['titletag'] ?>>
-<div>
-    <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>" data-theVideo="https://www.youtube.com/embed/<?php echo $youtube_id ?>">
-    <div class="box<?php echo $box_id ?>">
+<?php if(!empty($showtitle)) { ?>
+<<?php echo $rrze_video_shortcode['titletag'] ?>><?php echo $showtitle ?></<?php echo $rrze_video_shortcode['titletag'] ?>>
+<?php } ?>
+    <div class="container<?php echo $box_id ?>">
+        <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>" data-theVideo="https://www.youtube.com/embed/<?php echo $youtube_id ?>">
         <?php if( $youtube_resolution == 1 ) { ?>
-        <img alt="" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
+        <img alt="Youtube Image" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
         <?php } elseif( $youtube_resolution == 2 ) { ?>
-        <img alt="" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/default.jpg"/>
+        <img alt="Youtube Image" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/default.jpg"/>
         <?php } elseif( $youtube_resolution == 3 ) { ?>
-        <img alt="" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/hqdefault.jpg"/>
+        <img alt="Youtube Image" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/hqdefault.jpg"/>
         <?php } elseif( $youtube_resolution == 4 ) { ?>
-        <img alt="" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
+        <img alt="Youtube Image" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
         <?php } else { ?>
-        <img alt="" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/sddefault.jpg"/>
+        <img alt="Youtube Image" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/sddefault.jpg"/>
         <?php } ?>
-        <div class="overlay">
-            <div class="text">
-                <span class="yt-icon-shortcode">
-                    <i class="fa fa-play-circle-o colored" aria-hidden="true"></i>
-                </span>
+        <div class="middle">
+            <div class="play-button">
+                <i class="fa fa-play-circle-o" aria-hidden="true"></i>
             </div>
         </div>
+        </a>
     </div>
-</a>
-</div>    
 <div class="modal fade is_youtube" id="videoModal<?php echo $id ?>" role="dialog" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
 <div class="modal-dialog">
     <div class="modal-content">

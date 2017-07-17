@@ -44,7 +44,7 @@ $background_color_3: transparent;
 		filter: alpha(opacity=50);
 	}
 }
-button.close {
+.close-modal {
 	padding: 0;
 	cursor: pointer;
 	background: transparent;
@@ -216,4 +216,12 @@ button.close {
 	.modal-lg {
 		width: 900px;
 	}
+}
+
+*{
+  //-webkit-backface-visibility:hidden;
+     -moz-backface-visibility:hidden;
+      -ms-backface-visibility:hidden;
+       -o-backface-visibility:hidden;
+          backface-visibility:hidden;
 }

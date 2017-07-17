@@ -11,21 +11,23 @@ function show_video_on_page( $atts ) {
     $show_youtube_player    =   (!empty($yt_options['youtube_activate_checkbox'])) ? $yt_options['youtube_activate_checkbox'] : 0;
     
     $rrze_video_shortcode = shortcode_atts( array(
-        'url'           => '',
-        'id'            => '',
-        'width-video'   => '50',
-        'showinfo'      => '1',
-        'showtitle'     => '1',
-        'titletag'      => 'h2',
-        'youtube-res'   => '1',
-        'rand'          => ''
+        'url'                   => '',
+        'id'                    => '',
+        'width'                 => '640',
+        'height'                => '360',
+        'showinfo'              => '1',
+        'showtitle'             => '1',
+        'titletag'              => 'h2',
+        'youtube-resolution'    => '1',
+        'rand'                  => ''
     ), $atts );
     
     $url_shortcode          = $rrze_video_shortcode['url'];
     $id_shortcode           = $rrze_video_shortcode['id'];
-    $width_shortcode        = $rrze_video_shortcode['width-video'];
+    $width_shortcode        = $rrze_video_shortcode['width'];
+    $height_shortcode       = $rrze_video_shortcode['height'];
     $taxonomy_genre         = $rrze_video_shortcode['rand'];
-    $youtube_resolution     = $rrze_video_shortcode['youtube-res'];
+    $youtube_resolution     = $rrze_video_shortcode['youtube-resolution'];
     
     $args_video = array(
         'post_type'         =>  'Video',
@@ -53,11 +55,29 @@ function show_video_on_page( $atts ) {
     ?>
     
     <style type="text/css" scoped="scoped">
+        
+        .rrze-video .container<?php echo $box_id ?> {
+            position: relative;
+            max-width: 100%;
+        }
+
         @media (min-width: 768px) {
-            .box<?php echo $box_id ?> {
-              max-width:<?php echo $width_shortcode .'%' ?>;
+            .rrze-video .container<?php echo $box_id ?> {
+                position: relative;
+                width: <?php echo $width_shortcode.'px'?>;
             }
         }
+
+        .rrze-video .image<?php echo $box_id ?> {
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .rrze-video .image<?php echo $box_id ?> {
+                width: <?php echo $width_shortcode.'px'?>;
+            }
+        }
+
     </style>  
     
     <?php

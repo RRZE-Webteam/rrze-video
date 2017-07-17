@@ -22,6 +22,10 @@ $('.player')
         $(window).scrollTop(0);
     });
     
+    $("[class^=container]").click(function() {
+        $(window).scrollTop(0);
+    });
+    
      $(document).keydown(function (e) {
         if (e.keyCode > 36 && e.keyCode < 41) {
             $('.modal-overlay').hide();

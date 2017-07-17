@@ -13,7 +13,7 @@
     }
 
 });' ); ?>
-<h2><?php echo wordwrap($showtitle, 50, "<br/>") ?></h2>
+<h2 class="small"><?php echo wordwrap($showtitle, 50, "<br/>") ?></h2>
 <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
 <div class="box-widget<?php echo $box_id ?>">
     <?php if($thumbnail) {     
@@ -38,7 +38,7 @@
                 <div class="close-modal" data-dismiss="modal">
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </div>
-                <h2 class="widget-title" style="color:#000;padding:<?php echo ($modaltitle) ? '30px 0px' : '20px 0px' ?>"><?php echo wordwrap($modaltitle, 30, "<br/>") ?></h2>
+                <h2 class="widget-title" style="padding:<?php echo ($modaltitle) ? '30px 0px' : '20px 0px' ?>"><?php echo wordwrap($modaltitle, 30, "<br/>") ?></h2>
             </div>
             <div class="modal-body">
                 <div class="videocontent">
