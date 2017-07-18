@@ -18,6 +18,7 @@ function show_video_on_page( $atts ) {
         'showinfo'              => '1',
         'showtitle'             => '1',
         'titletag'              => 'h2',
+        'youtube-support'       => '0',
         'youtube-resolution'    => '1',
         'rand'                  => ''
     ), $atts );
@@ -27,6 +28,7 @@ function show_video_on_page( $atts ) {
     $width_shortcode        = $rrze_video_shortcode['width'];
     $height_shortcode       = $rrze_video_shortcode['height'];
     $taxonomy_genre         = $rrze_video_shortcode['rand'];
+    $youtube_support        = $rrze_video_shortcode['youtube-support'];
     $youtube_resolution     = $rrze_video_shortcode['youtube-resolution'];
     
     $args_video = array(

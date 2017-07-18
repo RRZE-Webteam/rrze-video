@@ -3,9 +3,6 @@ $('.player')
     .mediaelementplayer({
         alwaysShowControls: true,
         features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
-        iPadUseNativeControls: true,
-        iPhoneUseNativeControls: true,
-        AndroidUseNativeControls: true
     });
     
     $('body').on('hidden.bs.modal', '.modal', function() {

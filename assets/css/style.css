@@ -98,3 +98,10 @@
 @media screen and (min-width: 768px) { .rrze-video .modal-dialog { padding-top: 10%; } }
 @media (max-width: 767px) { .rrze-video [class^=box] { max-width: 100%; }
   .rrze-video h2.small { margin: 40px 0px 0px 0px !important; } }
+.mejs-controls div.mejs-time-rail { direction: ltr; padding-top: 5px; width: 90px; }
+
+.mejs-controls .mejs-time-rail span, .mejs-controls .mejs-time-rail a { width: 80px; }
+
+@media (min-width: 360px) { .mejs-controls div.mejs-time-rail { direction: ltr; padding-top: 5px; width: 130px; } }
+@media (min-width: 400px) { .mejs-controls div.mejs-time-rail { direction: ltr; padding-top: 5px; width: 215px; } }
+@media (min-width: 768px) { .mejs-controls div.mejs-time-rail { direction: ltr; padding-top: 5px; width: 397px; } }

@@ -20,9 +20,9 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <a href="" class="close-modal" data-dismiss="modal">
+                <div class="close-modal" data-dismiss="modal">
                     <i class="fa fa-times" aria-hidden="true"></i>
-                </a>
+                </div>
                 <h2 class="modal-title" style="text-align:left;padding:<?php echo ($modaltitle) ? '30px 0px' : '20px 0px' ?>"><?php echo wordwrap((!empty($modaltitle)) ? $modaltitle : '', 30, "<br/>") ?></h2>
             </div>
             <div class="modal-body">

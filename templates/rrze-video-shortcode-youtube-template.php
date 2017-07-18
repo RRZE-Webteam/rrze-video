@@ -33,7 +33,7 @@
         </div>
         <div class="modal-body">
             <div class="videocontent">
-                <?php if(!$show_youtube_player) { ?>
+                <?php if(!$show_youtube_player and $youtube_support == 0) { ?>
                 <video width="640" height="360" class="player" preload="none">
                     <source type="video/youtube" src="https://www.youtube.com/watch?v=<?php echo $youtube_id ?>" />
                 </video>
