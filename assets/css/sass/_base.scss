@@ -12,9 +12,10 @@ $background_color_1: transparent;
 
 .rrze-video {
     
+    margin: 15px 0;
 
     .modal-dialog {
-            padding-top: 50%;
+            padding-top: 30%;
     }
     .modal-footer {
             text-align: left;
@@ -195,7 +196,7 @@ $background_color_1: transparent;
             transition: .5s ease;
             opacity: 0;
             position: absolute;
-            top: 55%;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             -ms-transform: translate(-50%, -50%);
@@ -208,6 +209,9 @@ $background_color_1: transparent;
             color: white;
             font-size: 90px;
             opacity: 0.7;
+    }
+    br,p {
+        display: none;
     }
 }
 @media screen and (min-width: 768px) {
@@ -261,7 +265,21 @@ $background_color_1: transparent;
     .mejs-controls div.mejs-time-rail {
         direction: ltr;
         padding-top: 5px;
-        width: 397px;
+        width: 395px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-title {
+       font-size: 16px;
+    }
+}
+
+@media (min-width: 768px) {
+    .rrze-video {
+        .modal-dialog {
+                padding-top: 10%;
+        }
     }
 }
 

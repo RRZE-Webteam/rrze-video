@@ -53,6 +53,7 @@ $background_color_3: transparent;
 }
 .modal-open {
 	overflow: hidden;
+        padding-right: 0 !important;
 	.modal {
 		overflow-x: hidden;
 		overflow-y: auto;

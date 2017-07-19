@@ -103,7 +103,7 @@ function custom_libraries_scripts() {
         wp_enqueue_style( 'mediaelementplayercss' );
         wp_enqueue_script( 'mediaelementplayerjs' );
         
-        if (preg_match('/^fau/i', $theme_name)) {
+        if (preg_match('/^fau/i', $theme_name) || preg_match('/^rrze/i', $theme_name)) {
             wp_enqueue_style( 'stylescss' );
         }
         

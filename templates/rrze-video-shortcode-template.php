@@ -3,17 +3,11 @@
 <<?php echo $rrze_video_shortcode['titletag'] ?>><?php echo $showtitle ?></<?php echo $rrze_video_shortcode['titletag'] ?>>
 <?php } ?>
 <div class="container<?php echo $box_id ?>">
-    <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
-    <?php if(!empty($thumbnail)) {     
-    echo '<img src="' . $thumbnail[0]  . '" alt="Youtube Image" class="image' . $box_id .'"  />';
+    <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>"><?php if(!empty($thumbnail)){echo '<img src="' . $thumbnail[0]  . '" alt="Youtube Image" class="image' . $box_id .'"  />';
     } else { ?>
     <img alt="<?php echo $showtitle ?>"  src="<?php echo $picture ?>" alt="Youtube Image" class="image<?php echo $id ?>"/>
     <?php }?>
-    <div class="middle">
-        <div class="play-button">
-            <i class="fa fa-play-circle-o" aria-hidden="true"></i>
-        </div>
-    </div>
+    <div class="middle"><div class="play-button"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div></div>
     </a>
 </div> 
 <div class="modal fade" id="videoModal<?php echo $id ?>" role="dialog" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">

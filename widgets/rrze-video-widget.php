@@ -36,10 +36,10 @@ class RRZE_Video_Widget extends \WP_Widget {
         
         echo $before_widget;
         
-        $form_id                = $instance['id'];
-        $form_url               = $instance['url'];
-        $form_title             = $instance['title'];
-        $form_showtitle         = $instance['showtitle'];    
+        $form_id                = (!empty($instance['id'])) ? $instance['id'] :'';
+        $form_url               = (!empty($instance['url'])) ? $instance['url'] :'';
+        $form_title             = (!empty($instance['title'])) ? $instance['title'] :'';
+        $form_showtitle         = (!empty($instance['showtitle'])) ? $instance['showtitle'] :'';    
         $meta                   = (!empty($instance['meta'])) ? $instance['meta'] :'';
         $taxonomy_genre         = (!empty($instance['genre'])) ? $instance['genre'] :'';
         $youtube_resolution     = (!empty($instance['resolution'])) ? $instance['resolution'] :'';

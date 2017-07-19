@@ -53,7 +53,7 @@
                     </video>
                     <?php } else { ?>
                     <div class="embed-container">
-                        <iframe frameborder="0" allowfullscreen width="640" height="360" src="https://www.youtube.com/embed/<?php echo $youtube_id ?>?rel=0"></iframe>
+                        <iframe frameborder="0" allowfullscreen width="640" height="360" src="https://www.youtube.com/embed/<?php echo $youtube_id ?>?rel=0&enablejsapi=1&origin=http://example.com"></iframe>
                     </div>
                     <?php } ?>
                 </div>

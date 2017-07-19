@@ -3,7 +3,7 @@
 <<?php echo $rrze_video_shortcode['titletag'] ?>><?php echo $showtitle ?></<?php echo $rrze_video_shortcode['titletag'] ?>>
 <?php } ?>
     <div class="container<?php echo $box_id ?>">
-        <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>" data-theVideo="https://www.youtube.com/embed/<?php echo $youtube_id ?>">
+        <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
         <?php if( $youtube_resolution == 1 ) { ?>
         <img alt="Youtube Image" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
         <?php } elseif( $youtube_resolution == 2 ) { ?>
@@ -39,7 +39,7 @@
                 </video>
                 <?php } else { ?>
                 <div class="embed-container">
-                    <iframe frameborder="0" allowfullscreen width="640" height="360" src="https://www.youtube.com/embed/<?php echo $youtube_id ?>?rel=0"></iframe>
+                    <iframe id="ytplayer" frameborder="0" allowfullscreen width="640" height="360" src="https://www.youtube.com/embed/<?php echo $youtube_id ?>?enablejsapi=1&origin=http://example.com"></iframe>
                 </div>
                 <?php } ?>
             </div>
