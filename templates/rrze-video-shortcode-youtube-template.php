@@ -1,3 +1,23 @@
+<?php
+echo '<script type="text/javascript">';
+echo 'jQuery(function($) { 
+$(document).keydown(function (e) {
+if (e.keyCode == 38) { $(".modal-overlay").hide();
+$(".modal").hide();
+$("video").trigger("pause");';
+if(!$show_youtube_player and $youtube_support == 0) {
+echo 'player = new YT.Player("ytplayer");';
+}   
+echo 'stopVideo($("#ytplayer'. $box_id . '"));}';  
+echo 'function stopVideo(player) {
+var vidSrc = player.prop("src");
+player.prop("src", "");
+player.prop("src", vidSrc);
+};
+});
+});';
+echo '</script>';
+?>
 <div class="rrze-video">
 <?php if(!empty($showtitle)) { ?>
 <<?php echo $rrze_video_shortcode['titletag'] ?>><?php echo $showtitle ?></<?php echo $rrze_video_shortcode['titletag'] ?>>
@@ -5,15 +25,15 @@
     <div class="container<?php echo $box_id ?>">
         <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
         <?php if( $youtube_resolution == 1 ) { ?>
-        <img alt="Youtube Image" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
+        <img title="Youtube Video" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
         <?php } elseif( $youtube_resolution == 2 ) { ?>
-        <img alt="Youtube Image" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/default.jpg"/>
+        <img title="Youtube Video" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/default.jpg"/>
         <?php } elseif( $youtube_resolution == 3 ) { ?>
-        <img alt="Youtube Image" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/hqdefault.jpg"/>
+        <img title="Youtube Video" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/hqdefault.jpg"/>
         <?php } elseif( $youtube_resolution == 4 ) { ?>
-        <img alt="Youtube Image" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
+        <img title="Youtube Video" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
         <?php } else { ?>
-        <img alt="Youtube Image" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/sddefault.jpg"/>
+        <img title="Youtube Video" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/sddefault.jpg"/>
         <?php } ?>
         <div class="middle">
             <div class="play-button">
@@ -39,7 +59,7 @@
                 </video>
                 <?php } else { ?>
                 <div class="embed-container">
-                    <iframe id="ytplayer" frameborder="0" allowfullscreen width="640" height="360" src="https://www.youtube.com/embed/<?php echo $youtube_id ?>?enablejsapi=1&origin=http://example.com"></iframe>
+                    <iframe id="ytplayer<?php echo $box_id ?>" frameborder="0" allowfullscreen width="640" height="360" src="https://www.youtube.com/embed/<?php echo $youtube_id ?>?enablejsapi=1&origin=http://example.com"></iframe>
                 </div>
                 <?php } ?>
             </div>

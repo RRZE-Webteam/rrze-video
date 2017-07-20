@@ -3,9 +3,9 @@
 <<?php echo $rrze_video_shortcode['titletag'] ?>><?php echo $showtitle ?></<?php echo $rrze_video_shortcode['titletag'] ?>>
 <?php } ?>
 <div class="container<?php echo $box_id ?>">
-    <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>"><?php if(!empty($thumbnail)){echo '<img src="' . $thumbnail[0]  . '" alt="Youtube Image" class="image' . $box_id .'"  />';
+    <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>"><?php if(!empty($thumbnail)){echo '<img src="' . $thumbnail[0]  . '" title="'. $video_url['title'] .'" class="image' . $box_id .'"  />';
     } else { ?>
-    <img alt="<?php echo $showtitle ?>"  src="<?php echo $picture ?>" alt="Youtube Image" class="image<?php echo $id ?>"/>
+    <img title="<?php echo $video_url['title'] ?>"  src="<?php echo $picture ?>" class="image<?php echo $id ?>"/>
     <?php }?>
     <div class="middle"><div class="play-button"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div></div>
     </a>

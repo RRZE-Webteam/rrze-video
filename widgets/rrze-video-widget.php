@@ -39,7 +39,9 @@ class RRZE_Video_Widget extends \WP_Widget {
         $form_id                = (!empty($instance['id'])) ? $instance['id'] :'';
         $form_url               = (!empty($instance['url'])) ? $instance['url'] :'';
         $form_title             = (!empty($instance['title'])) ? $instance['title'] :'';
-        $form_showtitle         = (!empty($instance['showtitle'])) ? $instance['showtitle'] :'';    
+        $form_showtitle         = (!empty($instance['showtitle'])) ? $instance['showtitle'] :''; 
+        $width                  = ! empty($instance['width'] ) ? $instance['width'] : 270;
+        $height                 = ! empty($instance['height'] ) ? $instance['height'] : 150;
         $meta                   = (!empty($instance['meta'])) ? $instance['meta'] :'';
         $taxonomy_genre         = (!empty($instance['genre'])) ? $instance['genre'] :'';
         $youtube_resolution     = (!empty($instance['resolution'])) ? $instance['resolution'] :'';
@@ -72,7 +74,7 @@ class RRZE_Video_Widget extends \WP_Widget {
         <style type="text/css" scoped="scoped">
             @media (min-width: 320px) {
                 .box-widget<?php echo $box_id ?> {
-                  max-width:<?php echo $instance['width'] .'px' ?>;
+                  max-width:<?php echo $width .'px' ?>;
                 }
             }
         </style>  
