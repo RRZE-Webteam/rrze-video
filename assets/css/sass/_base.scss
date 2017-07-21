@@ -200,7 +200,7 @@ $background_color_1: transparent;
             left: 50%;
             transform: translate(-50%, -50%);
             -ms-transform: translate(-50%, -50%);
-            opacity: 0.7;
+            opacity: 1;
     }
     .play-button:hover {
             opacity: 1;
@@ -210,9 +210,12 @@ $background_color_1: transparent;
             font-size: 90px;
             opacity: 0.7;
     }
-    br,p {
-        display: none;
+    [class^=container] {
+        br,p {
+            display:none;
+        }
     }
+   
 }
 @media screen and (min-width: 768px) {
     .rrze-video {

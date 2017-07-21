@@ -1,26 +1,12 @@
 <div class="rrze-video">
-<?php  wp_enqueue_script( 'jquery' ); wp_add_inline_script( 'jquery', 
-'jQuery(document).ready(function(){ 
-
-    if ($(window).width() >= 768){	
-
-        $( "body" ).removeClass( "is-mobile" );
-        $("video").attr({ style: "height: 360px; width: 100%;" });
-
-    } else {
-
-        $("video").attr({ style: "height: 100%; width: 100%" });
-    }
-
-});' ); ?>
 <h2 class="small"><?php echo wordwrap($showtitle, 50, "<br/>") ?></h2>
 <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
 <div class="box-widget<?php echo $box_id ?>">
     <?php if($thumbnail) {     
         //echo $picture;
-        echo '<img src="' . $thumbnail[0]  . '" width="'. $instance['width'] . '" height="' . $instance['height']  . '"  />'; // width="100%" responsive
+        echo '<img title="'. $modaltitle .'" src="' . $thumbnail[0]  . '" width="'. $instance['width'] . '" height="' . $instance['height']  . '"  />'; // width="100%" responsive
     } else { ?>
-        <img alt="<?php echo $showtitle ?>"width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"  src="<?php echo $picture ?>"/> <!-- width="100%" responsive  -->
+        <img title="<?php echo $modaltitle ?>" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"  src="<?php echo $picture ?>"/> <!-- width="100%" responsive  -->
     <?php }?>
     <div class="overlay-widget">
         <div class="text">

@@ -7,18 +7,17 @@ Die Videos können als Shortcode sowie als Widget eingebunden werden.
 
 ### __Für Umsteiger vom alten FAU-Video-Plugin auf das neue RRZE-Video-Plugin__
 
-Wird bereits das Video-Plugin "FAU-Video" auf der Webseite verwendet, so muss nach der Installation dieses Plugins der shortcode wie folgt angepasst werden.
 
-Alter Shortcode (width und height):
+Alter Shortcode (bleibt bestehen):
 
 ```
 [fauvideo url="..." width="220" height="150" showtitle="..." showinfo="..." titletag="..."]
 ```
 
-Neuer Shortcode (nur width):
+Neuer Shortcode (wird erweitert):
 
 ```
-[fauvideo url="..." width-video="Wert zwischen 1 - 100" showtitle="..." showinfo="..." titletag="..." rand="..."]
+[fauvideo id oder url="..." width="..." height="..." showtitle="..." showinfo="..." titletag="..." youtube-support="..." youtube-resolution="..." rand="..."]
 ```
 ### __Das neue RRZE-Video-Plugin__
 
@@ -29,7 +28,7 @@ muss man einen neuen Videodatensatz anlegen. Ordnet man dem Videodatensatz ein G
 Das Plugin unterscheidet zwischen zwei Möglichkeiten Videos auf einer Seite auszugeben. Die erste Möglichkeit ist die Übergabe der Datensatz-ID. Diese finden Sie im Menü->Alle Videos in der Spalte ID, nachdem Sie einen Datensatz angelegt haben.
 
 ```
-[fauvideo id="398" width-video="30" showtitle="1" showinfo="0" titletag="h2"]
+[fauvideo id="398" width="640" height="360" showtitle="1" showinfo="0" titletag="h2"]
 ```
 
 Die zweite Möglichkeit ist die Übergabe einer Url.
@@ -54,36 +53,38 @@ Der Shortcode sieht wie folgt aus:
 Für eine Video aus dem FAU Videoportal
 
 ```
-[fauvideo url="https://www.video.uni-erlangen.de/webplayer/id/13950" width="30" showtitle="1" showinfo="1" titletag="h4" rand="Neuigkeiten"]
+[fauvideo url="https://www.video.uni-erlangen.de/webplayer/id/13950" width="640" height="360" showtitle="1" showinfo="1" titletag="h4" rand="Neuigkeiten"]
 ```
 oder
 ```
-[fauvideo url="13950" width="30" showtitle="1" showinfo="1" titletag="h4" rand="Neuigkeiten"]
+[fauvideo url="13950" width="640" height="360" showtitle="1" showinfo="1" titletag="h4" rand="news"]
 ```
 
 Für ein Youtube Video
 
 ```
-[fauvideo url="https://www.youtube.com/watch?v=DF2aRrr21-M" width="50" showtitle="1" showinfo="1" titletag="h2"]
+[fauvideo url="https://www.youtube.com/watch?v=DF2aRrr21-M" width="640" height="360" showtitle="1" showinfo="1" titletag="h2" youtube-resolution="1"]
 ```
 
 oder
 
 ```
-[fauvideo url="https://youtu.be/DF2aRrr21-M" width="50" showtitle="1" showinfo="1" titletag="h2"]
+[fauvideo url="https://youtu.be/DF2aRrr21-M" width="640" height="360" showtitle="1" showinfo="1" titletag="h2"]
 ```
 
 oder
 
 ```
-[fauvideo url="DF2aRrr21-M" width="30" showtitle="1" showinfo="1" titletag="h2"]
+[fauvideo url="DF2aRrr21-M" width="640" height="360" showtitle="1" showinfo="1" titletag="h2"]
 ```
 
-* Das Argument "width-video" kann Werte zwischen 0 und 100 annehmen. (Die Größe des Vorschaubildes in % / Default 50%)
-* Das Argument "titletag" kann die Werte zwischen h1 und h6 annehmen. (Überschriftgröße / Default) h2)
-* Das Argument "showtitle" kann den Wert 0 oder 1 annehmen. (Der Titel wird angezeigt  / Default 1/on)
+* Den Argumenten "width" und "height" wird die Bildgröße in Pixel übergeben - Default 640x360px
+* Das Argument "titletag" kann die Werte zwischen h1 und h6 annehmen. (Überschriftgröße - Default) h2)
+* Das Argument "showtitle" kann den Wert 0 oder 1 annehmen. (Der Titel wird angezeigt  - Default 1/on)
 * Das Argument "showinfo" kann den Wert 0 oder 1 annehmen. (Es werden Zusatzinformationen wie Author, Download-Link und Copyright angezeigt / Default 1/on)
-* Dem Argument "rand" kann der Wert aus der Datensatzspalte Genre übergeben werden. (zufällig Wiedergabe von Videos, welche diesem Genre zugeordnet sind / kein Default)
+* Dem Argument "youtube-support" kann den Wert 0 oder 1 annehmen. (Videos werden dann mit dem Youtube Player angezeigt - Default 0/off)
+* Dem Argument "youtube-resolution" kann einen Wert zwischen 1 und 4 übergeben werden. (Das Vorschaubild wird im Format 16:9 angezeigt - Default 4)
+* Dem Argument "rand" kann der Wert aus der Datensatzspalte Genre übergeben werden. (zufällig Wiedergabe von Videos, welche diesem Genre zugeordnet sind - kein Default)
 
 ## Einbindung des Plugins als Widget
 
@@ -127,3 +128,8 @@ Videos mit dem gleichen Genre werden dann zufällig ausgegeben.)
 
 !Wichtig: Die Felder ID und URL dürfen nicht gefüllt sein.
 ```
+
+
+Youtube Auflösung
+
+* Hier wird die Auflösung des Youtube Vorschaubildes bestimmt.

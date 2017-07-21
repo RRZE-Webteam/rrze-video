@@ -19,7 +19,7 @@ function show_video_on_page( $atts ) {
         'showtitle'             => '1',
         'titletag'              => 'h2',
         'youtube-support'       => '0',
-        'youtube-resolution'    => '1',
+        'youtube-resolution'    => '4',
         'rand'                  => ''
     ), $atts );
     

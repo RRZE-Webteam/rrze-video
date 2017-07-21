@@ -50,7 +50,6 @@ function init() {
     
     
     add_action( 'wp_enqueue_scripts', 'RRZE\PostVideo\custom_libraries_scripts');
-    add_filter( 'body_class', 'RRZE\PostVideo\add_class_to_body');
     add_action( 'admin_notices', 'RRZE\PostVideo\video_admin_notice');
     
 }
@@ -108,12 +107,4 @@ function custom_libraries_scripts() {
         
         wp_enqueue_script( 'myjs' );
     }
-}
-
-function add_class_to_body($classes) {
-    
-    $classes[] = 'is-mobile';
-    
-    return $classes;
-    
 }

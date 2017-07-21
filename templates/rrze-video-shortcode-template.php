@@ -26,12 +26,12 @@
                     </video>
                 </div>
             </div>
-            <div class="modal-footer">
-                <p class="description"><?php echo (!empty($description)) ? 'Beschreibung: ' . $description : '' ?></p><br/>
-                 <?php if($rrze_video_shortcode['showinfo'] == 1) { ?>
-                    <span class="meta_heading">Author: </span><span class="meta_content"><?php echo $author ?></span><br/>
-                    <span class="meta_heading">Quelle: </span><span class="meta_content"><a href="<?php echo $video_file ?>">Download</a></span>
-                    <span class="meta_heading">Copyright: </span><span class="meta_content"><?php echo $copyright ?></span>
+             <div class="modal-footer">
+                <p class="description"><?php echo (!empty($description)) ? 'Beschreibung: ' . $description : '' ?></p>
+                 <?php if($rrze_video_shortcode['showinfo'] == '1') { ?>
+                    <span class="meta_heading">Author: </span><span class="meta_content"><?php echo $author; ?></span><br/>
+                    <span class="meta_heading">Quelle: </span><span class="meta_content"><a href="<?php echo $video_file; ?>">Download</a></span>
+                    <span class="meta_heading">Copyright: </span><span class="meta_content"><?php echo $copyright; ?></span>
                 <?php } ?>
             </div>
         </div>

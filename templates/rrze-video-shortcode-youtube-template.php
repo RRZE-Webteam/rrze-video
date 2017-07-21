@@ -25,15 +25,15 @@ echo '</script>';
     <div class="container<?php echo $box_id ?>">
         <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
         <?php if( $youtube_resolution == 1 ) { ?>
-        <img title="Youtube Video" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
+        <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
         <?php } elseif( $youtube_resolution == 2 ) { ?>
-        <img title="Youtube Video" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/default.jpg"/>
+        <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/default.jpg"/>
         <?php } elseif( $youtube_resolution == 3 ) { ?>
-        <img title="Youtube Video" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/hqdefault.jpg"/>
+        <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/hqdefault.jpg"/>
         <?php } elseif( $youtube_resolution == 4 ) { ?>
-        <img title="Youtube Video" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
+        <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
         <?php } else { ?>
-        <img title="Youtube Video" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/sddefault.jpg"/>
+        <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/sddefault.jpg"/>
         <?php } ?>
         <div class="middle">
             <div class="play-button">
@@ -54,7 +54,7 @@ echo '</script>';
         <div class="modal-body">
             <div class="videocontent">
                 <?php if(!$show_youtube_player and $youtube_support == 0) { ?>
-                <video width="640" height="360" class="player" preload="none">
+                <video width="640" height="360" class="player" controls="controls" preload="none">
                     <source type="video/youtube" src="https://www.youtube.com/watch?v=<?php echo $youtube_id ?>" />
                 </video>
                 <?php } else { ?>
