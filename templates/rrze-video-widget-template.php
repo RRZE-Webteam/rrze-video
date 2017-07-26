@@ -2,7 +2,7 @@
 <h2 class="small"><?php echo wordwrap($showtitle, 50, "<br/>") ?></h2>
 <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
 <div class="box-widget<?php echo $box_id ?>">
-    <?php if($thumbnail) {     
+    <?php if(!empty($thumbnail)) {     
         //echo $picture;
         echo '<img title="'. $modaltitle .'" src="' . $thumbnail[0]  . '" width="'. $instance['width'] . '" height="' . $instance['height']  . '"  />'; // width="100%" responsive
     } else { ?>

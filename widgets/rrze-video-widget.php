@@ -92,6 +92,7 @@ class RRZE_Video_Widget extends \WP_Widget {
                 $video_file         = $video_url['file'];
                 $preview_image      = 'https://cdn.video.uni-erlangen.de/Images/player_previews/'. self::http_check_and_filter($form_url) .'_preview.img';
                 $picture            = $preview_image;
+                $description        = '';
                 
                 if ( empty( $form_title ) && $form_showtitle == 1 ) {
                     $showtitle  = $video_url['title'];
