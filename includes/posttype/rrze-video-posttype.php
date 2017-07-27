@@ -5,13 +5,13 @@ namespace RRZE\PostVideo;
 function custom_post_type_videos() {
 
     $labels = array(
-        'name'                  => _x( 'Video', 'Post Type General Name', 'rrze-video' ),
+        'name'                  => _x( 'Videothek', 'Post Type General Name', 'rrze-video' ),
         'singular_name'         => _x( 'Video', 'Post Type Singular Name', 'rrze-video' ),
-        'menu_name'             => __( 'Videos', 'rrze-video' ),
+        'menu_name'             => __( 'Videothek', 'rrze-video' ),
         'parent_item_colon'     => __( 'Übergeordneter Video', 'rrze-video' ),
-        'all_items'             => __( 'Alle Video', 'rrze-video' ),
+        'all_items'             => __( 'Alle Videos', 'rrze-video' ),
         'add_new_item'          => __( 'Neues Video hinzufügen', 'rrze-video' ),
-        'add_new'               => __( 'Neues Video', 'rrze-video' ),
+        'add_new'               => __( 'Video hinzufügen', 'rrze-video' ),
         'edit_item'             => __( 'Video bearbeiten', 'rrze-video' ),
         'update_item'           => __( 'Video aktualisieren', 'rrze-video' ),
         'view_item'             => __( 'Video anzeigen', 'rrze-video' ),
@@ -25,7 +25,7 @@ function custom_post_type_videos() {
         'labels'                => $labels,
         'supports'              => array( 'title', 'thumbnail' ),
         'taxonomies'            => array( 'Genre' ),
-        //'menu_icon'             => 'dashicons-admin-users',
+        'menu_icon'             => 'dashicons-format-video',
         'hierarchical'          => false,
         'public'                => true,
         'publicly_queryable'    => true,
