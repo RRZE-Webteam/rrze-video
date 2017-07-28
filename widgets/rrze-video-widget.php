@@ -235,33 +235,33 @@ class RRZE_Video_Widget extends \WP_Widget {
         ?>
         
          <p>
-        <label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Title:', 'rrze-video' ); ?></label> 
+        <label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Titel:', 'rrze-video' ); ?></label> 
         <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" placeholder="title" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
-        <em><?php _e('Der Video-Titel.' ) ?></em>
+        <em><?php _e('Videotitel' ) ?></em>
         </p>
         
          <p>
         <label for="<?php echo esc_attr( $this->get_field_id( 'id' ) ); ?>"><?php esc_attr_e( 'ID:', 'rrze-video' ); ?></label> 
         <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'id' ) ); ?>" placeholder="id" name="<?php echo esc_attr( $this->get_field_name( 'id' ) ); ?>" type="text" value="<?php echo esc_attr( $id ); ?>">
-        <em><?php _e('Die Datensatz-ID.' ) ?></em>
+        <em><?php _e('Datensatz-ID' ) ?></em>
         </p>
         
         <p>
         <label for="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>"><?php esc_attr_e( 'Url:', 'rrze-video' ); ?></label> 
         <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" placeholder="url" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="text" value="<?php echo esc_attr( $url ); ?>">
-        <em><?php _e('Die URL.' ) ?></em>
+        <em><?php _e('URL' ) ?></em>
         </p>
         
         <p>
-        <label for="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>"><?php esc_attr_e( 'width:', 'rrze-video' ); ?></label> 
+        <label for="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>"><?php esc_attr_e( 'Breite:', 'rrze-video' ); ?></label> 
         <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'width' ) ); ?>" type="text" value="<?php echo esc_attr( $width ); ?>">
-        <em><?php _e('Die Breite des Preview-Images' ) ?></em>
+        <em><?php _e('Breite des Vorschaubildes' ) ?></em>
         </p>
         
         <p>
-        <label for="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>"><?php esc_attr_e( 'height:', 'rrze-video' ); ?></label> 
+        <label for="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>"><?php esc_attr_e( 'Höhe:', 'rrze-video' ); ?></label> 
         <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" type="text" value="<?php echo esc_attr( $height ); ?>">
-        <em><?php _e('Die Höhe des Preview-Images' ) ?></em>
+        <em><?php _e('Höhe des Vorschaubildes' ) ?></em>
         </p>
         
         <p>
