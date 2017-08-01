@@ -95,7 +95,7 @@
 .rrze-video .middle { transition: .5s ease; opacity: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); opacity: 1; }
 .rrze-video .play-button:hover { opacity: 1; }
 .rrze-video .play-button { color: white; font-size: 90px; opacity: 0.7; }
-.rrze-video [class^=container] br, .rrze-video [class^=container] p { display: none; }
+.rrze-video [class^=rrze-video-container] br, .rrze-video [class^=rrze-video-container] p { display: none; }
 
 @media screen and (min-width: 768px) { .rrze-video .modal-dialog { padding-top: 10%; } }
 @media (max-width: 767px) { .rrze-video [class^=box] { max-width: 100%; }

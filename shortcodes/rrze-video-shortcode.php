@@ -58,13 +58,13 @@ function show_video_on_page( $atts ) {
     
     <style type="text/css" scoped="scoped">
         
-        .rrze-video .container<?php echo $box_id ?> {
+        .rrze-video .rrze-video-container<?php echo $box_id ?> {
             position: relative;
             max-width: 100%;
         }
 
         @media (min-width: 768px) {
-            .rrze-video .container<?php echo $box_id ?> {
+            .rrze-video .rrze-video-container<?php echo $box_id ?> {
                 position: relative;
                 width: <?php echo $width_shortcode.'px'?>;
             }

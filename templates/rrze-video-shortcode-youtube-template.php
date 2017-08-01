@@ -22,7 +22,7 @@ echo '</script>';
 <?php if(!empty($showtitle)) { ?>
 <<?php echo $rrze_video_shortcode['titletag'] ?>><?php echo $showtitle ?></<?php echo $rrze_video_shortcode['titletag'] ?>>
 <?php } ?>
-    <div class="container<?php echo $box_id ?>">
+    <div class="rrze-video-container<?php echo $box_id ?>">
         <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
         <?php if( $youtube_resolution == 1 ) { ?>
         <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->

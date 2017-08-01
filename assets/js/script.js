@@ -15,11 +15,11 @@ $('.player')
         $frame.attr("src", $frame.attr("src"));
     });
     
-    $("[class^=box]").click(function() {
+    $("[class^=box-widget]").click(function() {
         $(window).scrollTop(0);
     });
     
-    $("[class^=container]").click(function() {
+    $("[class^=rrze-video-container]").click(function() {
         $(window).scrollTop(0);
     });
 });
