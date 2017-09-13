@@ -3,7 +3,7 @@
 <<?php echo $rrze_video_shortcode['titletag'] ?>><?php echo $showtitle ?></<?php echo $rrze_video_shortcode['titletag'] ?>>
 <?php } ?>
 <div class="rrze-video-container<?php echo $box_id ?>">
-    <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>"><?php if(!empty($thumbnail)){echo '<img src="' . $thumbnail[0]  . '" title="'. $video_url['title'] .'" class="image' . $box_id .'"  />';
+    <a href="#get_video" data-toggle="modal" data-id="<?php echo $id ?>" data-preview-image="<?php echo $preview_image ?>" data-video-file="<?php echo $video_file ?>" data-target="#videoModal<?php echo $id ?>"><?php if(!empty($thumbnail)){echo '<img src="' . $thumbnail[0]  . '" title="'. $video_url['title'] .'" class="image' . $box_id .'"  />';
     } else { ?>
     <img title="<?php echo $video_url['title'] ?>"  src="<?php echo $picture ?>" class="image<?php echo $id ?>"/>
     <?php }?>
@@ -20,10 +20,11 @@
                 <h2 class="modal-title" style="text-align:left;padding:<?php echo ($modaltitle) ? '30px 0px' : '20px 0px' ?>"><?php echo wordwrap((!empty($modaltitle)) ? $modaltitle : '', 30, "<br/>") ?></h2>
             </div>
             <div class="modal-body">
-                <div class="videocontent">
-                    <video class="player img-responsive center-block" style="width:100%;height:100%;" width="639" height="360" poster="<?php echo $preview_image ?>" controls="controls" preload="none">
+                <div class="videocontent<?php echo $id ?>">
+                    <video class="player"></video>
+                    <!-- <video class="player img-responsive center-block" style="width:100%;height:100%;" width="639" height="360" controls="controls" preload="none">
                         <source type="video/mp4" src="<?php echo $video_file ?>" />
-                    </video>
+                    </video>-->
                 </div>
             </div>
              <div class="modal-footer">

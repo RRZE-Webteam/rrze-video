@@ -1,9 +1,9 @@
 jQuery(document).ready(function($) {
-$('.player')
+/*$('.player')
     .mediaelementplayer({
         alwaysShowControls: true,
         features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
-    });
+    });*/
     
     $('body').on('hidden.bs.modal', '.modal', function() {
         $('video').trigger('pause');
