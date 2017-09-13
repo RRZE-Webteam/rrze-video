@@ -23,7 +23,7 @@ echo '</script>';
 <<?php echo $rrze_video_shortcode['titletag'] ?>><?php echo $showtitle ?></<?php echo $rrze_video_shortcode['titletag'] ?>>
 <?php } ?>
     <div class="rrze-video-container<?php echo $box_id ?>">
-        <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
+        <a href="#get_youtube" data-box-id="<?php echo $id ?>" data-youtube-id="<?php echo $youtube_id ?>" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
         <?php if( $youtube_resolution == 1 ) { ?>
         <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
         <?php } elseif( $youtube_resolution == 2 ) { ?>
@@ -58,8 +58,9 @@ echo '</script>';
                     <source type="video/youtube" src="https://www.youtube.com/watch?v=<?php echo $youtube_id ?>" />
                 </video>
                 <?php } else { ?>
-                <div class="embed-container">
-                    <iframe id="ytplayer<?php echo $box_id ?>" frameborder="0" allowfullscreen width="640" height="360" src="https://www.youtube.com/embed/<?php echo $youtube_id ?>?enablejsapi=1&origin=http://example.com"></iframe>
+                <div class="embed-container<?php echo $id ?>">
+                    <div class="youtube-video"></div>
+                    <!--<iframe id="ytplayer<?php echo $box_id ?>" frameborder="0" allowfullscreen width="640" height="360" src="https://www.youtube.com/embed/<?php echo $youtube_id ?>?enablejsapi=1&origin=http://example.com"></iframe>-->
                 </div>
                 <?php } ?>
             </div>

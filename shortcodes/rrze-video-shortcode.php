@@ -298,3 +298,48 @@ function video_ajax() { ?>
 
 function get_video_action() {
 }
+
+add_action( 'wp_ajax_nopriv_get_youtube_action', 'RRZE\PostVideo\get_youtube_action' );
+add_action( 'wp_ajax_get_youtube_action', 'RRZE\PostVideo\get_youtube_action' );
+add_action( 'wp_footer', 'RRZE\PostVideo\youtube_ajax');
+
+function youtube_ajax() { ?>
+    <script type="text/javascript" >
+    jQuery(document).ready(function($) {
+
+        $('a[href="#get_youtube"]').click(function(){
+
+            var youtube_id  = $(this).attr('data-youtube-id');
+            var id      = $(this).attr('data-box-id');
+
+            $.ajax({
+                url: videoajax.ajaxurl,
+                data: {
+                    'action': 'get_youtube_action',
+                    'youtube_id': youtube_id,
+                    'id': id
+                },
+                success:function() {
+
+                    var iframe = document.createElement("iframe");
+                    iframe.setAttribute("frameborder", "0");
+                    iframe.setAttribute("allowfullscreen", "");
+                    iframe.setAttribute("src", "https://www.youtube.com/embed/" + youtube_id + "?rel=0&showinfo=0");
+                   
+                    $(".embed-container" + id)
+                            .html(iframe)
+                            .find(".youtube-video") 
+
+                },  
+                error: function(errorThrown){
+                    window.alert(errorThrown);
+                }
+             });
+         })
+
+    });
+    </script> <?php
+}
+
+function get_youtube_action() {
+}
