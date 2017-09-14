@@ -3,7 +3,7 @@
 <?php if(!$show_youtube_player) { ?>
 <a href="#get_widget_mejs_youtube" data-toggle="modal"  data-box-id="<?php echo $id ?>" data-youtube-id="<?php echo $youtube_id ?>" data-target="#videoModal<?php echo $id ?>">
 <?php } else { ?>
-<a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
+<a href="#get_widget_youtube" data-toggle="modal" data-box-id="<?php echo $id ?>" data-youtube-id="<?php echo $youtube_id ?>" data-target="#videoModal<?php echo $id ?>">
 <?php } ?>    
 <div class="box-widget<?php echo $box_id ?>">
     <?php if( $youtube_resolution == 1 ) { ?>
@@ -43,8 +43,9 @@
                         <source type="video/youtube" src="https://www.youtube.com/watch?v=<?php echo $youtube_id ?>" />
                     </video>-->
                     <?php } else { ?>
-                    <div class="embed-container">
-                        <iframe frameborder="0" allowfullscreen width="640" height="360" src="https://www.youtube.com/embed/<?php echo $youtube_id ?>?rel=0&enablejsapi=1&origin=http://example.com"></iframe>
+                    <div class="embed-container<?php echo $id ?>">
+                        <div class="youtube-video"></div>
+                        <!--<iframe frameborder="0" allowfullscreen width="640" height="360" src="https://www.youtube.com/embed/<?php echo $youtube_id ?>?rel=0&enablejsapi=1&origin=http://example.com"></iframe>-->
                     </div>
                     <?php } ?>
                 </div>

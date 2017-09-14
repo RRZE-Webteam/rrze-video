@@ -25,6 +25,10 @@ class RRZE_Video_Widget extends \WP_Widget {
         add_action( 'wp_ajax_nopriv_widget_mejs_youtube_callback_action', array($this, 'widget_mejs_youtube_callback_action' ));
         add_action( 'wp_ajax_widget_mejs_youtube_callback_action', array($this,'widget_mejs_youtube_callback_action' ));
         add_action( 'wp_footer', array($this,'widget_mejs_youtube_ajax'));
+        
+        add_action( 'wp_ajax_nopriv_widget_youtube_callback_action', array($this, 'widget_youtube_callback_action' ));
+        add_action( 'wp_ajax_widget_youtube_callback_action', array($this,'widget_youtube_callback_action' ));
+        add_action( 'wp_footer', array($this,'widget_youtube_ajax'));
     }
 
     /**
@@ -523,5 +527,45 @@ class RRZE_Video_Widget extends \WP_Widget {
     }
     
     public function widget_mejs_youtube_callback_action() {
+    }
+    
+    public function widget_youtube_ajax() { ?>
+	<script type="text/javascript" >
+	jQuery(document).ready(function($) {
+
+            $('a[href="#get_widget_youtube"]').click(function(){
+
+                var youtube_id  = $(this).attr('data-youtube-id');
+                var id      = $(this).attr('data-box-id');
+
+                $.ajax({
+                    url: videoajax.ajaxurl,
+                    data: {
+                        'action': 'widget_youtube_callback_action',
+                        'youtube_id': youtube_id,
+                        'id': id
+                    },
+                    success:function(data) {
+
+                        var iframe = document.createElement("iframe");
+                        iframe.setAttribute("frameborder", "0");
+                        iframe.setAttribute("allowfullscreen", "");
+                        iframe.setAttribute("src", "https://www.youtube.com/embed/" + youtube_id + "?rel=0&showinfo=0");
+
+                        $(".embed-container" + id)
+                            .html(iframe)
+                            .find(".youtube-video")
+
+                    },  
+                    error: function(errorThrown){
+                        window.alert(errorThrown);
+                    }
+                });
+            })
+	});
+	</script> <?php
+    }
+    
+    public function widget_youtube_callback_action() {
     }
 }
