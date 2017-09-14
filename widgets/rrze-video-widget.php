@@ -21,6 +21,10 @@ class RRZE_Video_Widget extends \WP_Widget {
         add_action( 'wp_ajax_nopriv_widget_mejs_callback_action', array($this, 'widget_mejs_callback_action' ));
         add_action( 'wp_ajax_widget_mejs_callback_action', array($this, 'widget_mejs_callback_action' ));
         add_action( 'wp_footer', array($this, 'widget_mejs_ajax'));
+        
+        add_action( 'wp_ajax_nopriv_widget_mejs_youtube_callback_action', array($this, 'widget_mejs_youtube_callback_action' ));
+        add_action( 'wp_ajax_widget_mejs_youtube_callback_action', array($this,'widget_mejs_youtube_callback_action' ));
+        add_action( 'wp_footer', array($this,'widget_mejs_youtube_ajax'));
     }
 
     /**
@@ -473,5 +477,51 @@ class RRZE_Video_Widget extends \WP_Widget {
     }
     
     public function widget_mejs_callback_action() {
+    }
+    
+    public function widget_mejs_youtube_ajax() { ?>
+	<script type="text/javascript" >
+	jQuery(document).ready(function($) {
+        
+            $('a[href="#get_widget_mejs_youtube"]').click(function(){
+
+                var youtube_id  = $(this).attr('data-youtube-id');
+                var id      = $(this).attr('data-box-id');
+
+                $.ajax({
+                    url: videoajax.ajaxurl,
+                    data: {
+                        'action': 'widget_mejs_youtube_callback_action',
+                        'youtube_id': youtube_id,
+                        'id': id
+                    },
+                    success:function() {
+
+                        var video = '<video class="player"  width="640" height="360" controls="controls" preload="none">' +
+                        '<source src="https://www.youtube.com/watch?v=' + youtube_id + '" type="video/youtube" />' +
+                        '</video>';
+
+                        $(".videocontent" + id)
+                            .html(video) 
+                            .find(".player") 
+                            .mediaelementplayer({
+                            alwaysShowControls: true,
+                                features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
+                        });
+                        
+
+                    },  
+                    error: function(errorThrown){
+                        window.alert(errorThrown);
+                    }
+                 });
+             })
+                
+                
+	});
+	</script> <?php
+    }
+    
+    public function widget_mejs_youtube_callback_action() {
     }
 }
