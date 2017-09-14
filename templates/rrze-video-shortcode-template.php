@@ -21,7 +21,9 @@
             </div>
             <div class="modal-body">
                 <div class="videocontent<?php echo $id ?>">
-                    <video class="player"></video>
+                    <div class="player">
+                        <img src="<?php echo $preview_image ?>" />
+                    </div>
                     <!-- <video class="player img-responsive center-block" style="width:100%;height:100%;" width="639" height="360" controls="controls" preload="none">
                         <source type="video/mp4" src="<?php echo $video_file ?>" />
                     </video>-->

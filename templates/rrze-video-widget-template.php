@@ -28,7 +28,10 @@
             </div>
             <div class="modal-body">
                 <div class="videocontent<?php echo $id ?>">
-                    <div class="player"></div>
+                    <div class="player">
+                        <img src="<?php echo $preview_image ?>" />
+                    </div>
+                     
                     <!--<video class="player img-responsive center-block" width="640"
                            height="360" poster="<?php echo $preview_image ?>" controls="controls" preload="none">
                         <source type="video/mp4" src="<?php echo $video_file ?>" />

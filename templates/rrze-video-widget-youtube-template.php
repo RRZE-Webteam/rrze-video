@@ -38,7 +38,10 @@
             <div class="modal-body">
                 <div class="videocontent<?php echo $id ?>">
                     <?php if(!$show_youtube_player) { ?>
-                    <div class="player"></div>
+                    <div class="player">
+                         <img title="preview_image" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
+                    </div>
+                       
                     <!--<video width="640" height="360" class="player" preload="none">
                         <source type="video/youtube" src="https://www.youtube.com/watch?v=<?php echo $youtube_id ?>" />
                     </video>-->
