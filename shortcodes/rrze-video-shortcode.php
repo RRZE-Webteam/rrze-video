@@ -280,7 +280,7 @@ function video_ajax() { ?>
                         .html(video) 
                         .find(".player") 
                         .mediaelementplayer({
-                         alwaysShowControls: true,
+                        alwaysShowControls: true,
                             features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
                     });
             
@@ -342,4 +342,52 @@ function youtube_ajax() { ?>
 }
 
 function get_youtube_action() {
+}
+
+add_action( 'wp_ajax_nopriv_get_mejs_youtube_action', 'RRZE\PostVideo\get_mejs_youtube_action' );
+add_action( 'wp_ajax_get_mejs_youtube_action', 'RRZE\PostVideo\get_mejs_youtube_action' );
+add_action( 'wp_footer', 'RRZE\PostVideo\mejs_youtube_ajax');
+
+function mejs_youtube_ajax() { ?>
+    <script type="text/javascript" >
+    jQuery(document).ready(function($) {
+        
+        $('a[href="#get_mejs_youtube"]').click(function(){
+            
+            var youtube_id  = $(this).attr('data-youtube-id');
+            var id      = $(this).attr('data-box-id');
+            
+            $.ajax({
+                url: videoajax.ajaxurl,
+                data: {
+                    'action': 'get_mejs_youtube_action',
+                    'youtube_id': youtube_id,
+                    'id': id
+                },
+                success:function(data) {
+                    
+                    var video = '<video class="player"  width="640" height="360" controls="controls" preload="none">' +
+                    '<source src="https://www.youtube.com/watch?v=' + youtube_id + '" type="video/youtube" />' +
+                    '</video>';
+            
+                    $(".videocontent" + id)
+                        .html(video) 
+                        .find(".player") 
+                        .mediaelementplayer({
+                        alwaysShowControls: true,
+                            features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
+                    });
+            
+                },  
+                error: function(errorThrown){
+                    window.alert(errorThrown);
+                }
+             });
+         })
+    });
+    </script> <?php
+}
+
+
+function get_mejs_youtube_action() {
 }

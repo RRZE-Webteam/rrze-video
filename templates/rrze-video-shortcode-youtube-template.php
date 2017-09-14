@@ -23,7 +23,11 @@ echo '</script>';
 <<?php echo $rrze_video_shortcode['titletag'] ?>><?php echo $showtitle ?></<?php echo $rrze_video_shortcode['titletag'] ?>>
 <?php } ?>
     <div class="rrze-video-container<?php echo $box_id ?>">
+        <?php if(!$show_youtube_player and $youtube_support == 0) { ?>
+        <a href="#get_mejs_youtube" data-box-id="<?php echo $id ?>" data-youtube-id="<?php echo $youtube_id ?>" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
+        <?php } else { ?>
         <a href="#get_youtube" data-box-id="<?php echo $id ?>" data-youtube-id="<?php echo $youtube_id ?>" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
+        <?php } ?>
         <?php if( $youtube_resolution == 1 ) { ?>
         <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
         <?php } elseif( $youtube_resolution == 2 ) { ?>
@@ -52,11 +56,13 @@ echo '</script>';
             <h2 class="modal-title" style="text-align:left;padding:<?php echo (!empty($modaltitle)) ? '30px 0px' : '20px 0px' ?>"><?php echo wordwrap((!empty($modaltitle)) ? $modaltitle : '', 30, "<br/>") ?></h2>
         </div>
         <div class="modal-body">
-            <div class="videocontent">
+            <div class="videocontent<?php echo $id ?>">
                 <?php if(!$show_youtube_player and $youtube_support == 0) { ?>
-                <video width="640" height="360" class="player" controls="controls" preload="none">
-                    <source type="video/youtube" src="https://www.youtube.com/watch?v=<?php echo $youtube_id ?>" />
-                </video>
+                <div class="player">
+                    <!--<video width="640" height="360" class="player" controls="controls" preload="none">
+                        <source type="video/youtube" src="https://www.youtube.com/watch?v=<?php echo $youtube_id ?>" />
+                    </video>-->
+                </div>
                 <?php } else { ?>
                 <div class="embed-container<?php echo $id ?>">
                     <div class="youtube-video"></div>
