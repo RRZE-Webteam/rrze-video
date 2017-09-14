@@ -17,6 +17,10 @@ class RRZE_Video_Widget extends \WP_Widget {
             'description' => __('Zeigt Videos in der Sidebar oder im Footer an.'),
         );
         parent::__construct( 'video_widget', 'RRZE Video Widget', $widget_ops );
+        
+        add_action( 'wp_ajax_nopriv_widget_mejs_callback_action', array($this, 'widget_mejs_callback_action' ));
+        add_action( 'wp_ajax_widget_mejs_callback_action', array($this, 'widget_mejs_callback_action' ));
+        add_action( 'wp_footer', array($this, 'widget_mejs_ajax'));
     }
 
     /**
@@ -423,5 +427,51 @@ class RRZE_Video_Widget extends \WP_Widget {
             $widget_video = new \WP_Query($argumentsTaxonomy);
             return $widget_video;
         }
+    }
+    
+    public function widget_mejs_ajax() { ?>
+       <script type="text/javascript" >
+	jQuery(document).ready(function($) {
+
+            $('a[href="#get_video_widget"]').click(function(){
+
+                var id = $(this).attr('data-id');
+                var poster = $(this).attr('data-preview-image');
+                var video_file = $(this).attr('data-video-file');
+
+                $.ajax({
+                    url: videoajax.ajaxurl,
+                    data: {
+                        'action': 'widget_mejs_callback_action',
+                        'id': id,
+                        'poster': poster,
+                        'video_file': video_file
+                    },
+                    success:function() {
+
+                        var video = '<video class="player img-responsive center-block" width="640" height="360" poster="' + poster + '" controls="controls" preload="none">' +
+                        '<source src="' + video_file + '" type="video/mp4" />' +
+                        '</video>';
+
+                        $(".videocontent" + id)
+                            .html(video) 
+                            .find(".player") 
+                            .mediaelementplayer({
+                            alwaysShowControls: true,
+                                features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
+                        });
+           
+                    },  
+                    error: function(errorThrown){
+                        window.alert(errorThrown);
+                    }
+                 });
+             })
+        
+	});
+	</script> <?php 
+    }
+    
+    public function widget_mejs_callback_action() {
     }
 }

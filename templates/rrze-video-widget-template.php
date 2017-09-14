@@ -1,6 +1,6 @@
 <div class="rrze-video">
 <h2 class="small"><?php echo wordwrap($showtitle, 50, "<br/>") ?></h2>
-<a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
+<a href="#get_video_widget" data-id="<?php echo $id ?>" data-preview-image="<?php echo $preview_image ?>" data-video-file="<?php echo $video_file ?>" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
 <div class="box-widget<?php echo $box_id ?>">
     <?php if(!empty($thumbnail)) {     
         //echo $picture;
@@ -27,11 +27,12 @@
                 <h2 class="modal-title" style="color:#000;padding:<?php echo ($modaltitle) ? '30px 0px' : '20px 0px' ?>"><?php echo wordwrap($modaltitle, 30, "<br/>") ?></h2>
             </div>
             <div class="modal-body">
-                <div class="videocontent">
-                    <video class="player img-responsive center-block" width="640"
+                <div class="videocontent<?php echo $id ?>">
+                    <div class="player"></div>
+                    <!--<video class="player img-responsive center-block" width="640"
                            height="360" poster="<?php echo $preview_image ?>" controls="controls" preload="none">
                         <source type="video/mp4" src="<?php echo $video_file ?>" />
-                    </video>
+                    </video>-->
                 </div>
             </div>
             <div class="modal-footer">

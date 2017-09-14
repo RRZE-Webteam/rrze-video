@@ -1,5 +1,5 @@
 <div class="rrze-video">
-<h2 class="small"><?php echo wordwrap($showtitle, 50, "<br/>") ?></h2>
+<h2 class="small"><?php echo ($showtitle) ? wordwrap($showtitle, 50, "<br/>") : '' ?></h2>
 <a href="" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
 <div class="box-widget<?php echo $box_id ?>">
     <?php if( $youtube_resolution == 1 ) { ?>
