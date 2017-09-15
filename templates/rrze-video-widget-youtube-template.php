@@ -1,5 +1,5 @@
 <div class="rrze-video">
-<h2 class="small"><?php echo ($showtitle) ? wordwrap($showtitle, 50, "<br/>") : '' ?></h2>
+<h2 class="small"><?php echo (isset($showtitle)) ? wordwrap($showtitle, 50, "<br/>") : '' ?></h2>
 <?php if(!$show_youtube_player) { ?>
 <a href="#get_widget_mejs_youtube" data-toggle="modal"  data-box-id="<?php echo $id ?>" data-youtube-id="<?php echo $youtube_id ?>" data-target="#videoModal<?php echo $id ?>">
 <?php } else { ?>
@@ -33,28 +33,23 @@
                 <div class="close-modal" data-dismiss="modal">
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </div>
-                <h2 class="widget-title" style="color:#000;padding:<?php echo ($modaltitle) ? '30px 0px' : '20px 0px' ?>"><?php echo wordwrap($modaltitle, 30, "<br/>") ?></h2>
+                <h2 class="widget-title" style="color:#000;padding:<?php echo ($modaltitle) ? '30px 0px' : '20px 0px' ?>"><?php echo (isset($modaltitle)) ? wordwrap($modaltitle, 30, "<br/>") : '' ?></h2>
             </div>
             <div class="modal-body">
                 <div class="videocontent<?php echo $id ?>">
                     <?php if(!$show_youtube_player) { ?>
                     <div class="player">
-                         <img title="preview_image" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
+                        <img title="preview_image" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
                     </div>
-                       
-                    <!--<video width="640" height="360" class="player" preload="none">
-                        <source type="video/youtube" src="https://www.youtube.com/watch?v=<?php echo $youtube_id ?>" />
-                    </video>-->
                     <?php } else { ?>
                     <div class="embed-container<?php echo $id ?>">
                         <div class="youtube-video"></div>
-                        <!--<iframe frameborder="0" allowfullscreen width="640" height="360" src="https://www.youtube.com/embed/<?php echo $youtube_id ?>?rel=0&enablejsapi=1&origin=http://example.com"></iframe>-->
                     </div>
                     <?php } ?>
                 </div>
             </div>
             <div class="modal-footer">
-                <p><?php echo $description ?></p>
+                <p><?php echo (isset($desc)) ? wordwrap($desc, 50, "<br/>") : '' ?></p>
             </div>
         </div>
     </div>

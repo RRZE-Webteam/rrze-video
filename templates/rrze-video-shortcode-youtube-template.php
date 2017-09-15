@@ -60,14 +60,10 @@ echo '</script>';
                 <?php if(!$show_youtube_player and $youtube_support == 0) { ?>
                 <div class="player">
                       <img title="preview_image" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
-                    <!--<video width="640" height="360" class="player" controls="controls" preload="none">
-                        <source type="video/youtube" src="https://www.youtube.com/watch?v=<?php echo $youtube_id ?>" />
-                    </video>-->
                 </div>
                 <?php } else { ?>
                 <div class="embed-container<?php echo $id ?>">
                     <div class="youtube-video"></div>
-                    <!--<iframe id="ytplayer<?php echo $box_id ?>" frameborder="0" allowfullscreen width="640" height="360" src="https://www.youtube.com/embed/<?php echo $youtube_id ?>?enablejsapi=1&origin=http://example.com"></iframe>-->
                 </div>
                 <?php } ?>
             </div>

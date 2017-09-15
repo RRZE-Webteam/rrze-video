@@ -104,7 +104,7 @@ class RRZE_Video_Widget extends \WP_Widget {
                 $video_file         = $video_url['file'];
                 $preview_image      = 'https://cdn.video.uni-erlangen.de/Images/player_previews/'. self::http_check_and_filter($form_url) .'_preview.img';
                 $picture            = $preview_image;
-                $description        = '';
+                $desc               = '';
                 
                 if ( empty( $form_title ) && $form_showtitle == 1 ) {
                     $showtitle  = $video_url['title'];
@@ -152,7 +152,7 @@ class RRZE_Video_Widget extends \WP_Widget {
             if ($video_flag) {
                
                 $showtitle          = get_the_title();
-                $description        = get_post_meta( $post->ID, 'description', true );
+                $desc               = get_post_meta( $post->ID, 'description', true );
                 $url_data           = get_post_meta( $post->ID, 'url', true );
                 $video_url          = self::http_check_and_filter($url_data);
                 $thumbnail          = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
@@ -193,7 +193,7 @@ class RRZE_Video_Widget extends \WP_Widget {
                 $youtube_data       = get_post_meta( $post->ID, 'url', true );
                 $youtube_title      = get_the_title();
                 $youtube_id         = self::http_check_and_filter($youtube_data);
-                $description        = get_post_meta( $post->ID, 'description', true );
+                $desc               = get_post_meta( $post->ID, 'description', true );
                 
                 if ( empty( $form_title ) && $form_showtitle == 1 ) {
                     $showtitle  =  $youtube_title; 

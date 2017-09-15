@@ -31,15 +31,10 @@
                     <div class="player">
                         <img src="<?php echo $preview_image ?>" />
                     </div>
-                     
-                    <!--<video class="player img-responsive center-block" width="640"
-                           height="360" poster="<?php echo $preview_image ?>" controls="controls" preload="none">
-                        <source type="video/mp4" src="<?php echo $video_file ?>" />
-                    </video>-->
                 </div>
             </div>
             <div class="modal-footer">
-                <p class="description"><?php echo (!empty($description)) ? 'Beschreibung: ' . $description : '' ?></p><br/>
+                <p class="description"><?php echo (!empty($desc)) ? 'Beschreibungs: ' . $desc : '' ?></p><br/>
                  <?php if($meta == 1) { ?>
                     <span class="meta_heading">Author: </span><span class="meta_content"><?php echo $author ?></span><br/>
                     <span class="meta_heading">Quelle: </span><span class="meta_content">

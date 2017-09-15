@@ -24,9 +24,6 @@
                     <div class="player">
                         <img src="<?php echo $preview_image ?>" />
                     </div>
-                    <!-- <video class="player img-responsive center-block" style="width:100%;height:100%;" width="639" height="360" controls="controls" preload="none">
-                        <source type="video/mp4" src="<?php echo $video_file ?>" />
-                    </video>-->
                 </div>
             </div>
              <div class="modal-footer">
