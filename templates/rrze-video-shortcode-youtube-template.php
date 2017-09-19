@@ -18,11 +18,14 @@ player.prop("src", vidSrc);
 });';
 echo '</script>';
 ?>
-<div class="rrze-video">
+<div class="rrze-video" <?php
+if ($width_shortcode != 640) { ?>
+style="width: <?php echo $rrze_video_shortcode['width'];?>px;"
+<?php } ?>> 
 <?php if(!empty($showtitle)) { ?>
 <<?php echo $rrze_video_shortcode['titletag'] ?>><?php echo $showtitle ?></<?php echo $rrze_video_shortcode['titletag'] ?>>
 <?php } ?>
-    <div class="rrze-video-container<?php echo $box_id ?>">
+    <div class="rrze-video-container rrze-video-id-<?php echo $box_id ?>">
         <?php if(!$show_youtube_player and $youtube_support == 0) { ?>
         <a href="#get_mejs_youtube" data-box-id="<?php echo $id ?>" data-youtube-id="<?php echo $youtube_id ?>" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
         <?php } else { ?>

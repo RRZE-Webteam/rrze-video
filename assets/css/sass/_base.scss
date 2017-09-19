@@ -13,7 +13,15 @@ $background_color_1: transparent;
 .rrze-video {
     
     margin: 15px 0;
-
+    display: inline-block; 
+    width: 640px;
+    max-width: 100%;
+    
+    @media (max-width: 768px) {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
     .modal-dialog {
             padding-top: 30%;
     }
@@ -160,6 +168,7 @@ $background_color_1: transparent;
             font-size: 40px;
             padding-top: 0px;
             padding-left: 20px;
+            padding-right: 20px;
             color: $color_4;
     }
     .meta_heading {
@@ -217,6 +226,14 @@ $background_color_1: transparent;
     }
    
 }
+
+.rrze-video-container {
+    position: relative;
+    img {
+        width: 100%;
+    }
+}
+
 @media screen and (min-width: 768px) {
     .rrze-video {
 	.modal-dialog {

@@ -54,35 +54,15 @@ function show_video_on_page( $atts ) {
     
     $box_id = uniqid();
    
-    ?>
-    
-    <style type="text/css" scoped="scoped">
-        
-        .rrze-video .rrze-video-container<?php echo $box_id ?> {
-            position: relative;
-            max-width: 100%;
-        }
-
-        @media (min-width: 768px) {
-            .rrze-video .rrze-video-container<?php echo $box_id ?> {
-                position: relative;
-                width: <?php echo $width_shortcode.'px'?>;
-            }
-        }
-
-        .rrze-video .image<?php echo $box_id ?> {
-            width: 100%;
-        }
-
-        @media (min-width: 768px) {
-            .rrze-video .image<?php echo $box_id ?> {
-                width: <?php echo $width_shortcode.'px'?>;
-            }
-        }
-
-    </style>  
-    
-    <?php
+    if(preg_match("/^[a-zA-Z.:\/ ]*$/", $width_shortcode, $matches)) {
+        $width_shortcode = 640;
+        $suffix = 'px';
+    } elseif(preg_match("/(\d+)%/", $width_shortcode, $matches)) {
+        $width_shortcode = 640;
+        $suffix = 'px';
+    } else {
+        $suffix = 'px';
+    }
     
     /*
      * Wenn die url im shortcode gesetzt ist.

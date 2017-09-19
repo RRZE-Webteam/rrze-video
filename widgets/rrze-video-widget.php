@@ -545,7 +545,7 @@ class RRZE_Video_Widget extends \WP_Widget {
                         'youtube_id': youtube_id,
                         'id': id
                     },
-                    success:function(data) {
+                    success:function() {
 
                         var iframe = document.createElement("iframe");
                         iframe.setAttribute("frameborder", "0");
