@@ -1,4 +1,4 @@
-<div class="rrze-video">
+<div class="rrze-video rrze-video-widget-container">
 <h2 class="small"><?php echo wordwrap($showtitle, 50, "<br/>") ?></h2>
 <a href="#get_video_widget" data-id="<?php echo $id ?>" data-preview-image="<?php echo $preview_image ?>" data-video-file="<?php echo $video_file ?>" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
 <div class="box-widget<?php echo $box_id ?>">

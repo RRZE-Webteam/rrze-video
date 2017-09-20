@@ -9,6 +9,12 @@ $color_4: lightgray;
 $color_5: grey;
 $background_color_1: transparent;
 
+.rrze-video.rrze-video-widget-container {
+    @media (max-width: 768px) {
+       margin-left: 15px;
+    }
+}
+
 
 .rrze-video {
     
@@ -244,7 +250,7 @@ $background_color_1: transparent;
 @media (max-width: 767px) {
     .rrze-video {
         [class^=box] {
-            max-width: 100%;
+            //max-width: 100%;
     }
         h2.small {
                 margin: 40px 0px 0px 0px !important;
@@ -302,4 +308,3 @@ $background_color_1: transparent;
         }
     }
 }
-

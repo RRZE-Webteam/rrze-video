@@ -1,4 +1,4 @@
-<div class="rrze-video">
+<div class="rrze-video rrze-video-widget-container">
 <h2 class="small"><?php echo (isset($showtitle)) ? wordwrap($showtitle, 50, "<br/>") : '' ?></h2>
 <?php if(!$show_youtube_player) { ?>
 <a href="#get_widget_mejs_youtube" data-toggle="modal"  data-box-id="<?php echo $id ?>" data-youtube-id="<?php echo $youtube_id ?>" data-target="#videoModal<?php echo $id ?>">
