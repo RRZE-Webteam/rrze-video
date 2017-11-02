@@ -51,7 +51,7 @@ class RRZE_Video_Widget extends \WP_Widget {
         $form_id                = (!empty($instance['id'])) ? $instance['id'] :'';
         $form_url               = (!empty($instance['url'])) ? $instance['url'] :'';
         $form_title             = (!empty($instance['title'])) ? $instance['title'] :'';
-        $form_showtitle         = (!empty($instance['showtitle'])) ? $instance['showtitle'] :''; 
+        $form_showtitle         = (!empty($instance['showtitle'])) ? $instance['showtitle'] :'';
         $width                  = ! empty($instance['width'] ) ? $instance['width'] : 270;
         $height                 = ! empty($instance['height'] ) ? $instance['height'] : 150;
         $meta                   = (!empty($instance['meta'])) ? $instance['meta'] :'';
@@ -132,6 +132,8 @@ class RRZE_Video_Widget extends \WP_Widget {
 
                 $id = uniqid();
                 $youtube_id = http_check_and_filter($form_url);
+                
+                $modaltitle = $form_title;
 
                 include( plugin_dir_path( __DIR__ ) . 'templates/rrze-video-widget-youtube-template.php');
                 
@@ -280,11 +282,10 @@ class RRZE_Video_Widget extends \WP_Widget {
         <label for="<?php echo $this->get_field_id( 'showtitle' ); ?>"><?php _e('Zeige Widget Videotitel:' ) ?></label>
         <select class='widefat' id="<?php echo $this->get_field_id( 'showtitle' ); ?>"
         name="<?php echo $this->get_field_name( 'showtitle' ); ?>" type="text">
-        <option value="" selected="selected"><?php _e('Auswählen') ?></option> 
         <option value='1'<?php echo ( $showtitle == '1' ) ? 'selected' : ''; ?>>
             Ein
           </option>
-          <option value='0'<?php echo ( $showtitle == '0' ) ? 'selected' : ''; ?>>
+          <option value='0'<?php echo ( $showtitle == '' ) ? 'selected' : ''; ?>>
             Aus
           </option> 
         </select>                
@@ -294,11 +295,10 @@ class RRZE_Video_Widget extends \WP_Widget {
         <label for="<?php echo $this->get_field_id( 'meta' ); ?>"><?php _e('Zeige Metainformationen:' ) ?></label>
         <select class='widefat' id="<?php echo $this->get_field_id('meta'); ?>"
         name="<?php echo $this->get_field_name( 'meta' ); ?>" type="text">
-        <option value="" selected="selected"><?php _e('Auswählen') ?></option>   
         <option value='1'<?php echo ( $meta == '1' ) ? 'selected' : ''; ?>>
             Ein
           </option>
-          <option value='0'<?php echo ( $meta == '0' )?'selected' : ''; ?>>
+          <option value='0'<?php echo ( $meta == '' )?'selected' : ''; ?>>
             Aus
           </option> 
         </select>                

@@ -57,14 +57,12 @@
   .modal-content { -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); }
   .modal-sm { width: 300px; } }
 @media (min-width: 992px) { .modal-lg { width: 900px; } }
-* { -moz-backface-visibility: hidden; -ms-backface-visibility: hidden; -o-backface-visibility: hidden; backface-visibility: hidden; }
-
 /***************************************************************************
 * base
 ***************************************************************************/
 @media (max-width: 768px) { .rrze-video.rrze-video-widget-container { margin-left: 15px; } }
 
-.rrze-video { margin: 15px 0; display: inline-block; width: 640px; max-width: 100%; }
+.rrze-video { -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -ms-backface-visibility: hidden; -o-backface-visibility: hidden; backface-visibility: hidden; margin: 15px 0; display: inline-block; width: 640px; max-width: 100%; }
 @media (max-width: 768px) { .rrze-video { width: 100% !important; max-width: 100% !important; } }
 .rrze-video .modal-dialog { padding-top: 30%; }
 .rrze-video .modal-footer { text-align: left; color: black; }

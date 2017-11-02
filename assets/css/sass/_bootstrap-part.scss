@@ -218,11 +218,3 @@ $background_color_3: transparent;
 		width: 900px;
 	}
 }
-
-*{
-  //-webkit-backface-visibility:hidden;
-     -moz-backface-visibility:hidden;
-      -ms-backface-visibility:hidden;
-       -o-backface-visibility:hidden;
-          backface-visibility:hidden;
-}

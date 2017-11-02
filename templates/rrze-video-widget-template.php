@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <p class="description"><?php echo (!empty($desc)) ? 'Beschreibungs: ' . $desc : '' ?></p><br/>
+                <p class="description"><?php echo (!empty($desc)) ? 'Beschreibung: ' . $desc : '' ?></p><br/>
                  <?php if($meta == 1) { ?>
                     <span class="meta_heading">Author: </span><span class="meta_content"><?php echo $author ?></span><br/>
                     <span class="meta_heading">Quelle: </span><span class="meta_content">
