@@ -88,16 +88,17 @@ function custom_libraries_scripts() {
     
     $theme_name = wp_get_theme();
     wp_register_script( 'rrze-main-js', plugins_url( 'rrze-video/assets/js/rrze-ajax.js', dirname(__FILE__)), array('jquery'),'', true);
-    wp_register_script( 'bootstrapjs', plugins_url( 'rrze-video/assets/js/bootstrap.js', dirname(__FILE__)), array('jquery'),'', true);
+    //wp_register_script( 'bootstrapjs', plugins_url( 'rrze-video/assets/js/bootstrap.js', dirname(__FILE__)), array('jquery'),'', true);
+    //wp_register_script( 'myjs', plugins_url('rrze-video/assets/js/script.min.js', dirname(__FILE__)), array('jquery'),'' , true);
     wp_register_style( 'mediaelementplayercss', includes_url( 'js/mediaelement/mediaelementplayer.min.css', dirname(__FILE__) ) );
     wp_register_script( 'mediaelementplayerjs', includes_url( 'js/mediaelement/mediaelement-and-player.min.js', dirname(__FILE__)), array('jquery'),'', true);
     wp_register_style( 'stylescss', plugins_url( 'rrze-video/assets/css/style.css', dirname(__FILE__) ) );
-    wp_register_script( 'myjs', plugins_url('rrze-video/assets/js/script.js', dirname(__FILE__)), array('jquery'),'' , true);
+    wp_register_script( 'myjs', plugins_url('rrze-video/assets/js/scripts.min.js', dirname(__FILE__)), array('jquery'),'' , true);
    
    
     if( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'fauvideo') || is_active_widget( '', '', 'video_widget')) {
         wp_enqueue_script( 'rrze-main-js' );
-        wp_enqueue_script( 'bootstrapjs' );
+        //wp_enqueue_script( 'bootstrapjs' );
         wp_enqueue_style( 'mediaelementplayercss' );
         wp_enqueue_script( 'mediaelementplayerjs' );
         
