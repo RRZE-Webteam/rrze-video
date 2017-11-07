@@ -263,7 +263,7 @@ class RRZE_Video_Widget extends \WP_Widget {
         <p>
         <label for="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>"><?php esc_attr_e( 'Url:', 'rrze-video' ); ?></label> 
         <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" placeholder="url" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="text" value="<?php echo esc_attr( $url ); ?>">
-        <em><?php _e('URL' ) ?></em>
+        <em><?php _e('z. B. http://www.video.uni-erlangen.de/webplayer/id/13953') ?></em>
         </p>
         
         <p>

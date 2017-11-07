@@ -10,6 +10,7 @@ function url_callback( $post) {
 
     echo '<label for="url"></label>';
     echo '<input type="text" size="80" name="url" id="url" value="'.  esc_attr( $value ) . '"/>';
+    echo '<br /><em> z. B. http://www.video.uni-erlangen.de/webplayer/id/13953</em>';
    
 }
 
