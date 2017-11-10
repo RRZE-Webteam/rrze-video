@@ -96,6 +96,11 @@ class RRZE_Video_Widget extends \WP_Widget {
         if( !empty( $form_url ) ) {
 
             $video_flag = self::assign_video_flag($form_url);
+               
+            wp_enqueue_script( 'rrze-main-js' );
+            wp_enqueue_style( 'mediaelementplayercss' );
+            wp_enqueue_script( 'mediaelementplayerjs' );
+            wp_enqueue_script( 'myjs' );
 
             if($video_flag) {
 
@@ -146,6 +151,11 @@ class RRZE_Video_Widget extends \WP_Widget {
         $widget_video = self::assign_wp_query_arguments($form_url, $form_id, $argumentsID, $argumentsTaxonomy);
        
         if ( $widget_video->have_posts() ) : while ($widget_video->have_posts()) : $widget_video->the_post();
+        
+            wp_enqueue_script( 'rrze-main-js' );
+            wp_enqueue_style( 'mediaelementplayercss' );
+            wp_enqueue_script( 'mediaelementplayerjs' );
+            wp_enqueue_script( 'myjs' );
         
             $url = get_post_meta( $post->ID, 'url', true );
             

@@ -4,7 +4,7 @@
 Plugin Name: RRZE Video Plugin
 Plugin URI: https://github.com/RRZE-Webteam/rrze-video
 Description: This is a video plugin to show videos on pages and in the social media footer.
-Version: 1.2.7
+Version: 1.2.8
 Author: RRZE-Webteam
 Author URI: http://blogs.fau.de/webworking/
 License: GNU GPLv2
@@ -87,26 +87,18 @@ function custom_libraries_scripts() {
     global $post;
     
     $theme_name = wp_get_theme();
+    $THEMES_WITH_CSS = array("FAU-Einrichtungen", "FAU-Einrichtungen [BETA]", "FAU-Medfak", "FAU-Natfak", "FAU-Philfak", "FAU-RWfak", "FAU-Techfak", "RRZE 2015");
+    
     wp_register_script( 'rrze-main-js', plugins_url( 'rrze-video/assets/js/rrze-ajax.js', dirname(__FILE__)), array('jquery'),'', true);
-    //wp_register_script( 'bootstrapjs', plugins_url( 'rrze-video/assets/js/bootstrap.js', dirname(__FILE__)), array('jquery'),'', true);
-    //wp_register_script( 'myjs', plugins_url('rrze-video/assets/js/script.min.js', dirname(__FILE__)), array('jquery'),'' , true);
     wp_register_style( 'mediaelementplayercss', includes_url( 'js/mediaelement/mediaelementplayer.min.css', dirname(__FILE__) ) );
     wp_register_script( 'mediaelementplayerjs', includes_url( 'js/mediaelement/mediaelement-and-player.min.js', dirname(__FILE__)), array('jquery'),'', true);
     wp_register_style( 'stylescss', plugins_url( 'rrze-video/assets/css/style.css', dirname(__FILE__) ) );
     wp_register_script( 'myjs', plugins_url('rrze-video/assets/js/scripts.min.js', dirname(__FILE__)), array('jquery'),'' , true);
-   
-   
-    if( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'fauvideo') || is_active_widget( '', '', 'video_widget')) {
-        wp_enqueue_script( 'rrze-main-js' );
-        //wp_enqueue_script( 'bootstrapjs' );
-        wp_enqueue_style( 'mediaelementplayercss' );
-        wp_enqueue_script( 'mediaelementplayerjs' );
-        
-        if (preg_match('/^fau/i', $theme_name) || preg_match('/^rrze/i', $theme_name)) {
-            wp_enqueue_style( 'stylescss' );
-        }
-        
-        wp_enqueue_script( 'myjs' );
-        wp_localize_script( 'rrze-main-js', 'videoajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
+
+    if (in_array($theme_name, $THEMES_WITH_CSS)) {
+        wp_enqueue_style( 'stylescss' );
     }
+       
+    wp_localize_script( 'rrze-main-js', 'videoajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
+    
 }
