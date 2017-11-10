@@ -74,6 +74,12 @@ function show_video_on_page( $atts ) {
     if( !empty( $url_shortcode ) ) {
         
         $video_flag = assign_video_flag($url_shortcode);
+        
+        wp_enqueue_script( 'rrze-main-js' );
+        wp_enqueue_style( 'mediaelementplayercss' );
+        wp_enqueue_script( 'mediaelementplayerjs' );
+        wp_enqueue_script( 'myjs' );
+       
        
         if($video_flag) {
             
@@ -119,6 +125,12 @@ function show_video_on_page( $atts ) {
         $shortcode_video = assign_wp_query_arguments( $url_shortcode, $id_shortcode , $args_video, $argumentsTaxonomy);
     
         if ( $shortcode_video->have_posts() ) : while ($shortcode_video->have_posts()) : $shortcode_video->the_post();
+        
+            wp_enqueue_script( 'rrze-main-js' );
+            wp_enqueue_style( 'mediaelementplayercss' );
+            wp_enqueue_script( 'mediaelementplayerjs' );
+            wp_enqueue_script( 'myjs' );
+           
 
             $url = get_post_meta( $post->ID, 'url', true );
             
