@@ -1,23 +1,3 @@
-<?php
-echo '<script type="text/javascript">';
-echo 'jQuery(function($) { 
-$(document).keydown(function (e) {
-if (e.keyCode == 38) { $(".modal-overlay").hide();
-$(".modal").hide();
-$("video").trigger("pause");';
-if(!$show_youtube_player and $youtube_support == 0) {
-echo 'player = new YT.Player("ytplayer");';
-}   
-echo 'stopVideo($("#ytplayer'. $box_id . '"));}';  
-echo 'function stopVideo(player) {
-var vidSrc = player.prop("src");
-player.prop("src", "");
-player.prop("src", vidSrc);
-};
-});
-});';
-echo '</script>';
-?>
 <div class="rrze-video" <?php
 if ($width_shortcode != 640) { ?>
 style="width: <?php echo $rrze_video_shortcode['width'];?>px;"
