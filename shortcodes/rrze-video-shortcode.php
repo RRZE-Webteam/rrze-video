@@ -79,7 +79,7 @@ function show_video_on_page( $atts ) {
         wp_enqueue_style( 'mediaelementplayercss' );
         wp_enqueue_script( 'mediaelementplayerjs' );
         wp_enqueue_script( 'myjs' );
-       
+        wp_enqueue_style( 'stylescss' );
        
         if($video_flag) {
             
@@ -130,6 +130,7 @@ function show_video_on_page( $atts ) {
             wp_enqueue_style( 'mediaelementplayercss' );
             wp_enqueue_script( 'mediaelementplayerjs' );
             wp_enqueue_script( 'myjs' );
+            wp_enqueue_style( 'stylescss' );
            
 
             $url = get_post_meta( $post->ID, 'url', true );

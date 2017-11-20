@@ -101,6 +101,7 @@ class RRZE_Video_Widget extends \WP_Widget {
             wp_enqueue_style( 'mediaelementplayercss' );
             wp_enqueue_script( 'mediaelementplayerjs' );
             wp_enqueue_script( 'myjs' );
+            wp_enqueue_style( 'stylescss' );
 
             if($video_flag) {
 
@@ -156,6 +157,7 @@ class RRZE_Video_Widget extends \WP_Widget {
             wp_enqueue_style( 'mediaelementplayercss' );
             wp_enqueue_script( 'mediaelementplayerjs' );
             wp_enqueue_script( 'myjs' );
+            wp_enqueue_style( 'stylescss' );
         
             $url = get_post_meta( $post->ID, 'url', true );
             
