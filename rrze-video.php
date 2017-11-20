@@ -95,9 +95,9 @@ function custom_libraries_scripts() {
     wp_register_style( 'stylescss', plugins_url( 'rrze-video/assets/css/style.css', dirname(__FILE__) ) );
     wp_register_script( 'myjs', plugins_url('rrze-video/assets/js/scripts.min.js', dirname(__FILE__)), array('jquery'),'' , true);
 
-    if (in_array($theme_name, $THEMES_WITH_CSS)) {
+    /*if (!in_array($theme_name, $THEMES_WITH_CSS)) {
         wp_enqueue_style( 'stylescss' );
-    }
+    }*/
        
     wp_localize_script( 'rrze-main-js', 'videoajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
     
