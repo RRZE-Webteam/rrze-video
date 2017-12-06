@@ -152,20 +152,20 @@ $background_color_1: transparent;
                     opacity: 1.0;
             }
     }
-    .mejs-container {
+    .mejs__container {
             width: 100% !important;
             height: auto !important;
             padding-top: 56.3%;
     }
-    .mejs-overlay {
+    .mejs__overlay {
             width: 100% !important;
             height: 100% !important;
     }
-    .mejs-poster {
+    .mejs__poster {
             width: 100% !important;
             height: 100% !important;
     }
-    .mejs-mediaelement {
+    .mejs__mediaelement {
             video {
                     position: absolute;
                     top: 0;
