@@ -150,6 +150,12 @@ class RRZE_Video_Widget extends \WP_Widget {
         } else {
           
         $widget_video = self::assign_wp_query_arguments($form_url, $form_id, $argumentsID, $argumentsTaxonomy);
+        
+        $genre_title = self::get_video_title($form_url, $form_id);
+        
+        $single_title = '';
+        
+        if($genre_title) $single_title = $widget_video->posts[0]->post_title;
        
         if ( $widget_video->have_posts() ) : while ($widget_video->have_posts()) : $widget_video->the_post();
         
@@ -176,7 +182,13 @@ class RRZE_Video_Widget extends \WP_Widget {
                 $preview_image      = $video['preview_image'];
                 $picture            = (!$thumbnail) ? $preview_image : $thumbnail;
                 
-                if ( empty( $form_title ) && $form_showtitle == 1 ) {
+                if (!empty($single_title) && $form_showtitle == 1  )  {
+                    $showtitle  = $single_title;
+                    $modaltitle = $single_title;
+                }elseif(!empty($single_title) && $form_showtitle == 0  )  {
+                    $showtitle  = '';
+                    $modaltitle = $single_title;
+                }  elseif( empty( $form_title ) && $form_showtitle == 1 ) {
                     $showtitle  = $video['title'];
                     $modaltitle = $video['title']; 
                 } elseif( empty( $form_title ) && $form_showtitle == 0  ) {
@@ -446,6 +458,16 @@ class RRZE_Video_Widget extends \WP_Widget {
         } else {
             $widget_video = new \WP_Query($argumentsTaxonomy);
             return $widget_video;
+        }
+    }
+    
+    public static function get_video_title($url, $id) {
+        if (!empty($id)) {
+            return false;
+        } elseif (!empty($url)) {
+            return false;
+        } else {
+            return true;
         }
     }
     
