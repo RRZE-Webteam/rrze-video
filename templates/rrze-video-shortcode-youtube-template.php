@@ -12,15 +12,15 @@ style="width: <?php echo $rrze_video_shortcode['width'];?>px;"
         <a href="#get_youtube" data-box-id="<?php echo $id ?>" data-youtube-id="<?php echo $youtube_id ?>" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
         <?php } ?>
         <?php if( $youtube_resolution == 1 ) { ?>
-        <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
+        <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" alt="Video aufrufen" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
         <?php } elseif( $youtube_resolution == 2 ) { ?>
-        <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/default.jpg"/>
+        <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" alt="Video aufrufen" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/default.jpg"/>
         <?php } elseif( $youtube_resolution == 3 ) { ?>
-        <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/hqdefault.jpg"/>
+        <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" alt="Video aufrufen" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/hqdefault.jpg"/>
         <?php } elseif( $youtube_resolution == 4 ) { ?>
-        <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
+        <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" alt="Video aufrufen" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
         <?php } else { ?>
-        <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/sddefault.jpg"/>
+        <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" alt="Video aufrufen" class="image<?php echo $box_id ?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/sddefault.jpg"/>
         <?php } ?>
         <div class="middle">
             <div class="play-button">

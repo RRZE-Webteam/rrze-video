@@ -6,9 +6,9 @@ style="width: <?php echo $width_shortcode; echo !empty($suffix) ? $suffix : '' ?
 <<?php echo $rrze_video_shortcode['titletag'] ?>><?php echo $showtitle ?></<?php echo $rrze_video_shortcode['titletag'] ?>>
 <?php } ?>
 <div class="rrze-video-container rrze-video-id-<?php echo $box_id ?>">
-    <a href="#get_video" data-toggle="modal" data-id="<?php echo $id ?>" data-preview-image="<?php echo $preview_image ?>" data-video-file="<?php echo $video_file ?>" data-target="#videoModal<?php echo $id ?>"><?php if(!empty($thumbnail)){echo '<img src="' . $thumbnail[0]  . '" title="'. $video_url['title'] .'" class="image' . $box_id .'"  />';
+    <a href="#get_video" data-toggle="modal" data-id="<?php echo $id ?>" data-preview-image="<?php echo $preview_image ?>" data-video-file="<?php echo $video_file ?>" data-target="#videoModal<?php echo $id ?>"><?php if(!empty($thumbnail)){echo '<img src="' . $thumbnail[0]  . '" title="'. $video_url['title'] .'" alt="Video aufrufen" class="image' . $box_id .'"  />';
     } else { ?>
-    <img title="<?php echo $video_url['title'] ?>"  src="<?php echo $picture ?>" class="image<?php echo $id ?>"/>
+    <img title="<?php echo $video_url['title'] ?>"  alt="Video aufrufen"  src="<?php echo $picture ?>" class="image<?php echo $id ?>"/>
     <?php }?>
     <div class="middle"><div class="play-button"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div></div>
     </a>

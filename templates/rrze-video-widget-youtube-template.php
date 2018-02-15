@@ -1,5 +1,11 @@
 <div class="rrze-video rrze-video-widget-container">
-<h2 class="small"><?php echo (!empty($form_showtitle)) ? wordwrap($modaltitle, 50, "<br/>") : '' ?></h2>
+<?php 
+$thistitle = wordwrap($showtitle, 50, "<br/>");
+if (empty($thistitle)) {
+   $thistitle = wordwrap($modaltitle, 50, "<br/>");
+}
+echo "<h2>".$thistitle."</h2>";
+?> 
 <?php if(!$show_youtube_player) { ?>
 <a href="#get_widget_mejs_youtube" data-toggle="modal"  data-box-id="<?php echo $id ?>" data-youtube-id="<?php echo $youtube_id ?>" data-target="#videoModal<?php echo $id ?>">
 <?php } else { ?>
@@ -7,15 +13,15 @@
 <?php } ?>    
 <div class="box-widget<?php echo $box_id ?>">
     <?php if( $youtube_resolution == 1 ) { ?>
-    <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
+    <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" alt="Video aufrufen" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
     <?php } elseif( $youtube_resolution == 2 ) { ?>
-    <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/default.jpg"/>
+    <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" alt="Video aufrufen" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/default.jpg"/>
     <?php } elseif( $youtube_resolution == 3 ) { ?>
-    <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/hqdefault.jpg"/>
+    <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" alt="Video aufrufen" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/hqdefault.jpg"/>
     <?php } elseif( $youtube_resolution == 4 ) { ?>
-    <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
+    <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" alt="Video aufrufen" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
     <?php } else { ?>
-    <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/sddefault.jpg"/>
+    <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" alt="Video aufrufen" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/sddefault.jpg"/>
     <?php } ?>
     <div class="overlay-widget">
         <div class="text">

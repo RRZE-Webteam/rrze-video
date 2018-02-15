@@ -1,12 +1,18 @@
 <div class="rrze-video rrze-video-widget-container">
-<h2 class="small"><?php echo wordwrap($showtitle, 50, "<br/>") ?></h2>
+<?php 
+$thistitle = wordwrap($showtitle, 50, "<br/>");
+if (empty($thistitle)) {
+   $thistitle = wordwrap($modaltitle, 50, "<br/>");
+}
+echo "<h2>".$thistitle."</h2>";
+?> 
 <a href="#get_video_widget" data-id="<?php echo $id ?>" data-preview-image="<?php echo $preview_image ?>" data-video-file="<?php echo $video_file ?>" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
 <div class="box-widget<?php echo $box_id ?>">
     <?php if(!empty($thumbnail)) {     
         //echo $picture;
-        echo '<img title="'. $modaltitle .'" src="' . $thumbnail[0]  . '" width="'. $instance['width'] . '" height="' . $instance['height']  . '"  />'; // width="100%" responsive
+        echo '<img title="'. $modaltitle .'" alt="Bild zum Video '. $modaltitle .'" src="' . $thumbnail[0]  . '" width="'. $instance['width'] . '" height="' . $instance['height']  . '"  />'; // width="100%" responsive
     } else { ?>
-        <img title="<?php echo $modaltitle ?>" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"  src="<?php echo $picture ?>"/> <!-- width="100%" responsive  -->
+        <img title="<?php echo $modaltitle ?>" alt="Bild zum Video <?php echo $modaltitle ?>"  width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"  src="<?php echo $picture ?>"/> <!-- width="100%" responsive  -->
     <?php }?>
     <div class="overlay-widget">
         <div class="text">
