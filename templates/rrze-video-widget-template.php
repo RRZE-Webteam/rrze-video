@@ -35,14 +35,14 @@ echo "<h2>".$thistitle."</h2>";
             <div class="modal-body">
                 <div class="videocontent<?php echo $id ?>">
                     <div class="player">
-                        <img src="<?php echo $preview_image ?>" />
+                        <img src="<?php echo $preview_image ?>" alt="<?php echo $thistitle; ?>">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <p class="description"><?php echo (!empty($desc)) ? 'Beschreibung: ' . $desc : '' ?></p><br/>
+                <p class="description"><?php echo (!empty($desc)) ? 'Beschreibung: ' . $desc : '' ?></p><br>
                  <?php if($meta == 1) { ?>
-                    <span class="meta_heading">Author: </span><span class="meta_content"><?php echo $author ?></span><br/>
+                    <span class="meta_heading">Author: </span><span class="meta_content"><?php echo $author ?></span><br>
                     <span class="meta_heading">Quelle: </span><span class="meta_content">
                         <a href="<?php echo $video_file ?>">Download</a>
                     </span><br />

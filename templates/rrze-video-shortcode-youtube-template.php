@@ -42,7 +42,7 @@ style="width: <?php echo $rrze_video_shortcode['width'];?>px;"
             <div class="videocontent<?php echo $id ?>">
                 <?php if(!$show_youtube_player and $youtube_support == 0) { ?>
                 <div class="player">
-                      <img title="preview_image" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"/>
+                      <img title="preview_image" width="100%" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/mqdefault.jpg"  alt="<?php echo $thistitle; ?>">
                 </div>
                 <?php } else { ?>
                 <div class="embed-container<?php echo $id ?>">

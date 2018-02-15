@@ -25,7 +25,7 @@ style="width: <?php echo $width_shortcode; echo !empty($suffix) ? $suffix : '' ?
             <div class="modal-body">
                 <div class="videocontent<?php echo $id ?>">
                     <div class="player">
-                        <img src="<?php echo $preview_image ?>" />
+                        <img src="<?php echo $preview_image ?>" alt="<?php echo $video_url['title'] ?>" />
                     </div>
                 </div>
             </div>
