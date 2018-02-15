@@ -4,19 +4,19 @@
 Plugin Name: RRZE Video Plugin
 Plugin URI: https://github.com/RRZE-Webteam/rrze-video
 Description: This is a video plugin to show videos on pages and in the social media footer.
-Version: 1.2.12
+Version: 1.2.13
 Author: RRZE-Webteam
 Author URI: http://blogs.fau.de/webworking/
 License: GNU GPLv2
 License URI: https://gnu.org/licenses/gpl.html
 Text Domain: rrze-video
 
-{Plugin Name} is free software: you can redistribute it and/or modify
+RRZE Video Plugin is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
 any later version.
 
-{Plugin Name} is distributed in the hope that it will be useful,
+RRZE Video Plugin is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
