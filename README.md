@@ -37,8 +37,8 @@ Das Feld "Url" kann je Datensatz einen der folgenden Werte annehmen:
 
 Für ein Video aus dem FAU Videoportal
 
-* 13950 (Die Video-ID aus dem FAU Videoportal)
 * http://www.video.uni-erlangen.de/webplayer/id/13950
+* http://www.video.uni-erlangen.de/clip/id/8352
 
 Für ein Youtube Video
 
@@ -57,7 +57,7 @@ Für eine Video aus dem FAU Videoportal
 ```
 oder
 ```
-[fauvideo url="13950" width="640" height="360" showtitle="1" showinfo="1" titletag="h4" rand="news"]
+[fauvideo url="http://www.video.uni-erlangen.de/clip/id/8352" width="640" height="360" showtitle="1" showinfo="1" titletag="h4" rand="news"]
 ```
 
 Für ein Youtube Video
@@ -85,6 +85,17 @@ oder
 * Dem Argument "youtube-support" kann den Wert 0 oder 1 annehmen. (Videos werden dann mit dem Youtube Player angezeigt - Default 0/off)
 * Dem Argument "youtube-resolution" kann einen Wert zwischen 1 und 4 übergeben werden. (Das Vorschaubild wird im Format 16:9 angezeigt - Default 4)
 * Dem Argument "rand" kann der Wert aus der Datensatzspalte Genre übergeben werden. (zufällig Wiedergabe von Videos, welche diesem Genre zugeordnet sind - kein Default)
+
+### __Ausrichtung der Videos auf einer Wordpress-Seite__
+Die Videos können links- oder rechtsbündig angeordnet werden. Der Text nach dem Video umfließt das Vorschaubild.
+```
+<div class="alignleft|alignright">
+
+[fauvideo id="http://www.video.uni-erlangen.de/clip/id/8352" width="420"  showtitle="1" showinfo="1" titletag="h4"]
+
+</div>
+Lo Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+```
 
 ## Einbindung des Plugins als Widget
 
