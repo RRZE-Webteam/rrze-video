@@ -49,14 +49,8 @@ get_header(); ?>
                 <div class="col-xs-12 col-lg-6">
                     <div class="rrze-video">
                         <?php $url = get_post_meta($post->ID, 'url', true);
-                        $suchmuster = '/youtu/';
-                        $string = substr($url, strpos($url, '='));
-                        $video = substr($string,1);
-                        /*if (!preg_match($suchmuster, $url)) { ?>
-                        <!-- <iframe src="https://www.video.uni-erlangen.de/services/oembed/?url=<?php #echo $url ?>&format=iframe&maxwidth=480&maxheight=240 " width="480" height="240" seamless style="border: 0; padding: 0; margin: 0; overflow: hidden;"></iframe>
-                        <?php } else { ?>
-                        <iframe width="480" height="240" id="player1" src="https://www.youtube.com/embed/<?php #echo $video ?>" frameborder="0" allowfullscreen=""></iframe> -->
-                        <?php } */?>
+                        echo do_shortcode('[fauvideo url="'. $url . '" width="480"  showtitle="1" showinfo="1" titletag="h4"]');
+                    ?>
                     </div>
                 </div>
                 <?php endwhile; ?>

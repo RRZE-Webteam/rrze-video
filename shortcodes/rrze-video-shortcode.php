@@ -109,8 +109,9 @@ function show_video_on_page( $atts ) {
 
             $id = uniqid();
             $youtube_id = http_check_and_filter($url_shortcode);
-            
+            $showtitle  = ($rrze_video_shortcode['showtitle'] == 1) ? get_the_title() : '';
             ob_start();
+            
             include( plugin_dir_path( __DIR__ ) . 'templates/rrze-video-shortcode-youtube-template.php');
             return ob_get_clean();
 
