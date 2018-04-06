@@ -46,6 +46,8 @@ function init() {
     include_once('shortcodes/rrze-video-shortcode.php');
     include_once('widgets/rrze-video-widget.php');
     include_once('help/rrze-video-plugin-tabmenu.php');
+    require_once('includes/endpoint/video-endpoint.php');
+    new VideoEndpoint;
     
     
     
@@ -61,6 +63,7 @@ function textdomain() {
 function activation() {
     textdomain();
     system_requirements();
+    flush_rewrite_rules();
     
 }
 
