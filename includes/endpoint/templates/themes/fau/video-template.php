@@ -52,11 +52,11 @@ get_header(); ?>
                         $suchmuster = '/youtu/';
                         $string = substr($url, strpos($url, '='));
                         $video = substr($string,1);
-                        if (!preg_match($suchmuster, $url)) { ?>
-                        <iframe src="https://www.video.uni-erlangen.de/services/oembed/?url=<?php echo $url ?>&format=iframe&maxwidth=480&maxheight=240 " width="480" height="240" seamless style="border: 0; padding: 0; margin: 0; overflow: hidden;"></iframe>
+                        /*if (!preg_match($suchmuster, $url)) { ?>
+                        <!-- <iframe src="https://www.video.uni-erlangen.de/services/oembed/?url=<?php #echo $url ?>&format=iframe&maxwidth=480&maxheight=240 " width="480" height="240" seamless style="border: 0; padding: 0; margin: 0; overflow: hidden;"></iframe>
                         <?php } else { ?>
-                        <iframe width="480" height="240" id="player1" src="https://www.youtube.com/embed/<?php echo $video ?>" frameborder="0" allowfullscreen=""></iframe>
-                        <?php } ?>
+                        <iframe width="480" height="240" id="player1" src="https://www.youtube.com/embed/<?php #echo $video ?>" frameborder="0" allowfullscreen=""></iframe> -->
+                        <?php } */?>
                     </div>
                 </div>
                 <?php endwhile; ?>
