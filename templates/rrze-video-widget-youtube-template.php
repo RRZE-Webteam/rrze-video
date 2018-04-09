@@ -1,6 +1,6 @@
 <div class="rrze-video rrze-video-widget-container">
 <?php 
-$thistitle = wordwrap(!empty($showtitle), 50, "<br/>");
+$thistitle = wordwrap($showtitle, 50, "<br/>");
 if (empty($thistitle)) {
    $thistitle = wordwrap($modaltitle, 50, "<br/>");
 }
