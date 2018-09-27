@@ -27,7 +27,7 @@ echo "<h2>".$thistitle."</h2>";
 	    <div class="overlay-widget">
 		<div class="text">
 		    <span class="yt-icon-widget">
-			<i class="fa fa-play-circle-o" aria-hidden="true"></i>
+			<em class="fa fa-play-circle-o" aria-hidden="true"></em>
 		    </span>
 		</div>
 	    </div>
@@ -39,7 +39,7 @@ echo "<h2>".$thistitle."</h2>";
 	    <div class="modal-content">
 		<div class="modal-header">
 		    <div class="close-modal" data-dismiss="modal">
-			<i class="fa fa-times" aria-hidden="true"></i>
+			<em class="fa fa-times" aria-hidden="true"></em>
 		    </div>
 		    <h2 class="widget-title" style="color:#000;padding:<?php echo ($modaltitle) ? '30px 0px' : '20px 0px' ?>"><?php echo (isset($modaltitle)) ? wordwrap($modaltitle, 30, "<br/>") : '' ?></h2>
 		</div>
