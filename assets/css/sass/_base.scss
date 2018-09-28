@@ -101,19 +101,7 @@ $background_color_1: transparent;
             background-color: $background_color_1;
             opacity: 1.0;
     }
-    .overlay-widget {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 100%;
-            width: 100%;
-            opacity: 0;
-            transition: .5s ease;
-            background-color: $background_color_1;
-            opacity: 1.0;
-    }
+    
     .yt-icon {
             color: $color_3;
             font-size: 80px;
@@ -124,20 +112,7 @@ $background_color_1: transparent;
             -ms-transform: translate(-50%, -50%);
             text-decoration: none;
     }
-    .yt-icon-widget {
-            color: $color_2;
-            font-size: 80px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            -ms-transform: translate(-50%, -50%);
-            text-decoration: none;
-            opacity: 0.7;
-            &:hover {
-                    opacity: 1.0;
-            }
-    }
+    
     .yt-icon-shortcode {
             color: $color_2;
             font-size: 80px;
@@ -238,6 +213,33 @@ $background_color_1: transparent;
     }
    
 }
+
+.rrze-video-widget-box {
+    
+
+    .overlay-widget {
+	    opacity: 0;
+	    transition: .5s ease;
+	    background-color: $background_color_1;
+	    opacity: 1.0;
+    }
+	
+    .yt-icon-widget {
+            color: $color_2;
+            font-size: 80px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -30%);
+            -ms-transform: translate(-50%, -30%);
+            text-decoration: none;
+            opacity: 0.7;
+            &:hover {
+                    opacity: 1.0;
+            }
+    }
+}
+
 
 .rrze-video-container {
     position: relative;

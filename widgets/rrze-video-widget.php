@@ -87,8 +87,8 @@ class RRZE_Video_Widget extends \WP_Widget {
             wp_enqueue_script( 'rrze-main-js' );
             wp_enqueue_style( 'mediaelementplayercss' );
             wp_enqueue_script( 'mediaelementplayerjs' );
-            wp_enqueue_script( 'myjs' );
-            wp_enqueue_style( 'stylescss' );
+            wp_enqueue_script( 'rrze-video-js' );
+            wp_enqueue_style( 'rrze-video-css' );
 
             if($video_flag) {
                 $suchmuster = '/clip/';
@@ -152,8 +152,8 @@ class RRZE_Video_Widget extends \WP_Widget {
             wp_enqueue_script( 'rrze-main-js' );
             wp_enqueue_style( 'mediaelementplayercss' );
             wp_enqueue_script( 'mediaelementplayerjs' );
-            wp_enqueue_script( 'myjs' );
-            wp_enqueue_style( 'stylescss' );
+            wp_enqueue_script( 'rrze-video-js' );
+            wp_enqueue_style( 'rrze-video-css' );
         
             $url = get_post_meta( $post->ID, 'url', true );
             $orig_video_url     = self::http_check_and_filter($url);
