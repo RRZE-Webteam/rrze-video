@@ -7,8 +7,8 @@ if (empty($thistitle)) {
 echo "<h2>".$thistitle."</h2>";
 ?>
     <div class="rrze-video-defaultplayer">
-	<a href="#get_video_widget" data-id="<?php echo $id ?>" data-preview-image="<?php echo $preview_image ?>" data-video-file="<?php echo $video_file ?>" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
-	<div class="box-widget<?php echo $box_id ?>">
+	<a href="<?php echo $orig_video_url ?>" data-type="videothumb" data-id="<?php echo $id ?>" data-preview-image="<?php echo $preview_image ?>" data-video-file="<?php echo $video_file ?>" data-toggle="modal" data-target="#videoModal<?php echo $id ?>">
+	<div class="rrze-video-widget-box">
 	    <?php if(!empty($thumbnail)) {     
 		//echo $picture;
 		echo '<img title="'. $modaltitle .'" alt="Bild zum Video '. $modaltitle .'" src="' . $thumbnail[0]  . '" width="'. $instance['width'] . '" height="' . $instance['height']  . '"  />'; // width="100%" responsive
@@ -18,7 +18,7 @@ echo "<h2>".$thistitle."</h2>";
 	    <div class="overlay-widget">
 		<div class="text">
 		    <span class="yt-icon-widget">
-			<i class="fa fa-play-circle-o" aria-hidden="true"></i>
+			<em class="fa fa-play-circle-o" aria-hidden="true"></em>
 		    </span>
 		</div>
 	    </div>
@@ -30,7 +30,7 @@ echo "<h2>".$thistitle."</h2>";
 	    <div class="modal-content">
 		<div class="modal-header">
 		    <div class="close-modal" data-dismiss="modal">
-			<i class="fa fa-times" aria-hidden="true"></i>
+			<em class="fa fa-times" aria-hidden="true"></em>
 		    </div>
 		    <h2 class="modal-title" style="color:#000;padding:<?php echo ($modaltitle) ? '30px 0px' : '20px 0px' ?>"><?php echo wordwrap($modaltitle, 30, "<br/>") ?></h2>
 		</div>

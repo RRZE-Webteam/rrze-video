@@ -80,21 +80,8 @@ class RRZE_Video_Widget extends \WP_Widget {
         );
         
         $box_id = uniqid();
-   
-        ?>
-
-        <style type="text/css" scoped="scoped">
-            @media (min-width: 320px) {
-                .box-widget<?php echo $box_id ?> {
-                  max-width:<?php echo $width .'px' ?>;
-                }
-            }
-        </style>  
-
-        <?php
-        
+           
         if( !empty( $form_url ) ) {
-
             $video_flag = self::assign_video_flag($form_url);
                
             wp_enqueue_script( 'rrze-main-js' );
@@ -116,7 +103,7 @@ class RRZE_Video_Widget extends \WP_Widget {
                 $preview_image      = 'https://cdn.video.uni-erlangen.de/Images/player_previews/'. self::http_check_and_filter($form_url) .'_preview.img';
                 $picture            = $preview_image;
                 $desc               = '';
-                
+                $orig_video_url     = $form_url;
                 if ( empty( $form_title ) && $form_showtitle == 1 ) {
                     $showtitle  = $video_url['title'];
                     $modaltitle = $video_url['title']; 
@@ -143,7 +130,7 @@ class RRZE_Video_Widget extends \WP_Widget {
 
                 $id = uniqid();
                 $youtube_id = http_check_and_filter($form_url);
-                
+                $orig_video_url     = $form_url;
                 $modaltitle = $form_title;
 
                 include( plugin_dir_path( __DIR__ ) . 'templates/rrze-video-widget-youtube-template.php');
@@ -154,12 +141,10 @@ class RRZE_Video_Widget extends \WP_Widget {
 
         } else {
           
-        $widget_video = self::assign_wp_query_arguments($form_url, $form_id, $argumentsID, $argumentsTaxonomy);
-        
+        $widget_video = self::assign_wp_query_arguments($form_url, $form_id, $argumentsID, $argumentsTaxonomy);        
         $genre_title = self::get_video_title($form_url, $form_id);
-        
         $single_title = '';
-        
+        $orig_video_url     = $form_url;
         if($genre_title) $single_title = $widget_video->posts[0]->post_title;
        
         if ( $widget_video->have_posts() ) : while ($widget_video->have_posts()) : $widget_video->the_post();
@@ -171,7 +156,7 @@ class RRZE_Video_Widget extends \WP_Widget {
             wp_enqueue_style( 'stylescss' );
         
             $url = get_post_meta( $post->ID, 'url', true );
-            
+            $orig_video_url     = self::http_check_and_filter($url);
             $video_flag = self::assign_video_flag($url);
         
             if ($video_flag) {
@@ -232,7 +217,7 @@ class RRZE_Video_Widget extends \WP_Widget {
                 $youtube_title      = get_the_title();
                 $youtube_id         = self::http_check_and_filter($youtube_data);
                 $desc               = get_post_meta( $post->ID, 'description', true );
-                
+                $orig_video_url     = $youtube_data;
                 if ( empty( $form_title ) && $form_showtitle == 1 ) {
                     $showtitle  =  $youtube_title; 
                     $modaltitle =  $youtube_title; 
@@ -493,7 +478,8 @@ class RRZE_Video_Widget extends \WP_Widget {
        <script type="text/javascript" >
 	jQuery(document).ready(function($) {
 
-            $('a[href="#get_video_widget"]').click(function(){
+            // $('a[href="#get_video_widget"]').click(function(){
+            $('a[data-type="videothumb"]').click(function(){
 
                 var id = $(this).attr('data-id');
                 var poster = $(this).attr('data-preview-image');
