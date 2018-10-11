@@ -4,7 +4,7 @@
 Plugin Name: RRZE Video Plugin
 Plugin URI: https://github.com/RRZE-Webteam/rrze-video
 Description: This is a video plugin to show videos on pages and in the social media footer.
-Version: 1.3.0
+Version: 1.3.1
 Author: RRZE-Webteam
 Author URI: http://blogs.fau.de/webworking/
 License: GNU GPLv2
@@ -28,16 +28,16 @@ along with {Plugin Name}. If not, see {License URI}.
 namespace RRZE\PostVideo;
 
 const RRZE_PHP_VERSION = '7.0';
-const RRZE_WP_VERSION = '4.7';
-    
+const RRZE_WP_VERSION = '4.9';
+
 add_action('plugins_loaded', 'RRZE\PostVideo\init');
 register_activation_hook(__FILE__, 'RRZE\PostVideo\activation');
 register_deactivation_hook(__FILE__, 'RRZE\PostVideo\deactivation');
 
 function init() {
-    
+
     textdomain();
-    
+
     include_once('includes/posttype/rrze-video-posttype.php');
     include_once('includes/taxonomy/rrze-video-taxonomy.php');
     include_once('includes/metabox/rrze-video-add-metaboxes.php');
@@ -49,12 +49,12 @@ function init() {
     include_once('help/rrze-video-plugin-tabmenu.php');
     require_once('includes/endpoint/video-endpoint.php');
     new VideoEndpoint;
-    
-    
-    
+
+
+
     add_action( 'wp_enqueue_scripts', 'RRZE\PostVideo\custom_libraries_scripts');
     add_action( 'admin_notices', 'RRZE\PostVideo\video_admin_notice');
-    
+
 }
 
 function textdomain() {
@@ -63,14 +63,14 @@ function textdomain() {
 
 function activation() {
     textdomain();
-    
+
     system_requirements();
-    
+
     require_once __DIR__ . '/includes/endpoint/video-endpoint.php';
     $obj = new VideoEndpoint;
     $obj->default_options();
     $obj->rewrite();
-    
+
     flush_rewrite_rules();
 }
 
@@ -97,12 +97,12 @@ function system_requirements() {
 }
 
 function custom_libraries_scripts() {
-    
+
     global $post;
-    
+
     $theme_name = wp_get_theme();
    // $THEMES_WITH_CSS = array("FAU-Einrichtungen", "FAU-Einrichtungen [BETA]", "FAU-Medfak", "FAU-Natfak", "FAU-Philfak", "FAU-RWfak", "FAU-Techfak", "RRZE 2015");
-    
+
     wp_register_script( 'rrze-main-js', plugins_url( 'rrze-video/assets/js/rrze-ajax.js', dirname(__FILE__)), array('jquery'),'', true);
     wp_register_style( 'mediaelementplayercss', includes_url( 'js/mediaelement/mediaelementplayer.min.css', dirname(__FILE__) ) );
     wp_register_script( 'mediaelementplayerjs', includes_url( 'js/mediaelement/mediaelement-and-player.min.js', dirname(__FILE__)), array('jquery'),'', true);
@@ -112,7 +112,7 @@ function custom_libraries_scripts() {
     /*if (!in_array($theme_name, $THEMES_WITH_CSS)) {
         wp_enqueue_style( 'stylescss' );
     }*/
-       
+
     wp_localize_script( 'rrze-main-js', 'videoajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
-    
+
 }
