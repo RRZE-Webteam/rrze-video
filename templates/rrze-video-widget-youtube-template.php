@@ -12,7 +12,7 @@ echo "<h2>".$thistitle."</h2>";
 	<?php } else { ?>
 	<a href="#get_widget_youtube" data-toggle="modal" data-box-id="<?php echo $id ?>" data-youtube-id="<?php echo $youtube_id ?>" data-target="#videoModal<?php echo $id ?>">
 	<?php } ?>    
-	<div class="box-widget<?php echo $box_id ?>">
+	<div class="rrze-video-widget-box box-widget<?php echo $box_id ?>">
 	    <?php if( $youtube_resolution == 1 ) { ?>
 	    <img title="<?php echo (!isset($modaltitle)) ? 'Youtube Image' : get_the_title() ?>" alt="Video aufrufen" width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height']?>" src="https://img.youtube.com/vi/<?php echo $youtube_id ?>/maxresdefault.jpg"/> <!-- width="100%" responsive maxresdefault.jpg hqdefault.jpg -->
 	    <?php } elseif( $youtube_resolution == 2 ) { ?>
