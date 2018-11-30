@@ -58,6 +58,8 @@ class RRZE_Video_Widget extends \WP_Widget {
         $taxonomy_genre         = (!empty($instance['genre'])) ? $instance['genre'] :'';
         $youtube_resolution     = (!empty($instance['resolution'])) ? $instance['resolution'] :'';
         
+	$showtitle  = $form_title;
+	
         $argumentsID = array(
             'post_type'         =>  'Video',
             'p'                 =>  $form_id,
@@ -89,7 +91,7 @@ class RRZE_Video_Widget extends \WP_Widget {
             wp_enqueue_script( 'mediaelementplayerjs' );
             wp_enqueue_script( 'rrze-video-js' );
             wp_enqueue_style( 'rrze-video-css' );
-
+	    
             if($video_flag) {
                 $suchmuster = '/clip/';
                 if(preg_match($suchmuster, $form_url)) {
@@ -101,6 +103,7 @@ class RRZE_Video_Widget extends \WP_Widget {
                 $video_url          = json_decode(wp_remote_retrieve_body(wp_safe_remote_get($oembed_url)), true);       
                 $video_file         = $video_url['file'];
                 $preview_image      = 'https://cdn.video.uni-erlangen.de/Images/player_previews/'. self::http_check_and_filter($form_url) .'_preview.img';
+		
                 $picture            = $preview_image;
                 $desc               = '';
                 $orig_video_url     = $form_url;
