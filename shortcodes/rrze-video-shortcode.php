@@ -15,6 +15,7 @@ function show_video_on_page($atts)
         'id'                    => '',
         'width'                 => '640',
         'height'                => '360',
+        'poster'                => '', // '',[url],'default'
         'showinfo'              => '1',
         'showtitle'             => '1',
         'titletag'              => 'h2',
@@ -27,6 +28,7 @@ function show_video_on_page($atts)
     $id_shortcode           = $rrze_video_shortcode['id'];
     $width_shortcode        = $rrze_video_shortcode['width'];
     $height_shortcode       = $rrze_video_shortcode['height'];
+    $poster_shortcode       = $rrze_video_shortcode['poster'];
     $taxonomy_genre         = $rrze_video_shortcode['rand'];
     $youtube_support        = $rrze_video_shortcode['youtube-support'];
     $youtube_resolution     = $rrze_video_shortcode['youtube-resolution'];
@@ -72,26 +74,31 @@ function show_video_on_page($atts)
      */
 
     if (!empty($url_shortcode)) {
+
         $video_flag = assign_video_flag($url_shortcode);
 
         enqueue_scripts();
 
         if ($video_flag) {
+            // FAU-Video
+            $fau_video_url = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de';
             $suchmuster = '/clip/';
             if (preg_match($suchmuster, $url_shortcode)) {
-                $oembed_url         = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de/clip/id/' . http_check_and_filter($url_shortcode) . '&format=json';
+                $oembed_url = $fau_video_url . '/clip/id/'      . http_check_and_filter($url_shortcode) . '&format=json';
             } else {
-                $oembed_url         = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de/webplayer/id/' . http_check_and_filter($url_shortcode) . '&format=json';
+                $oembed_url = $fau_video_url . '/webplayer/id/' . http_check_and_filter($url_shortcode) . '&format=json';
             }
-            //$oembed_url         = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de/webplayer/id/' . http_check_and_filter($url_shortcode) . '&format=json';
-            $video_url          = json_decode(wp_remote_retrieve_body(wp_safe_remote_get($oembed_url)), true);
-            $video_file         = $video_url['file'];
-            $preview_image      = 'https://cdn.video.uni-erlangen.de/Images/player_previews/'. http_check_and_filter($url_shortcode) .'_preview.img';
-            $picture            = $preview_image;
-            $showtitle          = ($rrze_video_shortcode['showtitle'] == 1) ? $video_url['title'] : '';
-            $modaltitle         = $video_url['title'];
-            $author             = ($rrze_video_shortcode['showinfo'] == 1) ? $video_url['author_name'] : '';
-            $copyright          = ($rrze_video_shortcode['showinfo'] == 1) ? $video_url['provider_name'] : '';
+            $video_url  = json_decode(wp_remote_retrieve_body(wp_safe_remote_get($oembed_url)), true);
+            $video_file = $video_url['file'];
+
+            $preview_image  = video_preview_image($poster_shortcode);
+            // @@todo: small + large size for image and preview?
+            $picture        = $preview_image;
+            //
+            $showtitle      = ($rrze_video_shortcode['showtitle'] == 1) ? $video_url['title'] : '';
+            $modaltitle     = $video_url['title'];
+            $author         = ($rrze_video_shortcode['showinfo'] == 1) ? $video_url['author_name'] : '';
+            $copyright      = ($rrze_video_shortcode['showinfo'] == 1) ? $video_url['provider_name'] : '';
 
             $id = uniqid();
 
@@ -99,11 +106,18 @@ function show_video_on_page($atts)
             include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-template.php');
             return ob_get_clean();
         } else {
+            // YT video
             $id = uniqid();
             $youtube_id = http_check_and_filter($url_shortcode);
             $showtitle  = ($rrze_video_shortcode['showtitle'] == 1) ? get_the_title() : '';
+            $preview_image_opts = array(
+                'type'       => 'youtube',
+                'id'         => $youtube_id,
+                'resolution' => $youtube_resolution
+            );
+            $preview_image = video_preview_image($poster_shortcode, $preview_image_opts);
+            $picture = $preview_image;
             ob_start();
-
             include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-youtube-template.php');
             return ob_get_clean();
         }
@@ -176,6 +190,55 @@ function show_video_on_page($atts)
 
         return $out;
     }
+}
+
+function video_preview_image($poster,$args=array())
+{
+    $options_default = array(
+        'type' => false,
+        'id' => false,
+        'resolution' => false
+    );
+    $options = array_merge($options_default,$args);
+    // Preview image handling
+    $preview_image = false;
+    if ($poster == '') {
+        $preview_image = plugin_dir_url(__DIR__) . 'assets/img/_preview.png';
+    } else if ($poster == 'default') {
+        switch ($options['type']) {
+            case 'youtube':
+                $youtube_url = 'https://img.youtube.com/vi/' . $options['id'];
+                switch($options['resolution']){
+                    case 1:
+                        $preview_image = $youtube_url . '/maxresdefault.jpg';
+                        break;
+                    case 2:
+                        $preview_image = $youtube_url . '/default.jpg';
+                        break;
+                    case 3:
+                        $preview_image = $youtube_url . '/hqdefault.jpg';
+                        break;
+                    case 4:
+                        $preview_image = $youtube_url . '/mqdefault.jpg';
+                        break;
+                    default:
+                        $preview_image = $youtube_url . '/sddefault.jpg';
+                }
+                break;
+            default:
+                $preview_image = 'https://cdn.video.uni-erlangen.de/Images/player_previews/' . http_check_and_filter($url_shortcode) .'_preview.img';
+        }
+    } else {
+        // check if it is a URL
+        $preview_image = esc_url( $poster );
+        if (empty( $preview_image  )) {
+            // fall back to local placeholder
+            $preview_image = plugin_dir_url(__DIR__) . 'assets/img/_preview.png';
+        } else {
+            // check if is image? check if it is local/media?
+        }
+    }
+    return $preview_image;
 }
 
 function http_check_and_filter($url)
