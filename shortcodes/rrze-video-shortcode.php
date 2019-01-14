@@ -266,59 +266,53 @@ function http_check_and_filter($url)
 {
     if (strpos($url, "https://youtu.be/") !== false) {
         $filtered_id = substr($url, strpos($url, ".") + 4);
-        return $filtered_id;
     } elseif (strpos($url, "https://www.youtube.com/watch?v") !== false) {
         $filtered_id = substr($url, strpos($url, "=") + 1);
-        return $filtered_id;
-    } elseif (strpos($url, "http://www.video.uni-erlangen.de/clip/id/") !== false || strpos($url, "https://www.video.uni-erlangen.de/clip/id/") !== false) {
+    } elseif (
+        strpos($url, "http://www.video.uni-erlangen.de/clip/id/")       !== false ||
+        strpos($url, "https://www.video.uni-erlangen.de/clip/id/")      !== false ||
+        strpos($url, "http://www.video.uni-erlangen.de/webplayer/id/")  !== false ||
+        strpos($url, "https://www.video.uni-erlangen.de/webplayer/id/") !== false
+        ) {
         $filtered_id = substr($url, strrpos($url, "/") + 1);
-        return $filtered_id;
-    } elseif (strpos($url, "http://www.video.uni-erlangen.de/webplayer/id/") !== false || strpos($url, "https://www.video.uni-erlangen.de/webplayer/id/") !== false) {
-        $filtered_id = substr($url, strrpos($url, "/") + 1);
-        return $filtered_id;
     } else {
-        return $url;
+        $filtered_id = $url;
     }
+    return $filtered_id;
 }
 
 function assign_video_flag($url)
 {
-    if (strpos($url, "https://youtu.be/") !== false) {
+    if (
+        strpos($url, "https://youtu.be/")               !== false ||
+        strpos($url, "https://www.youtube.com/watch?v") !== false
+        ) {
         $video_flag = 0;
-        return $video_flag;
-    } elseif (strpos($url, "https://www.youtube.com/watch?v") !== false) {
-        $video_flag = 0;
-        return $video_flag;
-    } elseif (strpos($url, "http://www.video.uni-erlangen.de/clip/id/") !== false || strpos($url, "https://www.video.uni-erlangen.de/clip/id/") !== false) {
+    } elseif (
+        strpos($url, "http://www.video.uni-erlangen.de/clip/id/")       !== false ||
+        strpos($url, "https://www.video.uni-erlangen.de/clip/id/")      !== false ||
+        strpos($url, "http://www.video.uni-erlangen.de/webplayer/id/")  !== false ||
+        strpos($url, "https://www.video.uni-erlangen.de/webplayer/id/") !== false
+        ) {
         $video_flag = 1;
-        return $video_flag;
-    } elseif (strpos($url, "http://www.video.uni-erlangen.de/webplayer/id/") !== false || strpos($url, "https://www.video.uni-erlangen.de/webplayer/id/") !== false) {
-        $video_flag = 1;
-        return $video_flag;
     } elseif (strlen($url) > 5) {
         $video_flag = 0;
-        return $video_flag;
     } elseif (strlen($url) == 5) {
         $video_flag = 1;
-        return $video_flag;
     } else {
         $video_flag = 1;
-        return $video_flag;
     }
+    return $video_flag;
 }
 
  function assign_wp_query_arguments($url, $id, $argumentsID, $argumentsTaxonomy)
  {
-     if (!empty($id)) {
+     if (!empty($id) || !empty($url)) {
          $widget_video = new \WP_Query($argumentsID);
-         return $widget_video;
-     } elseif (!empty($url)) {
-         $widget_video = new \WP_Query($argumentsID);
-         return $widget_video;
      } else {
          $widget_video = new \WP_Query($argumentsTaxonomy);
-         return $widget_video;
      }
+     return $widget_video;
  }
 
 add_action('wp_ajax_nopriv_get_video_action', 'RRZE\PostVideo\get_video_action');
