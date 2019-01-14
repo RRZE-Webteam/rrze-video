@@ -143,23 +143,32 @@ function show_video_on_page($atts)
                 $url = get_post_meta($post->ID, 'url', true);
 
                 $video_flag = assign_video_flag($url);
+                $thumbnail = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full');
 
                 if ($video_flag) {
+                    // FAU video
                     $url_data           = get_post_meta($post->ID, 'url', true);
                     $video_id           = http_check_and_filter($url_data);
                     $description        = get_post_meta($post->ID, 'description', true);
                     $genre              = wp_strip_all_tags(get_the_term_list($post->ID, 'genre', true));
-                    $thumbnail          = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full');
+
+                    $fau_video_url      = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de';
                     $suchmuster = '/clip/';
                     if (preg_match($suchmuster, $url)) {
-                        $oembed_url     = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de/clip/id/' . $video_id . '&format=json';
+                        $oembed_url     = $fau_video_url . '/clip/id/' . $video_id . '&format=json';
                     } else {
-                        $oembed_url     = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de/webplayer/id/' . $video_id . '&format=json';
+                        $oembed_url     = $fau_video_url . '/webplayer/id/' . $video_id . '&format=json';
                     }
                     $video_url          = json_decode(wp_remote_retrieve_body(wp_safe_remote_get($oembed_url)), true);
                     $video_file         = $video_url['file'];
-                    $preview_image      = 'https://cdn.video.uni-erlangen.de/Images/player_previews/'. $video_id .'_preview.img';
-                    $picture            = (!$thumbnail) ? $preview_image : $thumbnail;
+
+                    if (!$thumbnail) {
+                        $preview_image  = video_preview_image($poster_shortcode);
+                    } else {
+                        $preview_image  = $thumbnail[0];
+                    }
+                    $picture            = $preview_image;
+
                     $showtitle          = ($rrze_video_shortcode['showtitle'] == 1) ? $video_url['title'] : '';
                     $modaltitle         = $video_url['title'];
                     $author             = $video_url['author_name'];
@@ -170,10 +179,21 @@ function show_video_on_page($atts)
                     include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-template.php');
                     $out = ob_get_clean();
                 } else {
-                    $showtitle          = ($rrze_video_shortcode['showtitle'] == 1) ? get_the_title() : '';
-                    $modaltitle         = get_the_title();
+                    // YT Video
                     $youtube_data       = get_post_meta($post->ID, 'url', true);
                     $youtube_id         = http_check_and_filter($youtube_data);
+
+                    $preview_image_opts = array(
+                        'type'       => 'youtube',
+                        'id'         => $youtube_id,
+                        'resolution' => $youtube_resolution,
+                        'thumbnail'  => $thumbnail
+                    );
+                    $preview_image      = video_preview_image($poster_shortcode,$preview_image_opts);
+                    $picture            = $preview_image;
+
+                    $showtitle          = ($rrze_video_shortcode['showtitle'] == 1) ? get_the_title() : '';
+                    $modaltitle         = get_the_title();
                     $description        = get_post_meta($post->ID, 'description', true);
                     $id                 = uniqid();
 
@@ -195,15 +215,16 @@ function show_video_on_page($atts)
 function video_preview_image($poster,$args=array())
 {
     $options_default = array(
-        'type' => false,
-        'id' => false,
-        'resolution' => false
+        'type'       => false,
+        'id'         => false,
+        'resolution' => false,
+        'thumbnail'  => false
     );
     $options = array_merge($options_default,$args);
     // Preview image handling
     $preview_image = false;
     if ($poster == '') {
-        $preview_image = plugin_dir_url(__DIR__) . 'assets/img/_preview.png';
+        $preview_image = ( !$options['thumbnail'] ) ? plugin_dir_url(__DIR__) . 'assets/img/_preview.png' : $options['thumbnail'][0];
     } else if ($poster == 'default') {
         switch ($options['type']) {
             case 'youtube':
