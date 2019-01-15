@@ -53,7 +53,15 @@ function rrze_video_section_preview_image_settings_info()
     if(esc_url($options['preview_image'])){
         $preview_image_default = $options['preview_image'];
     }
-    $html = '<p class="hint">' . sprintf(__('Aktuell gewähltes Bild ist: <code>%s</code>'),$preview_image_default) . '<a href="' . $preview_image_default . '" target="_blank" rel="noopener">' . __('Bild ansehen') . '</a></p>';
+    $site_address  = wp_parse_url( get_site_url() );
+    $image_address = wp_parse_url( $preview_image_default );
+    if( $site_address['scheme'] == $image_address['scheme'] && $site_address['host'] == $image_address['host'] ){
+        $img_preview_html = '<img src="' . $preview_image_default . '" alt="" style="width: 200px; height:auto; max-width:100%;"/>';
+    } else {
+        $img_preview_html = __('Bild ansehen');
+    }
+    $html = '<p class="hint">' . sprintf(__('Aktuell gewähltes Bild ist: <code>%s</code>'),$preview_image_default) . ':</p>' . PHP_EOL;
+    $html .= '<div class="preview-image"><a href="' . $preview_image_default . '" target="_blank" rel="noopener">' . $img_preview_html . '</a></div>' . PHP_EOL;
     echo $html;
 }
 
