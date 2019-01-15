@@ -15,15 +15,11 @@ function rrze_video_option_page()
 ?>
 
 <div class="wrap">
-    <h1><?php esc_html_e('RRZE Video Einstellungen'); ?></h1>
+    <h1><?php esc_html_e('Einstellungen › RRZE Video Plugin'); ?></h1>
     <form action="options.php" method="post">
         <?php settings_fields('rrze_video_plugin_options');?>
-        <div class="form-row">
-            <?php do_settings_sections('rrze_video_youtube_setting');?>
-        </div>
-        <div class="form-row">
-            <?php do_settings_sections('rrze_video_preview_image_setting');?>
-        </div>
+        <?php do_settings_sections('rrze_video_youtube_setting');?>
+        <?php do_settings_sections('rrze_video_preview_image_setting');?>
         <p class="submit"><button class="button button-primary"><?php esc_html_e('Änderungen speichern') ?></button></p>
     </form>
 </div>
@@ -38,11 +34,11 @@ function rrze_video_settings()
     //register_setting( $option_group, $option_name );
     register_setting( 'rrze_video_plugin_options', 'rrze_video_plugin_options' );
 
-    add_settings_section('plugin_main', esc_html__('Youtube Player'), 'RRZE\PostVideo\rrze_video_section_youtube_settings_info', 'rrze_video_youtube_setting');
-    add_settings_field('rrze_video_settings_yt_player', esc_html__('Youtube Player aktivieren'), 'RRZE\PostVideo\rrze_video_checkbox_settings_youtube_player_cb', 'rrze_video_youtube_setting', 'plugin_main', array('label_for'=>'rrze_video_settings_yt_player') );
+    add_settings_section('rrze_video_section_youtube', esc_html__('Youtube Player'), 'RRZE\PostVideo\rrze_video_section_youtube_settings_info', 'rrze_video_youtube_setting');
+    add_settings_field('rrze_video_settings_yt_player', esc_html__('Youtube Player aktivieren'), 'RRZE\PostVideo\rrze_video_checkbox_settings_youtube_player_cb', 'rrze_video_youtube_setting', 'rrze_video_section_youtube', array('label_for'=>'rrze_video_settings_yt_player') );
 
-    add_settings_section('plugin_main', esc_html__('Vorschaubild Fallback'), 'RRZE\PostVideo\rrze_video_section_preview_image_settings_info', 'rrze_video_preview_image_setting');
-    add_settings_field('rrze_video_settings_preview_image', esc_html__('Pfad zum Vorschaubild'), 'RRZE\PostVideo\rrze_video_settings_input_preview_image_cb', 'rrze_video_preview_image_setting', 'plugin_main', array('label_for'=>'rrze_video_settings_preview_image') );
+    add_settings_section('rrze_video_section_preview_image', esc_html__('Vorschaubild Fallback'), 'RRZE\PostVideo\rrze_video_section_preview_image_settings_info', 'rrze_video_preview_image_setting');
+    add_settings_field('rrze_video_settings_preview_image', esc_html__('Pfad zum Vorschaubild'), 'RRZE\PostVideo\rrze_video_settings_input_preview_image_cb', 'rrze_video_preview_image_setting', 'rrze_video_section_preview_image', array('label_for'=>'rrze_video_settings_preview_image') );
 
 }
 
