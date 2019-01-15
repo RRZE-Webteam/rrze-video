@@ -69,12 +69,3 @@ function rrze_video_settings_input_preview_image_cb()
     echo $html;
 
 }
-
-// obsolete?
-function plugin_rvce_options_validate($input)
-{
-
-    $options = get_option('rrze_video_plugin_options');
-    return $options;
-
-}
