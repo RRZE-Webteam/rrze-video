@@ -47,7 +47,7 @@ function rrze_video_checkbox_element_callback() {
 
 function rrze_video_section_text() {
 
-    echo '<p>' . esc_html_e(' Aktivierung des Youtube Players') . '</p>';
+    echo '<p>' . esc_html__('Aktivierung des Youtube Players') . '</p>';
 
 }
 
