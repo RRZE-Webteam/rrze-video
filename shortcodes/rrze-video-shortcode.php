@@ -7,8 +7,8 @@ function show_video_on_page($atts)
 {
     global $post;
 
-    $yt_options             =   get_option('rrze_video_plugin_options');
-    $show_youtube_player    =   (!empty($yt_options['youtube_activate_checkbox'])) ? $yt_options['youtube_activate_checkbox'] : 0;
+    $plugin_settings        = get_option('rrze_video_plugin_options');
+    $show_youtube_player    = (!empty( $plugin_settings['youtube_activate_checkbox'] )) ? $plugin_settings['youtube_activate_checkbox'] : 0;
 
     $rrze_video_shortcode = shortcode_atts(array(
         'url'                   => '',
@@ -32,6 +32,7 @@ function show_video_on_page($atts)
     $taxonomy_genre         = $rrze_video_shortcode['rand'];
     $youtube_support        = $rrze_video_shortcode['youtube-support'];
     $youtube_resolution     = $rrze_video_shortcode['youtube-resolution'];
+
 
     $args_video = array(
         'post_type'         =>  'Video',
@@ -111,9 +112,9 @@ function show_video_on_page($atts)
             $youtube_id = http_check_and_filter($url_shortcode);
             $showtitle  = ($rrze_video_shortcode['showtitle'] == 1) ? get_the_title() : '';
             $preview_image_opts = array(
-                'type'       => 'youtube',
-                'id'         => $youtube_id,
-                'resolution' => $youtube_resolution
+                'type'             => 'youtube',
+                'id'               => $youtube_id,
+                'resolution'       => $youtube_resolution
             );
             $preview_image = video_preview_image($poster_shortcode, $preview_image_opts);
             $picture = $preview_image;
@@ -214,17 +215,24 @@ function show_video_on_page($atts)
 
 function video_preview_image($poster,$args=array())
 {
+
+    $plugin_settings = get_option('rrze_video_plugin_options');
+    $preview_image_fallback = esc_url($plugin_settings['preview_image']);
+
+    $preview_image_fallback = (!empty($preview_image_fallback)) ? $preview_image_fallback : plugin_dir_url(__DIR__) . 'assets/img/_preview.png';
+
     $options_default = array(
-        'type'       => false,
-        'id'         => false,
-        'resolution' => false,
-        'thumbnail'  => false
+        'type'              => false,
+        'id'                => false,
+        'resolution'        => false,
+        'thumbnail'         => false,
+        'preview_fallback'  => $preview_image_fallback
     );
     $options = array_merge($options_default,$args);
     // Preview image handling
     $preview_image = false;
     if ($poster == '') {
-        $preview_image = ( !$options['thumbnail'] ) ? plugin_dir_url(__DIR__) . 'assets/img/_preview.png' : $options['thumbnail'][0];
+        $preview_image = ( !$options['thumbnail'] ) ? $options['preview_fallback'] : $options['thumbnail'][0];
     } else if ($poster == 'default') {
         switch ($options['type']) {
             case 'youtube':
@@ -305,15 +313,15 @@ function assign_video_flag($url)
     return $video_flag;
 }
 
- function assign_wp_query_arguments($url, $id, $argumentsID, $argumentsTaxonomy)
- {
-     if (!empty($id) || !empty($url)) {
+function assign_wp_query_arguments($url, $id, $argumentsID, $argumentsTaxonomy)
+{
+    if (!empty($id) || !empty($url)) {
          $widget_video = new \WP_Query($argumentsID);
-     } else {
-         $widget_video = new \WP_Query($argumentsTaxonomy);
-     }
-     return $widget_video;
- }
+    } else {
+        $widget_video = new \WP_Query($argumentsTaxonomy);
+    }
+    return $widget_video;
+}
 
 add_action('wp_ajax_nopriv_get_video_action', 'RRZE\PostVideo\get_video_action');
 add_action('wp_ajax_get_video_action', 'RRZE\PostVideo\get_video_action');
