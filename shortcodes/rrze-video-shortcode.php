@@ -80,8 +80,6 @@ function show_video_on_page($atts)
             preg_match('/(clip|webplayer)\/id\/(\d+)/',$url_shortcode,$matches);
             $oembed_url    = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
 
-            var_dump( wp_safe_remote_get($oembed_url) );
-
             $video_url  = json_decode(wp_remote_retrieve_body(wp_safe_remote_get($oembed_url)), true);
             $video_file = $video_url['file'];
 
@@ -234,7 +232,7 @@ function video_preview_image($poster,$args=array())
         switch ($options['provider']) {
             case 'youtube':
                 $youtube_url = 'https://img.youtube.com/vi/' . $options['id'];
-                var_dump($youtube_url);
+
                 switch($options['resolution']){
                     case 1:
                         $preview_image = $youtube_url . '/maxresdefault.jpg';
