@@ -15,7 +15,7 @@
         <a
             href="<?php echo $anchor; ?>"
             data-box-id="<?php echo $id ?>"
-            data-youtube-id="<?php echo $youtube_id ?>"
+            data-youtube-id="<?php echo $video_id ?>"
             data-toggle="modal"
             data-target="#videoModal<?php echo $id ?>"
         >

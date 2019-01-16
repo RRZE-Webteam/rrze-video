@@ -67,28 +67,21 @@ function show_video_on_page($atts)
         $suffix = 'px';
     }
 
-    /*
-     * Wenn die url im shortcode gesetzt ist.
-     *
-     * video_flag = 1 - Videos aus dem FAU-Videoportal
-     * video-flag = 0 - Videos aus Youtube
-     */
+   if (!empty($url_shortcode)) {
 
-    if (!empty($url_shortcode)) {
-
-        $video_flag = assign_video_flag($url_shortcode);
+        $is_fau_video = is_fau_video($url_shortcode);
 
         enqueue_scripts();
 
-        if ($video_flag) {
+        if ($is_fau_video) {
             // FAU-Video
+            // @@todo: General setting:
             $fau_video_url = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de';
-            $suchmuster = '/clip/';
-            if (preg_match($suchmuster, $url_shortcode)) {
-                $oembed_url = $fau_video_url . '/clip/id/'      . http_check_and_filter($url_shortcode) . '&format=json';
-            } else {
-                $oembed_url = $fau_video_url . '/webplayer/id/' . http_check_and_filter($url_shortcode) . '&format=json';
-            }
+            preg_match('/(clip|webplayer)\/id\/(\d+)/',$url_shortcode,$matches);
+            $oembed_url    = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
+
+            var_dump( wp_safe_remote_get($oembed_url) );
+
             $video_url  = json_decode(wp_remote_retrieve_body(wp_safe_remote_get($oembed_url)), true);
             $video_file = $video_url['file'];
 
@@ -104,16 +97,19 @@ function show_video_on_page($atts)
             $id = uniqid();
 
             ob_start();
-            include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-template.php');
+            include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-fau-template.php');
             return ob_get_clean();
+
         } else {
-            // YT video
+
+            // other video platform
+            // currently youtube only
             $id = uniqid();
-            $youtube_id = http_check_and_filter($url_shortcode);
+            $video_id = get_video_id_from_url($url_shortcode);
             $showtitle  = ($rrze_video_shortcode['showtitle'] == 1) ? get_the_title() : '';
             $preview_image_opts = array(
-                'type'             => 'youtube',
-                'id'               => $youtube_id,
+                'provider'         => 'youtube',
+                'id'               => $video_id,
                 'resolution'       => $youtube_resolution
             );
             $preview_image = video_preview_image($poster_shortcode, $preview_image_opts);
@@ -121,15 +117,14 @@ function show_video_on_page($atts)
             ob_start();
             include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-youtube-template.php');
             return ob_get_clean();
+
         }
+
     } else {
 
        /*
-        * Wenn die id im shortcode gesetzt ist.
+        * Wenn die id im shortcode gesetzt ist
         * Dann wird der Datensatz aus dem Video Post Type gezogen
-        *
-        * video_flag = 1 - Videos aus dem FAU-Videoportal
-        * video-flag = 0 - Videos aus Youtube
         */
 
         //$shortcode_video = new \WP_Query($args_video);
@@ -139,21 +134,21 @@ function show_video_on_page($atts)
         if ($shortcode_video->have_posts()) {
             enqueue_scripts();
             while ($shortcode_video->have_posts()) {
+
                 $shortcode_video->the_post();
+                $url          = get_post_meta($post->ID, 'url', true);
+                $is_fau_video = is_fau_video($url);
+                $thumbnail    = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full');
 
-                $url = get_post_meta($post->ID, 'url', true);
-
-                $video_flag = assign_video_flag($url);
-                $thumbnail = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full');
-
-                if ($video_flag) {
+                if ($is_fau_video) {
                     // FAU video
                     $url_data           = get_post_meta($post->ID, 'url', true);
                     $video_id           = http_check_and_filter($url_data);
                     $description        = get_post_meta($post->ID, 'description', true);
                     $genre              = wp_strip_all_tags(get_the_term_list($post->ID, 'genre', true));
-
+                    //@@todo: Generalsetting:
                     $fau_video_url      = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de';
+
                     $suchmuster = '/clip/';
                     if (preg_match($suchmuster, $url)) {
                         $oembed_url     = $fau_video_url . '/clip/id/' . $video_id . '&format=json';
@@ -162,7 +157,6 @@ function show_video_on_page($atts)
                     }
                     $video_url          = json_decode(wp_remote_retrieve_body(wp_safe_remote_get($oembed_url)), true);
                     $video_file         = $video_url['file'];
-
                     if (!$thumbnail) {
                         $preview_image  = video_preview_image($poster_shortcode);
                     } else {
@@ -177,16 +171,18 @@ function show_video_on_page($atts)
                     $id                 = uniqid();
 
                     ob_start();
-                    include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-template.php');
+                    include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-fau-template.php');
                     $out = ob_get_clean();
-                } else {
-                    // YT Video
-                    $youtube_data       = get_post_meta($post->ID, 'url', true);
-                    $youtube_id         = http_check_and_filter($youtube_data);
 
+                } else {
+
+                    // other videos
+                    $video_data         = get_post_meta($post->ID, 'url', true);
+                    $video_id           = get_video_id_from_url($video_data);
                     $preview_image_opts = array(
-                        'type'       => 'youtube',
-                        'id'         => $youtube_id,
+                        'provider'   => 'youtube',
+                        'id'         => $video_id,
+                        'url'        => $url_shortcode,
                         'resolution' => $youtube_resolution,
                         'thumbnail'  => $thumbnail
                     );
@@ -222,8 +218,9 @@ function video_preview_image($poster,$args=array())
     $preview_image_fallback = (!empty($preview_image_fallback)) ? $preview_image_fallback : plugin_dir_url(__DIR__) . 'assets/img/_preview.png';
 
     $options_default = array(
-        'type'              => false,
+        'provider'          => false,
         'id'                => false,
+        'url'               => false,
         'resolution'        => false,
         'thumbnail'         => false,
         'preview_fallback'  => $preview_image_fallback
@@ -234,9 +231,10 @@ function video_preview_image($poster,$args=array())
     if ($poster == '') {
         $preview_image = ( !$options['thumbnail'] ) ? $options['preview_fallback'] : $options['thumbnail'][0];
     } else if ($poster == 'default') {
-        switch ($options['type']) {
+        switch ($options['provider']) {
             case 'youtube':
                 $youtube_url = 'https://img.youtube.com/vi/' . $options['id'];
+                var_dump($youtube_url);
                 switch($options['resolution']){
                     case 1:
                         $preview_image = $youtube_url . '/maxresdefault.jpg';
@@ -255,7 +253,7 @@ function video_preview_image($poster,$args=array())
                 }
                 break;
             default:
-                $preview_image = 'https://cdn.video.uni-erlangen.de/Images/player_previews/' . http_check_and_filter($url_shortcode) .'_preview.img';
+                $preview_image = 'https://cdn.video.uni-erlangen.de/Images/player_previews/' . get_video_id_from_url( $options['url'] ) .'_preview.img';
         }
     } else {
         // check if it is a URL
@@ -270,53 +268,67 @@ function video_preview_image($poster,$args=array())
     return $preview_image;
 }
 
-function http_check_and_filter($url)
+function get_video_id_from_url($url,$provider=false)
 {
-    if (strpos($url, "https://youtu.be/") !== false) {
-        $filtered_id = substr($url, strpos($url, ".") + 4);
-    } elseif (strpos($url, "https://www.youtube.com/watch?v") !== false) {
-        $filtered_id = substr($url, strpos($url, "=") + 1);
-    } elseif (
-        strpos($url, "http://www.video.uni-erlangen.de/clip/id/")       !== false ||
-        strpos($url, "https://www.video.uni-erlangen.de/clip/id/")      !== false ||
-        strpos($url, "http://www.video.uni-erlangen.de/webplayer/id/")  !== false ||
-        strpos($url, "https://www.video.uni-erlangen.de/webplayer/id/") !== false
-        ) {
-        $filtered_id = substr($url, strrpos($url, "/") + 1);
+    $video_id = false;
+    if ($url != '' && !empty(wp_parse_url($url))) {
+
+        // check video providers
+        $test_domain = wp_parse_url($url);
+        $test_host   = preg_replace('/^www\./','',$test_domain['host']);
+
+        if ($provider == 'fau') {
+
+            preg_match('/^\/(clip|webplayer)\/id\/(\d+)/',$test_domain['path'],$matches);
+            $video_id = $matches[2];
+
+        } else {
+
+            // youtube:
+            if ($test_host == 'youtube.com') {
+                preg_match('/^v=(.*)/',$test_domain['query'],$matches);
+                $video_id = $matches[1];
+            }
+            if ($test_host == 'youtu.be') {
+                preg_match('/^\/(.*)$/',$test_domain['path'],$matches);
+                $video_id = $matches[1];
+            }
+            // vimeo:
+            // etc:
+
+        }
     } else {
-        $filtered_id = $url;
+
+        // url kann auch nur die/eine ID sein (argh!)
+        $video_id = $url;
+
     }
-    return $filtered_id;
+    return $video_id;
 }
 
-function assign_video_flag($url)
+function is_fau_video($url)
 {
-    if (
-        strpos($url, "https://youtu.be/")               !== false ||
-        strpos($url, "https://www.youtube.com/watch?v") !== false
-        ) {
-        $video_flag = 0;
-    } elseif (
-        strpos($url, "http://www.video.uni-erlangen.de/clip/id/")       !== false ||
-        strpos($url, "https://www.video.uni-erlangen.de/clip/id/")      !== false ||
-        strpos($url, "http://www.video.uni-erlangen.de/webplayer/id/")  !== false ||
-        strpos($url, "https://www.video.uni-erlangen.de/webplayer/id/") !== false
-        ) {
-        $video_flag = 1;
-    } elseif (strlen($url) > 5) {
-        $video_flag = 0;
-    } elseif (strlen($url) == 5) {
-        $video_flag = 1;
-    } else {
-        $video_flag = 1;
+    $is_fau_video = false;
+    // @@todo get the domains from settings/admin screen or general constants/vars?
+    $fau_video_domains = array(
+        'video.uni-erlangen.de',
+        'video.fau.de',
+        'fau.tv'
+    );
+    if (!empty(wp_parse_url($url))) {
+        $test_url    = wp_parse_url($url);
+        $test_domain = preg_replace('/^www\./','',$test_url['host']);
+        if (in_array($test_domain,$fau_video_domains)) {
+           $is_fau_video = true;
+        }
     }
-    return $video_flag;
+    return $is_fau_video;
 }
 
 function assign_wp_query_arguments($url, $id, $argumentsID, $argumentsTaxonomy)
 {
     if (!empty($id) || !empty($url)) {
-         $widget_video = new \WP_Query($argumentsID);
+        $widget_video = new \WP_Query($argumentsID);
     } else {
         $widget_video = new \WP_Query($argumentsTaxonomy);
     }
