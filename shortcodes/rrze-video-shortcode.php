@@ -6,7 +6,6 @@ add_shortcode('fauvideo', 'RRZE\PostVideo\show_video_on_page');
 function show_video_on_page($atts)
 {
     global $post;
-
     $plugin_settings        = get_option('rrze_video_plugin_options');
     $show_youtube_player    = (!empty( $plugin_settings['youtube_activate_checkbox'] )) ? $plugin_settings['youtube_activate_checkbox'] : 0;
 
@@ -22,7 +21,7 @@ function show_video_on_page($atts)
         'youtube-support'       => '0',
         'youtube-resolution'    => '4',
         'rand'                  => ''
-    ), $atts);
+    ), $atts, 'fauvideo');
 
     $url_shortcode          = $rrze_video_shortcode['url'];
     $id_shortcode           = $rrze_video_shortcode['id'];
@@ -55,8 +54,9 @@ function show_video_on_page($atts)
         ),
     );
 
-    $box_id = uniqid();
+    $instance_id = uniqid();
 
+    // warum?
     if (preg_match("/^[a-zA-Z.:\/ ]*$/", $width_shortcode, $matches)) {
         $width_shortcode = 640;
         $suffix = 'px';
@@ -67,7 +67,7 @@ function show_video_on_page($atts)
         $suffix = 'px';
     }
 
-   if (!empty($url_shortcode)) {
+   if ( ! empty( $url_shortcode ) ) {
 
         $is_fau_video = is_fau_video($url_shortcode);
 
@@ -80,29 +80,33 @@ function show_video_on_page($atts)
             preg_match('/(clip|webplayer)\/id\/(\d+)/',$url_shortcode,$matches);
             $oembed_url    = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
 
-            $video_url  = json_decode(wp_remote_retrieve_body(wp_safe_remote_get($oembed_url)), true);
-            $video_file = $video_url['file'];
+            $remote_get = wp_safe_remote_get($oembed_url);
+            if ( is_wp_error( $remote_get ) ) {
+                $error_string = $remote_get->get_error_message();
+                return '<div id="message" class="error"><p>' . $error_string . '</p></div>';
+            } else {
+                $video_url     = json_decode(wp_remote_retrieve_body($remote_get), true);
+                $video_file    = $video_url['file'];
 
-            $preview_image  = video_preview_image($poster_shortcode);
-            // @@todo: small + large size for image and preview?
-            $picture        = $preview_image;
-            //
-            $showtitle      = ($rrze_video_shortcode['showtitle'] == 1) ? $video_url['title'] : '';
-            $modaltitle     = $video_url['title'];
-            $author         = ($rrze_video_shortcode['showinfo'] == 1) ? $video_url['author_name'] : '';
-            $copyright      = ($rrze_video_shortcode['showinfo'] == 1) ? $video_url['provider_name'] : '';
+                $preview_image  = video_preview_image($poster_shortcode);
+                // @@todo: small + large size for image and preview?
+                $picture        = $preview_image;
+                //
+                $showtitle      = ($rrze_video_shortcode['showtitle'] == 1) ? $video_url['title'] : '';
+                $modaltitle     = $video_url['title'];
+                $author         = ($rrze_video_shortcode['showinfo'] == 1) ? $video_url['author_name'] : '';
+                $copyright      = ($rrze_video_shortcode['showinfo'] == 1) ? $video_url['provider_name'] : '';
 
-            $id = uniqid();
-
-            ob_start();
-            include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-fau-template.php');
-            return ob_get_clean();
+                ob_start();
+                include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-fau-template.php');
+                return ob_get_clean();
+            }
 
         } else {
 
             // other video platform
             // currently youtube only
-            $id = uniqid();
+
             $video_id = get_video_id_from_url($url_shortcode);
             $showtitle  = ($rrze_video_shortcode['showtitle'] == 1) ? get_the_title() : '';
             $preview_image_opts = array(
@@ -125,8 +129,6 @@ function show_video_on_page($atts)
         * Dann wird der Datensatz aus dem Video Post Type gezogen
         */
 
-        //$shortcode_video = new \WP_Query($args_video);
-
         $shortcode_video = assign_wp_query_arguments($url_shortcode, $id_shortcode, $args_video, $argumentsTaxonomy);
 
         if ($shortcode_video->have_posts()) {
@@ -146,15 +148,11 @@ function show_video_on_page($atts)
                     $genre              = wp_strip_all_tags(get_the_term_list($post->ID, 'genre', true));
                     //@@todo: Generalsetting:
                     $fau_video_url      = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de';
-
-                    $suchmuster = '/clip/';
-                    if (preg_match($suchmuster, $url)) {
-                        $oembed_url     = $fau_video_url . '/clip/id/' . $video_id . '&format=json';
-                    } else {
-                        $oembed_url     = $fau_video_url . '/webplayer/id/' . $video_id . '&format=json';
-                    }
+                    preg_match('/(clip|webplayer)\/id\/(\d+)/',$url,$matches);
+                    $oembed_url         = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
                     $video_url          = json_decode(wp_remote_retrieve_body(wp_safe_remote_get($oembed_url)), true);
                     $video_file         = $video_url['file'];
+
                     if (!$thumbnail) {
                         $preview_image  = video_preview_image($poster_shortcode);
                     } else {
@@ -166,7 +164,6 @@ function show_video_on_page($atts)
                     $modaltitle         = $video_url['title'];
                     $author             = $video_url['author_name'];
                     $copyright          = $video_url['provider_name'];
-                    $id                 = uniqid();
 
                     ob_start();
                     include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-fau-template.php');
@@ -190,7 +187,6 @@ function show_video_on_page($atts)
                     $showtitle          = ($rrze_video_shortcode['showtitle'] == 1) ? get_the_title() : '';
                     $modaltitle         = get_the_title();
                     $description        = get_post_meta($post->ID, 'description', true);
-                    $id                 = uniqid();
 
                     ob_start();
                     include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-youtube-template.php');
@@ -334,8 +330,8 @@ function assign_wp_query_arguments($url, $id, $argumentsID, $argumentsTaxonomy)
 }
 
 add_action('wp_ajax_nopriv_get_video_action', 'RRZE\PostVideo\get_video_action');
-add_action('wp_ajax_get_video_action', 'RRZE\PostVideo\get_video_action');
-add_action('wp_footer', 'RRZE\PostVideo\video_ajax');
+add_action('wp_ajax_get_video_action'       , 'RRZE\PostVideo\get_video_action');
+add_action('wp_footer'                      , 'RRZE\PostVideo\video_ajax');
 
 function video_ajax()
 {
@@ -343,7 +339,7 @@ function video_ajax()
     <script type="text/javascript" >
     jQuery(document).ready(function($) {
 
-        $('a[href="#get_video"]').click(function(){
+        $('a[data-type="fauvideo"]').click(function(){
 
             var id = $(this).attr('data-id');
             var poster = $(this).attr('data-preview-image');
@@ -367,11 +363,9 @@ function video_ajax()
                         .html(video)
                         .find(".player")
                         .mediaelementplayer({
-                        alwaysShowControls: true,
+                            alwaysShowControls: true,
                             features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
-                    });
-
-
+                        });
                 },
                 error: function(errorThrown){
                     window.alert(errorThrown);
@@ -388,8 +382,8 @@ function get_video_action()
 }
 
 add_action('wp_ajax_nopriv_get_youtube_action', 'RRZE\PostVideo\get_youtube_action');
-add_action('wp_ajax_get_youtube_action', 'RRZE\PostVideo\get_youtube_action');
-add_action('wp_footer', 'RRZE\PostVideo\youtube_ajax');
+add_action('wp_ajax_get_youtube_action'       , 'RRZE\PostVideo\get_youtube_action');
+add_action('wp_footer'                        , 'RRZE\PostVideo\youtube_ajax');
 
 function youtube_ajax()
 {
@@ -397,10 +391,10 @@ function youtube_ajax()
     <script type="text/javascript" >
     jQuery(document).ready(function($) {
 
-        $('a[href="#get_youtube"]').click(function(){
+        $('a[data-player-type="youtube"]').click(function(){
 
-            var youtube_id  = $(this).attr('data-youtube-id');
-            var id      = $(this).attr('data-box-id');
+            var youtube_id = $(this).attr('data-youtube-id');
+            var id         = $(this).attr('data-box-id');
 
             $.ajax({
                 url: videoajax.ajaxurl,
@@ -418,8 +412,7 @@ function youtube_ajax()
 
                     $(".embed-container" + id)
                             .html(iframe)
-                            .find(".youtube-video")
-
+                            .find(".youtube-video");
                 },
                 error: function(errorThrown){
                     window.alert(errorThrown);
@@ -436,8 +429,8 @@ function get_youtube_action()
 }
 
 add_action('wp_ajax_nopriv_get_mejs_youtube_action', 'RRZE\PostVideo\get_mejs_youtube_action');
-add_action('wp_ajax_get_mejs_youtube_action', 'RRZE\PostVideo\get_mejs_youtube_action');
-add_action('wp_footer', 'RRZE\PostVideo\mejs_youtube_ajax');
+add_action('wp_ajax_get_mejs_youtube_action'       , 'RRZE\PostVideo\get_mejs_youtube_action');
+add_action('wp_footer'                             , 'RRZE\PostVideo\mejs_youtube_ajax');
 
 function mejs_youtube_ajax()
 {
@@ -445,10 +438,10 @@ function mejs_youtube_ajax()
     <script type="text/javascript" >
     jQuery(document).ready(function($) {
 
-        $('a[href="#get_mejs_youtube"]').click(function(){
+        $('a[data-player-type="mediaelement"]').click(function(){
 
-            var youtube_id  = $(this).attr('data-youtube-id');
-            var id      = $(this).attr('data-box-id');
+            var youtube_id = $(this).attr('data-youtube-id');
+            var id         = $(this).attr('data-box-id');
 
             $.ajax({
                 url: videoajax.ajaxurl,
