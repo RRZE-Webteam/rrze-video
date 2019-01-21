@@ -19,9 +19,9 @@
             href="<?php echo $video_file; ?>"
             data-player-type="fauvideo"
             data-toggle="modal"
-            data-id="<?php echo $instance_id; ?>"
+            data-box-id="<?php echo $instance_id; ?>"
             data-preview-image="<?php echo $preview_image ?>"
-            data-video-file="<?php echo $video_file ?>"
+            data-video-url="<?php echo $video_file ?>"
             data-target="#videoModal<?php echo $instance_id; ?>"
         >
         <img src="<?php echo $preview_image_src; ?>" title="<?php echo $preview_image_title; ?>"  alt="Video aufrufen" class="<?php echo $preview_image_class; ?>" />

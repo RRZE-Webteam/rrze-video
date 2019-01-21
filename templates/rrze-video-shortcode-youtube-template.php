@@ -16,7 +16,7 @@
             href="<?php echo 'https://www.youtube.com/watch?v=' . $video_id; ?>"
             data-player-type="<?php echo $player_type ?>"
             data-box-id="<?php echo $instance_id ?>"
-            data-youtube-id="<?php echo $video_id ?>"
+            data-video-id="<?php echo $video_id ?>"
             data-toggle="modal"
             data-target="#videoModal<?php echo $instance_id ?>"
         >

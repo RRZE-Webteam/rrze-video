@@ -265,37 +265,37 @@ function video_preview_image($poster,$args=array())
 function get_video_id_from_url($url,$provider=false)
 {
     $video_id = false;
-    if ($url != '' && !empty(wp_parse_url($url))) {
+    if ( $url != '' ) {
+        if ( ! empty( wp_parse_url($url) ) ) {
+            // check video providers
+            $test_domain = wp_parse_url($url);
+            $test_host   = preg_replace('/^(www|m)\./','',$test_domain['host']);
 
-        // check video providers
-        $test_domain = wp_parse_url($url);
-        $test_host   = preg_replace('/^www\./','',$test_domain['host']);
+            if ($provider == 'fau') {
 
-        if ($provider == 'fau') {
+                preg_match('/^\/(clip|webplayer)\/id\/(\d+)/',$test_domain['path'],$matches);
+                $video_id = $matches[2];
 
-            preg_match('/^\/(clip|webplayer)\/id\/(\d+)/',$test_domain['path'],$matches);
-            $video_id = $matches[2];
+            } else {
 
+                // youtube:
+                if ($test_host == 'youtube.com') {
+                    preg_match('/^v=(.*)/',$test_domain['query'],$matches);
+                    $video_id = $matches[1];
+                }
+                if ($test_host == 'youtu.be') {
+                    preg_match('/^\/(.*)$/',$test_domain['path'],$matches);
+                    $video_id = $matches[1];
+                }
+                // vimeo:
+                // @@todo
+                // etc:
+                // @@todo
+            }
         } else {
-
-            // youtube:
-            if ($test_host == 'youtube.com') {
-                preg_match('/^v=(.*)/',$test_domain['query'],$matches);
-                $video_id = $matches[1];
-            }
-            if ($test_host == 'youtu.be') {
-                preg_match('/^\/(.*)$/',$test_domain['path'],$matches);
-                $video_id = $matches[1];
-            }
-            // vimeo:
-            // etc:
-
+            // url kann auch nur die/eine ID sein zb. "DF2aRrr21-M" (aarggh)
+            $video_id = $url;
         }
-    } else {
-
-        // url kann auch nur die/eine ID sein (argh!)
-        $video_id = $url;
-
     }
     return $video_id;
 }
@@ -329,154 +329,100 @@ function assign_wp_query_arguments($url, $id, $argumentsID, $argumentsTaxonomy)
     return $widget_video;
 }
 
-add_action('wp_ajax_nopriv_get_video_action', 'RRZE\PostVideo\get_video_action');
-add_action('wp_ajax_get_video_action'       , 'RRZE\PostVideo\get_video_action');
-add_action('wp_footer'                      , 'RRZE\PostVideo\video_ajax');
+// WIP: make generic ajax function for the player variants
+add_action('wp_ajax_nopriv_get_js_player_action', 'RRZE\PostVideo\get_js_player_action');
+add_action('wp_ajax_get_js_player_action'       , 'RRZE\PostVideo\get_js_player_action');
+add_action('wp_footer'                          , 'RRZE\PostVideo\js_player_ajax');
 
-function video_ajax()
+function js_player_ajax($player)
 {
+    $players = array(
+        'mediaelement',
+        'youtube',
+        'fauvideo'
+    );
     ?>
     <script type="text/javascript" >
-    jQuery(document).ready(function($) {
+        jQuery(document).ready(function($){
+<?php
+    foreach( $players as $player) {
+?>
+            $('a[data-player-type="<?php echo $player; ?>"]').click(function(){
 
-        $('a[data-type="fauvideo"]').click(function(){
+                var video_id  = $(this).attr('data-video-id');
+                var id        = $(this).attr('data-box-id');
+                var video_url = $(this).attr('data-video-url');     // nur bei FAU video?
+                var poster    = $(this).attr('data-preview-image'); // nur bei FAU video?
 
-            var id = $(this).attr('data-id');
-            var poster = $(this).attr('data-preview-image');
-            var video_file = $(this).attr('data-video-file');
-
-            $.ajax({
-                url: videoajax.ajaxurl,
-                data: {
-                    'action': 'get_video_action',
-                    'id': id,
-                    'poster': poster,
-                    'video_file': video_file
-                },
-                success:function() {
-
-                    var video = '<video class="player img-responsive center-block" style="width:100%;height:100%;" width="639" height="360" poster="' + poster + '" controls="controls" preload="none">' +
-                    '<source src="' + video_file + '" type="video/mp4" />' +
-                    '</video>';
-
-                    $(".videocontent" + id)
-                        .html(video)
-                        .find(".player")
-                        .mediaelementplayer({
-                            alwaysShowControls: true,
-                            features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
-                        });
-                },
-                error: function(errorThrown){
-                    window.alert(errorThrown);
-                }
-             });
-         })
-    });
-    </script> <?php
-}
-
-
-function get_video_action()
-{
-}
-
-add_action('wp_ajax_nopriv_get_youtube_action', 'RRZE\PostVideo\get_youtube_action');
-add_action('wp_ajax_get_youtube_action'       , 'RRZE\PostVideo\get_youtube_action');
-add_action('wp_footer'                        , 'RRZE\PostVideo\youtube_ajax');
-
-function youtube_ajax()
-{
-    ?>
-    <script type="text/javascript" >
-    jQuery(document).ready(function($) {
-
-        $('a[data-player-type="youtube"]').click(function(){
-
-            var youtube_id = $(this).attr('data-youtube-id');
-            var id         = $(this).attr('data-box-id');
-
-            $.ajax({
-                url: videoajax.ajaxurl,
-                data: {
-                    'action': 'get_youtube_action',
-                    'youtube_id': youtube_id,
-                    'id': id
-                },
-                success:function() {
-
-                    var iframe = document.createElement("iframe");
-                    iframe.setAttribute("frameborder", "0");
-                    iframe.setAttribute("allowfullscreen", "");
-                    iframe.setAttribute("src", "https://www.youtube.com/embed/" + youtube_id + "?rel=0&showinfo=0");
-
-                    $(".embed-container" + id)
-                            .html(iframe)
-                            .find(".youtube-video");
-                },
-                error: function(errorThrown){
-                    window.alert(errorThrown);
-                }
-             });
-         })
-
-    });
-    </script> <?php
-}
-
-function get_youtube_action()
-{
-}
-
-add_action('wp_ajax_nopriv_get_mejs_youtube_action', 'RRZE\PostVideo\get_mejs_youtube_action');
-add_action('wp_ajax_get_mejs_youtube_action'       , 'RRZE\PostVideo\get_mejs_youtube_action');
-add_action('wp_footer'                             , 'RRZE\PostVideo\mejs_youtube_ajax');
-
-function mejs_youtube_ajax()
-{
-    ?>
-    <script type="text/javascript" >
-    jQuery(document).ready(function($) {
-
-        $('a[data-player-type="mediaelement"]').click(function(){
-
-            var youtube_id = $(this).attr('data-youtube-id');
-            var id         = $(this).attr('data-box-id');
-
-            $.ajax({
-                url: videoajax.ajaxurl,
-                data: {
-                    'action': 'get_mejs_youtube_action',
-                    'youtube_id': youtube_id,
-                    'id': id
-                },
-                success:function(data) {
-
-                    var video = '<video class="player"  width="640" height="360" controls="controls" preload="none">' +
-                    '<source src="https://www.youtube.com/watch?v=' + youtube_id + '" type="video/youtube" />' +
-                    '</video>';
-
-                    $(".videocontent" + id)
+                $.ajax({
+                    url: videoajax.ajaxurl,
+                    data: {
+                        'action'    : 'get_js_player_action',
+                        'video_id'  : video_id,
+                        'id'        : id,
+                        'poster'    : poster,
+                        'video_url' : video_url
+                    },
+                    success: function(data){
+<?php
+    switch( $player ) {
+        case 'mediaelement' :
+?>
+                    var video = '<video class="player" width="640" height="360" controls="controls" preload="none">' +
+                        '<source src="https://www.youtube.com/watch?v=' + video_id + '" type="video/youtube" />' +
+                        '</video>';
+                        $(".videocontent" + id)
                         .html(video)
                         .find(".player")
                         .mediaelementplayer({
                         alwaysShowControls: true,
                             features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
-                    });
+                        });
+<?php
+            break;
+        case 'youtube' :
+?>
+                    var iframe = document.createElement("iframe");
+                        iframe.setAttribute("frameborder", "0");
+                        iframe.setAttribute("allowfullscreen", "");
+                        iframe.setAttribute("src", "https://www.youtube.com/embed/" + video_id + "?rel=0&showinfo=0");
 
-                },
-                error: function(errorThrown){
-                    window.alert(errorThrown);
-                }
-             });
-         })
-    });
-    </script> <?php
+                        $(".embed-container" + id)
+                            .html(iframe)
+                                .find(".youtube-video"); // <-- ??
+<?php
+            break;
+        case 'fauvideo' :
+?>
+                     var video = '<video class="player img-responsive center-block" style="width:100%;height:100%;" width="639" height="360" poster="' + poster + '" controls="controls" preload="none">' +
+                            '<source src="' + video_url + '" type="video/mp4" />' + '</video>';
+                        $(".videocontent" + id)
+                            .html(video)
+                                .find(".player")
+                                    .mediaelementplayer({
+                                        alwaysShowControls: true,
+                                        features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
+                                    });
+<?php
+    }
+?>
+                   },
+                    error: function(errorThrown){
+                        window.console.log(errorThrown);
+                    }
+                });
+
+            });
+<?php
+    } // endforeach;
+?>
+        });
+    </script><?php
 }
 
-
-function get_mejs_youtube_action()
-{
+function get_js_player_action(){
+    // dummy callback from wp_ajax api
+    // empty on purpose.
 }
 
 function enqueue_scripts()
