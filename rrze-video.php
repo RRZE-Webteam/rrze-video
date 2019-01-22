@@ -43,6 +43,7 @@ function init() {
     include_once('includes/metabox/rrze-video-add-metaboxes.php');
     include_once('includes/metabox/rrze-video-save-metaboxes.php');
     include_once('includes/posttype/rrze-video-admin-view.php');
+    include_once('includes/functions/rrze-video-functions.php');
     include_once('settings/rrze-video-settings-page.php');
     include_once('shortcodes/rrze-video-shortcode.php');
     include_once('widgets/rrze-video-widget.php');
