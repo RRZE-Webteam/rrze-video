@@ -3,6 +3,10 @@ namespace RRZE\PostVideo;
 
 add_shortcode('fauvideo', 'RRZE\PostVideo\show_video_on_page');
 
+// WIP: make generic ajax function for the player variants
+add_action('wp_ajax_nopriv_get_js_player_action', 'RRZE\PostVideo\get_js_player_action');
+add_action('wp_ajax_get_js_player_action'       , 'RRZE\PostVideo\get_js_player_action');
+
 function show_video_on_page($atts)
 {
     global $post;
@@ -202,11 +206,8 @@ function show_video_on_page($atts)
 
         wp_reset_postdata();
 
+        add_action('wp_footer'                          , 'RRZE\PostVideo\js_player_ajax');
+
         return $out;
     }
 }
-
-// WIP: make generic ajax function for the player variants
-add_action('wp_ajax_nopriv_get_js_player_action', 'RRZE\PostVideo\get_js_player_action');
-add_action('wp_ajax_get_js_player_action'       , 'RRZE\PostVideo\get_js_player_action');
-add_action('wp_footer'                          , 'RRZE\PostVideo\js_player_ajax');
