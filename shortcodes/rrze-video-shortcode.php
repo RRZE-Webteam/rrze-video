@@ -200,13 +200,15 @@ function show_video_on_page($atts)
                     $out = ob_get_clean();
                 }
             }
+
+            // add players js to footer:
+            add_action('wp_footer', 'RRZE\PostVideo\js_player_ajax');
+
         } else {
             $out = '<p>' . __('Es wurden keine Videos gefunden!', 'rrze-video') . '</p>';
         }
 
         wp_reset_postdata();
-
-        add_action('wp_footer'                          , 'RRZE\PostVideo\js_player_ajax');
 
         return $out;
     }

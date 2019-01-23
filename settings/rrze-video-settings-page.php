@@ -44,7 +44,7 @@ function rrze_video_settings()
 
 function rrze_video_section_youtube_settings_info()
 {
-    echo '<p>' . __('Falls der Default YouTube-Player statt des FAU-Players genutzt werden soll, hier aktivieren') . '</p>';
+    echo '<p>' . __('Falls der Default YouTube-Player statt des WordPress Mediaelement-Players genutzt werden soll, hier aktivieren') . '</p>';
 }
 function rrze_video_section_preview_image_settings_info()
 {
