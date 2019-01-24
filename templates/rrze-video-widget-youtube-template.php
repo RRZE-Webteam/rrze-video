@@ -1,8 +1,5 @@
 <?php
-    $thistitle = wordwrap($showtitle, 50, "<br/>");
-    if (empty($thistitle)) {
-       $thistitle = wordwrap($modaltitle, 50, "<br/>");
-    }
+    $thistitle = ( ! empty($showtitle) ) ? $showtitle : $modaltitle;
     $player_type = ( !$show_youtube_player ) ? 'mediaelement' : 'youtube';
 ?>
 <div class="rrze-video rrze-video-widget-container">
@@ -17,7 +14,7 @@
             data-target="#videoModal<?php echo $instance_id ?>"
         >
 	    <div class="rrze-video-widget-box box-widget<?php echo $instance_id ?>">
-	        <img src="<?php echo $preview_image; ?>" title="<?php echo (!isset($modaltitle)) ? 'Preview Image' : get_the_title() ?>" alt="Video aufrufen" class="image<?php echo $instance_id ?>"/>
+	        <img src="<?php echo $preview_image; ?>" title="<?php echo (!isset($modaltitle)) ? 'Preview Image' : get_the_title() ?>" alt="<?php _e('Video aufrufen') ?>" class="image<?php echo $instance_id ?>"/>
             <div class="overlay-widget">
                 <div class="text">
                     <span class="yt-icon-widget">
@@ -35,13 +32,13 @@
                     <div class="close-modal" data-dismiss="modal">
                         <em class="fa fa-times" aria-hidden="true"></em>
                     </div>
-                    <h2 class="widget-title" style="color:#000;padding:<?php echo ($modaltitle) ? '30px 0px' : '20px 0px' ?>"><?php echo (isset($modaltitle)) ? wordwrap($modaltitle, 30, "<br/>") : '' ?></h2>
+                    <h2 class="widget-title"><?php echo ( isset($modaltitle) ) ? $modaltitle : '' ?></h2>
                 </div>
                 <div class="modal-body">
                     <div class="videocontent<?php echo $instance_id ?>">
-                        <?php if(!$show_youtube_player) { ?>
+                        <?php if ( ! $show_youtube_player ) { ?>
                         <div class="player">
-                            <img src="<?php echo $preview_image; ?>" title="<?php echo (!isset($modaltitle)) ? 'Preview Image' : get_the_title() ?>" alt="Video aufrufen" class="image<?php echo $instance_id ?>"/>
+                            <img src="<?php echo $preview_image; ?>" title="<?php echo (!isset($modaltitle)) ? 'Preview Image' : get_the_title() ?>" alt="<?php _e('Video aufrufen') ?>" class="image<?php echo $instance_id ?>"/>
                         </div>
                         <?php } else { ?>
                         <div class="embed-container<?php echo $instance_id ?>">
@@ -51,7 +48,7 @@
                     </div><!-- video-content -->
                 </div><!-- .modal-body -->
                 <div class="modal-footer">
-                    <p><?php echo (isset($desc)) ? wordwrap($desc, 50, "<br/>") : '' ?></p>
+                    <p><?php echo ( isset($desc) ) ? $desc : '' ?></p>
                 </div><!-- .modal-footer -->
 	        </div><!-- .modal-content -->
 	    </div><!-- .modal-dialog -->

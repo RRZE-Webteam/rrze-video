@@ -37,7 +37,7 @@
                     <div class="close-modal" data-dismiss="modal">
                         <i class="fa fa-times" aria-hidden="true"></i>
                     </div>
-                    <h2 class="modal-title" style="text-align:left;padding:<?php echo ($modaltitle) ? '30px 0px' : '20px 0px' ?>"><?php echo wordwrap((!empty($modaltitle)) ? $modaltitle : '', 30, "<br/>") ?></h2>
+                    <h2 class="modal-title"><?php echo ( ! empty( $modaltitle ) ? $modaltitle : '';  ?></h2>
                 </div>
                 <div class="modal-body">
                     <div class="videocontent<?php echo $instance_id; ?>">
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                 </div>
-                 <div class="modal-footer">
+                <div class="modal-footer">
                     <p class="description"><?php _e('Beschreibung:'); ?> <?php echo (!empty($description)) ? $description : __('Keine Angaben') ?></p>
                      <?php if($rrze_video_shortcode['showinfo'] == '1') { ?>
                         <dl>

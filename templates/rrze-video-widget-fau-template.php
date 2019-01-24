@@ -1,8 +1,7 @@
 <?php
-    $thistitle = wordwrap($showtitle, 50, "<br/>");
-    if (empty($thistitle)) {
-        $thistitle = wordwrap($modaltitle, 50, "<br/>");
-    }
+    $thistitle         = ( ! empty($thistitle) ) ? $showtitle    : $modaltitle;
+    $preview_image_src = ( ! empty($thumbnail) ) ? $thumbnail[0] : $picture;
+    $preview_image_alt = sprintf( __('Bild zum Video %s'), $modaltitle );
 ?>
 <div class="rrze-video rrze-video-widget-container">
     <h2><?php echo $thistitle; ?></h2>
@@ -17,13 +16,7 @@
 	        data-toggle="modal" data-target="#videoModal<?php echo $instance_id ?>"
 	    >
 	    <div class="rrze-video-widget-box">
-	        <?php
-	        if(!empty($thumbnail)) {
-		        echo '<img title="'. $modaltitle .'" alt="Bild zum Video '. $modaltitle .'" src="' . $thumbnail[0]  . '" width="'. $instance['width'] . '" height="' . $instance['height']  . '"  />'; // width="100%" responsive
-	        } else {
-	        ?>
-		    <img title="<?php echo $modaltitle ?>" alt="Bild zum Video <?php echo $modaltitle ?>"  width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"  src="<?php echo $picture ?>"/> <!-- width="100%" responsive  -->
-	        <?php }?>
+		    <img src="<?php echo $preview_image_src; ?>" title="<?php echo $modaltitle ?>" alt="<?php echo $preview_image_alt; ?>"  width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"/>
 	        <div class="overlay-widget">
 		        <div class="text">
 		            <span class="yt-icon-widget">
@@ -41,12 +34,12 @@
 		            <div class="close-modal" data-dismiss="modal">
 			            <em class="fa fa-times" aria-hidden="true"></em>
 		            </div>
-		            <h2 class="modal-title" style="color:#000;padding:<?php echo ($modaltitle) ? '30px 0px' : '20px 0px' ?>"><?php echo wordwrap($modaltitle, 30, "<br/>") ?></h2>
+		            <h2 class="modal-title"><?php echo $modaltitle; ?></h2>
 		        </div><!-- .modal-header -->
 		        <div class="modal-body">
 		            <div class="videocontent<?php echo $instance_id ?>">
 			            <div class="player">
-			                <img src="<?php echo $preview_image ?>" alt="<?php echo $thistitle; ?>">
+			                 <img src="<?php echo $preview_image_src; ?>" title="<?php echo $modaltitle ?>" alt="<?php echo $preview_image_alt; ?>"  width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"/>
 			            </div>
 		            </div>
 		        </div><!-- .modal-body -->

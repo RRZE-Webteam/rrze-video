@@ -134,6 +134,16 @@ Class RRZE_Video_Functions {
         return $widget_video;
     }
 
+    function get_video_title($url, $id) {
+        if (!empty($id)) {
+            return false;
+        } elseif (!empty($url)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     function enqueue_scripts()
     {
         wp_enqueue_script('rrze-main-js');
