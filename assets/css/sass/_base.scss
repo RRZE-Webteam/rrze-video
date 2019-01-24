@@ -17,23 +17,23 @@ $background_color_1: transparent;
 
 
 .rrze-video {
- 
+
     -webkit-backface-visibility:hidden;
     -moz-backface-visibility:hidden;
     -ms-backface-visibility:hidden;
     -o-backface-visibility:hidden;
     backface-visibility:hidden;
-    
+
     margin: 15px 0;
-    display: inline-block; 
+    display: inline-block;
     width: 640px;
     max-width: 100%;
-    
+
     @media (max-width: 768px) {
         width: 100% !important;
         max-width: 100% !important;
     }
-    
+
     .modal-dialog {
             padding-top: 30%;
     }
@@ -101,7 +101,7 @@ $background_color_1: transparent;
             background-color: $background_color_1;
             opacity: 1.0;
     }
-    
+
     .yt-icon {
             color: $color_3;
             font-size: 80px;
@@ -112,7 +112,7 @@ $background_color_1: transparent;
             -ms-transform: translate(-50%, -50%);
             text-decoration: none;
     }
-    
+
     .yt-icon-shortcode {
             color: $color_2;
             font-size: 80px;
@@ -171,19 +171,19 @@ $background_color_1: transparent;
             margin-bottom: 0px;
     }
     [class^=embed-container] {
-            position: relative; 
+            position: relative;
             padding-bottom: 56.25%; /* ratio 16x9 */
-            height: 0; 
-            overflow: hidden; 
+            height: 0;
+            overflow: hidden;
             width: 100%;
             height: auto;
     }
     [class^=embed-container] iframe {
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
     }
     [class^=embed-container] .ratio4x3 {
             padding-bottom: 75%;
@@ -211,11 +211,12 @@ $background_color_1: transparent;
             display:none;
         }
     }
-   
+
 }
 
 .rrze-video-widget-box {
-    
+
+    position: relative;
 
     .overlay-widget {
 	    opacity: 0;
@@ -223,7 +224,7 @@ $background_color_1: transparent;
 	    background-color: $background_color_1;
 	    opacity: 1.0;
     }
-	
+
     .yt-icon-widget {
             color: $color_2;
             font-size: 80px;
@@ -253,7 +254,7 @@ $background_color_1: transparent;
 	.modal-dialog {
 		padding-top: 10%;
 	}
-    }    
+    }
 }
 @media (max-width: 767px) {
     .rrze-video {
