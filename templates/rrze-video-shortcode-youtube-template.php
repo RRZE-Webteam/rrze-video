@@ -21,10 +21,8 @@
             data-target="#videoModal<?php echo $instance_id ?>"
         >
         <img src="<?php echo $preview_image; ?>" title="<?php echo (!isset($modaltitle)) ? 'Preview Image' : get_the_title() ?>" alt="Video aufrufen" class="image<?php echo $instance_id ?>"/>
-        <div class="middle">
-            <div class="play-button">
-                <i class="fa fa-play-circle-o" aria-hidden="true"></i>
-            </div>
+        <div class="middle" aria-hidden="true">
+            <div class="play-button"><i class="fa fa-play-circle-o"></i></div>
         </div>
         </a>
     </div>

@@ -17,13 +17,9 @@
 	    >
 	    <div class="rrze-video-widget-box">
 		    <img src="<?php echo $preview_image_src; ?>" title="<?php echo $modaltitle ?>" alt="<?php echo $preview_image_alt; ?>"  width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"/>
-	        <div class="overlay-widget">
-		        <div class="text">
-		            <span class="yt-icon-widget">
-			            <em class="fa fa-play-circle-o" aria-hidden="true"></em>
-		            </span>
-		        </div>
-	        </div>
+	        <div class="middle" aria-hidden="true">
+                <div class="play-button"><i class="fa fa-play-circle-o"></i></div>
+            </div>
 	    </div><!-- .rrze-video-widget-box -->
 	    </a>
     </div><!-- .rrze-video-defaultplayer -->

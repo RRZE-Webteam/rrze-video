@@ -15,12 +15,8 @@
         >
 	    <div class="rrze-video-widget-box box-widget<?php echo $instance_id ?>">
 	        <img src="<?php echo $preview_image; ?>" title="<?php echo (!isset($modaltitle)) ? 'Preview Image' : get_the_title() ?>" alt="<?php _e('Video aufrufen') ?>" class="image<?php echo $instance_id ?>"/>
-            <div class="overlay-widget">
-                <div class="text">
-                    <span class="yt-icon-widget">
-                    <em class="fa fa-play-circle-o" aria-hidden="true"></em>
-                    </span>
-                </div>
+            <div class="middle" aria-hidden="true">
+                <div class="play-button"><i class="fa fa-play-circle-o"></i></div>
             </div>
 	    </div><!-- .rrze-video-widget-box -->
         </a>
