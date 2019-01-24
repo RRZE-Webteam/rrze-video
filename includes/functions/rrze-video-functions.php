@@ -10,7 +10,7 @@ Class RRZE_Video_Functions {
     {
 
         $plugin_settings               = get_option('rrze_video_plugin_options');
-        $plugin_fallback_preview_image = plugins_url('../assets/img/_preview.png',dirname(__FILE__));
+        $plugin_fallback_preview_image = plugins_url('assets/img/_preview.png',dirname(__DIR__));
         $settings_preview_image        = esc_url($plugin_settings['preview_image']);
         $preview_image_fallback        = ( ! empty( $settings_preview_image ) ) ? $settings_preview_image : $plugin_fallback_preview_image;
 
