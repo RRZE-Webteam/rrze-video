@@ -6,7 +6,6 @@ add_action( 'widgets_init', function(){
 	register_widget( 'RRZE\PostVideo\RRZE_Video_Widget' );
 });
 
-// WIP/Test: the same js as for shortcode players:
 add_action('wp_ajax_nopriv_get_js_player_action', 'RRZE\PostVideo\get_js_player_action');
 add_action('wp_ajax_get_js_player_action'       , 'RRZE\PostVideo\get_js_player_action');
 
@@ -23,20 +22,6 @@ class RRZE_Video_Widget extends \WP_Widget
         );
         parent::__construct( 'video_widget', 'RRZE Video Widget', $widget_ops );
 
-        /*
-        add_action( 'wp_ajax_nopriv_widget_mejs_callback_action', array($this, 'widget_mejs_callback_action' ));
-        add_action( 'wp_ajax_widget_mejs_callback_action', array($this, 'widget_mejs_callback_action' ));
-        add_action( 'wp_footer', array($this, 'widget_mejs_ajax'));
-
-        add_action( 'wp_ajax_nopriv_widget_mejs_youtube_callback_action', array($this, 'widget_mejs_youtube_callback_action' ));
-        add_action( 'wp_ajax_widget_mejs_youtube_callback_action', array($this,'widget_mejs_youtube_callback_action' ));
-        add_action( 'wp_footer', array($this,'widget_mejs_youtube_ajax'));
-
-        add_action( 'wp_ajax_nopriv_widget_youtube_callback_action', array($this, 'widget_youtube_callback_action' ));
-        add_action( 'wp_ajax_widget_youtube_callback_action', array($this,'widget_youtube_callback_action' ));
-        add_action( 'wp_footer', array($this,'widget_youtube_ajax'));
-
-        */
     }
 
     /**
@@ -56,7 +41,6 @@ class RRZE_Video_Widget extends \WP_Widget
         // bad according to WP coding standards:
         extract( $args );
 
-        echo 'BEFOREWIDGET';
         echo $before_widget;
 
         $form_id                = ( !empty($instance['id']) )         ? $instance['id']         : '';
@@ -92,14 +76,12 @@ class RRZE_Video_Widget extends \WP_Widget
             ),
         );
 
-        $box_id = uniqid();
+        $instance_id = uniqid();
 
         if ( !empty( $form_url ) ) {
 
-            //$video_flag = self::assign_video_flag($form_url);
             $is_fau_video = $helpers->is_fau_video($form_url);
 
-            //self::enqueue_scripts();
             $helpers->equeue_scripts();
 
             if ($is_fau_video) {
@@ -136,21 +118,18 @@ class RRZE_Video_Widget extends \WP_Widget
                     }
                     $author    = ($meta == 1) ? $video_url['author_name']   : '';
                     $copyright = ($meta == 1) ? $video_url['provider_name'] : '';
-                    //$id = uniqid();
-                    $id = $box_id; // WIPWIPWIP
-                    //include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-fau-template.php');
-                    include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-fau-template.php');
+
+                    include(plugin_dir_path(__DIR__) . 'templates/rrze-video-widget-fau-template.php');
 
                 }
-/* WIPWIPWIPWIPWIP */
+
             } else {
 
                 // youtube or else ...
-                $id = uniqid();
-                //$youtube_id = http_check_and_filter($form_url);
-                $youtube_id     = $helpers->get_video_id_from_url($form_url);
+                $video_id       = $helpers->get_video_id_from_url($form_url);
                 $orig_video_url = $form_url;
                 $modaltitle     = $form_title;
+                $preview_image  = $helpers->video_preview_image('',array('url'=>$form_url));
 
                 include( plugin_dir_path( __DIR__ ) . 'templates/rrze-video-widget-youtube-template.php');
 
@@ -160,116 +139,111 @@ class RRZE_Video_Widget extends \WP_Widget
 
             // no url, so check for video post type:
 
-            //$widget_video = self::assign_wp_query_arguments($form_url, $form_id, $argumentsID, $argumentsTaxonomy);
-            $widget_video = $helpers->assign_wp_query_arguments($form_url, $form_id, $argumentsID, $argumentsTaxonomy);
-            $genre_title = self::get_video_title($form_url, $form_id);
-            $single_title = '';
-        $orig_video_url     = $form_url;
-        if($genre_title) $single_title = $widget_video->posts[0]->post_title;
+            $widget_video   = $helpers->assign_wp_query_arguments($form_url, $form_id, $argumentsID, $argumentsTaxonomy);
+            $genre_title    = self::get_video_title($form_url, $form_id);
+            $single_title   = ( $genre_title ) ? $widget_video->posts[0]->post_title : '';
 
-        if ( $widget_video->have_posts() ) : while ($widget_video->have_posts()) : $widget_video->the_post();
+            if ( $widget_video->have_posts() ) {
 
-            self::enqueue_scripts();
+                while ($widget_video->have_posts()) {
 
-            $url = get_post_meta( $post->ID, 'url', true );
-            // $orig_video_url     = self::http_check_and_filter($url);
-            $orig_video_url     = $helpers->get_video_id_from_url($url);
-            // $video_flag = self::assign_video_flag($url);
-            $video_flag = $helpers->is_fau_video($url);
+                    $widget_video->the_post();
 
-            if ($video_flag) {
+                    $helpers->enqueue_scripts();
 
-                $showtitle          = get_the_title();
-                $desc               = get_post_meta( $post->ID, 'description', true );
-                $url_data           = get_post_meta( $post->ID, 'url', true );
-                $video_url          = self::http_check_and_filter($url_data);
-                $thumbnail          = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
-                $suchmuster = '/clip/';
+                    $url            = get_post_meta( $post->ID, 'url', true );
+                    $orig_video_url = $helpers->get_video_id_from_url($url);
+                    $thumbnail      = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
+                    $is_fau_video   = $helpers->is_fau_video($url);
 
-                if(preg_match($suchmuster, $url)) {
-                    $oembed_url         = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de/clip/id/' . $video_url . '&format=json';
-                }else {
-                    $oembed_url         = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de/webplayer/id/' . $video_url . '&format=json';
-                }
-                //$oembed_url         = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de/clip/id/' . $video_url . '&format=json';
-                $video              = json_decode(wp_remote_retrieve_body(wp_safe_remote_get($oembed_url)), true);
-                $video_file         = $video['file'];
-                $preview_image      = $video['preview_image'];
-                $picture            = (!$thumbnail) ? $preview_image : $thumbnail;
+                    if ( $is_fau_video ) {
 
-                if (!empty($single_title) && $form_showtitle == 1  )  {
-                    $showtitle  = $single_title;
-                    $modaltitle = $single_title;
-                }elseif(!empty($single_title) && $form_showtitle == 0  )  {
-                    $showtitle  = '';
-                    $modaltitle = $single_title;
-                }  elseif( empty( $form_title ) && $form_showtitle == 1 ) {
-                    $showtitle  = $video['title'];
-                    $modaltitle = $video['title'];
-                } elseif( empty( $form_title ) && $form_showtitle == 0  ) {
-                    $showtitle  = '';
-                    $modaltitle = $video['title'];
-                } elseif( !empty( $form_title ) && $form_showtitle == 1  )  {
-                    $showtitle  = $form_title;
-                    $modaltitle = $form_title;
-                } else {
-                    $showtitle  = '';
-                    $modaltitle = $form_title;
-                }
+                        $showtitle          = get_the_title();
+                        $desc               = get_post_meta( $post->ID, 'description', true );
+                        $video_url          = $helpers->get_video_id_from_url($url);
 
-                $author             = ($meta == 1) ? $video['author_name'] : '';
-                $copyright          = ($meta == 1) ? $video['provider_name'] : '';
+                        // @@todo: General setting:
+                        $fau_video_url = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de';
+                        preg_match('/(clip|webplayer)\/id\/(\d+)/',$form_url,$matches);
+                        $oembed_url    = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
+                        $remote_get    = wp_safe_remote_get($oembed_url);
 
-                $id = uniqid();
+                        if ( is_wp_error( $remote_get ) ) {
+                            $error_string = $remote_get->get_error_message();
+                            return '<div id="message" class="error"><p>' . $error_string . '</p></div>';
+                        } else {
+                            $video_url      = json_decode(wp_remote_retrieve_body($remote_get), true);
+                            $video_file     = $video_url['file'];
+                            $preview_image  = $helpers->video_preview_image('',array('url'=>$form_url));
+                            // @@todo: small + large size for image and preview?
+                            $picture        = $preview_image;
+                        }
+                        if ( ! empty( $single_title ) ) {
+                            $showtitle  = ( $form_showtitle == 1 ) ? $single_title: '';
+                            $modaltitle = $single_title;
+                        } else if ( empty( $form_title ) ) {
+                            $showtitle  = ( $form_showtitle == 1 ) ? $video['title'] : '';
+                            $modaltitle = $video['title'];
+                        } else {
+                            $showtitle  = ( $form_showtitle == 1 ) ? $form_title : '';
+                            $modaltitle = $form_title;
+                        }
 
-                include( plugin_dir_path( __DIR__ ) . 'templates/rrze-video-widget-template.php');
+                        $author    = ($meta == 1) ? $video['author_name'] : '';
+                        $copyright = ($meta == 1) ? $video['provider_name'] : '';
+
+                        include( plugin_dir_path( __DIR__ ) . 'templates/rrze-video-widget-fau-template.php');
+
+                    } else {
+
+                        // youtube etc video
+
+                        $showtitle       = get_the_title();
+                        $video_post_url  = get_post_meta( $post->ID, 'url', true );
+                        $desc            = get_post_meta( $post->ID, 'description', true );
+                        $youtube_title   = get_the_title();
+
+                        $video_id        = $helpers->get_video_id_from_url($video_post_url);
+                        $preview_image_opts = array(
+                            'provider'   => 'youtube',
+                            'id'         => $video_id,
+                            'url'        => $form_url,
+                            'resolution' => $youtube_resolution,
+                            'thumbnail'  => $thumbnail
+                        );
+                        $preview_image   = $helpers->video_preview_image('',$preview_image_opts);
+
+                        $orig_video_url = $video_post_url;
+
+                        if ( empty( $form_title ) ) {
+                            $showtitle  =  ( $form_showtitle == 1 ) ? $youtube_title : '';
+                            $modaltitle =  $youtube_title;
+                        } else {
+                            $showtitle  = ( $form_showtitle == 1 ) ? $form_title : '';
+                            $modaltitle = $form_title;
+                        }
+
+                        include( plugin_dir_path( __DIR__ ) . 'templates/rrze-video-widget-youtube-template.php');
+
+                    }
+
+                } // endwhile
+
+                // add players js to footer:
+                add_action('wp_footer', 'RRZE\PostVideo\js_player_ajax');
 
             } else {
 
-                $id = uniqid();
-
-                $showtitle          = get_the_title();
-                $youtube_data       = get_post_meta( $post->ID, 'url', true );
-                $youtube_title      = get_the_title();
-                //$youtube_id         = self::http_check_and_filter($youtube_data);
-                $youtube_id         = $helpers->get_video_id_from_url($youtube_data);
-
-                $desc               = get_post_meta( $post->ID, 'description', true );
-                $orig_video_url     = $youtube_data;
-                if ( empty( $form_title ) && $form_showtitle == 1 ) {
-                    $showtitle  =  $youtube_title;
-                    $modaltitle =  $youtube_title;
-                } elseif( empty( $form_title ) && $form_showtitle == 0  ) {
-                    $showtitle  = '';
-                    $modaltitle =  $youtube_title;
-                } elseif( !empty( $form_title ) && $form_showtitle == 1  )  {
-                    $showtitle  = $form_title;
-                    $modaltitle = $form_title;
-                } else {
-                    $showtitle  = '';
-                    $modaltitle = $form_title;
-                }
-
-                include( plugin_dir_path( __DIR__ ) . 'templates/rrze-video-widget-youtube-template.php');
+                $no_posts = '<p>' . _e( 'Es wurden keine Videos gefunden!', 'rrze-video' ) . '</p>';
+                echo $no_posts;
 
             }
-        endwhile;
 
-        // add players js to footer:
-        add_action('wp_footer', 'RRZE\PostVideo\js_player_ajax');
+            wp_reset_postdata();
 
-        else :
-
-            $no_posts = '<p>' . _e( 'Es wurden keine Videos gefunden!', 'rrze-video' ) . '</p>';
-            echo $no_posts;
-
-        endif;
-        wp_reset_postdata();
-
-        echo $after_widget;
-        echo 'AFTERWIDGET';
+            echo $after_widget;
+        }
     }
-}
 
 
     /**
@@ -402,73 +376,6 @@ class RRZE_Video_Widget extends \WP_Widget
         return $instance;
     }
 
-    /*
-    public function http_check_and_filter($url) {
-
-        if ( strpos($url, "https://youtu.be/" ) !== false) {
-            $filtered_id = substr( $url, strpos( $url, "." ) + 4 );
-            return $filtered_id;
-        } elseif ( strpos($url, "https://www.youtube.com/watch?v" ) !== false ) {
-            $filtered_id = substr( $url, strpos( $url, "=" ) + 1 );
-            return $filtered_id;
-        } elseif ( strpos($url, "http://www.video.uni-erlangen.de/clip/id/" ) !== false || strpos($url, "https://www.video.uni-erlangen.de/clip/id/" ) !== false) {
-            $filtered_id = substr( $url, strrpos( $url, "/" ) + 1 );
-            return $filtered_id;
-        } elseif ( strpos($url, "http://www.video.uni-erlangen.de/webplayer/id/" ) !== false || strpos($url, "https://www.video.uni-erlangen.de/webplayer/id/" ) !== false) {
-            $filtered_id = substr( $url, strrpos( $url, "/" ) + 1 );
-            return $filtered_id;
-        } else {
-            return $url;
-        }
-
-    }
-    */
-    /*
-    public function assign_video_flag($url) {
-
-        if ( strpos($url, "https://youtu.be/" ) !== false) {
-            $video_flag = 0;
-            return $video_flag;
-        } elseif ( strpos($url, "https://www.youtube.com/watch?v" ) !== false ) {
-            $video_flag = 0;
-            return $video_flag;
-        } elseif ( strpos($url, "http://www.video.uni-erlangen.de/clip/id/" ) !== false || strpos($url, "https://www.video.uni-erlangen.de/clip/id/" ) !== false) {
-            $video_flag = 1;
-            return $video_flag;
-        } elseif ( strpos($url, "http://www.video.uni-erlangen.de/webplayer/id/" ) !== false || strpos($url, "https://www.video.uni-erlangen.de/webplayer/id/" ) !== false) {
-            $video_flag = 1;
-            return $video_flag;
-        } elseif (  strlen( $url) > 5 ) {
-            $video_flag = 0;
-            return $video_flag;
-        } elseif (  strlen( $url) == 5 ) {
-            $video_flag = 1;
-            return $video_flag;
-        } else {
-            $video_flag = 1;
-            return $video_flag;
-
-        }
-
-    }
-    */
-
-    /*
-    public function assign_wp_query_arguments($url, $id, $argumentsID, $argumentsTaxonomy) {
-
-        if( !empty( $id ) ) {
-            $widget_video = new \WP_Query($argumentsID);
-            return $widget_video;
-        } elseif( !empty( $url ) ) {
-            $widget_video = new \WP_Query($argumentsID);
-            return $widget_video;
-        } else {
-            $widget_video = new \WP_Query($argumentsTaxonomy);
-            return $widget_video;
-        }
-    }
-    */
-
     public static function get_video_title($url, $id) {
         if (!empty($id)) {
             return false;
@@ -479,6 +386,7 @@ class RRZE_Video_Widget extends \WP_Widget
         }
     }
 
+    /*
     public function widget_mejs_ajax() { ?>
        <script type="text/javascript" >
 	jQuery(document).ready(function($) {
@@ -608,7 +516,7 @@ class RRZE_Video_Widget extends \WP_Widget
 	});
 	</script> <?php
     }
-
+**
     public function enqueue_scripts()
     {
         wp_enqueue_script( 'rrze-main-js' );
@@ -617,8 +525,9 @@ class RRZE_Video_Widget extends \WP_Widget
         wp_enqueue_script( 'rrze-video-js' );
         wp_enqueue_style( 'rrze-video-css' );
     }
-
+/**
     public function widget_youtube_callback_action()
     {
     }
+    */
 }
