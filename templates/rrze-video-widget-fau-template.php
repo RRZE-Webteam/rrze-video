@@ -1,7 +1,6 @@
 <?php
     $description       = $desc;
-    $video_title       = ( ! empty($showtitle) ) ? $showtitle    : $modaltitle;
-    $video_title       = '<h2>' . $video_title  . '</h2>';
+    $video_title       = ( ! empty($showtitle) ) ? '<h2>' . $showtitle . '</h2>' : '';
     $preview_image_src = ( ! empty($thumbnail) ) ? $thumbnail[0] : $picture;
     $preview_image_alt = sprintf( __('Bild zum Video %s'), $modaltitle );
 ?>

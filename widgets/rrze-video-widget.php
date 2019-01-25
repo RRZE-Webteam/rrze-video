@@ -53,7 +53,7 @@ class RRZE_Video_Widget extends \WP_Widget
         $taxonomy_genre         = ( !empty($instance['genre']) )      ? $instance['genre']      : '';
         $youtube_resolution     = ( !empty($instance['resolution']) ) ? $instance['resolution'] : '';
 
-        $showtitle  = $form_title;
+        $showtitle = $form_title;
 
         $argumentsID = array(
             'post_type'         =>  'Video',
@@ -103,19 +103,16 @@ class RRZE_Video_Widget extends \WP_Widget
                     //
                     $desc           = ''; // used where?
                     $orig_video_url = $form_url; // used where?
-                    if ( empty( $form_title ) && $form_showtitle == 1 ) {
-                        $showtitle  = $video_url['title'];
-                        $modaltitle = $video_url['title'];
-                    } else if( empty( $form_title ) && $form_showtitle == 0  ) {
-                        $showtitle  = '';
-                        $modaltitle = $video_url['title'];
-                    } else if( !empty( $form_title ) && $form_showtitle == 1  )  {
-                        $showtitle  = $form_title;
-                        $modaltitle = $form_title;
+
+                    // should we show the title from the widget?
+                    if ( $form_showtitle == 1 ) {
+                        $showtitle  = ( ! empty($form_title) ) ? $form_title : $video_url['title'];
+                        $modaltitle = $showtitle;
                     } else {
                         $showtitle  = '';
-                        $modaltitle = $form_title;
+                        $modaltitle = '';
                     }
+
                     $author    = ($meta == 1) ? $video_url['author_name']   : '';
                     $copyright = ($meta == 1) ? $video_url['provider_name'] : '';
 
@@ -128,7 +125,13 @@ class RRZE_Video_Widget extends \WP_Widget
                 // youtube or else ...
                 $video_id       = $helpers->get_video_id_from_url($form_url);
                 $orig_video_url = $form_url;
-                $modaltitle     = $form_title;
+                if ( $form_showtitle == 1 ) {
+                    $showtitle  = $form_title;
+                    $modaltitle = $showtitle;
+                } else {
+                    $showtitle  = '';
+                    $modaltitle = '';
+                }
                 $preview_image  = $helpers->video_preview_image('',array('url'=>$form_url));
 
                 include( plugin_dir_path( __DIR__ ) . 'templates/rrze-video-widget-youtube-template.php');
@@ -158,7 +161,6 @@ class RRZE_Video_Widget extends \WP_Widget
 
                     if ( $is_fau_video ) {
 
-                        $showtitle          = get_the_title();
                         $desc               = get_post_meta( $post->ID, 'description', true );
                         $video_url          = $helpers->get_video_id_from_url($url);
 
@@ -177,15 +179,15 @@ class RRZE_Video_Widget extends \WP_Widget
                             $preview_image  = $helpers->video_preview_image('',array('url'=>$url));
                             // @@todo: small + large size for image and preview?
                             $picture        = $preview_image;
-                            if ( ! empty( $single_title ) ) {
-                                $showtitle  = ( $form_showtitle == 1 ) ? $single_title: '';
-                                $modaltitle = $single_title;
-                            } else if ( empty( $form_title ) ) {
-                                $showtitle  = ( $form_showtitle == 1 ) ? $video['title'] : '';
-                                $modaltitle = $video['title'];
+
+                            // should we show the title?
+                            if ( $form_showtitle == 1 ) {
+                                $fallback_title = ( ! empty( $single_title ) ) ? $single_title : get_the_title();
+                                $showtitle      = ( ! empty( $form_title ) )   ? $form_title   : $fallback_title;
+                                $modaltitle     = $showtitle;
                             } else {
-                                $showtitle  = ( $form_showtitle == 1 ) ? $form_title : '';
-                                $modaltitle = $form_title;
+                                $showtitle  = '';
+                                $modaltitle = '';
                             }
 
                             $author    = ($meta == 1) ? $video['author_name'] : '';
@@ -198,8 +200,6 @@ class RRZE_Video_Widget extends \WP_Widget
                     } else {
 
                         // youtube etc video
-
-                        $showtitle       = get_the_title();
                         $video_post_url  = get_post_meta( $post->ID, 'url', true );
                         $desc            = get_post_meta( $post->ID, 'description', true );
                         $youtube_title   = get_the_title();
@@ -216,12 +216,14 @@ class RRZE_Video_Widget extends \WP_Widget
 
                         $orig_video_url = $video_post_url;
 
-                        if ( empty( $form_title ) ) {
-                            $showtitle  =  ( $form_showtitle == 1 ) ? $youtube_title : '';
-                            $modaltitle =  $youtube_title;
+                        // should we show the title?
+                        if ( $form_showtitle == 1 ) {
+                            $fallback_title = ( ! empty( $single_title ) ) ? $single_title : get_the_title();
+                            $showtitle      = ( ! empty( $form_title ) )   ? $form_title   : $fallback_title;
+                            $modaltitle     = $showtitle;
                         } else {
-                            $showtitle  = ( $form_showtitle == 1 ) ? $form_title : '';
-                            $modaltitle = $form_title;
+                            $showtitle  = '';
+                            $modaltitle = '';
                         }
 
                         include( plugin_dir_path( __DIR__ ) . 'templates/rrze-video-widget-youtube-template.php');

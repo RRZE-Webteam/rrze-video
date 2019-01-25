@@ -1,9 +1,9 @@
 <?php
-    $thistitle = ( ! empty($showtitle) ) ? $showtitle : $modaltitle;
+    $video_title = ( ! empty($showtitle) ) ? '<h2>' . $showtitle . '</h2>' : '';
     $player_type = ( !$show_youtube_player ) ? 'mediaelement' : 'youtube';
 ?>
 <div class="rrze-video rrze-video-widget-container">
-    <h2><?php echo $thistitle; ?></h2>
+    <?php echo $video_title; ?>
     <div class="rrze-video-youtubeplayer">
         <a
             href="<?php echo 'https://www.youtube.com/watch?v=' . $video_id; ?>"
