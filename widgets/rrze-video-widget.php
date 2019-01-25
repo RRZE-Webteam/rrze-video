@@ -261,98 +261,122 @@ class RRZE_Video_Widget extends \WP_Widget
         $meta       = !empty( $instance['meta'] )       ? $instance['meta']       : '';
         $genre      = !empty( $instance['genre'] )      ? $instance['genre']      : '';
         $resolution = !empty( $instance['resolution'] ) ? $instance['resolution'] : '';
-        ?>
 
-         <p>
-        <label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Titel:', 'rrze-video' ); ?></label>
-        <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" placeholder="title" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
-        <em><?php _e('Videotitel' ) ?></em>
-        </p>
-
-         <p>
-        <label for="<?php echo esc_attr( $this->get_field_id( 'id' ) ); ?>"><?php esc_attr_e( 'ID:', 'rrze-video' ); ?></label>
-        <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'id' ) ); ?>" placeholder="id" name="<?php echo esc_attr( $this->get_field_name( 'id' ) ); ?>" type="text" value="<?php echo esc_attr( $id ); ?>">
-        <em><?php _e('Datensatz-ID' ) ?></em>
-        </p>
-
-        <p>
-        <label for="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>"><?php esc_attr_e( 'Url:', 'rrze-video' ); ?></label>
-        <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" placeholder="url" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="text" value="<?php echo esc_attr( $url ); ?>">
-        <em><?php _e('z. B. http://www.video.uni-erlangen.de/webplayer/id/13953') ?></em>
-        </p>
-
-        <p>
-        <label for="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>"><?php esc_attr_e( 'Breite:', 'rrze-video' ); ?></label>
-        <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'width' ) ); ?>" type="text" value="<?php echo esc_attr( $width ); ?>">
-        <em><?php _e('Breite des Vorschaubildes' ) ?></em>
-        </p>
-
-        <p>
-        <label for="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>"><?php esc_attr_e( 'Höhe:', 'rrze-video' ); ?></label>
-        <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" type="text" value="<?php echo esc_attr( $height ); ?>">
-        <em><?php _e('Höhe des Vorschaubildes' ) ?></em>
-        </p>
-
-        <p>
-        <label for="<?php echo $this->get_field_id( 'showtitle' ); ?>"><?php _e('Zeige Widget Videotitel:' ) ?></label>
-        <select class="widefat" id="<?php echo $this->get_field_id( 'showtitle' ); ?>" name="<?php echo $this->get_field_name( 'showtitle' ); ?>">
-            <option value="1"<?php echo ( $showtitle == '1' ) ? 'selected' : ''; ?>>Ein</option>
-            <option value="0"<?php echo ( $showtitle == '' )  ? 'selected' : ''; ?>>Aus</option>
-        </select>
-        </p>
-
-        <p>
-        <label for="<?php echo $this->get_field_id( 'meta' ); ?>"><?php _e('Zeige Metainformationen:' ) ?></label>
-        <select class="widefat" id="<?php echo $this->get_field_id('meta'); ?>" name="<?php echo $this->get_field_name( 'meta' ); ?>">
-            <option value="1"<?php echo ( $meta == '1' ) ? 'selected' : ''; ?>>Ein</option>
-            <option value="0"<?php echo ( $meta == '' )  ? 'selected' : ''; ?>>Aus</option>
-        </select>
-        </p>
-
-        <?php
-
-        $terms = get_terms( array(
-            'taxonomy' => 'genre',
-            'hide_empty' => true,
-        ) );
-
-        ?>
-
-        <p>
-        <label for="<?php echo $this->get_field_id('genre'); ?>"><?php _e('Zufallsvideo nach Genre:'); ?></label>
-        <select class="widefat" id="<?php echo $this->get_field_id('genre'); ?>" name="<?php echo $this->get_field_name('genre'); ?>">
-        <?php
-
-        $opts_select = 0;
-        $opts_html   = '';
-        foreach($terms as $term) {
-            if ($term->name == $genre) {
-                $selected = ' selected';
-                $opts_select++;
-            } else {
-                $selected = '';
+        // find videos of post-type "video", use for id-selector
+        $output_id_select = '';
+        $query_args = array(
+            'post_type' => 'Video'
+        );
+        $local_videos = new \WP_Query($query_args);
+        if ( $local_videos->have_posts() ) {
+            // make a select
+            $output_id_select .= '<label for="' . esc_attr( $this->get_field_id( 'id' ) ) . '">' . esc_attr( 'ID:', 'rrze-video' ) . '</label>' . PHP_EOL;
+            $output_id_select .= '<select class="widefat" id="' . esc_attr( $this->get_field_id( 'id' ) ) . '" name="' . $this->get_field_name( 'id' ) . '" >' . PHP_EOL;
+            $output_id_select .= '<option value="">' . __('Video aus der Mediathek auswählen') . '</option>';
+            while ($local_videos->have_posts()) {
+                $local_videos->the_post();
+                $selected = ( get_the_id() == esc_attr( $id ) ) ? ' selected' : '';
+                $output_id_select .= '<option value="' . get_the_id() . '"' . $selected . '>' . get_the_title() . '</option>';
             }
-            $opts_html .= '<option value="' . $term->name . '"' . $selected . '>' . $term->name . '</option>' . PHP_EOL;
+            $output_id_select .= '</select>' . PHP_EOL;
+        } else {
+            $output_id_select .= __('Es sind noch keine Videos in Ihrer Mediathek vorhanden.');
         }
-        $initial_selected = ($opts_select == 0) ? ' selected' : '';
-        echo '<option value="0"' . $initial_selected . '>' . __('Genre auswählen') . '</option>' .PHP_EOL;
-        echo $opts_html;
-
+        wp_reset_postdata();
+        // : end post-type video videos select
         ?>
-        </select>
-        </p>
 
-        <p>
-        <label for="<?php echo $this->get_field_id( 'resolution' ); ?>"><?php _e('Auflösung des Youtube-Bildes:' ) ?></label>
-        <select class="widefat" id="<?php echo $this->get_field_id( 'resolution' ); ?>" name="<?php echo $this->get_field_name( 'resolution' ); ?>">
-            <option value=""><?php _e('Auswählen') ?></option>
-            <option value="1"<?php echo ( $resolution == '1' ) ? 'selected' : ''; ?>>maxresultion</option>
-            <option value="2"<?php echo ( $resolution == '2' ) ? 'selected' : ''; ?>>default</option>
-            <option value="3"<?php echo ( $resolution == '3' ) ? 'selected' : ''; ?>>hqdefault</option>
-            <option value="4"<?php echo ( $resolution == '4' ) ? 'selected' : ''; ?>>mqdefault</option>
-            <option value="5"<?php echo ( $resolution == '5' ) ? 'selected' : ''; ?>>sddefault</option>
-        </select>
-        </p>
+        <fieldset class="rrze-fieldset" style="margin-bottom: 2em; margin-top: 1em;">
+            <legend style="font-weight: bold;"><?php _e('Videotitel','rrze-video'); ?></legend>
+            <p>
+                <label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Titel:', 'rrze-video' ); ?></label>
+                <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" placeholder="title" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
+                <em><?php _e('Videotitel' ) ?></em>
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id( 'showtitle' ); ?>"><?php _e('Zeige Widget Videotitel:' ) ?></label>
+                <select class="widefat" id="<?php echo $this->get_field_id( 'showtitle' ); ?>" name="<?php echo $this->get_field_name( 'showtitle' ); ?>">
+                    <option value="1"<?php echo ( $showtitle == '1' ) ? 'selected' : ''; ?>>Ein</option>
+                    <option value="0"<?php echo ( $showtitle == '' )  ? 'selected' : ''; ?>>Aus</option>
+                </select>
+            </p>
+        </fieldset>
+
+        <fieldset class="rrze-fieldset" style="margin-bottom: 2em;">
+            <legend style="font-weight: bold;"><?php _e('Videoauswahl','rrze-video'); ?></legend>
+            <p><?php _e('Bitte wählen Sie <em>eine</em> der Möglichkeiten, wie das Widget das anzuzeigende Video auswählt:') ?></p>
+            <p><?php echo $output_id_select; ?></p>
+             <?php /*
+            <label for="<?php echo esc_attr( $this->get_field_id( 'id' ) ); ?>"><?php esc_attr_e( 'ID:', 'rrze-video' ); ?></label>
+            <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'id' ) ); ?>" placeholder="id" name="<?php echo esc_attr( $this->get_field_name( 'id' ) ); ?>" type="text" value="<?php echo esc_attr( $id ); ?>">
+            <em><?php _e('Video aus der Mediathek auswählen' ) ?></em>
+            </p>
+            */ ?>
+            <p>
+                <label for="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>"><?php esc_attr_e( 'Url:', 'rrze-video' ); ?></label>
+                <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" placeholder="url" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="text" value="<?php echo esc_attr( $url ); ?>">
+                <em><?php _e('z. B. http://www.video.uni-erlangen.de/webplayer/id/13953') ?></em>
+            </p>
+
+            <p>
+                <label for="<?php echo $this->get_field_id('genre'); ?>"><?php _e('Zufallsvideo nach Genre:'); ?></label>
+                <select class="widefat" id="<?php echo $this->get_field_id('genre'); ?>" name="<?php echo $this->get_field_name('genre'); ?>">
+                <?php
+                    $terms = get_terms( array(
+                        'taxonomy' => 'genre',
+                        'hide_empty' => true,
+                    ) );
+                    $opts_select = 0;
+                    $opts_html   = '';
+                    foreach($terms as $term) {
+                        if ($term->name == $genre) {
+                            $selected = ' selected';
+                            $opts_select++;
+                        } else {
+                            $selected = '';
+                        }
+                        $opts_html .= '<option value="' . $term->name . '"' . $selected . '>' . $term->name . '</option>' . PHP_EOL;
+                    }
+                    $initial_selected = ($opts_select == 0) ? ' selected' : '';
+                    echo '<option value="0"' . $initial_selected . '>' . __('Genre auswählen') . '</option>' .PHP_EOL;
+                    echo $opts_html;
+                ?>
+                </select>
+            </p>
+        </fieldset>
+
+        <fieldset class="rrze-fieldset" style="margin-bottom: 2em;">
+            <legend style="font-weight: bold;"><?php _e('Video Optionen','rrze-video'); ?></legend>
+             <p>
+                <label for="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>"><?php esc_attr_e( 'Breite:', 'rrze-video' ); ?></label>
+                <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'width' ) ); ?>" type="text" value="<?php echo esc_attr( $width ); ?>">
+                <em><?php _e('Breite des Vorschaubildes' ) ?></em>
+            </p>
+            <p>
+                <label for="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>"><?php esc_attr_e( 'Höhe:', 'rrze-video' ); ?></label>
+                <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" type="text" value="<?php echo esc_attr( $height ); ?>">
+                <em><?php _e('Höhe des Vorschaubildes' ) ?></em>
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id( 'meta' ); ?>"><?php _e('Zeige Metainformationen:' ) ?></label>
+                <select class="widefat" id="<?php echo $this->get_field_id('meta'); ?>" name="<?php echo $this->get_field_name( 'meta' ); ?>">
+                    <option value="1"<?php echo ( $meta == '1' ) ? 'selected' : ''; ?>>Ein</option>
+                    <option value="0"<?php echo ( $meta == '' )  ? 'selected' : ''; ?>>Aus</option>
+                </select>
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id( 'resolution' ); ?>"><?php _e('Auflösung des Youtube-Bildes:' ) ?></label>
+                <select class="widefat" id="<?php echo $this->get_field_id( 'resolution' ); ?>" name="<?php echo $this->get_field_name( 'resolution' ); ?>">
+                    <option value=""><?php _e('Auswählen') ?></option>
+                    <option value="1"<?php echo ( $resolution == '1' ) ? 'selected' : ''; ?>>maxresultion</option>
+                    <option value="2"<?php echo ( $resolution == '2' ) ? 'selected' : ''; ?>>default</option>
+                    <option value="3"<?php echo ( $resolution == '3' ) ? 'selected' : ''; ?>>hqdefault</option>
+                    <option value="4"<?php echo ( $resolution == '4' ) ? 'selected' : ''; ?>>mqdefault</option>
+                    <option value="5"<?php echo ( $resolution == '5' ) ? 'selected' : ''; ?>>sddefault</option>
+                </select>
+            </p>
+        </fieldset>
+
         <?php
     }
 
