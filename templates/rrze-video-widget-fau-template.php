@@ -33,7 +33,7 @@
 		            <div class="close-modal" data-dismiss="modal">
 			            <em class="fa fa-times" aria-hidden="true"></em>
 		            </div>
-		            <?php echo ( ! empty( $modaltitle ) ? '<h2 class="modal-title">' . $modaltitle . '</h2>' : '';  ?>
+		            <?php echo ( ! empty( $modaltitle ) ) ? '<h2 class="modal-title">' . $modaltitle . '</h2>' : '';  ?>
 		        </div><!-- .modal-header -->
 		        <div class="modal-body">
 		            <div class="videocontent<?php echo $instance_id ?>">
