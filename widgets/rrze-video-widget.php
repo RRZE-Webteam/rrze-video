@@ -93,7 +93,7 @@ class RRZE_Video_Widget extends \WP_Widget
                 $remote_get = wp_safe_remote_get($oembed_url);
                 if ( is_wp_error( $remote_get ) ) {
                     $error_string = $remote_get->get_error_message();
-                    return '<div id="message" class="error"><p>' . $error_string . '</p></div>';
+                    echo '<div id="message" class="error"><p>' . $error_string . '</p></div>';
                 } else {
                     $video_url      = json_decode(wp_remote_retrieve_body($remote_get), true);
                     $video_file     = $video_url['file'];
