@@ -30,36 +30,36 @@
         </div>
         </a>
     </div>
-    <div class="modal fade" id="videoModal<?php echo $instance_id; ?>" role="dialog" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="modal fade rrze-video-modal" id="videoModal<?php echo $instance_id; ?>" role="dialog" data-backdrop="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="close-modal" data-dismiss="modal">
                         <i class="fa fa-times" aria-hidden="true"></i>
                     </div>
-                    <h2 class="modal-title"><?php echo ( ! empty( $modaltitle ) ? $modaltitle : '';  ?></h2>
-                </div>
+                    <?php echo ( ! empty( $modaltitle ) ? '<h2 class="modal-title">' . $modaltitle . '</h2>' : '';  ?>
+                </div><!-- .modal-header -->
                 <div class="modal-body">
                     <div class="videocontent<?php echo $instance_id; ?>">
                         <div class="player">
                             <img src="<?php echo $preview_image ?>" alt="<?php echo $video_url['title'] ?>" />
                         </div>
                     </div>
-                </div>
+                </div><!-- .modal-body -->
                 <div class="modal-footer">
                     <p class="description"><?php _e('Beschreibung:'); ?> <?php echo (!empty($description)) ? $description : __('Keine Angaben') ?></p>
                      <?php if($rrze_video_shortcode['showinfo'] == '1') { ?>
                         <dl>
-                            <dt class="meta_heading">Author:</dt>
+                            <dt class="meta_heading"><?php _e('Autor:'); ?></dt>
                             <dd class="meta_content"><?php echo $author; ?></dd>
-                            <dt class="meta_heading">Quelle:</dt>
-                            <dd class="meta_content"><a href="<?php echo $video_file; ?>">Download</a></dd>
-                            <dt class="meta_heading">Copyright:</dt>
+                            <dt class="meta_heading"><?php _e('Quelle:'); ?></dt>
+                            <dd class="meta_content"><a href="<?php echo $video_file; ?>"><?php _e('Download:'); ?></a></dd>
+                            <dt class="meta_heading"><?php _e('Copyright:'); ?></dt>
                             <dd class="meta_content"><?php echo $copyright; ?></dd>
                         </dl>
                     <?php } ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                </div><!-- .modal-footer -->
+            </div><!-- .modal-content -->
+        </div><!-- .modal-dialog -->
+    </div><!-- .modal -->
+</div><!-- .rrze-video -->

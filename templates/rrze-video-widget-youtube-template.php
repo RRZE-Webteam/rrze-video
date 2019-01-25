@@ -21,14 +21,14 @@
 	    </div><!-- .rrze-video-widget-box -->
         </a>
     </div><!-- .rrze-video-youtubeplayer -->
-    <div class="modal fade" id="videoModal<?php echo $instance_id ?>" role="dialog" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="modal fade rrze-video-modal" id="videoModal<?php echo $instance_id ?>" role="dialog" data-backdrop="false">
 	    <div class="modal-dialog">
 	        <div class="modal-content">
                 <div class="modal-header">
                     <div class="close-modal" data-dismiss="modal">
                         <em class="fa fa-times" aria-hidden="true"></em>
                     </div>
-                    <h2 class="widget-title"><?php echo ( isset($modaltitle) ) ? $modaltitle : '' ?></h2>
+                    <?php echo ( isset($modaltitle) ) ? '<h2 class="widget-title">' . $modaltitle . '</h2>' : '' ?>
                 </div>
                 <div class="modal-body">
                     <div class="videocontent<?php echo $instance_id ?>">

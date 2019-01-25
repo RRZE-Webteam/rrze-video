@@ -27,14 +27,14 @@
         </a>
     </div>
 
-    <div class="modal fade is_youtube" id="videoModal<?php echo $instance_id ?>" role="dialog" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="modal fade is_youtube rrze-video-modal" id="videoModal<?php echo $instance_id ?>" role="dialog" data-backdrop="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="close-modal" data-dismiss="modal">
                         <i class="fa fa-times" aria-hidden="true"></i>
                     </div>
-                    <h2 class="modal-title" style="text-align:left;padding:<?php echo (!empty($modaltitle)) ? '30px 0px' : '20px 0px' ?>"><?php echo wordwrap((!empty($modaltitle)) ? $modaltitle : '', 30, "<br/>") ?></h2>
+                    <?php echo (!empty($modaltitle)) ? '<h2 class="modal-title">' . $modaltitle . '</h2>' : ''; ?>
                 </div>
                 <div class="modal-body">
                     <div class="videocontent<?php echo $instance_id ?>">
