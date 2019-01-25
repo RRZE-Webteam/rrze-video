@@ -164,35 +164,36 @@ class RRZE_Video_Widget extends \WP_Widget
 
                         // @@todo: General setting:
                         $fau_video_url = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de';
-                        preg_match('/(clip|webplayer)\/id\/(\d+)/',$form_url,$matches);
+                        preg_match('/(clip|webplayer)\/id\/(\d+)/',$url,$matches);
                         $oembed_url    = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
                         $remote_get    = wp_safe_remote_get($oembed_url);
-
                         if ( is_wp_error( $remote_get ) ) {
                             $error_string = $remote_get->get_error_message();
-                            return '<div id="message" class="error"><p>' . $error_string . '</p></div>';
+                            echo '<div id="message" class="error"><p>' . $error_string . '</p></div>';
+
                         } else {
                             $video_url      = json_decode(wp_remote_retrieve_body($remote_get), true);
                             $video_file     = $video_url['file'];
-                            $preview_image  = $helpers->video_preview_image('',array('url'=>$form_url));
+                            $preview_image  = $helpers->video_preview_image('',array('url'=>$url));
                             // @@todo: small + large size for image and preview?
                             $picture        = $preview_image;
-                        }
-                        if ( ! empty( $single_title ) ) {
-                            $showtitle  = ( $form_showtitle == 1 ) ? $single_title: '';
-                            $modaltitle = $single_title;
-                        } else if ( empty( $form_title ) ) {
-                            $showtitle  = ( $form_showtitle == 1 ) ? $video['title'] : '';
-                            $modaltitle = $video['title'];
-                        } else {
-                            $showtitle  = ( $form_showtitle == 1 ) ? $form_title : '';
-                            $modaltitle = $form_title;
+                            if ( ! empty( $single_title ) ) {
+                                $showtitle  = ( $form_showtitle == 1 ) ? $single_title: '';
+                                $modaltitle = $single_title;
+                            } else if ( empty( $form_title ) ) {
+                                $showtitle  = ( $form_showtitle == 1 ) ? $video['title'] : '';
+                                $modaltitle = $video['title'];
+                            } else {
+                                $showtitle  = ( $form_showtitle == 1 ) ? $form_title : '';
+                                $modaltitle = $form_title;
+                            }
+
+                            $author    = ($meta == 1) ? $video['author_name'] : '';
+                            $copyright = ($meta == 1) ? $video['provider_name'] : '';
+
+                            include( plugin_dir_path( __DIR__ ) . 'templates/rrze-video-widget-fau-template.php');
                         }
 
-                        $author    = ($meta == 1) ? $video['author_name'] : '';
-                        $copyright = ($meta == 1) ? $video['provider_name'] : '';
-
-                        include( plugin_dir_path( __DIR__ ) . 'templates/rrze-video-widget-fau-template.php');
 
                     } else {
 
@@ -207,7 +208,7 @@ class RRZE_Video_Widget extends \WP_Widget
                         $preview_image_opts = array(
                             'provider'   => 'youtube',
                             'id'         => $video_id,
-                            'url'        => $form_url,
+                            'url'        => $url,
                             'resolution' => $youtube_resolution,
                             'thumbnail'  => $thumbnail
                         );
