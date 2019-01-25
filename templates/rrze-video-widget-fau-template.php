@@ -44,7 +44,7 @@
 		        </div><!-- .modal-body -->
 		        <div class="modal-footer">
                     <p class="description"><?php _e('Beschreibung:'); ?> <?php echo (!empty($description)) ? $description : __('Keine Angaben') ?></p>
-                     <?php if($rrze_video_shortcode['showinfo'] == '1') { ?>
+                     <?php if($meta == '1') { ?>
                         <dl>
                             <dt class="meta_heading"><?php _e('Autor:'); ?></dt>
                             <dd class="meta_content"><?php echo $author; ?></dd>
