@@ -295,11 +295,8 @@ class RRZE_Video_Widget extends \WP_Widget
                 <em><?php _e('Videotitel' ) ?></em>
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id( 'showtitle' ); ?>"><?php _e('Zeige Widget Videotitel:' ) ?></label>
-                <select class="widefat" id="<?php echo $this->get_field_id( 'showtitle' ); ?>" name="<?php echo $this->get_field_name( 'showtitle' ); ?>">
-                    <option value="1"<?php echo ( $showtitle == '1' ) ? 'selected' : ''; ?>>Ein</option>
-                    <option value="0"<?php echo ( $showtitle == '' )  ? 'selected' : ''; ?>>Aus</option>
-                </select>
+                <input type="checkbox" id="<?php echo $this->get_field_id( 'showtitle' ); ?>" name="<?php echo $this->get_field_name( 'showtitle' ); ?>" value="1"<?php echo ( $showtitle == '1' ) ? ' checked' : ''; ?>>
+                <label for="<?php echo $this->get_field_id( 'showtitle' ); ?>"><?php _e('Widget Videotitel anzeigen?' ) ?></label>
             </p>
         </fieldset>
 
@@ -307,15 +304,9 @@ class RRZE_Video_Widget extends \WP_Widget
             <legend style="font-weight: bold;"><?php _e('Videoauswahl','rrze-video'); ?></legend>
             <p><?php _e('Bitte wählen Sie <em>eine</em> der Möglichkeiten, wie das Widget das anzuzeigende Video auswählt:') ?></p>
             <p><?php echo $output_id_select; ?></p>
-             <?php /*
-            <label for="<?php echo esc_attr( $this->get_field_id( 'id' ) ); ?>"><?php esc_attr_e( 'ID:', 'rrze-video' ); ?></label>
-            <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'id' ) ); ?>" placeholder="id" name="<?php echo esc_attr( $this->get_field_name( 'id' ) ); ?>" type="text" value="<?php echo esc_attr( $id ); ?>">
-            <em><?php _e('Video aus der Mediathek auswählen' ) ?></em>
-            </p>
-            */ ?>
             <p>
                 <label for="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>"><?php esc_attr_e( 'Url:', 'rrze-video' ); ?></label>
-                <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" placeholder="url" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="text" value="<?php echo esc_attr( $url ); ?>">
+                <input class="widefat code" id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" placeholder="url" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="text" value="<?php echo esc_attr( $url ); ?>">
                 <em><?php _e('z. B. http://www.video.uni-erlangen.de/webplayer/id/13953') ?></em>
             </p>
 
@@ -349,21 +340,15 @@ class RRZE_Video_Widget extends \WP_Widget
         <fieldset class="rrze-fieldset" style="margin-bottom: 2em;">
             <legend style="font-weight: bold;"><?php _e('Video Optionen','rrze-video'); ?></legend>
              <p>
-                <label for="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>"><?php esc_attr_e( 'Breite:', 'rrze-video' ); ?></label>
-                <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'width' ) ); ?>" type="text" value="<?php echo esc_attr( $width ); ?>">
-                <em><?php _e('Breite des Vorschaubildes' ) ?></em>
+                <label for="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>"><?php _e( 'Breite:', 'rrze-video' ); ?></label>
+                <input class="small-text" id="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'width' ) ); ?>" type="text" value="<?php echo esc_attr( $width ); ?>">
+                <label for="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>"><?php _e( 'Höhe:', 'rrze-video' ); ?></label>
+                <input class="small-text" id="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" type="text" value="<?php echo esc_attr( $height ); ?>"> px
             </p>
             <p>
-                <label for="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>"><?php esc_attr_e( 'Höhe:', 'rrze-video' ); ?></label>
-                <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" type="text" value="<?php echo esc_attr( $height ); ?>">
-                <em><?php _e('Höhe des Vorschaubildes' ) ?></em>
-            </p>
-            <p>
-                <label for="<?php echo $this->get_field_id( 'meta' ); ?>"><?php _e('Zeige Metainformationen:' ) ?></label>
-                <select class="widefat" id="<?php echo $this->get_field_id('meta'); ?>" name="<?php echo $this->get_field_name( 'meta' ); ?>">
-                    <option value="1"<?php echo ( $meta == '1' ) ? 'selected' : ''; ?>>Ein</option>
-                    <option value="0"<?php echo ( $meta == '' )  ? 'selected' : ''; ?>>Aus</option>
-                </select>
+                <input type="checkbox" name="<?php echo $this->get_field_name( 'meta' ); ?>" id="<?php echo $this->get_field_id( 'meta' ); ?>" value="1"<?php echo ( $meta == '1' ) ? ' checked' : ''; ?>>
+                <label for="<?php echo $this->get_field_id( 'meta' ); ?>"><?php _e('Video-Metainformationen anzeigen?') ?></label>
+                <br><em><?php _e('(Autor, Copyright, Quelle und Beschreibung, falls angegeben)') ?></em>
             </p>
             <p>
                 <label for="<?php echo $this->get_field_id( 'resolution' ); ?>"><?php _e('Auflösung des Youtube-Bildes:' ) ?></label>
@@ -375,6 +360,7 @@ class RRZE_Video_Widget extends \WP_Widget
                     <option value="4"<?php echo ( $resolution == '4' ) ? 'selected' : ''; ?>>mqdefault</option>
                     <option value="5"<?php echo ( $resolution == '5' ) ? 'selected' : ''; ?>>sddefault</option>
                 </select>
+                <br><em><?php _e('Nur relevant wenn oben per "url" ein youtube-Video angegeben wurde') ?></em>
             </p>
         </fieldset>
 
