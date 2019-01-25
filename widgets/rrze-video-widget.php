@@ -82,7 +82,7 @@ class RRZE_Video_Widget extends \WP_Widget
 
             $is_fau_video = $helpers->is_fau_video($form_url);
 
-            $helpers->equeue_scripts();
+            $helpers->enqueue_scripts();
 
             if ($is_fau_video) {
                 // @@todo: General setting:
