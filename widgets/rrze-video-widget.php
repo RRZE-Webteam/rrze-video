@@ -241,9 +241,8 @@ class RRZE_Video_Widget extends \WP_Widget
             }
 
             wp_reset_postdata();
-
-            echo $after_widget;
         }
+        echo $after_widget;
     }
 
 
