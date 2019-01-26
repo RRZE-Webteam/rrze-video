@@ -7,24 +7,26 @@
     if (!empty($showtitle)) {
         $video_title = '<' . $rrze_video_shortcode['titletag'] . '>' . $showtitle . '</' . $rrze_video_shortcode['titletag'] . '>';
     }
+    $player_type = ( !$show_youtube_player && $youtube_support == 0 ) ? 'mediaelement' : 'youtube';
 ?>
 <div class="rrze-video"<?php echo $inline_css; ?>>
     <?php echo $video_title; ?>
     <div class="rrze-video-container rrze-video-id-<?php echo $instance_id ?>">
-        <?php  $player_type = ( !$show_youtube_player && $youtube_support == 0 ) ? 'mediaelement' : 'youtube'; ?>
-        <a
-            href="<?php echo 'https://www.youtube.com/watch?v=' . $video_id; ?>"
-            data-player-type="<?php echo $player_type ?>"
-            data-box-id="<?php echo $instance_id ?>"
-            data-video-id="<?php echo $video_id ?>"
-            data-toggle="modal"
-            data-target="#videoModal<?php echo $instance_id ?>"
-        >
-        <img src="<?php echo $preview_image; ?>" title="<?php echo (!isset($modaltitle)) ? 'Preview Image' : get_the_title() ?>" alt="Video aufrufen" class="image<?php echo $instance_id ?>"/>
-        <div class="middle" aria-hidden="true">
-            <div class="play-button"><i class="fa fa-play-circle-o"></i></div>
+        <div class="video-preview<?php echo $instance_id ?>" id="video-preview<?php echo $instance_id ?>">
+            <a
+                href="<?php echo 'https://www.youtube.com/watch?v=' . $video_id; ?>"
+                data-player-type="<?php echo $player_type ?>"
+                data-box-id="<?php echo $instance_id ?>"
+                data-video-id="<?php echo $video_id ?>"
+                data-toggle="modal"
+                data-target="#videoModal<?php echo $instance_id ?>"
+            >
+            <img id="video-thumbnail<?php echo $instance_id ?>" src="<?php echo $preview_image; ?>" title="<?php echo (!isset($modaltitle)) ? 'Preview Image' : get_the_title() ?>" alt="Video aufrufen" class="image<?php echo $instance_id ?>"/>
+            <div class="middle" aria-hidden="true">
+                <div class="play-button"><i class="fa fa-play-circle-o"></i></div>
+            </div>
+            </a>
         </div>
-        </a>
     </div>
 
     <div class="modal fade is_youtube rrze-video-modal" id="videoModal<?php echo $instance_id ?>" role="dialog" data-backdrop="false">
@@ -38,19 +40,11 @@
                 </div>
                 <div class="modal-body">
                     <div class="videocontent<?php echo $instance_id ?>">
-                    <?php if(!$show_youtube_player && $youtube_support == 0) {
-                        // use wp medialement
-                    ?>
                         <div class="player">
-                            <img title="preview_image" width="100%" src="<?php echo $preview_image; ?>" alt="Video Preview">
+                            <?php if(!$show_youtube_player && $youtube_support == 0) { ?>
+                                <img title="preview_image" width="100%" src="<?php echo $preview_image; ?>" alt="Video Preview">
+                            <?php } ?>
                         </div>
-                    <?php } else {
-                        // use youtube embed
-                    ?>
-                        <div class="embed-container<?php echo $instance_id ?>">
-                            <div class="youtube-video"></div>
-                        </div>
-                    <?php } ?>
                     </div>
                 </div>
                 <div class="modal-footer">

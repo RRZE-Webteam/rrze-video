@@ -20,12 +20,29 @@ function js_player_ajax()
 <?php
     foreach( $players as $player) {
 ?>
-            $('a[data-player-type="<?php echo $player; ?>"]').click(function(){
+            $('a[data-player-type="<?php echo $player; ?>"]').click(function(e){
 
-                var video_id  = $(this).attr('data-video-id');
-                var id        = $(this).attr('data-box-id');
-                var video_url = $(this).attr('data-video-url');     // nur bei FAU video?
-                var poster    = $(this).attr('data-preview-image'); // nur bei FAU video?
+                e.preventDefault();
+
+                var me         = $(this);
+                var video_id   = me.attr('data-video-id');
+                var id         = me.attr('data-box-id');
+                var video_url  = me.attr('data-video-url');     // nur bei FAU video?
+                var poster     = me.attr('data-preview-image'); // nur bei FAU video?
+                var stage_w    = $('#video-thumbnail'+id).width();
+                var document_w = $(document).width();
+
+                var target     = ".videocontent" + id;
+                if( stage_w >= 640 || document_w < 640 ){
+
+                    me.attr('data-toggle',false);
+                    me.attr('data-target',target);
+                    target = '.video-preview' + id;
+
+                    // remove scrolltop click on container
+                    $(target).parents('.rrze-video-container').unbind('click');
+
+                }
 
                 $.ajax({
                     url: videoajax.ajaxurl,
@@ -41,41 +58,40 @@ function js_player_ajax()
     switch( $player ) {
         case 'mediaelement' :
 ?>
-                    var video = '<video class="player" width="640" height="360" controls="controls" preload="none">' +
+                    var embed_html = '<video class="player" width="640" height="360" controls="controls" preload="none">' +
                         '<source src="https://www.youtube.com/watch?v=' + video_id + '" type="video/youtube" />' +
                         '</video>';
-                        $(".videocontent" + id)
-                        .html(video)
-                        .find(".player")
-                        .mediaelementplayer({
-                        alwaysShowControls: true,
-                            features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
-                        });
-<?php
-            break;
-        case 'youtube' :
-?>
-                    var iframe = document.createElement("iframe");
-                        iframe.setAttribute("frameborder", "0");
-                        iframe.setAttribute("allowfullscreen", "");
-                        iframe.setAttribute("src", "https://www.youtube.com/embed/" + video_id + "?rel=0&showinfo=0");
-
-                        $(".embed-container" + id)
-                            .html(iframe)
-                                .find(".youtube-video"); // <-- ??
-<?php
-            break;
-        case 'fauvideo' :
-?>
-                     var video = '<video class="player img-responsive center-block" style="width:100%;height:100%;" width="639" height="360" poster="' + poster + '" controls="controls" preload="none">' +
-                            '<source src="' + video_url + '" type="video/mp4" />' + '</video>';
-                        $(".videocontent" + id)
-                            .html(video)
+                        $(target)
+                            .html(embed_html)
                                 .find(".player")
                                     .mediaelementplayer({
                                         alwaysShowControls: true,
                                         features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
                                     });
+<?php
+            break;
+        case 'fauvideo' :
+?>
+                     var embed_html = '<video class="player" width="640" height="360" controls="controls" preload="none" poster="' + poster + '">' +
+                        '<source src="' + video_url + '" type="video/mp4" />' +
+                        '</video>';
+                        $(target)
+                            .html(embed_html)
+                                .find(".player")
+                                    .mediaelementplayer({
+                                        alwaysShowControls: true,
+                                        features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
+                                    });
+<?php
+            break;
+        case 'youtube' :
+?>
+                    var embed_html = document.createElement("iframe");
+                        embed_html.setAttribute("frameborder", "0");
+                        embed_html.setAttribute("allowfullscreen", "");
+                        embed_html.setAttribute("src", "https://www.youtube.com/embed/" + video_id + "?rel=0&showinfo=0");
+                        $(target)
+                            .html(embed_html);
 <?php
     }
 ?>

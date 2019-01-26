@@ -7,23 +7,25 @@
 <div class="rrze-video rrze-video-widget-container">
     <?php echo $video_title; ?>
     <div class="rrze-video-defaultplayer">
-	    <a
-	        href="<?php echo $orig_video_url ?>"
-	        data-player-type="fauvideo"
-	        data-toggle="modal"
-	        data-type="videothumb"
-	        data-id="<?php echo $instance_id ?>"
-	        data-preview-image="<?php echo $preview_image ?>"
-	        data-video-file="<?php echo $video_file ?>"
-	        data-target="#videoModal<?php echo $instance_id ?>"
-	    >
-	    <div class="rrze-video-widget-box">
-		    <img src="<?php echo $preview_image_src; ?>" title="<?php echo $modaltitle ?>" alt="<?php echo $preview_image_alt; ?>"  width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"/>
-	        <div class="middle" aria-hidden="true">
-                <div class="play-button"><i class="fa fa-play-circle-o"></i></div>
-            </div>
-	    </div><!-- .rrze-video-widget-box -->
-	    </a>
+        <div class="video-preview<?php echo $instance_id ?>" id="video-preview<?php echo $instance_id ?>">
+            <a
+                href="<?php echo $orig_video_url ?>"
+                data-player-type="fauvideo"
+                data-toggle="modal"
+                data-type="videothumb"
+                data-id="<?php echo $instance_id ?>"
+                data-preview-image="<?php echo $preview_image ?>"
+                data-video-file="<?php echo $video_file ?>"
+                data-target="#videoModal<?php echo $instance_id ?>"
+            >
+            <div class="rrze-video-widget-box">
+                <img id="video-thumbnail<?php echo $instance_id ?>" src="<?php echo $preview_image_src; ?>" title="<?php echo $modaltitle ?>" alt="<?php echo $preview_image_alt; ?>"  width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"/>
+                <div class="middle" aria-hidden="true">
+                    <div class="play-button"><i class="fa fa-play-circle-o"></i></div>
+                </div>
+            </div><!-- .rrze-video-widget-box -->
+            </a>
+	    </div><!-- .video-preview -->
     </div><!-- .rrze-video-defaultplayer -->
     <div class="modal fade rrze-video-modal" id="videoModal<?php echo $instance_id ?>" role="dialog" data-backdrop="false">
 	    <div class="modal-dialog">

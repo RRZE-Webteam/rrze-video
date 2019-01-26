@@ -15,20 +15,22 @@
 <div class="rrze-video"<?php echo $inline_css;?>>
     <?php echo $video_title; ?>
     <div class="rrze-video-container rrze-video-id-<?php echo $instance_id; ?>">
-        <a
-            href="<?php echo $video_file; ?>"
-            data-player-type="fauvideo"
-            data-toggle="modal"
-            data-box-id="<?php echo $instance_id; ?>"
-            data-preview-image="<?php echo $preview_image ?>"
-            data-video-url="<?php echo $video_file ?>"
-            data-target="#videoModal<?php echo $instance_id; ?>"
-        >
-        <img src="<?php echo $preview_image_src; ?>" title="<?php echo $preview_image_title; ?>"  alt="Video aufrufen" class="<?php echo $preview_image_class; ?>" />
-        <div class="middle" aria-hidden="true">
-            <div class="play-button"><i class="fa fa-play-circle-o"></i></div>
+        <div class="video-preview<?php echo $instance_id ?>" id="video-preview<?php echo $instance_id ?>">
+            <a
+                href="<?php echo $video_file; ?>"
+                data-player-type="fauvideo"
+                data-toggle="modal"
+                data-box-id="<?php echo $instance_id; ?>"
+                data-preview-image="<?php echo $preview_image ?>"
+                data-video-url="<?php echo $video_file ?>"
+                data-target="#videoModal<?php echo $instance_id; ?>"
+            >
+            <img id="video-thumbnail<?php echo $instance_id ?>" src="<?php echo $preview_image_src; ?>" title="<?php echo $preview_image_title; ?>"  alt="Video aufrufen" class="<?php echo $preview_image_class; ?>" />
+            <div class="middle" aria-hidden="true">
+                <div class="play-button"><i class="fa fa-play-circle-o"></i></div>
+            </div>
+            </a>
         </div>
-        </a>
     </div>
     <div class="modal fade rrze-video-modal" id="videoModal<?php echo $instance_id; ?>" role="dialog" data-backdrop="false">
         <div class="modal-dialog">
