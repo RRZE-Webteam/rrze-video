@@ -154,7 +154,7 @@ function show_video_on_page($atts)
 
                     $fau_video          = $helpers->fetch_fau_video($url);
                     if ( $fau_video['error'] != '' ) {
-                        return '<div id="message" class="error"><p>' . $fau_video['message'] . '</p></div>';
+                        $out = '<div id="message" class="error"><p>' . $fau_video['message'] . '</p></div>';
                     } else {
                         $video_file     = $fau_video['video']['file'];
                         $showtitle      = ($rrze_video_shortcode['showtitle'] == 1) ? $fau_video['video']['title'] : '';
