@@ -85,18 +85,14 @@ class RRZE_Video_Widget extends \WP_Widget
             $helpers->enqueue_scripts();
 
             if ($is_fau_video) {
-                // @@todo: General setting:
-                $fau_video_url = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de';
-                preg_match('/(clip|webplayer)\/id\/(\d+)/',$form_url,$matches);
-                $oembed_url    = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
 
-                $remote_get = wp_safe_remote_get($oembed_url);
-                if ( is_wp_error( $remote_get ) ) {
-                    $error_string = $remote_get->get_error_message();
-                    echo '<div id="message" class="error"><p>' . $error_string . '</p></div>';
+                // fau video:
+                $fau_video = $helpers->fetch_fau_video( $form_url );
+
+                if ( $fau_video['error'] != '' ) {
+                    echo '<div id="message" class="error"><p>' . $fau_video['error'] . '</p></div>';
                 } else {
-                    $video_url      = json_decode(wp_remote_retrieve_body($remote_get), true);
-                    $video_file     = $video_url['file'];
+                    $video_file     = $fau_video['video']['file'];
                     $preview_image  = $helpers->video_preview_image('',array('url'=>$form_url));
                     // @@todo: small + large size for image and preview?
                     $picture        = $preview_image;
@@ -106,15 +102,15 @@ class RRZE_Video_Widget extends \WP_Widget
 
                     // should we show the title from the widget?
                     if ( $form_showtitle == 1 ) {
-                        $showtitle  = ( ! empty($form_title) ) ? $form_title : $video_url['title'];
+                        $showtitle  = ( ! empty($form_title) ) ? $form_title : $fau_video['video']['title'];
                         $modaltitle = $showtitle;
                     } else {
                         $showtitle  = '';
                         $modaltitle = '';
                     }
 
-                    $author    = ($meta == 1) ? $video_url['author_name']   : '';
-                    $copyright = ($meta == 1) ? $video_url['provider_name'] : '';
+                    $author    = ($meta == 1) ? $fau_video['video']['author_name']   : '';
+                    $copyright = ($meta == 1) ? $fau_video['video']['provider_name'] : '';
 
                     include(plugin_dir_path(__DIR__) . 'templates/rrze-video-widget-fau-template.php');
 
@@ -155,27 +151,24 @@ class RRZE_Video_Widget extends \WP_Widget
                     $helpers->enqueue_scripts();
 
                     $url            = get_post_meta( $post->ID, 'url', true );
-                    $orig_video_url = $helpers->get_video_id_from_url($url);
+                    $desc           = get_post_meta( $post->ID, 'description', true );
                     $thumbnail      = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
                     $is_fau_video   = $helpers->is_fau_video($url);
 
                     if ( $is_fau_video ) {
 
-                        $desc               = get_post_meta( $post->ID, 'description', true );
-                        $video_url          = $helpers->get_video_id_from_url($url);
-
+                        //fau video:
                         // @@todo: General setting:
-                        $fau_video_url = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de';
-                        preg_match('/(clip|webplayer)\/id\/(\d+)/',$url,$matches);
-                        $oembed_url    = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
-                        $remote_get    = wp_safe_remote_get($oembed_url);
-                        if ( is_wp_error( $remote_get ) ) {
-                            $error_string = $remote_get->get_error_message();
-                            echo '<div id="message" class="error"><p>' . $error_string . '</p></div>';
-
+                        //$fau_video_url = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de';
+                        //preg_match('/(clip|webplayer)\/id\/(\d+)/',$url,$matches);
+                        //$oembed_url    = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
+                        //$remote_get    = wp_safe_remote_get($oembed_url);
+                        $fau_video = $helpers->fetch_fau_video( $url );
+                        if ( $fau_video['error'] != '' ) {
+                            echo '<div id="message" class="error"><p>' . $fau_video['error'] . '</p></div>';
                         } else {
-                            $video_url      = json_decode(wp_remote_retrieve_body($remote_get), true);
-                            $video_file     = $video_url['file'];
+                            //$video_url      = json_decode(wp_remote_retrieve_body($remote_get), true);
+                            $video_file     = $fau_video['video']['file'];
                             $preview_image  = $helpers->video_preview_image('',array('url'=>$url));
                             // @@todo: small + large size for image and preview?
                             $picture        = $preview_image;
@@ -190,8 +183,8 @@ class RRZE_Video_Widget extends \WP_Widget
                                 $modaltitle = '';
                             }
 
-                            $author    = ($meta == 1) ? $video['author_name'] : '';
-                            $copyright = ($meta == 1) ? $video['provider_name'] : '';
+                            $author    = ($meta == 1) ? $fau_video['video']['author_name'] : '';
+                            $copyright = ($meta == 1) ? $fau_video['video']['provider_name'] : '';
 
                             include( plugin_dir_path( __DIR__ ) . 'templates/rrze-video-widget-fau-template.php');
                         }
@@ -201,7 +194,6 @@ class RRZE_Video_Widget extends \WP_Widget
 
                         // youtube etc video
                         $video_post_url  = get_post_meta( $post->ID, 'url', true );
-                        $desc            = get_post_meta( $post->ID, 'description', true );
                         $youtube_title   = get_the_title();
 
                         $video_id        = $helpers->get_video_id_from_url($video_post_url);

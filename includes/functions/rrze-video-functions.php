@@ -124,6 +124,31 @@ Class RRZE_Video_Functions {
         return $is_fau_video;
     }
 
+    function fetch_fau_video($url){
+
+        $fau_video =  array(
+            'error'   => false,
+            'video'   => false,
+        );
+
+        $fau_video_url = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de';
+        preg_match('/(clip|webplayer)\/id\/(\d+)/',$url,$matches);
+        if( ! is_array( $matches ) ){
+            $fau_video['error'] = 'no match in url';
+        } else {
+            $oembed_url    = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
+            $remote_get    = wp_safe_remote_get($oembed_url, array( 'sslverify' => false ) );
+            if ( is_wp_error( $remote_get ) ) {
+                $fau_video['error'] = $remote_get->get_error_message();
+            } else {
+                $fau_video['video'] = json_decode(wp_remote_retrieve_body($remote_get), true);
+            }
+        }
+
+        return $fau_video;
+
+    }
+
     function assign_wp_query_arguments($url, $id, $argumentsID, $argumentsTaxonomy)
     {
         if (!empty($id) || !empty($url)) {

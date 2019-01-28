@@ -9,13 +9,13 @@
     <div class="rrze-video-defaultplayer">
         <div class="video-preview<?php echo $instance_id ?>" id="video-preview<?php echo $instance_id ?>">
             <a
-                href="<?php echo $orig_video_url ?>"
+                href="<?php echo $url ?>"
                 data-player-type="fauvideo"
                 data-toggle="modal"
                 data-type="videothumb"
-                data-id="<?php echo $instance_id ?>"
+                data-box-id="<?php echo $instance_id ?>"
                 data-preview-image="<?php echo $preview_image ?>"
-                data-video-file="<?php echo $video_file ?>"
+                data-video-url="<?php echo $video_file ?>"
                 data-target="#videoModal<?php echo $instance_id ?>"
             >
             <div class="rrze-video-widget-box">

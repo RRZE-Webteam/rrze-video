@@ -79,28 +79,21 @@ function show_video_on_page($atts)
         $helpers->enqueue_scripts();
 
         if ($is_fau_video) {
+
             // FAU-Video
-            // @@todo: General setting:
-            $fau_video_url = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de';
-            preg_match('/(clip|webplayer)\/id\/(\d+)/',$url_shortcode,$matches);
-            $oembed_url    = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
-
-            $remote_get = wp_safe_remote_get($oembed_url);
-            if ( is_wp_error( $remote_get ) ) {
-                $error_string = $remote_get->get_error_message();
-                return '<div id="message" class="error"><p>' . $error_string . '</p></div>';
+            $fau_video = $helpers->fetch_fau_video( $url_shortcode );
+            if ( $fau_video['error'] != '' ) {
+                return '<div id="message" class="error"><p>' . $fau_video['message'] . '</p></div>';
             } else {
-                $video_url     = json_decode(wp_remote_retrieve_body($remote_get), true);
-                $video_file    = $video_url['file'];
-
+                $video_file    = $fau_video['video']['file'];
                 $preview_image  = $helpers->video_preview_image($poster_shortcode);
                 // @@todo: small + large size for image and preview?
                 $picture        = $preview_image;
                 //
-                $showtitle      = ($rrze_video_shortcode['showtitle'] == 1) ? $video_url['title'] : '';
-                $modaltitle     = $video_url['title'];
-                $author         = ($rrze_video_shortcode['showinfo'] == 1) ? $video_url['author_name'] : '';
-                $copyright      = ($rrze_video_shortcode['showinfo'] == 1) ? $video_url['provider_name'] : '';
+                $showtitle      = ($rrze_video_shortcode['showtitle'] == 1) ? $fau_video['video']['title'] : '';
+                $modaltitle     = $fau_video['video']['title'];
+                $author         = ($rrze_video_shortcode['showinfo'] == 1) ? $fau_video['video']['author_name'] : '';
+                $copyright      = ($rrze_video_shortcode['showinfo'] == 1) ? $fau_video['video']['provider_name'] : '';
 
                 ob_start();
                 include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-fau-template.php');
@@ -146,20 +139,12 @@ function show_video_on_page($atts)
                 $url          = get_post_meta($post->ID, 'url', true);
                 $is_fau_video = $helpers->is_fau_video($url);
                 $thumbnail    = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full');
+                $description  = get_post_meta($post->ID, 'description', true);
 
                 if ($is_fau_video) {
-                    // FAU video
-                    $url_data           = get_post_meta($post->ID, 'url', true);
-                    $video_id           = $helpers->get_video_id_from_url($url_data);
-                    $description        = get_post_meta($post->ID, 'description', true);
-                    $genre              = wp_strip_all_tags(get_the_term_list($post->ID, 'genre', true));
-                    //@@todo: Generalsetting:
-                    $fau_video_url      = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de';
-                    preg_match('/(clip|webplayer)\/id\/(\d+)/',$url,$matches);
-                    $oembed_url         = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
-                    $video_url          = json_decode(wp_remote_retrieve_body(wp_safe_remote_get($oembed_url)), true);
-                    $video_file         = $video_url['file'];
 
+                    // FAU video
+                    $genre              = wp_strip_all_tags(get_the_term_list($post->ID, 'genre', true));
                     if (!$thumbnail) {
                         $preview_image  = $helpers->video_preview_image($poster_shortcode);
                     } else {
@@ -167,20 +152,26 @@ function show_video_on_page($atts)
                     }
                     $picture            = $preview_image;
 
-                    $showtitle          = ($rrze_video_shortcode['showtitle'] == 1) ? $video_url['title'] : '';
-                    $modaltitle         = $video_url['title'];
-                    $author             = $video_url['author_name'];
-                    $copyright          = $video_url['provider_name'];
+                    $fau_video          = $helpers->fetch_fau_video($url);
+                    if ( $fau_video['error'] != '' ) {
+                        return '<div id="message" class="error"><p>' . $fau_video['message'] . '</p></div>';
+                    } else {
+                        $video_file     = $fau_video['video']['file'];
+                        $showtitle      = ($rrze_video_shortcode['showtitle'] == 1) ? $fau_video['video']['title'] : '';
+                        $modaltitle     = ($fau_video['video']['title'] != '') ? $fau_video['video']['title'] : get_the_title();
+                        $author         = $fau_video['video']['author_name'];
+                        $copyright      = $fau_video['video']['provider_name'];
 
-                    ob_start();
-                    include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-fau-template.php');
-                    $out = ob_get_clean();
+                        ob_start();
+                        include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-fau-template.php');
+                        $out = ob_get_clean();
+                    }
 
                 } else {
 
                     // other videos
-                    $video_data         = get_post_meta($post->ID, 'url', true);
-                    $video_id           = $helpers->get_video_id_from_url($video_data);
+                    $video_data    = get_post_meta($post->ID, 'url', true);
+                    $video_id      = $helpers->get_video_id_from_url($video_data);
                     $preview_image_opts = array(
                         'provider'   => 'youtube',
                         'id'         => $video_id,
@@ -188,12 +179,11 @@ function show_video_on_page($atts)
                         'resolution' => $youtube_resolution,
                         'thumbnail'  => $thumbnail
                     );
-                    $preview_image      = $helpers->video_preview_image($poster_shortcode,$preview_image_opts);
-                    $picture            = $preview_image;
+                    $preview_image = $helpers->video_preview_image($poster_shortcode,$preview_image_opts);
+                    $picture       = $preview_image;
 
-                    $showtitle          = ($rrze_video_shortcode['showtitle'] == 1) ? get_the_title() : '';
-                    $modaltitle         = get_the_title();
-                    $description        = get_post_meta($post->ID, 'description', true);
+                    $showtitle     = ($rrze_video_shortcode['showtitle'] == 1) ? get_the_title() : '';
+                    $modaltitle    = $showtitle;
 
                     ob_start();
                     include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-youtube-template.php');
