@@ -3,30 +3,29 @@ namespace RRZE\PostVideo;
 
 add_shortcode('fauvideo', 'RRZE\PostVideo\show_video_on_page');
 
-// WIP: make generic ajax function for the player variants
 add_action('wp_ajax_nopriv_get_js_player_action', 'RRZE\PostVideo\get_js_player_action');
 add_action('wp_ajax_get_js_player_action'       , 'RRZE\PostVideo\get_js_player_action');
 
-function show_video_on_page($atts)
+function show_video_on_page( $atts )
 {
     global $post;
     $helpers = new RRZE_Video_Functions();
-    $plugin_settings        = get_option('rrze_video_plugin_options');
-    $show_youtube_player    = (!empty( $plugin_settings['youtube_activate_checkbox'] )) ? $plugin_settings['youtube_activate_checkbox'] : 0;
+    $plugin_settings     = get_option( 'rrze_video_plugin_options' );
+    $show_youtube_player = ( ! empty( $plugin_settings['youtube_activate_checkbox'] ) ) ? $plugin_settings['youtube_activate_checkbox'] : 0;
 
-    $rrze_video_shortcode = shortcode_atts(array(
+    $rrze_video_shortcode = shortcode_atts( array(
         'url'                   => '',
         'id'                    => '',
         'width'                 => '640',
         'height'                => '360',
-        'poster'                => '', // '',[url],'default'
+        'poster'                => '',
         'showinfo'              => '1',
         'showtitle'             => '1',
         'titletag'              => 'h2',
         'youtube-support'       => '0',
         'youtube-resolution'    => '4',
         'rand'                  => ''
-    ), $atts, 'fauvideo');
+    ), $atts, 'fauvideo' );
 
     $url_shortcode          = $rrze_video_shortcode['url'];
     $id_shortcode           = $rrze_video_shortcode['id'];
@@ -62,10 +61,10 @@ function show_video_on_page($atts)
     $instance_id = uniqid();
 
     // warum?
-    if (preg_match("/^[a-zA-Z.:\/ ]*$/", $width_shortcode, $matches)) {
+    if ( preg_match("/^[a-zA-Z.:\/ ]*$/", $width_shortcode, $matches ) ) {
         $width_shortcode = 640;
         $suffix = 'px';
-    } elseif (preg_match("/(\d+)%/", $width_shortcode, $matches)) {
+    } elseif ( preg_match("/(\d+)%/", $width_shortcode, $matches ) ) {
         $width_shortcode = 640;
         $suffix = 'px';
     } else {

@@ -2,7 +2,8 @@
 
 namespace RRZE\PostVideo;
 
-function get_js_player_action(){
+function get_js_player_action()
+{
     // dummy callback from wp_ajax api
     // empty on purpose.
 }
@@ -63,7 +64,7 @@ function js_player_ajax()
                         '</video>';
                         $(target)
                             .html(embed_html)
-                                .find(".player")
+                                .find('.player')
                                     .mediaelementplayer({
                                         alwaysShowControls: true,
                                         features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
@@ -77,7 +78,7 @@ function js_player_ajax()
                         '</video>';
                         $(target)
                             .html(embed_html)
-                                .find(".player")
+                                .find('.player')
                                     .mediaelementplayer({
                                         alwaysShowControls: true,
                                         features: ['playpause','stop','current','progress','duration','volume','tracks','fullscreen'],
@@ -86,14 +87,14 @@ function js_player_ajax()
             break;
         case 'youtube' :
 ?>
-                    var embed_html = document.createElement("iframe");
-                        embed_html.setAttribute("frameborder", "0");
-                        embed_html.setAttribute("allowfullscreen", "");
-                        embed_html.setAttribute("src", "https://www.youtube.com/embed/" + video_id + "?rel=0&showinfo=0");
+                    var embed_html = document.createElement('iframe');
+                        embed_html.setAttribute('frameborder', '0');
+                        embed_html.setAttribute('allowfullscreen', '');
+                        embed_html.setAttribute('src', 'https://www.youtube.com/embed/' + video_id + '?rel=0&showinfo=0');
                         $(target)
                             .html(embed_html);
 <?php
-    }
+    } // end switch;
 ?>
                    },
                     error: function(errorThrown){
