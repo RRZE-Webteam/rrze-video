@@ -43,14 +43,14 @@ function init() {
     include_once('includes/metabox/rrze-video-add-metaboxes.php');
     include_once('includes/metabox/rrze-video-save-metaboxes.php');
     include_once('includes/posttype/rrze-video-admin-view.php');
+    include_once('includes/functions/rrze-video-functions.php');
+    include_once('includes/ajax/rrze-video-player-js.php');
     include_once('settings/rrze-video-settings-page.php');
     include_once('shortcodes/rrze-video-shortcode.php');
     include_once('widgets/rrze-video-widget.php');
     include_once('help/rrze-video-plugin-tabmenu.php');
     require_once('includes/endpoint/video-endpoint.php');
     new VideoEndpoint;
-
-
 
     add_action( 'wp_enqueue_scripts', 'RRZE\PostVideo\custom_libraries_scripts');
     add_action( 'admin_notices', 'RRZE\PostVideo\video_admin_notice');
