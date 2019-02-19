@@ -231,6 +231,11 @@ $background_color_1: transparent;
 
     position: relative;
 
+    > img {
+        width: 100%;
+        height: auto;
+    }
+
     .overlay-widget {
 	    opacity: 0;
 	    transition: .5s ease;
