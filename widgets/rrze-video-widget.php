@@ -93,7 +93,7 @@ class RRZE_Video_Widget extends \WP_Widget
                     echo '<div id="message" class="error"><p>' . $fau_video['error'] . '</p></div>';
                 } else {
                     $video_file     = $fau_video['video']['file'];
-                    $preview_image  = $helpers->video_preview_image('',array('url'=>$form_url));
+                    $preview_image  = $helpers->video_preview_image('',array('provider'=>'fau','url'=>$form_url));
                     // @@todo: small + large size for image and preview?
                     $picture        = $preview_image;
                     //
@@ -174,7 +174,7 @@ class RRZE_Video_Widget extends \WP_Widget
                         } else {
                             //$video_url      = json_decode(wp_remote_retrieve_body($remote_get), true);
                             $video_file     = $fau_video['video']['file'];
-                            $preview_image  = $helpers->video_preview_image('',array('url'=>$url));
+                            $preview_image  = $helpers->video_preview_image('',array('provider'=>'fau','url'=>$url));
                             // @@todo: small + large size for image and preview?
                             $picture        = $preview_image;
 

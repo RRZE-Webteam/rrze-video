@@ -85,7 +85,7 @@ function show_video_on_page( $atts )
                 return '<div id="message" class="error"><p>' . $fau_video['error'] . '</p></div>';
             } else {
                 $video_file    = $fau_video['video']['file'];
-                $preview_image  = $helpers->video_preview_image($poster_shortcode);
+                $preview_image  = $helpers->video_preview_image($poster_shortcode,array('provider'=>'fau'));
                 // @@todo: small + large size for image and preview?
                 $picture        = $preview_image;
                 //
@@ -145,7 +145,7 @@ function show_video_on_page( $atts )
                     // FAU video
                     $genre              = wp_strip_all_tags(get_the_term_list($post->ID, 'genre', true));
                     if (!$thumbnail) {
-                        $preview_image  = $helpers->video_preview_image($poster_shortcode);
+                        $preview_image  = $helpers->video_preview_image($poster_shortcode,array('provider'=>'fau'));
                     } else {
                         $preview_image  = $thumbnail[0];
                     }
@@ -157,7 +157,7 @@ function show_video_on_page( $atts )
                     } else {
                         $video_file     = $fau_video['video']['file'];
                         $showtitle      = ($rrze_video_shortcode['showtitle'] == 1) ? $fau_video['video']['title'] : '';
-                        $modaltitle     = ($fau_video['video']['title'] != '') ? $fau_video['video']['title'] : get_the_title();
+                        $modaltitle     = ($fau_video['video']['title'] != '')      ? $fau_video['video']['title'] : get_the_title();
                         $author         = $fau_video['video']['author_name'];
                         $copyright      = $fau_video['video']['provider_name'];
 
