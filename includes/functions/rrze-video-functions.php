@@ -60,8 +60,9 @@ Class RRZE_Video_Functions {
                     $preview_image = $youtube_url . $thumb;
                     break;
                 case 'fau':
-                default:
-                    $preview_image = 'https://cdn.video.uni-erlangen.de/Images/player_previews/' . $this->get_video_id_from_url( $options['url'] ) .'_preview.img';
+                    $preview_image = 'https://cdn.video.uni-erlangen.de/Images/player_previews/' . $this->get_video_id_from_url( $options['url'], 'fau' ) .'_preview.img';
+                    break;
+                // default: use fallback from above
             }
         }
         return $preview_image;
