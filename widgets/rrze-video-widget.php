@@ -127,7 +127,7 @@ class RRZE_Video_Widget extends \WP_Widget
                     $modaltitle = $showtitle;
                 } else {
                     $showtitle  = '';
-                    $modaltitle = __('Ein Video');
+                    $modaltitle = ( ! empty( $form_title ) ) ? $form_title : __('Ein Video');
                 }
                 $preview_image_opts = array(
                     'provider'   => 'youtube',
