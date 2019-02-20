@@ -107,7 +107,7 @@ class RRZE_Video_Widget extends \WP_Widget
                         $modaltitle = $showtitle;
                     } else {
                         $showtitle  = '';
-                        $modaltitle = '';
+                        $modaltitle = $fau_video['video']['title'];
                     }
 
                     $author    = ($meta == 1) ? $fau_video['video']['author_name']   : '';
@@ -127,7 +127,7 @@ class RRZE_Video_Widget extends \WP_Widget
                     $modaltitle = $showtitle;
                 } else {
                     $showtitle  = '';
-                    $modaltitle = '';
+                    $modaltitle = __('Ein Video');
                 }
                 $preview_image_opts = array(
                     'provider'   => 'youtube',
@@ -188,7 +188,7 @@ class RRZE_Video_Widget extends \WP_Widget
                                 $modaltitle = $showtitle;
                             } else {
                                 $showtitle  = '';
-                                $modaltitle = (! empty( $form_title ) ) ? $form_title : __('Ein Video.');
+                                $modaltitle = ( ! empty( $single_title ) ) ? $single_title : get_the_title();
                             }
 
                             $author    = ($meta == 1) ? $fau_video['video']['author_name'] : '';
@@ -225,7 +225,7 @@ class RRZE_Video_Widget extends \WP_Widget
                             $modaltitle = $showtitle;
                         } else {
                             $showtitle  = '';
-                            $modaltitle = (! empty( $form_title ) ) ? $form_title : __('Ein Video.');
+                            $modaltitle = ( ! empty( $single_title ) ) ? $single_title : get_the_title();
                         }
 
                         include( plugin_dir_path( __DIR__ ) . 'templates/rrze-video-widget-youtube-template.php');
