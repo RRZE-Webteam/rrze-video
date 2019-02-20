@@ -18,12 +18,11 @@ function rrze_video_option_page()
     <h1><?php esc_html_e('Einstellungen › RRZE Video Plugin'); ?></h1>
     <form action="options.php" method="post">
         <?php settings_fields('rrze_video_plugin_options');?>
-        <?php do_settings_sections('rrze_video_youtube_setting');?>
-        <?php do_settings_sections('rrze_video_preview_image_setting');?>
+        <?php do_settings_sections('rrze_video_settings_section__youtube');?>
+        <?php do_settings_sections('rrze_video_settings_section__preview_image');?>
         <p class="submit"><button class="button button-primary"><?php esc_html_e('Änderungen speichern') ?></button></p>
     </form>
 </div>
-
 <?php }
 
 // ADMIN SETTINGS
@@ -33,22 +32,47 @@ function rrze_video_settings()
     //register_setting( $option_group, $option_name );
     register_setting( 'rrze_video_plugin_options', 'rrze_video_plugin_options' );
 
-    add_settings_section( 'rrze_video_section_youtube', esc_html__( 'Youtube Player' ), 'RRZE\PostVideo\rrze_video_section_youtube_settings_info', 'rrze_video_youtube_setting' );
-    add_settings_field( 'rrze_video_settings_yt_player', esc_html__( 'Youtube Player aktivieren' ), 'RRZE\PostVideo\rrze_video_checkbox_settings_youtube_player_cb', 'rrze_video_youtube_setting', 'rrze_video_section_youtube', array( 'label_for'=>'rrze_video_settings_yt_player' ) );
+    // add_settings_section( $id, $title, $callback, $page );
+    add_settings_section( 'rrze_video_section_youtube',       esc_html__( 'Youtube Player' ),             'RRZE\PostVideo\rrze_video_settings_section_youtube_info_cb',       'rrze_video_settings_section__youtube' );
+    add_settings_section( 'rrze_video_section_preview_image', esc_html__( 'Vorschaubild Einstellungen' ), 'RRZE\PostVideo\rrze_video_settings_section_preview_image_info_cb', 'rrze_video_settings_section__preview_image' );
 
-    add_settings_section( 'rrze_video_section_preview_image', esc_html__( 'Vorschaubild Fallback' ), 'RRZE\PostVideo\rrze_video_section_preview_image_settings_info', 'rrze_video_preview_image_setting' );
-    add_settings_field( 'rrze_video_settings_preview_image', esc_html__( 'Pfad zum Vorschaubild' ), 'RRZE\PostVideo\rrze_video_settings_input_preview_image_cb', 'rrze_video_preview_image_setting', 'rrze_video_section_preview_image', array( 'label_for'=>'rrze_video_settings_preview_image' ) );
+    // add_settings_field( $id, $title, $callback, $page, $section, $args );
+    add_settings_field(
+        'rrze_video_settings_yt_player',
+        esc_html__( 'Youtube Player aktivieren' ),
+        'RRZE\PostVideo\rrze_video_settings_input_youtube_player_cb',
+        'rrze_video_settings_section__youtube',
+        'rrze_video_section_youtube',
+        array( 'label_for'=>'rrze_video_settings_yt_player' )
+    );
 
+    add_settings_field(
+        'rrze_video_settings_preview_image_path',
+        esc_html__( 'Pfad zum Vorschaubild' ),
+        'RRZE\PostVideo\rrze_video_settings_input_preview_image_path_cb',
+        'rrze_video_settings_section__preview_image',
+        'rrze_video_section_preview_image',
+        array( 'label_for'=>'rrze_video_settings_preview_image_path' )
+    );
+    add_settings_field(
+        'rrze_video_settings_preview_image_vendor',
+        esc_html__( 'Vorschaubild vom Video-Anbieter verwenden' ),
+        'RRZE\PostVideo\rrze_video_settings_input_preview_image_vendor_cb',
+        'rrze_video_settings_section__preview_image',
+        'rrze_video_section_preview_image',
+        array( 'label_for'=>'rrze_video_settings_preview_image_vendor' )
+    );
 }
 
-function rrze_video_section_youtube_settings_info()
+// info/text displays
+function rrze_video_settings_section_youtube_info_cb()
 {
 
     echo '<p>' . __('Falls der Default YouTube-Player statt des WordPress Mediaelement-Players genutzt werden soll, hier aktivieren') . '</p>';
 
 }
 
-function rrze_video_section_preview_image_settings_info()
+function rrze_video_settings_section_preview_image_info_cb()
 {
 
     $options = get_option( 'rrze_video_plugin_options' );
@@ -71,7 +95,7 @@ function rrze_video_section_preview_image_settings_info()
 }
 
 // settings_fields callbacks:
-function rrze_video_checkbox_settings_youtube_player_cb()
+function rrze_video_settings_input_youtube_player_cb()
 {
 
     // YT player support option
@@ -82,7 +106,7 @@ function rrze_video_checkbox_settings_youtube_player_cb()
     echo $html;
 }
 
-function rrze_video_settings_input_preview_image_cb()
+function rrze_video_settings_input_preview_image_path_cb()
 {
 
     // Default placeholder image
@@ -95,4 +119,13 @@ function rrze_video_settings_input_preview_image_cb()
     $html = '<input class="regular-text code" type="text" name="rrze_video_plugin_options[preview_image]" value="' . $preview_image . '" id="rrze_video_settings_preview_image" />' . PHP_EOL;
     echo $html;
 
+}
+
+function rrze_video_settings_input_preview_image_vendor_cb()
+{
+    $options = get_option( 'rrze_video_plugin_options' );
+    $checked = ( isset($options['preview_image_vendor']) && $options['preview_image_vendor'] == 1) ? 1 : 0;
+    $html = '<input type="checkbox" id="rrze_video_settings_preview_image_vendor" name="rrze_video_plugin_options[preview_image_vendor]" value="1"' . checked( 1, $checked, false ) . '/><br>' . PHP_EOL;
+    $html .= '<p class="description">(' . __('Bei Auswahl dieser Option werden die Angaben zum lokalen Vorschau-Bild ignoriert und Besucher-Daten können schon vor Laden des Videos an den Server des Anbieters übertragen werden.') . ')</p>' . PHP_EOL;
+    echo $html;
 }

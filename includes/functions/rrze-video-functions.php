@@ -25,45 +25,45 @@ Class RRZE_Video_Functions {
         $options = array_merge($options_default,$args);
 
         // Preview image handling
-        $preview_image = false;
-        if ( $poster == '' ) {
-            $preview_image = ( ! $options['thumbnail'] ) ? $options['preview_fallback'] : $options['thumbnail'][0];
-        } elseif ( $poster == 'default' ) {
+        // fallback to local preview image first...
+        $preview_image = ( ! $options['thumbnail'] ) ? $options['preview_fallback'] : $options['thumbnail'][0];
+
+        // a dedicated poster(url|id) is given (but not "default"):
+        if ( $poster != '' && $poster != 'default' ) {
+            $check_image = esc_url( $poster );
+            if ( ! empty( $check_image ) ) {
+                // seems to be a url
+                $preview_image = $check_image;
+            }
+        } elseif ( $poster == 'default' || ! empty( $plugin_settings['preview_image_vendor'] ) ) {
+            // no poster is given, so check if it set to "default" or if
+            // use vendor thumb is set in plugin settings:
             switch ( $options['provider'] ) {
                 case 'youtube':
                     $youtube_url = 'https://img.youtube.com/vi/' . $options['id'];
-
                     switch( $options['resolution'] ){
                         case 1:
-                            $preview_image = $youtube_url . '/maxresdefault.jpg';
+                            $thumb = '/maxresdefault.jpg';
                             break;
                         case 2:
-                            $preview_image = $youtube_url . '/default.jpg';
+                            $thumb = '/default.jpg';
                             break;
                         case 3:
-                            $preview_image = $youtube_url . '/hqdefault.jpg';
+                            $thumb = '/hqdefault.jpg';
                             break;
                         case 4:
-                            $preview_image = $youtube_url . '/mqdefault.jpg';
+                            $thumb = '/mqdefault.jpg';
                             break;
                         default:
-                            $preview_image = $youtube_url . '/sddefault.jpg';
+                            $thumb = '/sddefault.jpg';
                     }
+                    $preview_image = $youtube_url . $thumb;
                     break;
+                case 'fau':
                 default:
                     $preview_image = 'https://cdn.video.uni-erlangen.de/Images/player_previews/' . $this->get_video_id_from_url( $options['url'] ) .'_preview.img';
             }
-        } else {
-            // check if it is a URL
-            $preview_image = esc_url( $poster );
-            if ( empty( $preview_image ) ) {
-                // fall back to local placeholder
-                $preview_image = $plugin_fallback_preview_image;
-            } else {
-                // check if is image? check if it is local/media?
-            }
         }
-
         return $preview_image;
     }
 

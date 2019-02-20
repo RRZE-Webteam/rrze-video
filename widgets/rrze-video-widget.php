@@ -128,7 +128,12 @@ class RRZE_Video_Widget extends \WP_Widget
                     $showtitle  = '';
                     $modaltitle = '';
                 }
-                $preview_image  = $helpers->video_preview_image('',array('url'=>$form_url));
+                $preview_image_opts = array(
+                    'provider'   => 'youtube',
+                    'id'         => $video_id,
+                    'resolution' => $youtube_resolution
+                );
+                $preview_image  = $helpers->video_preview_image('',$preview_image_opts);
 
                 include( plugin_dir_path( __DIR__ ) . 'templates/rrze-video-widget-youtube-template.php');
 
