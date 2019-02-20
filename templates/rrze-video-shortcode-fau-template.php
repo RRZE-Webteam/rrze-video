@@ -9,6 +9,7 @@
     }
     $preview_image_title = $modaltitle;
     $preview_image_src   = (!empty($thumbnail)) ? $thumbnail[0] : $preview_image;
+    $preview_image_alt = sprintf( __('Bild zum Video %s'), $modaltitle );
     $preview_image_class = 'image' . $instance_id;
 ?>
 
@@ -44,7 +45,7 @@
                 <div class="modal-body">
                     <div class="videocontent<?php echo $instance_id; ?>">
                         <div class="player">
-                            <img src="<?php echo $preview_image ?>" alt="<?php echo $video_url['title'] ?>" />
+                            <img src="<?php echo $preview_image ?>" alt="<?php echo $preview_image_alt ?>" />
                         </div>
                     </div>
                 </div><!-- .modal-body -->
