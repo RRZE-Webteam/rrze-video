@@ -34,7 +34,7 @@ function js_player_ajax()
                 var document_w = $(document).width();
 
                 var target     = ".videocontent" + id;
-                if( stage_w >= 640 || document_w < 640 ){
+                if( stage_w >= 480 || document_w < 640 ){
 
                     me.attr('data-toggle',false);
                     me.attr('data-target',target);
