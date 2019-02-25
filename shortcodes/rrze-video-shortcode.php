@@ -60,17 +60,6 @@ function show_video_on_page( $atts )
 
     $instance_id = uniqid();
 
-    // warum?
-    if ( preg_match("/^[a-zA-Z.:\/ ]*$/", $width_shortcode, $matches ) ) {
-        $width_shortcode = 640;
-        $suffix = 'px';
-    } elseif ( preg_match("/(\d+)%/", $width_shortcode, $matches ) ) {
-        $width_shortcode = 640;
-        $suffix = 'px';
-    } else {
-        $suffix = 'px';
-    }
-
    if ( ! empty( $url_shortcode ) ) {
 
         $is_fau_video = $helpers->is_fau_video($url_shortcode);

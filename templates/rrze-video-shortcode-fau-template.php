@@ -1,8 +1,4 @@
 <?php
-    $inline_css = '';
-    if ($width_shortcode != 640) {
-      $inline_css = ' style="width: ' . $width_shortcode . (!empty($suffix) ? $suffix : '') . ';"';
-    }
     $video_title = '';
     if (!empty($showtitle)) {
         $video_title = '<' . $rrze_video_shortcode['titletag'] . '>' . $showtitle . '</' . $rrze_video_shortcode['titletag'] . '>';
@@ -13,7 +9,7 @@
     $preview_image_class = 'image' . $instance_id;
 ?>
 
-<div class="rrze-video"<?php echo $inline_css;?>>
+<div class="rrze-video">
     <?php echo $video_title; ?>
     <div class="rrze-video-container rrze-video-id-<?php echo $instance_id; ?>">
         <div class="video-preview<?php echo $instance_id ?>" id="video-preview<?php echo $instance_id ?>">
