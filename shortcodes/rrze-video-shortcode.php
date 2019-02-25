@@ -145,7 +145,7 @@ function show_video_on_page( $atts )
                     // FAU video
                     $genre              = wp_strip_all_tags(get_the_term_list($post->ID, 'genre', true));
                     if (!$thumbnail) {
-                        $preview_image  = $helpers->video_preview_image($poster_shortcode,array('provider'=>'fau'));
+                        $preview_image  = $helpers->video_preview_image($poster_shortcode,array('provider'=>'fau','url' => $url));
                     } else {
                         $preview_image  = $thumbnail[0];
                     }
