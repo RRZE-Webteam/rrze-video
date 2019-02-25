@@ -273,6 +273,12 @@ $background_color_1: transparent;
     }
 }
 
+.rrze-video-single .rrze-video,
+.rrze-video-archive .rrze-video {
+    width: 100%;
+}
+
+
 @media screen and (min-width: 768px) {
     .rrze-video {
 	.modal-dialog {
