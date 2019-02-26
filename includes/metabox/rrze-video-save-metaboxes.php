@@ -15,7 +15,7 @@ function url_callback( $post) {
                 </th>
                 <td>
                     <input type="text" class="regular-text code" name="url" id="url" value="'.  esc_attr( $value ) . '"/><br>' . PHP_EOL . '
-                    <em> z. B. http://www.video.uni-erlangen.de/webplayer/id/13953</em>
+                    <em>' . __('z.B. http://www.video.uni-erlangen.de/webplayer/id/13953') . '</em>
                 </td>
             </tr>
         </table>' . PHP_EOL;
@@ -27,10 +27,6 @@ function url_meta_box_save( $post_id, $post, $update ) {
     $post_type = get_post_type($post_id);
 
     if ( "video" != $post_type ) return;
-
-    if ( isset( $_POST['url'] ) ) {
-        update_post_meta( $post_id, 'url', sanitize_text_field( $_POST['url'] ) );
-    }
 
     if ( isset( $_POST['url'] )  ) {
         $url = sanitize_text_field( $_POST['url'] );
@@ -47,18 +43,17 @@ function description_callback( $post) {
     wp_nonce_field( '_description_nonce', 'description_nonce' );
 
     $value = get_post_meta( $post->ID, 'description', true );
-
-    echo '
-        <table class="form-table">
-            <tr>
-                <th scope="row">
-                    <label for="description">' . __('Beschreibung zum Video') . '</label>
-                </th>
-                <td>
-                    <textarea class="large-text" type="text" name="description" id="description" value="'.  esc_attr( $value ) . '" >' . esc_attr( $value ) . '</textarea>
-                </td>
-            </tr>
-        </table>' . PHP_EOL;
+    wp_editor(
+        htmlspecialchars_decode($value),
+        'description',
+        $settings = array(
+            'textarea_name'=>'description',
+            'wpautop' => false,
+            'media_buttons' => false,
+            'tinymce' => false,
+            'quicktags' => array('buttons' => 'em,strong,link')
+        )
+    );
 }
 
 function description_meta_box_save( $post_id, $post, $update ) {
@@ -68,11 +63,7 @@ function description_meta_box_save( $post_id, $post, $update ) {
     if ( "video" != $post_type ) return;
 
     if ( isset( $_POST['description'] ) ) {
-        update_post_meta( $post_id, 'description', sanitize_text_field( $_POST['description'] ) );
-    }
-
-    if ( isset( $_POST['description'] ) ) {
-        $description = sanitize_text_field( $_POST['description'] );
+        $description = wp_kses_post( $_POST['description'] );
         update_post_meta( $post_id, 'description', $description );
     } else {
         update_post_meta( $post_id, 'description', FALSE );
@@ -81,7 +72,7 @@ function description_meta_box_save( $post_id, $post, $update ) {
 
 add_action( 'save_post', 'RRZE\PostVideo\description_meta_box_save', 10, 3 );
 
-function video_admin_notice () {
+function video_admin_notice() {
     $error = get_transient( 'video_id_failure' );
     delete_transient( 'video_id_failure' );
 
