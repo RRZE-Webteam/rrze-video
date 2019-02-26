@@ -10,7 +10,7 @@
                     <div class="rrze-video-archive">
                     <?php
                         while ( have_posts() ) : the_post();
-                            $url  = get_post_meta($post->ID, 'url', true);
+                            $url  = esc_url(get_post_meta($post->ID, 'url', true));
                             $desc = get_post_meta($post->ID, 'description', true);
                     ?>
                             <div <?php post_class(); ?>>
