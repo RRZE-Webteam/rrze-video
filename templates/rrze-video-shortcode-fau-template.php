@@ -24,7 +24,7 @@
             >
             <img id="video-thumbnail<?php echo $instance_id ?>" src="<?php echo $preview_image_src; ?>" title="<?php echo $preview_image_title; ?>"  alt="Video aufrufen" class="<?php echo $preview_image_class; ?>" />
             <div class="middle" aria-hidden="true">
-                <div class="play-button"><i class="fa fa-play-circle-o"></i></div>
+                <div class="play-button"><em class="fa fa-play-circle-o"></em></div>
             </div>
             </a>
         </div>

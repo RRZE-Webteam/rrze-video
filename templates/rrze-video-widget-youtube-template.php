@@ -17,7 +17,7 @@
             <div class="rrze-video-widget-box box-widget<?php echo $instance_id ?>">
                 <img id="video-thumbnail<?php echo $instance_id ?>" src="<?php echo $preview_image; ?>" title="<?php echo $modaltitle ?>" alt="<?php _e('Video aufrufen') ?>" class="image<?php echo $instance_id ?>"/>
                 <div class="middle" aria-hidden="true">
-                    <div class="play-button"><i class="fa fa-play-circle-o"></i></div>
+                    <div class="play-button"><em class="fa fa-play-circle-o"></em></div>
                 </div>
             </div><!-- .rrze-video-widget-box -->
             </a>
