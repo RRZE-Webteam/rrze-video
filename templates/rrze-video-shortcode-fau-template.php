@@ -1,18 +1,15 @@
 <?php
-    $inline_css = '';
-    if ($width_shortcode != 640) {
-      $inline_css = ' style="width: ' . $width_shortcode . (!empty($suffix) ? $suffix : '') . ';"';
-    }
     $video_title = '';
     if (!empty($showtitle)) {
         $video_title = '<' . $rrze_video_shortcode['titletag'] . '>' . $showtitle . '</' . $rrze_video_shortcode['titletag'] . '>';
     }
     $preview_image_title = $modaltitle;
     $preview_image_src   = (!empty($thumbnail)) ? $thumbnail[0] : $preview_image;
+    $preview_image_alt = sprintf( __('Bild zum Video %s'), $modaltitle );
     $preview_image_class = 'image' . $instance_id;
 ?>
 
-<div class="rrze-video"<?php echo $inline_css;?>>
+<div class="rrze-video">
     <?php echo $video_title; ?>
     <div class="rrze-video-container rrze-video-id-<?php echo $instance_id; ?>">
         <div class="video-preview<?php echo $instance_id ?>" id="video-preview<?php echo $instance_id ?>">
@@ -27,7 +24,7 @@
             >
             <img id="video-thumbnail<?php echo $instance_id ?>" src="<?php echo $preview_image_src; ?>" title="<?php echo $preview_image_title; ?>"  alt="Video aufrufen" class="<?php echo $preview_image_class; ?>" />
             <div class="middle" aria-hidden="true">
-                <div class="play-button"><i class="fa fa-play-circle-o"></i></div>
+                <div class="play-button"><em class="fa fa-play-circle-o"></em></div>
             </div>
             </a>
         </div>
@@ -44,7 +41,7 @@
                 <div class="modal-body">
                     <div class="videocontent<?php echo $instance_id; ?>">
                         <div class="player">
-                            <img src="<?php echo $preview_image ?>" alt="<?php echo $video_url['title'] ?>" />
+                            <img src="<?php echo $preview_image ?>" alt="<?php echo $preview_image_alt ?>" />
                         </div>
                     </div>
                 </div><!-- .modal-body -->

@@ -15,9 +15,9 @@
                 data-target="#videoModal<?php echo $instance_id ?>"
             >
             <div class="rrze-video-widget-box box-widget<?php echo $instance_id ?>">
-                <img id="video-thumbnail<?php echo $instance_id ?>" src="<?php echo $preview_image; ?>" title="<?php echo (!isset($modaltitle)) ? 'Preview Image' : get_the_title() ?>" alt="<?php _e('Video aufrufen') ?>" class="image<?php echo $instance_id ?>"/>
+                <img id="video-thumbnail<?php echo $instance_id ?>" src="<?php echo $preview_image; ?>" title="<?php echo $modaltitle ?>" alt="<?php _e('Video aufrufen') ?>" class="image<?php echo $instance_id ?>"/>
                 <div class="middle" aria-hidden="true">
-                    <div class="play-button"><i class="fa fa-play-circle-o"></i></div>
+                    <div class="play-button"><em class="fa fa-play-circle-o"></em></div>
                 </div>
             </div><!-- .rrze-video-widget-box -->
             </a>
@@ -36,7 +36,7 @@
                     <div class="videocontent<?php echo $instance_id ?>">
                         <div class="player">
                             <?php if ( ! $show_youtube_player ) { ?>
-                            <img src="<?php echo $preview_image; ?>" title="<?php echo (!isset($modaltitle)) ? 'Preview Image' : get_the_title() ?>" alt="<?php _e('Video aufrufen') ?>" class="image<?php echo $instance_id ?>"/>
+                            <img src="<?php echo $preview_image; ?>" title="<?php echo $modaltitle ?>" alt="<?php _e('Video aufrufen') ?>" class="image<?php echo $instance_id ?>"/>
                             <?php } ?>
                         </div>
                     </div><!-- video-content -->

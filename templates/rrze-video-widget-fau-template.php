@@ -21,7 +21,7 @@
             <div class="rrze-video-widget-box">
                 <img id="video-thumbnail<?php echo $instance_id ?>" src="<?php echo $preview_image_src; ?>" title="<?php echo $modaltitle ?>" alt="<?php echo $preview_image_alt; ?>"  width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"/>
                 <div class="middle" aria-hidden="true">
-                    <div class="play-button"><i class="fa fa-play-circle-o"></i></div>
+                    <div class="play-button"><em class="fa fa-play-circle-o"></em></div>
                 </div>
             </div><!-- .rrze-video-widget-box -->
             </a>

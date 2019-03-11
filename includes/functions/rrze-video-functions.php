@@ -8,7 +8,6 @@ Class RRZE_Video_Functions {
      */
     function video_preview_image($poster,$args=array())
     {
-
         $plugin_settings               = get_option('rrze_video_plugin_options');
         $plugin_fallback_preview_image = plugins_url('assets/img/_preview.png',dirname(__DIR__));
         $settings_preview_image        = esc_url($plugin_settings['preview_image']);
@@ -60,8 +59,9 @@ Class RRZE_Video_Functions {
                     $preview_image = $youtube_url . $thumb;
                     break;
                 case 'fau':
-                default:
-                    $preview_image = 'https://cdn.video.uni-erlangen.de/Images/player_previews/' . $this->get_video_id_from_url( $options['url'] ) .'_preview.img';
+                    $preview_image = 'https://cdn.video.uni-erlangen.de/Images/player_previews/' . $this->get_video_id_from_url( $options['url'], 'fau' ) .'_preview.img';
+                    break;
+                // default: use fallback from above
             }
         }
         return $preview_image;
@@ -138,7 +138,7 @@ Class RRZE_Video_Functions {
             $fau_video['error'] = 'no match in url';
         } else {
             $oembed_url    = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
-            $remote_get    = wp_safe_remote_get( $oembed_url );
+            $remote_get    = wp_safe_remote_get( $oembed_url, array( 'sslverify' => true ));
             if ( is_wp_error( $remote_get ) ) {
                 $fau_video['error'] = $remote_get->get_error_message();
             } else {

@@ -272,6 +272,19 @@ $background_color_1: transparent;
         width: 100%;
     }
 }
+.rrze-video-single,
+.rrze-video-archive {
+    padding-left: 15px;
+    padding-right: 15px;
+     .rrze-video {
+        width: 100%;
+     }
+}
+.rrze-video-archive {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: repeat(auto-fill,minmax(460px,1fr));
+}
 
 @media screen and (min-width: 768px) {
     .rrze-video {

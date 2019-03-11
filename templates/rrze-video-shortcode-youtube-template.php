@@ -1,15 +1,11 @@
 <?php
-    $inline_css = '';
-    if ($width_shortcode != 640) {
-        $inline_css = ' style="width: ' . $rrze_video_shortcode['width'] . 'px;"';
-    }
     $video_title = '';
     if (!empty($showtitle)) {
         $video_title = '<' . $rrze_video_shortcode['titletag'] . '>' . $showtitle . '</' . $rrze_video_shortcode['titletag'] . '>';
     }
     $player_type = ( !$show_youtube_player && $youtube_support == 0 ) ? 'mediaelement' : 'youtube';
 ?>
-<div class="rrze-video"<?php echo $inline_css; ?>>
+<div class="rrze-video">
     <?php echo $video_title; ?>
     <div class="rrze-video-container rrze-video-id-<?php echo $instance_id ?>">
         <div class="video-preview<?php echo $instance_id ?>" id="video-preview<?php echo $instance_id ?>">
@@ -23,7 +19,7 @@
             >
             <img id="video-thumbnail<?php echo $instance_id ?>" src="<?php echo $preview_image; ?>" title="<?php echo (!isset($modaltitle)) ? 'Preview Image' : get_the_title() ?>" alt="Video aufrufen" class="image<?php echo $instance_id ?>"/>
             <div class="middle" aria-hidden="true">
-                <div class="play-button"><i class="fa fa-play-circle-o"></i></div>
+                <div class="play-button"><em class="fa fa-play-circle-o"></em></div>
             </div>
             </a>
         </div>
