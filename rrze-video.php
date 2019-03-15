@@ -83,17 +83,23 @@ function system_requirements() {
     $error = '';
 
     if (version_compare(PHP_VERSION, RRZE_PHP_VERSION, '<')) {
-        $error = sprintf(__('Your server is running PHP version %s. Please upgrade at least to PHP version %s.', 'rrze-test'), PHP_VERSION, RRZE_PHP_VERSION);
+        $error = sprintf(__('Your server is running PHP version %s. Please upgrade at least to PHP version %s.', 'rrze-video'), PHP_VERSION, RRZE_PHP_VERSION);
     }
 
     if (version_compare($GLOBALS['wp_version'], RRZE_WP_VERSION, '<')) {
-        $error = sprintf(__('Your Wordpress version is %s. Please upgrade at least to Wordpress version %s.', 'rrze-test'), $GLOBALS['wp_version'], RRZE_WP_VERSION);
+        $error = sprintf(__('Your Wordpress version is %s. Please upgrade at least to Wordpress version %s.', 'rrze-video'), $GLOBALS['wp_version'], RRZE_WP_VERSION);
     }
+
+    // check auf altes FAU-Video plugin
+    if ( is_plugin_active('fau-video/fau-video.php') ) {
+        $error = sprintf( __('An older version of the FAU video plugin is active. Please deactivate it before enabling the RRZE Video plugin.', 'rrze-video') );
+    }
+
 
     // Wenn die Überprüfung fehlschlägt, dann wird das Plugin automatisch deaktiviert.
     if (!empty($error)) {
         deactivate_plugins(plugin_basename(__FILE__), FALSE, TRUE);
-        wp_die($error);
+        die( $error );
     }
 }
 
