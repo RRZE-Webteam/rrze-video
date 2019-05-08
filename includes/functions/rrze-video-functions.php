@@ -54,7 +54,8 @@ Class RRZE_Video_Functions {
                             $thumb = '/mqdefault.jpg';
                             break;
                         default:
-                            $thumb = '/sddefault.jpg';
+                            //$thumb = '/sddefault.jpg';
+                            $thumb = '/maxresdefault.jpg';
                     }
                     $preview_image = $youtube_url . $thumb;
                     break;
@@ -77,7 +78,6 @@ Class RRZE_Video_Functions {
                 $test_host   = preg_replace( '/^(www|m)\./', '', $test_domain['host'] );
 
                 if ($provider == 'fau') {
-
                     preg_match( '/^\/(clip|webplayer)\/id\/(\d+)/' , $test_domain['path'], $matches );
                     $video_id = $matches[2];
 

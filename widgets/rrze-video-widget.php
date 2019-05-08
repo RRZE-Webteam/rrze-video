@@ -95,7 +95,10 @@ class RRZE_Video_Widget extends \WP_Widget
                     echo '<div id="message" class="error"><p>' . $fau_video['error'] . '</p></div>';
                 } else {
                     $video_file     = $fau_video['video']['file'];
-                    $preview_image  = $helpers->video_preview_image('',array('provider'=>'fau','url'=>$form_url));
+                    $preview_image  = $fau_video['video']['preview_image'];
+                    if ( empty($preview_image) ) {
+                        $preview_image  = $helpers->video_preview_image('',array('provider'=>'fau','url'=>$form_url));
+                    }
                     // @@todo: small + large size for image and preview?
                     $picture        = $preview_image;
                     //
@@ -176,7 +179,10 @@ class RRZE_Video_Widget extends \WP_Widget
                         } else {
                             //$video_url      = json_decode(wp_remote_retrieve_body($remote_get), true);
                             $video_file     = $fau_video['video']['file'];
-                            $preview_image  = $helpers->video_preview_image('',array('provider'=>'fau','url'=>$url));
+                            $preview_image  = $fau_video['video']['preview_image'];
+                            if ( empty($preview_image) ) {
+                                 $preview_image  = $helpers->video_preview_image('',array('provider'=>'fau','url'=>$url));
+                            }
                             // @@todo: small + large size for image and preview?
                             $picture        = $preview_image;
 
@@ -311,7 +317,7 @@ class RRZE_Video_Widget extends \WP_Widget
             <legend class="rrze-legend"><?php _e('Videoquelle','rrze-video'); ?></legend>
             <div class="rrze-accordeon">
                 <div class="rrze-accordeon-item">
-                    <input id="<?php echo esc_attr( $this->get_field_id( 'video_src_type' ) ) . '-r1'; ?>" class="rrze-accordeon-toggle" type="radio" name="<?php echo esc_attr( $this->get_field_name( 'video_src_type' ) ); ?>" value="local"<?php echo ( $video_src_type == 'local' ) ? ' checked' : ''; ?>/>
+                    <input id="<?php echo esc_attr( $this->get_field_id( 'video_src_type' ) ) . '-r1'; ?>" class="rrze-accordeon-toggle" type="radio" name="<?php echo esc_attr( $this->get_field_name( 'video_src_type' ) ); ?>" value="local"<?php echo ( $video_src_type == 'local' || !empty($id) || !empty($genre) ) ? ' checked' : ''; ?>/>
                     <label for="<?php echo esc_attr( $this->get_field_id( 'video_src_type' ) ) . '-r1'; ?>"><?php _e('Aus Mediathek','rrze-video'); ?></label>
                     <div class="rrze-accordeon-toggle-target">
                         <p><?php _e('Bitte wählen Sie ein Video aus Ihrer lokalen Videothek aus:','rrze-video') ?></p>
@@ -349,13 +355,13 @@ class RRZE_Video_Widget extends \WP_Widget
                     </div>
                 </div>
                 <div class="rrze-accordeon-item">
-                    <input id="<?php echo esc_attr( $this->get_field_id( 'video_src_type' ) ) . '-r2'; ?>" class="rrze-accordeon-toggle" type="radio" name="<?php echo esc_attr( $this->get_field_name( 'video_src_type' ) ); ?>" value="remote"<?php echo ( $video_src_type == 'remote' ) ? ' checked' : ''; ?>/>
+                    <input id="<?php echo esc_attr( $this->get_field_id( 'video_src_type' ) ) . '-r2'; ?>" class="rrze-accordeon-toggle" type="radio" name="<?php echo esc_attr( $this->get_field_name( 'video_src_type' ) ); ?>" value="remote"<?php echo ( $video_src_type == 'remote' || !empty($url) ) ? ' checked' : ''; ?>/>
                     <label for="<?php echo esc_attr( $this->get_field_id( 'video_src_type' ) ) . '-r2'; ?>"><?php _e('Externe Quelle','rrze-video'); ?></label>
                     <div class="rrze-accordeon-toggle-target">
                         <p><?php _e('Geben Sie eine URL zum gewünschten Video an:','rrze-video') ?></p>
                         <p>
                             <label for="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>"><?php esc_attr_e( 'Url:', 'rrze-video' ); ?></label>
-                            <input class="widefat code" id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" placeholder="url" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="text" value="<?php echo esc_attr( $url ); ?>">
+                            <input class="widefat code" id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="text" value="<?php echo esc_attr( $url ); ?>">
                             <em><?php _e('z. B. http://www.video.uni-erlangen.de/webplayer/id/13953','rrze-video') ?></em>
                         </p>
                     </div>
