@@ -43,16 +43,17 @@ class RRZE_Video_Widget extends \WP_Widget
 
         echo $before_widget;
 
-        $form_id                = ( !empty($instance['id']) )         ? $instance['id']         : '';
-        $form_url               = ( !empty($instance['url']) )        ? $instance['url']        : '';
-        $form_title             = ( !empty($instance['title']) )      ? $instance['title']      : '';
-        $form_showtitle         = ( !empty($instance['showtitle']) )  ? $instance['showtitle']  : '';
+        $form_id                     = ( !empty($instance['id']) )                      ? $instance['id']         : '';
+        $form_url                    = ( !empty($instance['url']) )                     ? $instance['url']        : '';
+        $form_title                  = ( !empty($instance['title']) )                   ? $instance['title']      : '';
+        $form_showtitle              = ( !empty($instance['showtitle']) )               ? $instance['showtitle']  : '';
+        $width                       = ( !empty($instance['width']) )                   ? $instance['width']      : 270; // obsolete
+        $height                      = ( !empty($instance['height']) )                  ? $instance['height']     : 150; // obsolete
+        $meta                        = ( !empty($instance['meta']) )                    ? $instance['meta']       : '';
+        $taxonomy_genre              = ( !empty($instance['genre']) )                   ? $instance['genre']      : '';
+        $youtube_resolution          = ( !empty($instance['resolution']) )              ? $instance['resolution'] : ''; // obsolete
         $form_show_custom_post_title = ( !empty($instance['show_custom_post_title']) )  ? $instance['show_custom_post_title']  : '';
-        $width                  = ( !empty($instance['width']) )      ? $instance['width']      : 270;
-        $height                 = ( !empty($instance['height']) )     ? $instance['height']     : 150;
-        $meta                   = ( !empty($instance['meta']) )       ? $instance['meta']       : '';
-        $taxonomy_genre         = ( !empty($instance['genre']) )      ? $instance['genre']      : '';
-        $youtube_resolution     = ( !empty($instance['resolution']) ) ? $instance['resolution'] : '';
+        $video_src_type              = ( !empty($instance['video_src_type']) )          ? $instance['video_src_type'] : '';
 
         $showtitle = $form_title;
 
@@ -256,16 +257,18 @@ class RRZE_Video_Widget extends \WP_Widget
      * @param array $instance The widget options
      */
     public function form( $instance ) {
-        $title                   = ! empty( $instance['title'] )      ? $instance['title']      : '';
-        $id                      = ! empty( $instance['id'] )         ? $instance['id']         : '';
-        $url                     = ! empty( $instance['url'] )        ? $instance['url']        : '';
-        $width                   = ! empty( $instance['width'] )      ? $instance['width']      : 270;
-        $height                  = ! empty( $instance['height'] )     ? $instance['height']     : 150;
-        $showtitle               = ! empty( $instance['showtitle'])   ? $instance['showtitle']  : '';
+
+        $title                   = ! empty( $instance['title'] )                 ? $instance['title']      : '';
+        $id                      = ! empty( $instance['id'] )                    ? $instance['id']         : '';
+        $url                     = ! empty( $instance['url'] )                   ? $instance['url']        : '';
+        $width                   = ! empty( $instance['width'] )                 ? $instance['width']      : 270; // obsolete
+        $height                  = ! empty( $instance['height'] )                ? $instance['height']     : 150; // obsolete
+        $showtitle               = ! empty( $instance['showtitle'])              ? $instance['showtitle']  : '';
+        $meta                    = ! empty( $instance['meta'] )                  ? $instance['meta']       : '';
+        $genre                   = ! empty( $instance['genre'] )                 ? $instance['genre']      : '';
+        $resolution              = ! empty( $instance['resolution'] )            ? $instance['resolution'] : ''; // obsolete
         $show_custom_post_title  = ! empty( $instance['show_custom_post_title']) ? $instance['show_custom_post_title']  : '';
-        $meta                    = ! empty( $instance['meta'] )       ? $instance['meta']       : '';
-        $genre                   = ! empty( $instance['genre'] )      ? $instance['genre']      : '';
-        $resolution              = ! empty( $instance['resolution'] ) ? $instance['resolution'] : '';
+        $video_src_type          = ! empty( $instance['video_src_type'])         ? $instance['video_src_type']  : '';
 
         // find videos of post-type "video", use for id-selector
         $output_id_select = '';
@@ -277,7 +280,7 @@ class RRZE_Video_Widget extends \WP_Widget
             // make a select
             $output_id_select .= '<label for="' . esc_attr( $this->get_field_id( 'id' ) ) . '">' . esc_attr( 'ID:', 'rrze-video' ) . '</label>' . PHP_EOL;
             $output_id_select .= '<select class="widefat" id="' . esc_attr( $this->get_field_id( 'id' ) ) . '" name="' . $this->get_field_name( 'id' ) . '" >' . PHP_EOL;
-            $output_id_select .= '<option value="">' . __('Video aus der Mediathek auswählen') . '</option>';
+            $output_id_select .= '<option value="">' . __('Video aus der Mediathek auswählen','rrze-video') . '</option>';
             while ($local_videos->have_posts()) {
                 $local_videos->the_post();
                 $selected = ( get_the_id() == esc_attr( $id ) ) ? ' selected' : '';
@@ -285,84 +288,97 @@ class RRZE_Video_Widget extends \WP_Widget
             }
             $output_id_select .= '</select>' . PHP_EOL;
         } else {
-            $output_id_select .= __('Es sind noch keine Videos in Ihrer Mediathek vorhanden.');
+            $output_id_select .= __('Es sind noch keine Videos in Ihrer Mediathek vorhanden.', 'rrze-video');
         }
         wp_reset_postdata();
         // : end post-type video videos select
         ?>
 
-        <fieldset class="rrze-fieldset" style="margin-bottom: 2em; margin-top: 1em;">
-            <legend style="font-weight: bold;"><?php _e('Videotitel','rrze-video'); ?></legend>
+         <fieldset class="rrze-fieldset">
+            <legend class="rrze-legend"><?php _e('Videotitel','rrze-video'); ?></legend>
             <p>
                 <label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Titel:', 'rrze-video' ); ?></label>
-                <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" placeholder="title" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
-                <em><?php _e('Videotitel') ?></em>
+                <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
+                <em><?php _e('Videotitel', 'rrze-video') ?></em>
             </p>
             <p>
                 <input type="checkbox" id="<?php echo $this->get_field_id( 'showtitle' ); ?>" name="<?php echo $this->get_field_name( 'showtitle' ); ?>" value="1"<?php echo ( $showtitle == '1' ) ? ' checked' : ''; ?>>
-                <label for="<?php echo $this->get_field_id( 'showtitle' ); ?>"><?php _e('Videotitel als Widgettitel anzeigen?' ) ?></label>
+                <label for="<?php echo $this->get_field_id( 'showtitle' ); ?>"><?php _e('Videotitel als Widgettitel anzeigen?','rrze-video') ?></label>
             </p>
         </fieldset>
 
-        <fieldset class="rrze-fieldset" style="margin-bottom: 2em;">
-            <legend style="font-weight: bold;"><?php _e('Externes Video','rrze-video'); ?></legend>
-            <p><?php _e('Geben Sie eine URL zum gewünschten Video an:') ?></p>
-            <p>
-                <label for="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>"><?php esc_attr_e( 'Url:', 'rrze-video' ); ?></label>
-                <input class="widefat code" id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" placeholder="url" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="text" value="<?php echo esc_attr( $url ); ?>">
-                <em><?php _e('z. B. http://www.video.uni-erlangen.de/webplayer/id/13953') ?></em>
-            </p>
+        <fieldset class="rrze-fieldset">
+            <legend class="rrze-legend"><?php _e('Videoquelle','rrze-video'); ?></legend>
+            <div class="rrze-accordeon">
+                <div class="rrze-accordeon-item">
+                    <input id="<?php echo esc_attr( $this->get_field_id( 'video_src_type' ) ) . '-r1'; ?>" class="rrze-accordeon-toggle" type="radio" name="<?php echo esc_attr( $this->get_field_name( 'video_src_type' ) ); ?>" value="local"<?php echo ( $video_src_type == 'local' ) ? ' checked' : ''; ?>/>
+                    <label for="<?php echo esc_attr( $this->get_field_id( 'video_src_type' ) ) . '-r1'; ?>"><?php _e('Aus Mediathek','rrze-video'); ?></label>
+                    <div class="rrze-accordeon-toggle-target">
+                        <p><?php _e('Bitte wählen Sie ein Video aus Ihrer lokalen Videothek aus:','rrze-video') ?></p>
+                        <p><?php echo $output_id_select; ?></p>
+                        <p><?php _e('Oder wählen Sie eine Videokategorie aus Ihrer lokalen Videothek aus:','rrze-video') ?></p>
+                        <p>
+                            <label for="<?php echo $this->get_field_id('genre'); ?>"><?php _e('Zufallsvideo nach Genre:','rrze-video'); ?></label>
+                            <select class="widefat" id="<?php echo $this->get_field_id('genre'); ?>" name="<?php echo $this->get_field_name('genre'); ?>">
+                            <?php
+                                $terms = get_terms( array(
+                                    'taxonomy' => 'genre',
+                                    'hide_empty' => true,
+                                ) );
+                                $opts_select = 0;
+                                $opts_html   = '';
+                                foreach($terms as $term) {
+                                    if ($term->name == $genre) {
+                                        $selected = ' selected';
+                                        $opts_select++;
+                                    } else {
+                                        $selected = '';
+                                    }
+                                    $opts_html .= '<option value="' . $term->name . '"' . $selected . '>' . $term->name . '</option>' . PHP_EOL;
+                                }
+                                $initial_selected = ($opts_select == 0) ? ' selected' : '';
+                                echo '<option value="0"' . $initial_selected . '>' . __('Genre auswählen','rrze-video') . '</option>' .PHP_EOL;
+                                echo $opts_html;
+                            ?>
+                            </select>
+                        </p>
+                        <p>
+                            <input type="checkbox" id="<?php echo $this->get_field_id( 'show_custom_post_title' ); ?>" name="<?php echo $this->get_field_name( 'show_custom_post_title' ); ?>" value="1"<?php echo ( $show_custom_post_title == '1' ) ? ' checked' : ''; ?>>
+                            <label for="<?php echo $this->get_field_id( 'show_custom_post_title' ); ?>"><?php _e('Titel des Videothek-Videos als Widgettitel anzeigen?','rrze-video' ) ?></label><br><em>(<?php _e('Überschreibt Titel-Einstellung von oben','rrze-video'); ?>)</em>
+                        </p>
+                    </div>
+                </div>
+                <div class="rrze-accordeon-item">
+                    <input id="<?php echo esc_attr( $this->get_field_id( 'video_src_type' ) ) . '-r2'; ?>" class="rrze-accordeon-toggle" type="radio" name="<?php echo esc_attr( $this->get_field_name( 'video_src_type' ) ); ?>" value="remote"<?php echo ( $video_src_type == 'remote' ) ? ' checked' : ''; ?>/>
+                    <label for="<?php echo esc_attr( $this->get_field_id( 'video_src_type' ) ) . '-r2'; ?>"><?php _e('Externe Quelle','rrze-video'); ?></label>
+                    <div class="rrze-accordeon-toggle-target">
+                        <p><?php _e('Geben Sie eine URL zum gewünschten Video an:','rrze-video') ?></p>
+                        <p>
+                            <label for="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>"><?php esc_attr_e( 'Url:', 'rrze-video' ); ?></label>
+                            <input class="widefat code" id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" placeholder="url" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="text" value="<?php echo esc_attr( $url ); ?>">
+                            <em><?php _e('z. B. http://www.video.uni-erlangen.de/webplayer/id/13953','rrze-video') ?></em>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </fieldset>
 
-        <fieldset class="rrze-fieldset" style="margin-bottom: 2em;">
-            <legend style="font-weight: bold;"><?php _e('Video aus Videothek','rrze-video'); ?></legend>
-            <p><?php _e('Bitte wählen Sie ein Video aus Ihrer lokalen Videothek aus:') ?></p>
-            <p><?php echo $output_id_select; ?></p>
-            <p><?php _e('Oder wählen Sie eine Videokategorie aus Ihrer lokalen Videothek aus:') ?></p>
-            <p>
-                <label for="<?php echo $this->get_field_id('genre'); ?>"><?php _e('Zufallsvideo nach Genre:'); ?></label>
-                <select class="widefat" id="<?php echo $this->get_field_id('genre'); ?>" name="<?php echo $this->get_field_name('genre'); ?>">
-                <?php
-                    $terms = get_terms( array(
-                        'taxonomy' => 'genre',
-                        'hide_empty' => true,
-                    ) );
-                    $opts_select = 0;
-                    $opts_html   = '';
-                    foreach($terms as $term) {
-                        if ($term->name == $genre) {
-                            $selected = ' selected';
-                            $opts_select++;
-                        } else {
-                            $selected = '';
-                        }
-                        $opts_html .= '<option value="' . $term->name . '"' . $selected . '>' . $term->name . '</option>' . PHP_EOL;
-                    }
-                    $initial_selected = ($opts_select == 0) ? ' selected' : '';
-                    echo '<option value="0"' . $initial_selected . '>' . __('Genre auswählen') . '</option>' .PHP_EOL;
-                    echo $opts_html;
-                ?>
-                </select>
-            </p>
-            <p>
-                <input type="checkbox" id="<?php echo $this->get_field_id( 'show_custom_post_title' ); ?>" name="<?php echo $this->get_field_name( 'show_custom_post_title' ); ?>" value="1"<?php echo ( $show_custom_post_title == '1' ) ? ' checked' : ''; ?>>
-                <label for="<?php echo $this->get_field_id( 'show_custom_post_title' ); ?>"><?php _e('Titel des Videothek-Videos als Widgettitel anzeigen?' ) ?></label>
-            </p>
-        </fieldset>
-
-        <fieldset class="rrze-fieldset" style="margin-bottom: 2em;">
-            <legend style="font-weight: bold;"><?php _e('Video Optionen','rrze-video'); ?></legend>
+        <fieldset class="rrze-fieldset">
+            <legend class="rrze-legend"><?php _e('Video Optionen','rrze-video'); ?></legend>
+            <?php /* obsolete
              <p>
                 <label for="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>"><?php _e( 'Breite:', 'rrze-video' ); ?></label>
                 <input class="small-text" id="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'width' ) ); ?>" type="text" value="<?php echo esc_attr( $width ); ?>">
                 <label for="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>"><?php _e( 'Höhe:', 'rrze-video' ); ?></label>
                 <input class="small-text" id="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" type="text" value="<?php echo esc_attr( $height ); ?>"> px
             </p>
+            */ ?>
             <p>
                 <input type="checkbox" name="<?php echo $this->get_field_name( 'meta' ); ?>" id="<?php echo $this->get_field_id( 'meta' ); ?>" value="1"<?php echo ( $meta == '1' ) ? ' checked' : ''; ?>>
-                <label for="<?php echo $this->get_field_id( 'meta' ); ?>"><?php _e('Video-Metainformationen anzeigen?') ?></label>
-                <br><em><?php _e('(Autor, Copyright, Quelle und Beschreibung, falls angegeben)') ?></em>
+                <label for="<?php echo $this->get_field_id( 'meta' ); ?>"><?php _e('Video-Metainformationen anzeigen?','rrze-video') ?></label>
+                <br><em>(<?php _e('Autor, Copyright, Quelle und Beschreibung, falls angegeben','rrze-video') ?>)</em>
             </p>
+            <?php /* obsolete
             <p>
                 <label for="<?php echo $this->get_field_id( 'resolution' ); ?>"><?php _e('Auflösung des Youtube-Bildes:' ) ?></label>
                 <select class="widefat" id="<?php echo $this->get_field_id( 'resolution' ); ?>" name="<?php echo $this->get_field_name( 'resolution' ); ?>">
@@ -375,6 +391,7 @@ class RRZE_Video_Widget extends \WP_Widget
                 </select>
                 <br><em><?php _e('Nur relevant wenn oben per "url" ein youtube-Video angegeben wurde') ?></em>
             </p>
+            */ ?>
         </fieldset>
 
         <?php
@@ -387,16 +404,17 @@ class RRZE_Video_Widget extends \WP_Widget
     public function update( $new_instance, $old_instance ) {
 
         $instance = $old_instance;
-        $instance[ 'title' ]        = strip_tags( $new_instance[ 'title' ] );
-        $instance[ 'id' ]           = strip_tags( $new_instance[ 'id' ] );
-        $instance[ 'url' ]          = strip_tags( $new_instance[ 'url' ] );
-        $instance[ 'width' ]        = strip_tags( $new_instance[ 'width' ] );
-        $instance[ 'height' ]       = strip_tags( $new_instance[ 'height' ] );
-        $instance[ 'showtitle' ]    = strip_tags( $new_instance[ 'showtitle' ] );
+        $instance[ 'title' ]          = strip_tags( $new_instance[ 'title' ] );
+        $instance[ 'id' ]             = strip_tags( $new_instance[ 'id' ] );
+        $instance[ 'url' ]            = strip_tags( $new_instance[ 'url' ] );
+        $instance[ 'width' ]          = strip_tags( $new_instance[ 'width' ] ); // obsolete
+        $instance[ 'height' ]         = strip_tags( $new_instance[ 'height' ] ); // obsolete
+        $instance[ 'showtitle' ]      = strip_tags( $new_instance[ 'showtitle' ] );
         $instance[ 'show_custom_post_title' ] = strip_tags( $new_instance[ 'show_custom_post_title' ] );
-        $instance[ 'meta' ]         = strip_tags( $new_instance[ 'meta' ] );
-        $instance[ 'genre' ]        = strip_tags( $new_instance[ 'genre' ] );
-        $instance[ 'resolution' ]   = strip_tags( $new_instance[ 'resolution' ] );
+        $instance[ 'meta' ]           = strip_tags( $new_instance[ 'meta' ] );
+        $instance[ 'genre' ]          = strip_tags( $new_instance[ 'genre' ] );
+        $instance[ 'resolution' ]     = strip_tags( $new_instance[ 'resolution' ] ); // obsolete
+        $instance[ 'video_src_type' ] = strip_tags( $new_instance[ 'video_src_type' ] );
 
         return $instance;
     }

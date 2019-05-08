@@ -55,6 +55,7 @@ function init() {
 
     add_action( 'wp_enqueue_scripts', 'RRZE\PostVideo\custom_libraries_scripts');
     add_action( 'admin_notices', 'RRZE\PostVideo\video_admin_notice');
+    add_action( 'admin_enqueue_scripts', 'RRZE\PostVideo\rrze_video_admin_styles');
 
 }
 
@@ -101,6 +102,10 @@ function system_requirements() {
         deactivate_plugins(plugin_basename(__FILE__), FALSE, TRUE);
         die( $error );
     }
+}
+
+function rrze_video_admin_styles() {
+    wp_enqueue_style('rrze-video-admin-styles', plugins_url( 'rrze-video/assets/css/rrze-video-admin.css', dirname(__FILE__) ) );
 }
 
 function custom_libraries_scripts() {
