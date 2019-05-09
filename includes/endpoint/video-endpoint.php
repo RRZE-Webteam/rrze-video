@@ -8,8 +8,7 @@ Class VideoEndpoint {
         add_action( 'init', array( $this, 'default_options' ) );
         add_action( 'init', array( $this, 'rewrite' ) );
         add_filter( 'query_vars', array( $this , 'add_query_vars'));
-        // add_action( 'template_redirect', array( $this, 'endpoint_template_redirect' ) );
-
+        add_action( 'template_redirect', array( $this, 'endpoint_template_redirect' ) );
     }
 
     public static $allowed_stylesheets = [
@@ -50,21 +49,22 @@ Class VideoEndpoint {
 
         global $wp_query;
 
-        if (!isset($wp_query->query_vars[$this->options['endpoint_slug']])) {
+        if ( !isset($wp_query->query_vars[$this->options['endpoint_slug']]) ) {
             return;
         }
 
         $current_theme = wp_get_theme();
+        var_dump( $current_theme->stylesheet );
 
         $styledir = '';
-        foreach (self::$allowed_stylesheets as $dir => $style) {
-            if (in_array(strtolower($current_theme->stylesheet), array_map('strtolower', $style))) {
-                $styledir = dirname(__FILE__) . "/templates/themes/$dir/";
+        foreach ( self::$allowed_stylesheets as $dir => $style ) {
+            if ( in_array( strtolower($current_theme->stylesheet), array_map('strtolower', $style) ) ) {
+                $styledir = dirname(__FILE__) . '/templates/themes/' .  $dir . '/';
                 break;
             }
         }
 
-       if(isset( $wp_query->query[$this->options['endpoint_slug']] )) {
+       if ( isset( $wp_query->query[$this->options['endpoint_slug']] ) ) {
             include $styledir . 'video-template.php';
        }
 

@@ -158,4 +158,22 @@ Class RRZE_Video_Functions {
         wp_enqueue_style('rrze-video-css');
     }
 
+    function is_fau_theme(){
+        $fau_themes = array(
+            "FAU-Einrichtungen",
+            "FAU-Einrichtungen [BETA]",
+            "FAU-Medfak",
+            "FAU-Natfak",
+            "FAU-Philfak",
+            "FAU-RWfak",
+            "FAU-Techfak",
+            "RRZE 2015"
+        );
+        $current_theme = wp_get_theme();
+        if ( in_array( $current_theme->name, $fau_themes) ) {
+            return true;
+        }
+        return false;
+    }
+
 }

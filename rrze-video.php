@@ -50,8 +50,9 @@ function init() {
     include_once('shortcodes/rrze-video-shortcode.php');
     include_once('widgets/rrze-video-widget.php');
     include_once('help/rrze-video-plugin-tabmenu.php');
-    require_once('includes/endpoint/video-endpoint.php');
-    new VideoEndpoint;
+
+    //require_once('includes/endpoint/video-endpoint.php');
+    //new VideoEndpoint;
 
     add_action( 'wp_enqueue_scripts', 'RRZE\PostVideo\custom_libraries_scripts');
     add_action( 'admin_notices', 'RRZE\PostVideo\video_admin_notice');
@@ -112,18 +113,11 @@ function custom_libraries_scripts() {
 
     global $post;
 
-    $theme_name = wp_get_theme();
-   // $THEMES_WITH_CSS = array("FAU-Einrichtungen", "FAU-Einrichtungen [BETA]", "FAU-Medfak", "FAU-Natfak", "FAU-Philfak", "FAU-RWfak", "FAU-Techfak", "RRZE 2015");
-
     wp_register_script( 'rrze-main-js', plugins_url( 'rrze-video/assets/js/rrze-ajax.js', dirname(__FILE__)), array('jquery'),'', true);
     wp_register_style( 'mediaelementplayercss', includes_url( 'js/mediaelement/mediaelementplayer.min.css', dirname(__FILE__) ) );
     wp_register_script( 'mediaelementplayerjs', includes_url( 'js/mediaelement/mediaelement-and-player.min.js', dirname(__FILE__)), array('jquery'),'', true);
     wp_register_style( 'rrze-video-css', plugins_url( 'rrze-video/assets/css/rrze-video.css', dirname(__FILE__) ) );
     wp_register_script( 'rrze-video-js', plugins_url('rrze-video/assets/js/scripts.min.js', dirname(__FILE__)), array('jquery'),'' , true);
-
-    /*if (!in_array($theme_name, $THEMES_WITH_CSS)) {
-        wp_enqueue_style( 'stylescss' );
-    }*/
 
     wp_localize_script( 'rrze-main-js', 'videoajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
 
