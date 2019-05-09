@@ -51,9 +51,6 @@ function init() {
     include_once('widgets/rrze-video-widget.php');
     include_once('help/rrze-video-plugin-tabmenu.php');
 
-    //require_once('includes/endpoint/video-endpoint.php');
-    //new VideoEndpoint;
-
     add_action( 'wp_enqueue_scripts', 'RRZE\PostVideo\custom_libraries_scripts');
     add_action( 'admin_notices', 'RRZE\PostVideo\video_admin_notice');
     add_action( 'admin_enqueue_scripts', 'RRZE\PostVideo\rrze_video_admin_styles');
