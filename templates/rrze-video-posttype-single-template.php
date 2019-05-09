@@ -62,7 +62,6 @@
                             if( $desc != '' ){
                                 echo sprintf('<p class="rrze-video__description">%s</p>', $desc );
                             }
-
                     ?>
                             </div>
                     <?php endwhile; ?>

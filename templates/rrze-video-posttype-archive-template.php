@@ -58,9 +58,6 @@
                                 <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
                     <?php
                             echo do_shortcode('[fauvideo id="' . $post->ID . '" width="100%"  showtitle="0" showinfo="1"]');
-                            if( $url != '' ){
-                                echo sprintf('<p class="rrze-video__url">%s</p>',$url);
-                            }
                     ?>
                             </div>
                     <?php endwhile; ?>
