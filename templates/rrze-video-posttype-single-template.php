@@ -4,6 +4,13 @@
     <div id="hero"></div>
     <div id="content">
         <div class="container">
+            <?php if( isset($breadcrumb) && ! empty($breadcrumb) ) { ?>
+            <div class="row">
+                <div class="col-xs-12">
+                    <?php echo $breadcrumb; ?>
+                </div>
+            </div>
+            <?php } ?>
             <div class="row">
                 <main>
                     <h1 class="screen-reader-text"><?php _e('Video aus der Mediathek'); ?></h1>
