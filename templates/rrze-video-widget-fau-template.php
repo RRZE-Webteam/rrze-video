@@ -1,7 +1,7 @@
 <?php
     $description       = $desc;
     $video_title       = ( ! empty($showtitle) ) ? '<h2>' . $showtitle . '</h2>' : '';
-    $preview_image_src = ( ! empty($thumbnail) ) ? $thumbnail[0] : $picture;
+    $preview_image_src = ( ! empty($thumbnail) ) ? $thumbnail : $preview_image;
     $preview_image_alt = sprintf( __('Bild zum Video %s','rrze-video'), $modaltitle );
 ?>
 <div class="rrze-video rrze-video-widget-container">

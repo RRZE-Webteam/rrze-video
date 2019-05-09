@@ -18,7 +18,7 @@ class RRZE_Video_Widget extends \WP_Widget
     public function __construct() {
         $widget_ops = array(
             'classname' => 'video_widget',
-            'description' => __('Zeigt Videos in der Sidebar oder im Footer an.'),
+            'description' => __('Zeigt Videos in der Sidebar oder im Footer an.','rrze-video'),
         );
         parent::__construct( 'video_widget', 'RRZE Video Widget', $widget_ops );
 
@@ -47,11 +47,8 @@ class RRZE_Video_Widget extends \WP_Widget
         $form_url                    = ( !empty($instance['url']) )                     ? $instance['url']        : '';
         $form_title                  = ( !empty($instance['title']) )                   ? $instance['title']      : '';
         $form_showtitle              = ( !empty($instance['showtitle']) )               ? $instance['showtitle']  : '';
-        $width                       = ( !empty($instance['width']) )                   ? $instance['width']      : 270; // obsolete
-        $height                      = ( !empty($instance['height']) )                  ? $instance['height']     : 150; // obsolete
         $meta                        = ( !empty($instance['meta']) )                    ? $instance['meta']       : '';
         $taxonomy_genre              = ( !empty($instance['genre']) )                   ? $instance['genre']      : '';
-        $youtube_resolution          = ( !empty($instance['resolution']) )              ? $instance['resolution'] : ''; // obsolete
         $form_show_custom_post_title = ( !empty($instance['show_custom_post_title']) )  ? $instance['show_custom_post_title']  : '';
         $video_src_type              = ( !empty($instance['video_src_type']) )          ? $instance['video_src_type'] : '';
 
@@ -95,13 +92,13 @@ class RRZE_Video_Widget extends \WP_Widget
                     echo '<div id="message" class="error"><p>' . $fau_video['error'] . '</p></div>';
                 } else {
                     $video_file     = $fau_video['video']['file'];
-                    $preview_image  = $fau_video['video']['preview_image'];
-                    if ( empty($preview_image) ) {
-                        $preview_image  = $helpers->video_preview_image('',array('provider'=>'fau','url'=>$form_url));
-                    }
-                    // @@todo: small + large size for image and preview?
-                    $picture        = $preview_image;
-                    //
+                    $preview_image_opts = array(
+                        'provider'  => 'fau',
+                        'url'       => $form_url,
+                        'thumbnail' => $fau_video['video']['preview_image']
+                    );
+                    $preview_image  = $helpers->video_preview_image('',$preview_image_opts);
+
                     $desc           = ''; // used where?
                     $orig_video_url = $form_url; // used where?
 
@@ -163,28 +160,27 @@ class RRZE_Video_Widget extends \WP_Widget
                     $url            = get_post_meta( $post->ID, 'url', true );
                     $desc           = get_post_meta( $post->ID, 'description', true );
                     $thumbnail      = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
+                    if ( ! empty( $thumbnail ) ) {
+                        $thumbnail = $thumbnail[0]; // array (url, width, height, is_intermediate)
+                    }
+
                     $is_fau_video   = $helpers->is_fau_video($url);
 
                     if ( $is_fau_video ) {
 
                         //fau video:
-                        // @@todo: General setting:
-                        //$fau_video_url = 'https://www.video.uni-erlangen.de/services/oembed/?url=https://www.video.uni-erlangen.de';
-                        //preg_match('/(clip|webplayer)\/id\/(\d+)/',$url,$matches);
-                        //$oembed_url    = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
-                        //$remote_get    = wp_safe_remote_get($oembed_url);
                         $fau_video = $helpers->fetch_fau_video( $url );
                         if ( $fau_video['error'] != '' ) {
                             echo '<div id="message" class="error"><p>' . $fau_video['error'] . '</p></div>';
                         } else {
                             //$video_url      = json_decode(wp_remote_retrieve_body($remote_get), true);
                             $video_file     = $fau_video['video']['file'];
-                            $preview_image  = $fau_video['video']['preview_image'];
-                            if ( empty($preview_image) ) {
-                                 $preview_image  = $helpers->video_preview_image('',array('provider'=>'fau','url'=>$url));
-                            }
-                            // @@todo: small + large size for image and preview?
-                            $picture        = $preview_image;
+                            $preview_image_opts = array(
+                                'provider' => 'fau',
+                                'url'      =>  $url,
+                                'thumbnail'=>  $fau_video['video']['preview_image']
+                            );
+                            $preview_image  = $helpers->video_preview_image('',$preview_image_opts);
 
                             // should we show the title?
                             if ( $form_show_custom_post_title == 1 ) {
@@ -267,12 +263,9 @@ class RRZE_Video_Widget extends \WP_Widget
         $title                   = ! empty( $instance['title'] )                 ? $instance['title']      : '';
         $id                      = ! empty( $instance['id'] )                    ? $instance['id']         : '';
         $url                     = ! empty( $instance['url'] )                   ? $instance['url']        : '';
-        $width                   = ! empty( $instance['width'] )                 ? $instance['width']      : 270; // obsolete
-        $height                  = ! empty( $instance['height'] )                ? $instance['height']     : 150; // obsolete
         $showtitle               = ! empty( $instance['showtitle'])              ? $instance['showtitle']  : '';
         $meta                    = ! empty( $instance['meta'] )                  ? $instance['meta']       : '';
         $genre                   = ! empty( $instance['genre'] )                 ? $instance['genre']      : '';
-        $resolution              = ! empty( $instance['resolution'] )            ? $instance['resolution'] : ''; // obsolete
         $show_custom_post_title  = ! empty( $instance['show_custom_post_title']) ? $instance['show_custom_post_title']  : '';
         $video_src_type          = ! empty( $instance['video_src_type'])         ? $instance['video_src_type']  : '';
 
@@ -371,33 +364,11 @@ class RRZE_Video_Widget extends \WP_Widget
 
         <fieldset class="rrze-fieldset">
             <legend class="rrze-legend"><?php _e('Video Optionen','rrze-video'); ?></legend>
-            <?php /* obsolete
-             <p>
-                <label for="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>"><?php _e( 'Breite:', 'rrze-video' ); ?></label>
-                <input class="small-text" id="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'width' ) ); ?>" type="text" value="<?php echo esc_attr( $width ); ?>">
-                <label for="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>"><?php _e( 'Höhe:', 'rrze-video' ); ?></label>
-                <input class="small-text" id="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" type="text" value="<?php echo esc_attr( $height ); ?>"> px
-            </p>
-            */ ?>
             <p>
                 <input type="checkbox" name="<?php echo $this->get_field_name( 'meta' ); ?>" id="<?php echo $this->get_field_id( 'meta' ); ?>" value="1"<?php echo ( $meta == '1' ) ? ' checked' : ''; ?>>
                 <label for="<?php echo $this->get_field_id( 'meta' ); ?>"><?php _e('Video-Metainformationen anzeigen?','rrze-video') ?></label>
                 <br><em>(<?php _e('Autor, Copyright, Quelle und Beschreibung, falls angegeben','rrze-video') ?>)</em>
             </p>
-            <?php /* obsolete
-            <p>
-                <label for="<?php echo $this->get_field_id( 'resolution' ); ?>"><?php _e('Auflösung des Youtube-Bildes:' ) ?></label>
-                <select class="widefat" id="<?php echo $this->get_field_id( 'resolution' ); ?>" name="<?php echo $this->get_field_name( 'resolution' ); ?>">
-                    <option value=""><?php _e('Auswählen') ?></option>
-                    <option value="1"<?php echo ( $resolution == '1' ) ? 'selected' : ''; ?>>maxresultion</option>
-                    <option value="2"<?php echo ( $resolution == '2' ) ? 'selected' : ''; ?>>default</option>
-                    <option value="3"<?php echo ( $resolution == '3' ) ? 'selected' : ''; ?>>hqdefault</option>
-                    <option value="4"<?php echo ( $resolution == '4' ) ? 'selected' : ''; ?>>mqdefault</option>
-                    <option value="5"<?php echo ( $resolution == '5' ) ? 'selected' : ''; ?>>sddefault</option>
-                </select>
-                <br><em><?php _e('Nur relevant wenn oben per "url" ein youtube-Video angegeben wurde') ?></em>
-            </p>
-            */ ?>
         </fieldset>
 
         <?php
@@ -413,13 +384,10 @@ class RRZE_Video_Widget extends \WP_Widget
         $instance[ 'title' ]          = strip_tags( $new_instance[ 'title' ] );
         $instance[ 'id' ]             = strip_tags( $new_instance[ 'id' ] );
         $instance[ 'url' ]            = strip_tags( $new_instance[ 'url' ] );
-        $instance[ 'width' ]          = strip_tags( $new_instance[ 'width' ] ); // obsolete
-        $instance[ 'height' ]         = strip_tags( $new_instance[ 'height' ] ); // obsolete
         $instance[ 'showtitle' ]      = strip_tags( $new_instance[ 'showtitle' ] );
         $instance[ 'show_custom_post_title' ] = strip_tags( $new_instance[ 'show_custom_post_title' ] );
         $instance[ 'meta' ]           = strip_tags( $new_instance[ 'meta' ] );
         $instance[ 'genre' ]          = strip_tags( $new_instance[ 'genre' ] );
-        $instance[ 'resolution' ]     = strip_tags( $new_instance[ 'resolution' ] ); // obsolete
         $instance[ 'video_src_type' ] = strip_tags( $new_instance[ 'video_src_type' ] );
 
         return $instance;

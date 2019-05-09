@@ -25,10 +25,10 @@ Class RRZE_Video_Functions {
 
         // Preview image handling
         // fallback to local preview image first...
-        $preview_image = ( ! $options['thumbnail'] ) ? $options['preview_fallback'] : $options['thumbnail'][0];
+        $preview_image = ( empty( $options['thumbnail'] ) ) ? $options['preview_fallback'] : $options['thumbnail'];
 
         // a dedicated poster(url|id) is given (but not "default"):
-        if ( $poster != '' && $poster != 'default' ) {
+        if ( ! empty( $poster ) && $poster != 'default' ) {
             $check_image = esc_url( $poster );
             if ( ! empty( $check_image ) ) {
                 // seems to be a url
@@ -37,32 +37,10 @@ Class RRZE_Video_Functions {
         } elseif ( $poster == 'default' || ! empty( $plugin_settings['preview_image_vendor'] ) ) {
             // no poster is given, so check if it set to "default" or if
             // use vendor thumb is set in plugin settings:
-            switch ( $options['provider'] ) {
-                case 'youtube':
-                    $youtube_url = 'https://img.youtube.com/vi/' . $options['id'];
-                    switch( $options['resolution'] ){
-                        case 1:
-                            $thumb = '/maxresdefault.jpg';
-                            break;
-                        case 2:
-                            $thumb = '/default.jpg';
-                            break;
-                        case 3:
-                            $thumb = '/hqdefault.jpg';
-                            break;
-                        case 4:
-                            $thumb = '/mqdefault.jpg';
-                            break;
-                        default:
-                            //$thumb = '/sddefault.jpg';
-                            $thumb = '/maxresdefault.jpg';
-                    }
-                    $preview_image = $youtube_url . $thumb;
-                    break;
-                case 'fau':
-                    $preview_image = 'https://cdn.video.uni-erlangen.de/Images/player_previews/' . $this->get_video_id_from_url( $options['url'], 'fau' ) .'_preview.img';
-                    break;
-                // default: use fallback from above
+            if( $options['provider'] == 'youtube' ){
+                $youtube_url   = 'https://img.youtube.com/vi/' . $options['id'];
+                $thumb         = '/maxresdefault.jpg';
+                $preview_image = $youtube_url . $thumb;
             }
         }
         return $preview_image;
