@@ -26,12 +26,8 @@ function show_video_on_page( $atts )
 
     $url_shortcode          = $rrze_video_shortcode['url'];
     $id_shortcode           = $rrze_video_shortcode['id'];
-    //$width_shortcode        = $rrze_video_shortcode['width'];
-    //$height_shortcode       = $rrze_video_shortcode['height'];
     $poster_shortcode       = $rrze_video_shortcode['poster'];
     $taxonomy_genre         = $rrze_video_shortcode['rand'];
-    //$youtube_support        = $rrze_video_shortcode['youtube-support'];
-    //$youtube_resolution     = $rrze_video_shortcode['youtube-resolution'];
     $error = false;
     $html  = '';
 
