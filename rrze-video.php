@@ -4,7 +4,7 @@
 Plugin Name: RRZE Video Plugin
 Plugin URI: https://github.com/RRZE-Webteam/rrze-video
 Description: This is a video plugin to show videos on pages and in the social media footer.
-Version: 2.0.1
+Version: 2.1.0
 Author: RRZE-Webteam
 Author URI: http://blogs.fau.de/webworking/
 License: GNU GPLv2
@@ -28,7 +28,7 @@ along with {Plugin Name}. If not, see {License URI}.
 namespace RRZE\PostVideo;
 
 const RRZE_PHP_VERSION = '7.0';
-const RRZE_WP_VERSION  = '4.9';
+const RRZE_WP_VERSION  = '5.2';
 
 add_action('plugins_loaded', 'RRZE\PostVideo\init');
 register_activation_hook(__FILE__, 'RRZE\PostVideo\activation');
