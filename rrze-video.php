@@ -4,7 +4,7 @@
 Plugin Name: RRZE Video Plugin
 Plugin URI: https://github.com/RRZE-Webteam/rrze-video
 Description: This is a video plugin to show videos on pages and in the social media footer.
-Version: 2.0.1
+Version: 2.1.0
 Author: RRZE-Webteam
 Author URI: http://blogs.fau.de/webworking/
 License: GNU GPLv2
@@ -28,7 +28,7 @@ along with {Plugin Name}. If not, see {License URI}.
 namespace RRZE\PostVideo;
 
 const RRZE_PHP_VERSION = '7.0';
-const RRZE_WP_VERSION  = '4.9';
+const RRZE_WP_VERSION  = '5.2';
 
 add_action('plugins_loaded', 'RRZE\PostVideo\init');
 register_activation_hook(__FILE__, 'RRZE\PostVideo\activation');
@@ -50,11 +50,10 @@ function init() {
     include_once('shortcodes/rrze-video-shortcode.php');
     include_once('widgets/rrze-video-widget.php');
     include_once('help/rrze-video-plugin-tabmenu.php');
-    require_once('includes/endpoint/video-endpoint.php');
-    new VideoEndpoint;
 
     add_action( 'wp_enqueue_scripts', 'RRZE\PostVideo\custom_libraries_scripts');
     add_action( 'admin_notices', 'RRZE\PostVideo\video_admin_notice');
+    add_action( 'admin_enqueue_scripts', 'RRZE\PostVideo\rrze_video_admin_styles');
 
 }
 
@@ -83,36 +82,39 @@ function system_requirements() {
     $error = '';
 
     if (version_compare(PHP_VERSION, RRZE_PHP_VERSION, '<')) {
-        $error = sprintf(__('Your server is running PHP version %s. Please upgrade at least to PHP version %s.', 'rrze-test'), PHP_VERSION, RRZE_PHP_VERSION);
+        $error = sprintf(__('Your server is running PHP version %s. Please upgrade at least to PHP version %s.', 'rrze-video'), PHP_VERSION, RRZE_PHP_VERSION);
     }
 
     if (version_compare($GLOBALS['wp_version'], RRZE_WP_VERSION, '<')) {
-        $error = sprintf(__('Your Wordpress version is %s. Please upgrade at least to Wordpress version %s.', 'rrze-test'), $GLOBALS['wp_version'], RRZE_WP_VERSION);
+        $error = sprintf(__('Your Wordpress version is %s. Please upgrade at least to Wordpress version %s.', 'rrze-video'), $GLOBALS['wp_version'], RRZE_WP_VERSION);
     }
+
+    // check auf altes FAU-Video plugin
+    if ( is_plugin_active('fau-video/fau-video.php') ) {
+        $error = sprintf( __('An older version of the FAU video plugin is active. Please deactivate it before enabling the RRZE Video plugin.', 'rrze-video') );
+    }
+
 
     // Wenn die Überprüfung fehlschlägt, dann wird das Plugin automatisch deaktiviert.
     if (!empty($error)) {
         deactivate_plugins(plugin_basename(__FILE__), FALSE, TRUE);
-        wp_die($error);
+        die( $error );
     }
+}
+
+function rrze_video_admin_styles() {
+    wp_enqueue_style('rrze-video-admin-styles', plugins_url( 'rrze-video/assets/css/rrze-video-admin.css', dirname(__FILE__) ) );
 }
 
 function custom_libraries_scripts() {
 
     global $post;
 
-    $theme_name = wp_get_theme();
-   // $THEMES_WITH_CSS = array("FAU-Einrichtungen", "FAU-Einrichtungen [BETA]", "FAU-Medfak", "FAU-Natfak", "FAU-Philfak", "FAU-RWfak", "FAU-Techfak", "RRZE 2015");
-
     wp_register_script( 'rrze-main-js', plugins_url( 'rrze-video/assets/js/rrze-ajax.js', dirname(__FILE__)), array('jquery'),'', true);
     wp_register_style( 'mediaelementplayercss', includes_url( 'js/mediaelement/mediaelementplayer.min.css', dirname(__FILE__) ) );
     wp_register_script( 'mediaelementplayerjs', includes_url( 'js/mediaelement/mediaelement-and-player.min.js', dirname(__FILE__)), array('jquery'),'', true);
     wp_register_style( 'rrze-video-css', plugins_url( 'rrze-video/assets/css/rrze-video.css', dirname(__FILE__) ) );
     wp_register_script( 'rrze-video-js', plugins_url('rrze-video/assets/js/scripts.min.js', dirname(__FILE__)), array('jquery'),'' , true);
-
-    /*if (!in_array($theme_name, $THEMES_WITH_CSS)) {
-        wp_enqueue_style( 'stylescss' );
-    }*/
 
     wp_localize_script( 'rrze-main-js', 'videoajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
 

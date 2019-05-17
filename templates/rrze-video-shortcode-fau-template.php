@@ -4,7 +4,7 @@
         $video_title = '<' . $rrze_video_shortcode['titletag'] . '>' . $showtitle . '</' . $rrze_video_shortcode['titletag'] . '>';
     }
     $preview_image_title = $modaltitle;
-    $preview_image_src   = (!empty($thumbnail)) ? $thumbnail[0] : $preview_image;
+    $preview_image_src   = (!empty($thumbnail)) ? $thumbnail : $preview_image;
     $preview_image_alt = sprintf( __('Bild zum Video %s'), $modaltitle );
     $preview_image_class = 'image' . $instance_id;
 ?>

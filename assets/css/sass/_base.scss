@@ -227,6 +227,15 @@ $background_color_1: transparent;
 
 }
 
+.rrze-accordeon-item {
+    .rrze-accordeon-toggle-target {
+        display: none;
+    }
+    .rrze-accordeon-toggle:checked + .accordeon-toggle-target {
+        display: block;
+    }
+}
+
 .rrze-video-widget-box {
 
     position: relative;

@@ -59,7 +59,7 @@ function js_player_ajax()
     switch( $player ) {
         case 'mediaelement' :
 ?>
-                    var embed_html = '<video class="player" width="640" height="360" controls="controls" preload="none">' +
+                    var embed_html = '<video class="player" controls="controls" preload="none">' +
                         '<source src="https://www.youtube.com/watch?v=' + video_id + '" type="video/youtube" />' +
                         '</video>';
                         $(target)
@@ -73,7 +73,7 @@ function js_player_ajax()
             break;
         case 'fauvideo' :
 ?>
-                     var embed_html = '<video class="player" width="640" height="360" controls="controls" preload="none" poster="' + poster + '">' +
+                     var embed_html = '<video class="player" controls="controls" preload="none" poster="' + poster + '">' +
                         '<source src="' + video_url + '" type="video/mp4" />' +
                         '</video>';
                         $(target)

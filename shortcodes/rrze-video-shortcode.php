@@ -16,25 +16,20 @@ function show_video_on_page( $atts )
     $rrze_video_shortcode = shortcode_atts( array(
         'url'                   => '',
         'id'                    => '',
-        'width'                 => '640',
-        'height'                => '360',
         'poster'                => '',
         'showinfo'              => '1',
         'showtitle'             => '1',
         'titletag'              => 'h2',
         'youtube-support'       => '0',
-        'youtube-resolution'    => '4',
         'rand'                  => ''
     ), $atts, 'fauvideo' );
 
     $url_shortcode          = $rrze_video_shortcode['url'];
     $id_shortcode           = $rrze_video_shortcode['id'];
-    $width_shortcode        = $rrze_video_shortcode['width'];
-    $height_shortcode       = $rrze_video_shortcode['height'];
     $poster_shortcode       = $rrze_video_shortcode['poster'];
     $taxonomy_genre         = $rrze_video_shortcode['rand'];
-    $youtube_support        = $rrze_video_shortcode['youtube-support'];
-    $youtube_resolution     = $rrze_video_shortcode['youtube-resolution'];
+    $error = false;
+    $html  = '';
 
 
     $args_video = array(
@@ -58,9 +53,11 @@ function show_video_on_page( $atts )
         ),
     );
 
+
+
     $instance_id = uniqid();
 
-   if ( ! empty( $url_shortcode ) ) {
+    if ( ! empty( $url_shortcode ) ) {
 
         $is_fau_video = $helpers->is_fau_video($url_shortcode);
 
@@ -71,10 +68,17 @@ function show_video_on_page( $atts )
             // FAU-Video
             $fau_video = $helpers->fetch_fau_video( $url_shortcode );
             if ( $fau_video['error'] != '' ) {
-                return '<div id="message" class="error"><p>' . $fau_video['error'] . '</p></div>';
+                $error = true;
+                $html = '<div id="message" class="error"><p>' . $fau_video['error'] . '</p></div>';
             } else {
                 $video_file    = $fau_video['video']['file'];
-                $preview_image  = $helpers->video_preview_image($poster_shortcode,array('provider'=>'fau'));
+                $preview_image_opts = array(
+                    'provider' => 'fau',
+                    'url' => $url_shortcode,
+                    'thumbnail' => $fau_video['video']['preview_image']
+                );
+                $preview_image  = $helpers->video_preview_image($poster_shortcode,$preview_image_opts);
+
                 // @@todo: small + large size for image and preview?
                 $picture        = $preview_image;
                 //
@@ -85,7 +89,7 @@ function show_video_on_page( $atts )
 
                 ob_start();
                 include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-fau-template.php');
-                return ob_get_clean();
+                $html = ob_get_clean();
             }
 
         } else {
@@ -104,7 +108,7 @@ function show_video_on_page( $atts )
             $picture = $preview_image;
             ob_start();
             include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-youtube-template.php');
-            return ob_get_clean();
+            $html = ob_get_clean();
 
         }
 
@@ -127,24 +131,34 @@ function show_video_on_page( $atts )
                 $url          = get_post_meta($post->ID, 'url', true);
                 $is_fau_video = $helpers->is_fau_video($url);
                 $thumbnail    = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full');
+                if ( ! empty($thumbnail) ) {
+                    $thumbnail = $thumbnail[0];
+                }
                 $description  = get_post_meta($post->ID, 'description', true);
 
                 if ($is_fau_video) {
 
                     // FAU video
                     $genre              = wp_strip_all_tags(get_the_term_list($post->ID, 'genre', true));
-                    if (!$thumbnail) {
-                        $preview_image  = $helpers->video_preview_image($poster_shortcode,array('provider'=>'fau','url' => $url));
-                    } else {
-                        $preview_image  = $thumbnail[0];
-                    }
-                    $picture            = $preview_image;
 
                     $fau_video          = $helpers->fetch_fau_video($url);
                     if ( $fau_video['error'] != '' ) {
+                        $error = true;
                         $out = '<div id="message" class="error"><p>' . $fau_video['error'] . '</p></div>';
                     } else {
                         $video_file     = $fau_video['video']['file'];
+                        if (!$thumbnail) {
+                            $preview_image_opts = array(
+                                'provider'  => 'fau',
+                                'url'       => $url,
+                                'thumbnail' => $fau_video['video']['preview_image']
+                            );
+                            $preview_image  = $helpers->video_preview_image($poster_shortcode,$preview_image_opts);
+                        } else {
+                            $preview_image  = $thumbnail;
+                        }
+                        $picture = $preview_image;
+
                         $showtitle      = ($rrze_video_shortcode['showtitle'] == 1) ? $fau_video['video']['title'] : '';
                         $modaltitle     = ($fau_video['video']['title'] != '')      ? $fau_video['video']['title'] : get_the_title();
                         $author         = $fau_video['video']['author_name'];
@@ -178,16 +192,20 @@ function show_video_on_page( $atts )
                     $out = ob_get_clean();
                 }
             }
-
-            // add players js to footer:
-            add_action('wp_footer', 'RRZE\PostVideo\js_player_ajax');
-
         } else {
+            $error = true;
             $out = '<p>' . __('Es wurden keine Videos gefunden!', 'rrze-video') . '</p>';
         }
 
         wp_reset_postdata();
 
-        return $out;
+        $html = $out;
     }
+
+    if ( empty( $error ) ){
+        // add players js to footer:
+        add_action('wp_footer', 'RRZE\PostVideo\js_player_ajax');
+    }
+
+    return $html;
 }

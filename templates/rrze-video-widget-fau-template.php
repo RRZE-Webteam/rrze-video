@@ -1,8 +1,8 @@
 <?php
     $description       = $desc;
     $video_title       = ( ! empty($showtitle) ) ? '<h2>' . $showtitle . '</h2>' : '';
-    $preview_image_src = ( ! empty($thumbnail) ) ? $thumbnail[0] : $picture;
-    $preview_image_alt = sprintf( __('Bild zum Video %s'), $modaltitle );
+    $preview_image_src = ( ! empty($thumbnail) ) ? $thumbnail : $preview_image;
+    $preview_image_alt = sprintf( __('Bild zum Video %s','rrze-video'), $modaltitle );
 ?>
 <div class="rrze-video rrze-video-widget-container">
     <?php echo $video_title; ?>
@@ -19,7 +19,7 @@
                 data-target="#videoModal<?php echo $instance_id ?>"
             >
             <div class="rrze-video-widget-box">
-                <img id="video-thumbnail<?php echo $instance_id ?>" src="<?php echo $preview_image_src; ?>" title="<?php echo $modaltitle ?>" alt="<?php echo $preview_image_alt; ?>"  width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"/>
+                <img id="video-thumbnail<?php echo $instance_id ?>" src="<?php echo $preview_image_src; ?>" title="<?php echo $modaltitle ?>" alt="<?php echo $preview_image_alt; ?>"/>
                 <div class="middle" aria-hidden="true">
                     <div class="play-button"><em class="fa fa-play-circle-o"></em></div>
                 </div>
@@ -39,20 +39,26 @@
 		        <div class="modal-body">
 		            <div class="videocontent<?php echo $instance_id ?>">
 			            <div class="player">
-			                 <img src="<?php echo $preview_image_src; ?>" title="<?php echo $modaltitle ?>" alt="<?php echo $preview_image_alt; ?>"  width="<?php echo $instance['width'] ?>" height="<?php echo $instance['height'] ?>"/>
+			                 <img src="<?php echo $preview_image_src; ?>" title="<?php echo $modaltitle ?>" alt="<?php echo $preview_image_alt; ?>" />
 			            </div>
 		            </div>
 		        </div><!-- .modal-body -->
 		        <div class="modal-footer">
-                    <p class="description"><?php _e('Beschreibung:'); ?> <?php echo (!empty($description)) ? $description : __('Keine Angaben') ?></p>
+                    <p class="description"><?php _e('Beschreibung:','rrze-video'); ?> <?php echo (!empty($description)) ? $description : __('Keine Angaben','rrze-video') ?></p>
                      <?php if($meta == '1') { ?>
                         <dl>
-                            <dt class="meta_heading"><?php _e('Autor:'); ?></dt>
+                        <?php if ( ! empty( $author ) ) { ?>
+                            <dt class="meta_heading"><?php _e('Autor:','rrze-video'); ?></dt>
                             <dd class="meta_content"><?php echo $author; ?></dd>
-                            <dt class="meta_heading"><?php _e('Quelle:'); ?></dt>
-                            <dd class="meta_content"><a href="<?php echo $video_file; ?>"><?php _e('Download:'); ?></a></dd>
-                            <dt class="meta_heading"><?php _e('Copyright:'); ?></dt>
+                        <?php } ?>
+                        <?php if ( ! empty( $video_file ) ) { ?>
+                            <dt class="meta_heading"><?php _e('Quelle:','rrze-video'); ?></dt>
+                            <dd class="meta_content"><a href="<?php echo $video_file; ?>"><?php _e('Download:','rrze-video'); ?></a></dd>
+                        <?php } ?>
+                        <?php if ( ! empty( $copyright ) ) { ?>
+                            <dt class="meta_heading"><?php _e('Copyright:','rrze-video'); ?></dt>
                             <dd class="meta_content"><?php echo $copyright; ?></dd>
+                        <?php } ?>
                         </dl>
                     <?php } ?>
                 </div><!-- .modal-footer -->
