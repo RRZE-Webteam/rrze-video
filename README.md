@@ -66,8 +66,6 @@ oder
 * Das Argument "titletag" kann die Werte zwischen h1 und h6 annehmen. (Überschriftgröße - Default) h2)
 * Das Argument "showtitle" kann den Wert 0 oder 1 annehmen. (Der Titel wird angezeigt  - Default 1/on)
 * Das Argument "showinfo" kann den Wert 0 oder 1 annehmen. (Es werden Zusatzinformationen wie Author, Download-Link und Copyright angezeigt / Default 1/on)
-* Dem Argument "youtube-support" kann den Wert 0 oder 1 annehmen. (Videos werden dann mit dem Youtube Player angezeigt - Default 0/off)
-* Dem Argument "youtube-resolution" kann einen Wert zwischen 1 und 4 übergeben werden. (Das Vorschaubild wird im Format 16:9 angezeigt - Default 4)
 * Dem Argument "rand" kann der Wert aus der Datensatzspalte Genre übergeben werden. (zufällig Wiedergabe von Videos, welche diesem Genre zugeordnet sind - kein Default)
 
 ### __Ausrichtung der Videos auf einer Wordpress-Seite__
