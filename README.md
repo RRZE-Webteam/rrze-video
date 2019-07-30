@@ -12,12 +12,12 @@ muss man einen neuen Videodatensatz anlegen. Ordnet man dem Videodatensatz ein G
 Das Plugin unterscheidet zwischen zwei Möglichkeiten Videos auf einer Seite auszugeben. Die erste Möglichkeit ist die Übergabe der Datensatz-ID. Diese finden Sie im Menü->Alle Videos in der Spalte ID, nachdem Sie einen Datensatz angelegt haben.
 
 ```
-[fauvideo id="398" width="640" height="360" showtitle="1" showinfo="0" titletag="h2"]
+[fauvideo id="398" showtitle="1" showinfo="0" titletag="h2"]
 ```
 
-Die zweite Möglichkeit ist die Übergabe einer Url.
+Die zweite Möglichkeit ist die Übergabe einer URL.
 
-Das Feld "Url" kann je Datensatz einen der folgenden Werte annehmen:
+Das Feld "url" kann je Datensatz einen der folgenden Werte annehmen:
 
 Für ein Video aus dem FAU Videoportal
 
