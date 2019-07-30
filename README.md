@@ -59,7 +59,7 @@ oder
 oder
 
 ```
-[fauvideo url="DF2aRrr21-M" width="640" height="360" showtitle="1" showinfo="1" titletag="h2"]
+[fauvideo url="DF2aRrr21-M" showtitle="1" showinfo="1" titletag="h2"]
 ```
 
 * Das Argument "titletag" kann die Werte zwischen h1 und h6 annehmen. (Überschriftgröße - Default) h2)
@@ -67,16 +67,6 @@ oder
 * Das Argument "showinfo" kann den Wert 0 oder 1 annehmen. (Es werden Zusatzinformationen wie Author, Download-Link und Copyright angezeigt / Default 1/on)
 * Dem Argument "rand" kann der Wert aus der Datensatzspalte Genre übergeben werden. (zufällig Wiedergabe von Videos, welche diesem Genre zugeordnet sind - kein Default)
 
-### __Ausrichtung der Videos auf einer Wordpress-Seite__
-Die Videos können links- oder rechtsbündig angeordnet werden. Der Text nach dem Video umfließt das Vorschaubild.
-```
-<div class="alignleft|alignright">
-
-[fauvideo id="http://www.video.uni-erlangen.de/clip/id/8352" width="420"  showtitle="1" showinfo="1" titletag="h4"]
-
-</div>
-Lo Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-```
 
 ## Einbindung des Plugins als Widget
 
