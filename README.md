@@ -37,23 +37,23 @@ Der Shortcode sieht wie folgt aus:
 Für eine Video aus dem FAU Videoportal
 
 ```
-[fauvideo url="https://www.video.uni-erlangen.de/webplayer/id/13950" width="640" height="360" showtitle="1" showinfo="1" titletag="h4" rand="Neuigkeiten"]
+[fauvideo url="https://www.video.uni-erlangen.de/webplayer/id/13950" showtitle="1" showinfo="1" titletag="h4" rand="Neuigkeiten"]
 ```
 oder
 ```
-[fauvideo url="http://www.video.uni-erlangen.de/clip/id/8352" width="640" height="360" showtitle="1" showinfo="1" titletag="h4" rand="news"]
+[fauvideo url="http://www.video.uni-erlangen.de/clip/id/8352" showtitle="1" showinfo="1" titletag="h4" rand="news"]
 ```
 
 Für ein Youtube Video
 
 ```
-[fauvideo url="https://www.youtube.com/watch?v=DF2aRrr21-M" width="640" height="360" showtitle="1" showinfo="1" titletag="h2"]
+[fauvideo url="https://www.youtube.com/watch?v=DF2aRrr21-M" showtitle="1" showinfo="1" titletag="h2"]
 ```
 
 oder
 
 ```
-[fauvideo url="https://youtu.be/DF2aRrr21-M" width="640" height="360" showtitle="1" showinfo="1" titletag="h2"]
+[fauvideo url="https://youtu.be/DF2aRrr21-M"  showtitle="1" showinfo="1" titletag="h2"]
 ```
 
 oder
@@ -62,7 +62,6 @@ oder
 [fauvideo url="DF2aRrr21-M" width="640" height="360" showtitle="1" showinfo="1" titletag="h2"]
 ```
 
-* Den Argumenten "width" und "height" wird die Bildgröße in Pixel übergeben - Default 640x360px
 * Das Argument "titletag" kann die Werte zwischen h1 und h6 annehmen. (Überschriftgröße - Default) h2)
 * Das Argument "showtitle" kann den Wert 0 oder 1 annehmen. (Der Titel wird angezeigt  - Default 1/on)
 * Das Argument "showinfo" kann den Wert 0 oder 1 annehmen. (Es werden Zusatzinformationen wie Author, Download-Link und Copyright angezeigt / Default 1/on)
