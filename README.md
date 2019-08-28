@@ -12,12 +12,12 @@ muss man einen neuen Videodatensatz anlegen. Ordnet man dem Videodatensatz ein G
 Das Plugin unterscheidet zwischen zwei Möglichkeiten Videos auf einer Seite auszugeben. Die erste Möglichkeit ist die Übergabe der Datensatz-ID. Diese finden Sie im Menü->Alle Videos in der Spalte ID, nachdem Sie einen Datensatz angelegt haben.
 
 ```
-[fauvideo id="398" width="640" height="360" showtitle="1" showinfo="0" titletag="h2"]
+[fauvideo id="398" showtitle="1" showinfo="0" titletag="h2"]
 ```
 
-Die zweite Möglichkeit ist die Übergabe einer Url.
+Die zweite Möglichkeit ist die Übergabe einer URL.
 
-Das Feld "Url" kann je Datensatz einen der folgenden Werte annehmen:
+Das Feld "url" kann je Datensatz einen der folgenden Werte annehmen:
 
 Für ein Video aus dem FAU Videoportal
 
@@ -37,49 +37,36 @@ Der Shortcode sieht wie folgt aus:
 Für eine Video aus dem FAU Videoportal
 
 ```
-[fauvideo url="https://www.video.uni-erlangen.de/webplayer/id/13950" width="640" height="360" showtitle="1" showinfo="1" titletag="h4" rand="Neuigkeiten"]
+[fauvideo url="https://www.video.uni-erlangen.de/webplayer/id/13950" showtitle="1" showinfo="1" titletag="h4" rand="Neuigkeiten"]
 ```
 oder
 ```
-[fauvideo url="http://www.video.uni-erlangen.de/clip/id/8352" width="640" height="360" showtitle="1" showinfo="1" titletag="h4" rand="news"]
+[fauvideo url="http://www.video.uni-erlangen.de/clip/id/8352" showtitle="1" showinfo="1" titletag="h4" rand="news"]
 ```
 
 Für ein Youtube Video
 
 ```
-[fauvideo url="https://www.youtube.com/watch?v=DF2aRrr21-M" width="640" height="360" showtitle="1" showinfo="1" titletag="h2"]
+[fauvideo url="https://www.youtube.com/watch?v=DF2aRrr21-M" showtitle="1" showinfo="1" titletag="h2"]
 ```
 
 oder
 
 ```
-[fauvideo url="https://youtu.be/DF2aRrr21-M" width="640" height="360" showtitle="1" showinfo="1" titletag="h2"]
+[fauvideo url="https://youtu.be/DF2aRrr21-M"  showtitle="1" showinfo="1" titletag="h2"]
 ```
 
 oder
 
 ```
-[fauvideo url="DF2aRrr21-M" width="640" height="360" showtitle="1" showinfo="1" titletag="h2"]
+[fauvideo url="DF2aRrr21-M" showtitle="1" showinfo="1" titletag="h2"]
 ```
 
-* Den Argumenten "width" und "height" wird die Bildgröße in Pixel übergeben - Default 640x360px
 * Das Argument "titletag" kann die Werte zwischen h1 und h6 annehmen. (Überschriftgröße - Default) h2)
 * Das Argument "showtitle" kann den Wert 0 oder 1 annehmen. (Der Titel wird angezeigt  - Default 1/on)
 * Das Argument "showinfo" kann den Wert 0 oder 1 annehmen. (Es werden Zusatzinformationen wie Author, Download-Link und Copyright angezeigt / Default 1/on)
-* Dem Argument "youtube-support" kann den Wert 0 oder 1 annehmen. (Videos werden dann mit dem Youtube Player angezeigt - Default 0/off)
-* Dem Argument "youtube-resolution" kann einen Wert zwischen 1 und 4 übergeben werden. (Das Vorschaubild wird im Format 16:9 angezeigt - Default 4)
 * Dem Argument "rand" kann der Wert aus der Datensatzspalte Genre übergeben werden. (zufällig Wiedergabe von Videos, welche diesem Genre zugeordnet sind - kein Default)
 
-### __Ausrichtung der Videos auf einer Wordpress-Seite__
-Die Videos können links- oder rechtsbündig angeordnet werden. Der Text nach dem Video umfließt das Vorschaubild.
-```
-<div class="alignleft|alignright">
-
-[fauvideo id="http://www.video.uni-erlangen.de/clip/id/8352" width="420"  showtitle="1" showinfo="1" titletag="h4"]
-
-</div>
-Lo Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-```
 
 ## Einbindung des Plugins als Widget
 
