@@ -6,7 +6,7 @@ function rrze_video_add_settings_link($links)
 {
     $url = admin_url( 'options-general.php?page=rrze_video_settings' );
     $links = (array) $links;
-    $links[] = sprintf( '<a href="%s">%s</a>', $url, __( 'Settings' ) );
+    $links[] = sprintf( '<a href="%s">%s</a>', $url, __( 'Settings','rrze-video' ) );
     return $links;
 }
 add_filter( 'plugin_action_links', 'RRZE\PostVideo\rrze_video_add_settings_link' );
