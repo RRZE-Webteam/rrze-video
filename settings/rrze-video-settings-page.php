@@ -2,14 +2,16 @@
 namespace RRZE\PostVideo;
 
 // add link to settings page to plugin
-function rrze_video_add_settings_link($links)
+function rrze_video_add_settings_link($links,$file)
 {
-    $url = admin_url( 'options-general.php?page=rrze_video_settings' );
-    $links = (array) $links;
-    $links[] = sprintf( '<a href="%s">%s</a>', $url, __( 'Settings','rrze-video' ) );
+    if( $file == plugin_basename(dirname(__DIR__).'/rrze-video.php') && function_exists( 'admin_url' ) ) {
+        $url = admin_url( 'options-general.php?page=rrze_video_settings' );
+        $links = (array) $links;
+        $links[] = sprintf( '<a href="%s">%s</a>', $url, __( 'Settings','rrze-video' ) );
+    }
     return $links;
 }
-add_filter( 'plugin_action_links', 'RRZE\PostVideo\rrze_video_add_settings_link' );
+add_filter( 'plugin_action_links', 'RRZE\PostVideo\rrze_video_add_settings_link',10,2);
 
 add_action('admin_menu', 'RRZE\PostVideo\rrze_video_plugin_admin_settings');
 function rrze_video_plugin_admin_settings()
