@@ -34,16 +34,13 @@ function js_player_ajax()
                 var document_w = $(document).width();
 
                 var target     = ".videocontent" + id;
-                if( stage_w >= 480 || document_w < 640 ){
 
-                    me.attr('data-toggle',false);
-                    me.attr('data-target',target);
-                    target = '.video-preview' + id;
-
-                    // remove scrolltop click on container
-                    $(target).parents('.rrze-video-container').unbind('click');
-
-                }
+                // hotfix for strange browser freeze on some videos
+                me.attr('data-toggle',false);
+                me.attr('data-target',target);
+                target = '.video-preview' + id;
+                // remove scrolltop click on container
+                $(target).parents('.rrze-video-container').unbind('click');
 
                 $.ajax({
                     url: videoajax.ajaxurl,
