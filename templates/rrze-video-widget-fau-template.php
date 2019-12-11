@@ -3,13 +3,15 @@
     $video_title       = ( ! empty($showtitle) ) ? '<h2>' . $showtitle . '</h2>' : '';
     $preview_image_src = ( ! empty($thumbnail) ) ? $thumbnail : $preview_image;
     $preview_image_alt = sprintf( __('Bild zum Video %s','rrze-video'), $modaltitle );
+    
+
 ?>
 <div class="rrze-video rrze-video-widget-container">
     <?php echo $video_title; ?>
     <div class="rrze-video-defaultplayer">
         <div class="video-preview<?php echo $instance_id ?>" id="video-preview<?php echo $instance_id ?>">
             <a
-                href="<?php echo $url ?>"
+                href="<?php echo $orig_video_url ?>"
                 data-player-type="fauvideo"
                 data-toggle="modal"
                 data-type="videothumb"
