@@ -11,7 +11,7 @@
     <div class="rrze-video-defaultplayer">
         <div class="video-preview<?php echo $instance_id ?>" id="video-preview<?php echo $instance_id ?>">
             <a
-                href="<?php echo $orig_video_url ?>"
+                href="<?php echo $video_file ?>"
                 data-player-type="fauvideo"
                 data-toggle="modal"
                 data-type="videothumb"
