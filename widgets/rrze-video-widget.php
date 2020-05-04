@@ -210,7 +210,6 @@ class RRZE_Video_Widget extends \WP_Widget
                             'provider'   => 'youtube',
                             'id'         => $video_id,
                             'url'        => $url,
-                            'resolution' => $youtube_resolution,
                             'thumbnail'  => $thumbnail
                         );
                         $preview_image   = $helpers->video_preview_image('',$preview_image_opts);

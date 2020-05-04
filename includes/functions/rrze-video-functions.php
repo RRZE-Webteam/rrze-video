@@ -6,10 +6,9 @@ Class RRZE_Video_Functions {
     /**
      * Shared functions for widget and shortcode
      */
-    function video_preview_image($poster,$args=array())
-    {
+    function video_preview_image($poster,$args=array()) {
         $plugin_settings               = get_option('rrze_video_plugin_options');
-        $plugin_fallback_preview_image = plugins_url('assets/img/_preview.png',dirname(__DIR__));
+        $plugin_fallback_preview_image = plugins_url('/img/_preview.png',dirname(__DIR__));
         $settings_preview_image        = esc_url($plugin_settings['preview_image']);
         $preview_image_fallback        = ( ! empty( $settings_preview_image ) ) ? $settings_preview_image : $plugin_fallback_preview_image;
 
@@ -46,8 +45,7 @@ Class RRZE_Video_Functions {
         return $preview_image;
     }
 
-    function get_video_id_from_url( $url, $provider=false )
-    {
+    function get_video_id_from_url( $url, $provider=false )  {
         $video_id = false;
         if ( $url != '' ) {
             if ( ! empty( wp_parse_url( $url ) ) ) {
@@ -83,8 +81,7 @@ Class RRZE_Video_Functions {
         return $video_id;
     }
 
-    function is_fau_video( $url )
-    {
+    function is_fau_video( $url )  {
         $is_fau_video = false;
         // @@todo get the domains from settings/admin screen or general constants/vars?
         $fau_video_domains = array(
@@ -102,8 +99,7 @@ Class RRZE_Video_Functions {
         return $is_fau_video;
     }
 
-    function fetch_fau_video( $url )
-    {
+    function fetch_fau_video( $url ) {
 
         $fau_video =  array(
             'error'   => false,
@@ -138,8 +134,7 @@ Class RRZE_Video_Functions {
         return $widget_video;
     }
 
-    function get_video_title( $url, $id )
-    {
+    function get_video_title( $url, $id ) {
         if ( ! empty( $id ) ) {
             return false;
         } elseif ( ! empty( $url ) ) {
@@ -149,8 +144,7 @@ Class RRZE_Video_Functions {
         }
     }
 
-    function enqueue_scripts()
-    {
+    function enqueue_scripts() {
         wp_enqueue_script('rrze-main-js');
         wp_enqueue_style('mediaelementplayercss');
         wp_enqueue_script('mediaelementplayerjs');

@@ -88,7 +88,7 @@ function rrze_video_settings_section_preview_image_info_cb()
 {
 
     $options = get_option( 'rrze_video_plugin_options' );
-    $preview_image_default = plugin_dir_url(__DIR__) . 'assets/img/_preview.png';
+    $preview_image_default = plugin_dir_url(__DIR__) . 'img/_preview.png';
     if(esc_url($options['preview_image'])){
         $preview_image_default = $options['preview_image'];
     }

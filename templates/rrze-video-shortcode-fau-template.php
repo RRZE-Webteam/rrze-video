@@ -12,7 +12,7 @@
 <div class="rrze-video">
     <?php echo $video_title; ?>
     <div class="rrze-video-container rrze-video-id-<?php echo $instance_id; ?>">
-        <div class="video-preview<?php echo $instance_id ?>" id="video-preview<?php echo $instance_id ?>">
+        <div class="fauvideo video-preview<?php echo $instance_id ?>" id="video-preview<?php echo $instance_id ?>">
             <a
                 href="<?php echo $video_file; ?>"
                 data-player-type="fauvideo"

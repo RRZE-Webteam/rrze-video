@@ -6,8 +6,7 @@ add_shortcode('fauvideo', 'RRZE\PostVideo\show_video_on_page');
 add_action('wp_ajax_nopriv_get_js_player_action', 'RRZE\PostVideo\get_js_player_action');
 add_action('wp_ajax_get_js_player_action'       , 'RRZE\PostVideo\get_js_player_action');
 
-function show_video_on_page( $atts )
-{
+function show_video_on_page( $atts ) {
     global $post;
     $helpers = new RRZE_Video_Functions();
     $plugin_settings     = get_option( 'rrze_video_plugin_options' );
@@ -101,15 +100,15 @@ function show_video_on_page( $atts )
             $showtitle  = ($rrze_video_shortcode['showtitle'] == 1) ? get_the_title() : '';
             $preview_image_opts = array(
                 'provider'         => 'youtube',
-                'id'               => $video_id,
-                'resolution'       => $youtube_resolution
+                'id'               => $video_id
             );
             $preview_image = $helpers->video_preview_image($poster_shortcode, $preview_image_opts);
             $picture = $preview_image;
             ob_start();
             include(plugin_dir_path(__DIR__) . 'templates/rrze-video-shortcode-youtube-template.php');
             $html = ob_get_clean();
-
+	    
+	    echo "NO FAU VIDEO";
         }
 
     } else {
@@ -178,7 +177,6 @@ function show_video_on_page( $atts )
                         'provider'   => 'youtube',
                         'id'         => $video_id,
                         'url'        => $url_shortcode,
-                        'resolution' => $youtube_resolution,
                         'thumbnail'  => $thumbnail
                     );
                     $preview_image = $helpers->video_preview_image($poster_shortcode,$preview_image_opts);

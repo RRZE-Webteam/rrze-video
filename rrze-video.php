@@ -4,7 +4,7 @@
 Plugin Name: RRZE Video Plugin
 Plugin URI: https://github.com/RRZE-Webteam/rrze-video
 Description: This is a video plugin to show videos on pages and in the social media footer.
-Version: 2.1.0
+Version: 2.1.1-0
 Author: RRZE-Webteam
 Author URI: http://blogs.fau.de/webworking/
 License: GNU GPLv2
@@ -27,8 +27,8 @@ along with {Plugin Name}. If not, see {License URI}.
 
 namespace RRZE\PostVideo;
 
-const RRZE_PHP_VERSION = '7.0';
-const RRZE_WP_VERSION  = '5.2';
+const RRZE_PHP_VERSION = '7.4';
+const RRZE_WP_VERSION  = '5.3';
 
 add_action('plugins_loaded', 'RRZE\PostVideo\init');
 register_activation_hook(__FILE__, 'RRZE\PostVideo\activation');
@@ -103,18 +103,18 @@ function system_requirements() {
 }
 
 function rrze_video_admin_styles() {
-    wp_enqueue_style('rrze-video-admin-styles', plugins_url( 'rrze-video/assets/css/rrze-video-admin.css', dirname(__FILE__) ) );
+    wp_enqueue_style('rrze-video-admin-styles', plugins_url( 'rrze-video/css/rrze-video-admin.css', dirname(__FILE__) ) );
 }
 
 function custom_libraries_scripts() {
 
     global $post;
 
-    wp_register_script( 'rrze-main-js', plugins_url( 'rrze-video/assets/js/rrze-ajax.js', dirname(__FILE__)), array('jquery'),'', true);
+    wp_register_script( 'rrze-main-js', plugins_url( 'rrze-video/js/rrze-ajax.js', dirname(__FILE__)), array('jquery'),'', true);
     wp_register_style( 'mediaelementplayercss', includes_url( 'js/mediaelement/mediaelementplayer.min.css', dirname(__FILE__) ) );
     wp_register_script( 'mediaelementplayerjs', includes_url( 'js/mediaelement/mediaelement-and-player.min.js', dirname(__FILE__)), array('jquery'),'', true);
-    wp_register_style( 'rrze-video-css', plugins_url( 'rrze-video/assets/css/rrze-video.css', dirname(__FILE__) ) );
-    wp_register_script( 'rrze-video-js', plugins_url('rrze-video/assets/js/scripts.min.js', dirname(__FILE__)), array('jquery'),'' , true);
+    wp_register_style( 'rrze-video-css', plugins_url( 'rrze-video/css/rrze-video.css', dirname(__FILE__) ) );
+    wp_register_script( 'rrze-video-js', plugins_url('rrze-video/js/scripts.min.js', dirname(__FILE__)), array('jquery'),'' , true);
 
     wp_localize_script( 'rrze-main-js', 'videoajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
 

@@ -3,12 +3,15 @@
     if (!empty($showtitle)) {
         $video_title = '<' . $rrze_video_shortcode['titletag'] . '>' . $showtitle . '</' . $rrze_video_shortcode['titletag'] . '>';
     }
-    $player_type = ( !$show_youtube_player && $youtube_support == 0 ) ? 'mediaelement' : 'youtube';
+    $player_type ='mediaelement';
+    if ($show_youtube_player) {
+	$player_type = 'youtube';
+    }
 ?>
 <div class="rrze-video">
     <?php echo $video_title; ?>
     <div class="rrze-video-container rrze-video-id-<?php echo $instance_id ?>">
-        <div class="video-preview<?php echo $instance_id ?>" id="video-preview<?php echo $instance_id ?>">
+        <div class="<?php echo $player_type ?> video-preview<?php echo $instance_id ?>" id="video-preview<?php echo $instance_id ?>">
             <a
                 href="<?php echo 'https://www.youtube.com/watch?v=' . $video_id; ?>"
                 data-player-type="<?php echo $player_type ?>"
@@ -37,7 +40,7 @@
                 <div class="modal-body">
                     <div class="videocontent<?php echo $instance_id ?>">
                         <div class="player">
-                            <?php if(!$show_youtube_player && $youtube_support == 0) { ?>
+                            <?php if(!$show_youtube_player) { ?>
                                 <img title="preview_image" width="100%" src="<?php echo $preview_image; ?>" alt="Video Preview">
                             <?php } ?>
                         </div>
