@@ -1,7 +1,31 @@
-# Das RRZE-Video-Plugin
+# RRZE-Video
+
+Plugin zum Embedding von Videos auf FAU-Websites
+
+## Download 
+
+GITHub-Repo: https://github.com/RRZE-Webteam/rrze-video
+
+
+## Autor 
+RRZE-Webteam , http://www.rrze.fau.de
+
+## Copryright
+
+GNU General Public License (GPL) Version 2 
+
+
+## Zweck 
+
 Mit dem RRZE-Video-Plugin kann man sowohl Videos aus dem FAU Videoportal als auch Youtube Videos in eine Wordpress Website einbinden.
 
 Die Videos können als Shortcode sowie als Widget eingebunden werden.
+
+## Dokumentation
+
+Eine vollständige Dokumentation mit vielen Anwendungsbeispielen findet sich auf der Seite: 
+https://www.wordpress.rrze.fau.de/plugins/fau-und-rrze-plugins/rrze-video
+
 
 ## Installation und Vorbereitungen
 
