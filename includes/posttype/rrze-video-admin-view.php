@@ -58,7 +58,7 @@ function show_video_columns($column_name) {
     }
 }
 
-add_action('manage_posts_custom_column',  'RRZE\PostVideo\show_video_columns');
+add_action('manage_video_posts_custom_column',  'RRZE\PostVideo\show_video_columns');
 
 function video_sortable_columns() {
   return array(
