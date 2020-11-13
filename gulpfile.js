@@ -38,9 +38,9 @@ function cssdev() {
 function js() {
     return src('./src/js/*.js')
 //	.pipe(babel({
-  //          presets: ['@babel/env']
+  //         presets: ['@babel/env']
 //	}))
-//	.pipe(uglify())
+	.pipe(uglify())
 	.pipe(dest('./js'))
 	.pipe(touch());
 }
