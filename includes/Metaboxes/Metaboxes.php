@@ -1,11 +1,11 @@
 <?php
 
-namespace RRZE_Video\Metaboxes;
+namespace RRZE\Video\Metaboxes;
 
 defined('ABSPATH') || exit;
 
-use RRZE_Video\Main;
-use RRZE_Video\Metaboxes\Video;
+use RRZE\Video\Main;
+use RRZE\Video\Metaboxes\Video;
 
 
 class Metaboxes  {

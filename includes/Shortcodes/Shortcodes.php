@@ -1,11 +1,11 @@
 <?php
 
-namespace RRZE_Video\Shortcodes;
+namespace RRZE\Video\Shortcodes;
 
 defined('ABSPATH') || exit;
 
-use RRZE_Video\Main;
-use RRZE_Video\Shortcodes\Video;
+use RRZE\Video\Main;
+use RRZE\Video\Shortcodes\Video;
 
 
 /**

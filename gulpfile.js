@@ -15,6 +15,7 @@ const
     touch = require('gulp-touch-cmd')
 ;
 
+
 function css() {
     return src('./src/sass/*.scss', {
             sourcemaps: false
@@ -22,7 +23,7 @@ function css() {
         .pipe(sass())
         .pipe(postcss([autoprefixer()]))
         .pipe(cleancss())
-        .pipe(dest('./css'))
+        .pipe(dest(info.dist.cssdir))
 	.pipe(touch());
 }
 function cssdev() {
@@ -31,19 +32,22 @@ function cssdev() {
         })
         .pipe(sass())
         .pipe(postcss([autoprefixer()]))
-        .pipe(dest('./css'))
+        .pipe(dest(info.dist.cssdir))
 	.pipe(touch());
 }
 
+
 function js() {
-    return src('./src/js/*.js')
-//	.pipe(babel({
-  //         presets: ['@babel/env']
-//	}))
+    return src(['./src/js/*.js','!./src/js/**/*.min.js'])
+	.pipe(babel({
+            presets: ['@babel/env']
+	}))
 	.pipe(uglify())
-	.pipe(dest('./js'))
+	.pipe(dest(info.dist.jsdir))
 	.pipe(touch());
 }
+
+
 
 function patchPackageVersion() {
     var newVer = semver.inc(info.version, 'patch');
@@ -64,8 +68,9 @@ function prereleasePackageVersion() {
 	.pipe(touch());;
 };
 
+
 function updatepot()  {
-  return src("**/*.php")
+  return src(['**/*.php', '!vendor/**/*.php'])
   .pipe(
       wpPot({
         domain: info.textdomain,
@@ -81,6 +86,7 @@ function updatepot()  {
 };
 
 
+
 function startWatch() {
     watch('./src/sass/*.scss', css);
     watch('./src/js/*.js', js);
@@ -93,3 +99,6 @@ exports.build = series(js, css, patchPackageVersion);
 exports.pot = updatepot;
 
 exports.default = startWatch;
+
+
+

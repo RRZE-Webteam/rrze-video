@@ -1,7 +1,7 @@
 <?php
 
-namespace RRZE_Video;
-use function RRZE_Video\Config\getConstants;
+namespace RRZE\Video;
+use function RRZE\Video\Config\getConstants;
 
 defined('ABSPATH') || exit;
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace RRZE_Video\Taxonomy;
+namespace RRZE\Video\Taxonomy;
 
 defined('ABSPATH') || exit;
 
-use RRZE_Video\Main;
-use RRZE_Video\Taxonomy\Video;
+use RRZE\Video\Main;
+use RRZE\Video\Taxonomy\Video;
 /**
  * Laden und definieren der Posttypes
  */

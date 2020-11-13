@@ -2,7 +2,7 @@
     /*
      * FAU Themes use a breadcrumb.
      */
-    $helpers = new RRZE\PostVideo\RRZE_Video_Functions();
+    $helpers = new RRZE\PostVideo\RRZE\Video_Functions();
     $is_fau_theme = $helpers->is_fau_theme();
     if ( $is_fau_theme ) {
         // we need a breadcrumb.

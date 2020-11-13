@@ -1,6 +1,6 @@
 <?php
 
-namespace RRZE_Video\Config;
+namespace RRZE\Video\Config;
 
 defined('ABSPATH') || exit;
 
@@ -18,7 +18,17 @@ function getOptionName() {
  */
 function getConstants() {
         $options = array(
-	    
+	    'oembed-provider' => [
+		'fau'	=> [
+		    'domains'	=> [
+			'video.uni-erlangen.de',
+			'video.fau.de',
+			'fau.tv'
+		    ],
+		    'api-endpoint'  => 'https://www.video.uni-erlangen.de/services/oembed'
+		]
+	    ],
+
 	    'fauthemes' => [
 		'FAU-Einrichtungen', 
 		'FAU-Philfak',

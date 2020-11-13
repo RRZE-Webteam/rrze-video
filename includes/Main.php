@@ -1,17 +1,17 @@
 <?php
 
-namespace RRZE_Video;
+namespace RRZE\Video;
 
 defined('ABSPATH') || exit;
 
-use RRZE_Video\Settings;
-use RRZE_Video\Taxonomy\Taxonomy;
-use RRZE_Video\Templates\Templates;
-use RRZE_Video\Shortcodes\Shortcodes;
-use RRZE_Video\Widgets\Widgets;
-use RRZE_Video\Metaboxes\Metaboxes;
-use RRZE_Video\Helper;
-use function RRZE_Video\Config\getConstants;
+use RRZE\Video\Settings;
+use RRZE\Video\Taxonomy\Taxonomy;
+use RRZE\Video\Templates\Templates;
+use RRZE\Video\Shortcodes\Shortcodes;
+use RRZE\Video\Widgets\Widgets;
+use RRZE\Video\Metaboxes\Metaboxes;
+use RRZE\Video\Helper;
+use function RRZE\Video\Config\getConstants;
 	
 	
 

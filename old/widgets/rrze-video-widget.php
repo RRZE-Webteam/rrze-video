@@ -3,13 +3,13 @@
 namespace RRZE\PostVideo;
 
 add_action( 'widgets_init', function(){
-	register_widget( 'RRZE\PostVideo\RRZE_Video_Widget' );
+	register_widget( 'RRZE\PostVideo\RRZE\Video_Widget' );
 });
 
 add_action('wp_ajax_nopriv_get_js_player_action', 'RRZE\PostVideo\get_js_player_action');
 add_action('wp_ajax_get_js_player_action'       , 'RRZE\PostVideo\get_js_player_action');
 
-class RRZE_Video_Widget extends \WP_Widget
+class RRZE\Video_Widget extends \WP_Widget
 {
 
     /**
@@ -33,7 +33,7 @@ class RRZE_Video_Widget extends \WP_Widget
     public function widget( $args, $instance ) {
 
         global $post;
-        $helpers = new RRZE_Video_Functions();
+        $helpers = new RRZE\Video_Functions();
 
         $plugin_settings        = get_option('rrze_video_plugin_options');
         $show_youtube_player    = ( !empty( $plugin_settings['youtube_activate_checkbox'] )) ? $plugin_settings['youtube_activate_checkbox'] : 0;

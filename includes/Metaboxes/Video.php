@@ -1,6 +1,6 @@
 <?php
 
-namespace RRZE_Video\Metaboxes;
+namespace RRZE\Video\Metaboxes;
 
 defined('ABSPATH') || exit;
 

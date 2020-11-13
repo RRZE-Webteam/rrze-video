@@ -1,11 +1,11 @@
 <?php
 
-namespace RRZE_Video\Shortcodes;
-use function RRZE_Video\Config\getShortcodeSettings;
-use function RRZE_Video\Config\getShortcodeDefaults;
+namespace RRZE\Video\Shortcodes;
+use function RRZE\Video\Config\getShortcodeSettings;
+use function RRZE\Video\Config\getShortcodeDefaults;
 
 
-use RRZE_Video\Helper;
+use RRZE\Video\Helper;
 
 defined('ABSPATH') || exit;
 

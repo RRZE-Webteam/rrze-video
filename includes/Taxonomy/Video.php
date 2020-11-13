@@ -1,7 +1,7 @@
 <?php
 
-namespace RRZE_Video\Taxonomy;
-use function RRZE_Video\Config\get_rrze_video_capabilities;
+namespace RRZE\Video\Taxonomy;
+use function RRZE\Video\Config\get_rrze_video_capabilities;
 
 defined('ABSPATH') || exit;
 

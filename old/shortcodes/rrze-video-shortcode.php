@@ -8,7 +8,7 @@ add_action('wp_ajax_get_js_player_action'       , 'RRZE\PostVideo\get_js_player_
 
 function show_video_on_page( $atts ) {
     global $post;
-    $helpers = new RRZE_Video_Functions();
+    $helpers = new RRZE\Video_Functions();
     $plugin_settings     = get_option( 'rrze_video_plugin_options' );
     $show_youtube_player = ( ! empty( $plugin_settings['youtube_activate_checkbox'] ) ) ? $plugin_settings['youtube_activate_checkbox'] : 0;
 

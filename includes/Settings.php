@@ -1,17 +1,17 @@
 <?php
 
-namespace RRZE_Video;
+namespace RRZE\Video;
 
 defined('ABSPATH') || exit;
 
-use function RRZE_Video\Config\getOptionName;
-use function RRZE_Video\Config\getMenuSettings;
-use function RRZE_Video\Config\getHelpTab;
-use function RRZE_Video\Config\getHelpTabSidebar;
-use function RRZE_Video\Config\getSections;
-use function RRZE_Video\Config\getFields;
-use function RRZE_Video\Config\default_options;
-use function RRZE_Video\Config\getConstants;
+use function RRZE\Video\Config\getOptionName;
+use function RRZE\Video\Config\getMenuSettings;
+use function RRZE\Video\Config\getHelpTab;
+use function RRZE\Video\Config\getHelpTabSidebar;
+use function RRZE\Video\Config\getSections;
+use function RRZE\Video\Config\getFields;
+use function RRZE\Video\Config\default_options;
+use function RRZE\Video\Config\getConstants;
 
 /**
  * Settings-Klasse

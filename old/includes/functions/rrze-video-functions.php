@@ -2,7 +2,7 @@
 
 namespace RRZE\PostVideo;
 
-Class RRZE_Video_Functions {
+Class RRZE\Video_Functions {
     /**
      * Shared functions for widget and shortcode
      */
