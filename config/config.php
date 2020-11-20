@@ -18,16 +18,7 @@ function getOptionName() {
  */
 function getConstants() {
         $options = array(
-	    'oembed-provider' => [
-		'fau'	=> [
-		    'domains'	=> [
-			'video.uni-erlangen.de',
-			'video.fau.de',
-			'fau.tv'
-		    ],
-		    'api-endpoint'  => 'https://www.video.uni-erlangen.de/services/oembed'
-		]
-	    ],
+
 
 	    'fauthemes' => [
 		'FAU-Einrichtungen', 
@@ -160,13 +151,13 @@ function getShortcodeSettings(){
 			'default' => '',
 			'field_type' => 'text', // Art des Feldes im Gutenberg Editor
 			'label' => __( 'URL (Video)', 'rrze-video' ),
-			'type' => 'text' // Variablentyp der Eingabe
+			'type' => 'url' // Variablentyp der Eingabe
 		],
 		'poster' => [
 			'default' => '',
 			'field_type' => 'text', // Art des Feldes im Gutenberg Editor
 			'label' => __( 'URL (Vorschaubild)', 'rrze-video' ),
-			'type' => 'text' // Variablentyp der Eingabe
+			'type' => 'url' // Variablentyp der Eingabe
 		],
 		'category' => [
 			'default' => '',
@@ -204,7 +195,7 @@ function getShortcodeSettings(){
 			'default' => '',
 			'field_type' => 'text',
 			'label' => __( 'CSS Klassen, die der Shordcode erhalten soll.', 'rrze-video' ),
-			'type' => 'string' 
+			'type' => 'class' 
 		],
 		
 	    ],

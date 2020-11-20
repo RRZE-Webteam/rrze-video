@@ -40,7 +40,7 @@ function cssdev() {
 function js() {
     return src(['./src/js/*.js','!./src/js/**/*.min.js'])
 	.pipe(babel({
-            presets: ['@babel/env']
+        //    presets: ['@babel/env']
 	}))
 	.pipe(uglify())
 	.pipe(dest(info.dist.jsdir))

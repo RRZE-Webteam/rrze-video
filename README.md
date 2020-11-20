@@ -4,7 +4,7 @@ Plugin zum Embedding von Videos auf FAU-Websites
 
 ## Download 
 
-GITHub-Repo: https://github.com/RRZE-Webteam/rrze-video
+GitHub-Repo: https://github.com/RRZE-Webteam/rrze-video
 
 
 ## Autor 
@@ -20,6 +20,11 @@ GNU General Public License (GPL) Version 3
 Mit dem RRZE-Video-Plugin kann man sowohl Videos aus dem FAU Videoportal als auch Youtube Videos in eine Wordpress Website einbinden.
 
 Die Videos können als Shortcode sowie als Widget eingebunden werden.
+
+
+Als Player wird Plyr.io verwendet: 
+* Homepage https://plyr.io/
+* GitHub: https://github.com/sampotts/plyr
 
 ## Dokumentation
 
@@ -80,11 +85,7 @@ oder
 [fauvideo url="https://youtu.be/DF2aRrr21-M"  showtitle="1" showinfo="1" titletag="h2"]
 ```
 
-oder
 
-```
-[fauvideo url="DF2aRrr21-M" showtitle="1" showinfo="1" titletag="h2"]
-```
 
 * Das Argument "titletag" kann die Werte zwischen h1 und h6 annehmen. (Überschriftgröße - Default) h2)
 * Das Argument "showtitle" kann den Wert 0 oder 1 annehmen. (Der Titel wird angezeigt  - Default 1/on)

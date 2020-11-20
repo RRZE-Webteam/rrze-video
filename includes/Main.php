@@ -11,6 +11,7 @@ use RRZE\Video\Shortcodes\Shortcodes;
 use RRZE\Video\Widgets\Widgets;
 use RRZE\Video\Metaboxes\Metaboxes;
 use RRZE\Video\Helper;
+
 use function RRZE\Video\Config\getConstants;
 	
 	
@@ -35,13 +36,16 @@ class Main {
      * Es wird ausgeführt, sobald die Klasse instanziiert wird.
      */
     public function onLoaded() {
-	 add_action('wp_enqueue_scripts', [$this, 'registerFrontendStyles']);
+	add_action('wp_enqueue_scripts', [$this, 'registerFrontendStyles']);
+	add_action('admin_enqueue_scripts', [$this, 'adminEnqueueScripts']);
+	 
 
-	 // Settings-Klasse wird instanziiert.
-
+	// Settings-Klasse wird instanziiert.
         $settings = new Settings($this->pluginFile);
         $settings->onLoaded();
 	$this->settings = $settings;
+	
+	
 	// $this->options = $settings->options;
 
 
@@ -75,7 +79,7 @@ class Main {
         $backend->onLoaded();
 	
 
-		
+		      
 	
 	
 
@@ -96,7 +100,12 @@ class Main {
     public function registerFrontendStyles() {
 	wp_register_style('rrze-video', plugins_url('css/rrze-video.css', plugin_basename($this->pluginFile)));
     }
-        
+    public function adminEnqueueScripts($hook) {
+        global $post_type;
+
+        wp_enqueue_style('rrze-video-admin',plugins_url('assets/css/rrze-bideo-admin.css', plugin()->getBasename()), [], plugin()->getVersion() );
+
+    }
     
     public static function enqueueFrontendStyles() {
 	 wp_enqueue_style('rrze-video');  
