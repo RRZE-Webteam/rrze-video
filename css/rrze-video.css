@@ -1403,3 +1403,10 @@ Custom Settings for Plyr CSS
 .plyr,
 .rrze-video {
   --plyr-color-main: #003366; }
+
+.rrze-video .youtube-video,
+.rrze-video .vimeo-video,
+.rrze-video video {
+  object-fit: cover;
+  max-width: 100%;
+  height: auto; }

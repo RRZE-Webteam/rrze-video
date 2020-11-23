@@ -7,15 +7,13 @@ use function RRZE\Video\Config\getShortcodeSettings;
 use RRZE\Video\OEmbed;
 
 class Player {
-    
-    
     private static $counter = 0;
 
     public function __construct() {
       self::$counter++;
     }
     
-    function get_player_html($provider, $data, $id = '') {
+    static function get_player_html($provider, $data, $id = '') {
 	$res = '';
 	$providerlist = OEmbed::get_known_provider();
 	if ((!isset($provider)) || (!isset($providerlist[$provider]))) {	 
@@ -38,13 +36,22 @@ class Player {
 	
 
 	$thumbnail = '';
-	if ($data['poster']) {
-	    $thumbnail = $data['poster'];
-	} elseif ($data['video']['thumbnail_url']) {
-	    $thumbnail = $data['video']['thumbnail_url'];    
-	} elseif ($data['video']['preview_image']) {
-	    $thumbnail = $data['video']['preview_image'];
+	if (isset($data['poster'])) {
+	    $poster = $data['poster'];
+	} elseif (isset($data['video']['preview_image'])) {
+	    $poster = $data['video']['preview_image'];    
+	} elseif (isset($data['video']['thumbnail_url'])) {
+	    $poster = $data['video']['thumbnail_url'];    
 	}
+	  $lang = $hreflang = '';
+	
+	    if (isset($data['inLanguage'])) {
+		$lang = $data['inLanguage'];
+		$hreflang = explode("-",$lang)[0];
+	    } elseif (isset($data['language'])) {
+		$lang = $data['language'];
+		$hreflang = explode("-",$lang)[0];
+	    }
 	
 	
 	$res .= '<div class="rrze-video">';
@@ -60,11 +67,10 @@ class Player {
 	if ($provider == 'youtube') {
 	    $id = $data['video']['v'];
 	    
-	    $res .= '<div class="'.$classname.'" data-plyr-provider="youtube" data-plyr-embed-id="'.$data['video']['v'].'"></div>';
+	    $res .= '<div class="youtube-video '.$classname.'" data-plyr-provider="youtube" data-plyr-embed-id="'.$data['video']['v'].'"></div>';
 	    
 	} elseif ($provider == 'vimeo') {    
-   
-	    $res .= '<div class="'.$classname.'" data-plyr-provider="vimeo" data-plyr-embed-id="'.$data['video']['video_id'].'"></div>';
+	    $res .= '<div class="vimeo-video '.$classname.'" data-plyr-provider="vimeo" data-plyr-embed-id="'.$data['video']['video_id'].'"></div>';
 
 	} elseif ($provider == 'fau') {
 
@@ -72,14 +78,21 @@ class Player {
 	    
 	    if ($data['video']['title']) {
 		$res .= ' data-plyr-config=\'{"title": "'.$data['video']['title'].'"}\'';
+	    } 
+	    if ($poster) {
+		$res .= ' poster="'.$poster.'" data-poster="'.$poster.'"';
+	    }
+	    if (isset($data['video']['width'])) {
+		$res .= ' width="'.$data['video']['width'].'"';
+	    }
+	     if (isset($data['video']['height'])) {
+		$res .= ' height="'.$data['video']['height'].'"';
 	    }
 	    
-	    if ($thumbnail) {
-		$res .= ' data-poster="'.$thumbnail.'"';
-	    }
-	    
-	    
+	    $res .= ' itemscope itemtype="https://schema.org/Movie"';
 	    $res .= '>';
+	    
+	    $res .= self::get_html_structuredmeta($data);
 	    
 	    $path = parse_url($data['video']['file'], PHP_URL_PATH);
 	    $ext = pathinfo($path, PATHINFO_EXTENSION);
@@ -90,11 +103,34 @@ class Player {
 		$res .= '<source src="'.$data['video']['file'].'" type="video/mp4">';
 	    }
 
-	    
-	    
-	    if ($data['video']['transcript']) {
-		  $res .= '<track kind="captions" label="English captions" src="'.$data['video']['transcript'].'" default />';
+	    if (isset($data['video']['alternative_Video_size_large']) && isset($data['video']['alternative_Video_size_large_url'])) {
+		$path = parse_url($data['video']['alternative_Video_size_large_url'], PHP_URL_PATH);
+		$ext = pathinfo($path, PATHINFO_EXTENSION);
+		$res .= '<source src="'.$data['video']['alternative_Video_size_large_url'].'" type="video/'.$ext.'" size="'.$data['video']['alternative_Video_size_large_width'].'">';
 	    }
+	    if (isset($data['video']['alternative_Video_size_medium']) && isset($data['video']['alternative_Video_size_medium_url'])) {
+		$path = parse_url($data['video']['alternative_Video_size_medium_url'], PHP_URL_PATH);
+		$ext = pathinfo($path, PATHINFO_EXTENSION);
+		$res .= '<source src="'.$data['video']['alternative_Video_size_medium_url'].'" type="video/'.$ext.'" size="'.$data['video']['alternative_Video_size_medium_width'].'">';
+	    }
+	    
+	    if (isset($data['video']['transcript'])) {
+		  $res .= '<track kind="captions" label="'.__('Audiotranskription','rrze-video').'" src="'.$data['video']['transcript'].'" default';
+		  if ($hreflang) {
+		      $res .= ' hreflang="'.$hreflang.'"';
+		  }
+		  $res .= '>';
+	    }
+	    $res .= '<p class="alert alert-warning">';
+	    $res .= __('Ihr Browser unterstützt leider keine HTML5 Videoformate. Bitte rufen Sie das Video direkt unter folgenden Adressen auf:', 'rrze-video');
+	    $res .= '</p>';	   
+	    $res .= '<ul>';
+	    if (isset($data['url'])) {
+		$res .= '<li>Video <a href="'.$data['url'].'">'.$data['video']['title'].' im Videoportal</a> anschauen</li>';
+	    }
+	    $res .= '<li>Video <a href="'.$data['video']['file'].'">'.$data['video']['title'].' als Datei laden</a> und anschauen</li>';
+	    $res .= '</ul>';
+	    
 	    $res .= '</video>';
 	} else {
 	     $res .= '<div class="alert clearfix clear alert-danger">';
@@ -109,5 +145,51 @@ class Player {
     }
 
     
+    static function get_html_structuredmeta($data) {
+	    if (isset($data['video']['title'])) {
+		 $res = '<meta itemprop="name" content="'.$data['video']['title'].'">';
+	    }
+	   if (isset($data['poster'])) {
+		$poster = $data['poster'];
+	    } elseif (isset($data['video']['preview_image'])) {
+		$poster = $data['video']['preview_image'];    
+	    } elseif (isset($data['video']['thumbnail_url'])) {
+		$poster = $data['video']['thumbnail_url'];    
+	    }
+	    $lang = $hreflang = '';
+	
+	    if (isset($data['inLanguage'])) {
+		$lang = $data['inLanguage'];
+		$hreflang = explode("-",$lang)[0];
+	    } elseif (isset($data['language'])) {
+		$lang = $data['language'];
+		$hreflang = explode("-",$lang)[0];
+	    }
+	
+	    
+	    $res .= '<meta itemprop="image" content="'.$poster.'">';
+	    if (isset($data['video']['upload_date'])) {
+		 $res .= '<meta itemprop="dateCreated" content="'.$data['video']['upload_date'].'">';
+	    }
+	    if (isset($data['video']['author_name'])) {
+		 $res .= '<meta itemprop="director" content="'.$data['video']['author_name'].'">';
+	    }
+	    if ($hreflang) {
+		$res .= '<meta itemprop="inLanguage" content="'.$hreflang.'">';
+	    }
+	   if (isset($data['video']['provider_name'])) {
+		$res .= '<meta itemprop="provider" content="'.$data['video']['provider_name'].'">';
+	    }
+	    if (isset($data['video']['thumbnail_url']) && ($data['video']['thumbnail_url'] != $poster) ) {
+		$res .= '<meta itemprop="thumbnailUrl" content="'.$data['video']['thumbnail_url'].'">';
+	    }
+	    if (isset($data['video']['duration'])) {
+		$res .= '<meta itemprop="duration" content="'.$data['video']['duration'].'">';
+	    }
+	    if (isset($data['video']['description']) && (!empty($data['video']['description']))) {
+		$res .= '<meta itemprop="abstract" content="'.$data['video']['description'].'">';
+	    }
+	    return $res;
+    }
     
 }

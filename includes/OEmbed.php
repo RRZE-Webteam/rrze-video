@@ -41,7 +41,7 @@ class OEmbed {
     }
     
 
-    public function is_oembed_provider( $url ) {
+    static function is_oembed_provider( $url ) {
 	if (!isset($url)) {
 	    return '';
 	}
@@ -62,21 +62,21 @@ class OEmbed {
 	return $res;
     }
     
-    function get_oembed_data( $provider, $url ) {
+    static function get_oembed_data( $provider, $url ) {
 	if (!isset($provider)) {
 	    return;
 	}
 	
 	if ($provider == 'fau') {
-	    return self::fetch_fau_video($url);
+	    return self::sanitize_oembed_data(self::fetch_fau_video($url));
 	} elseif ($provider == 'youtube') {
-	     return self::fetch_youtube_video($url);
+	    return self::sanitize_oembed_data(self::fetch_youtube_video($url));
 	} else {
-	    return self::fetch_defaultoembed_video($provider, $url);
+	    return self::sanitize_oembed_data(self::fetch_defaultoembed_video($provider, $url));
 	}
 	
     }
-    function fetch_defaultoembed_video( $provider, $url ) {
+    static function fetch_defaultoembed_video( $provider, $url ) {
 	$known = self::get_known_provider();
         $videodata =  array(
             'error'   => false,
@@ -98,7 +98,7 @@ class OEmbed {
 
     }
     
-    function fetch_youtube_video( $url ) {
+    static function fetch_youtube_video( $url ) {
 	$known = self::get_known_provider();
         $videodata =  array(
             'error'   => false,
@@ -124,7 +124,7 @@ class OEmbed {
 
     }
 
-    function fetch_fau_video( $url ) {
+    static function fetch_fau_video( $url ) {
 	$known = self::get_known_provider();
         $fau_video =  array(
             'error'   => false,
@@ -149,5 +149,40 @@ class OEmbed {
 
     }
 
-    
+    static function sanitize_oembed_data($data) {
+	// dont trust them ;)
+	$urllist = array("file", "url", "preview_image", "poster", "thumbnail_url", "alternative_Video_size_large_url", "alternative_Video_size_medium_url", "transcript","provider_url");
+	$textstrings = array("inLanguage", "author_name", "title", "provider_name", "type", "version");
+	$textareastrings  = array("description");
+	$htmllist = array("html");
+	$numbers = array("width", "height", "thumbnail_width", "thumbnail_height", "alternative_Video_size_large_width", "alternative_Video_size_large_height", "alternative_Video_size_medium_width", "alternative_Video_size_medium_height");
+	
+	if (is_array($data)) {
+	    if (isset($data['error'])) {
+		$data['error'] = sanitize_text_field($data['error']);
+	    }
+	    if (is_array($data['video'])) {
+		foreach ($data['video'] as $key => $value) {
+		    if (in_array($key, $urllist)) {
+			$data['video'][$key] = esc_url_raw($data['video'][$key]);
+		    } elseif (in_array($key, $textstrings)) {
+			$data['video'][$key] = sanitize_text_field($data['video'][$key]);
+		    } elseif (in_array($key, $textareastrings)) {
+			$data['video'][$key] = sanitize_textarea_field($data['video'][$key]);
+		    } elseif (in_array($key, $htmllist)) {
+			   // stay intact
+			$data['video'][$key] = $data['video'][$key];
+		    } elseif (in_array($key, $numbers)) {
+			$data['video'][$key] = intval($data['video'][$key]);	
+		    } else {
+			$data['video'][$key] = sanitize_text_field($data['video'][$key]);
+		    }
+		}
+	    }
+	}
+	return $data;
+    }
 }
+
+
+

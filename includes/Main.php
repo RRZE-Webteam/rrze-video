@@ -79,13 +79,7 @@ class Main {
         $backend->onLoaded();
 	
 
-		      
-	
-	
 
-
-
-		
 	// Add Widget
         $widget = new Widgets($this->pluginFile, $settings); 
         $widget->onLoaded();
@@ -99,6 +93,7 @@ class Main {
     
     public function registerFrontendStyles() {
 	wp_register_style('rrze-video', plugins_url('css/rrze-video.css', plugin_basename($this->pluginFile)));
+
     }
     public function adminEnqueueScripts($hook) {
         global $post_type;
@@ -107,7 +102,7 @@ class Main {
 
     }
     
-    public static function enqueueFrontendStyles() {
+    static function enqueueFrontendStyles() {
 	 wp_enqueue_style('rrze-video');  
     }
     

@@ -9,6 +9,7 @@ use RRZE\Video\Data;
 use RRZE\Video\OEmbed;
 use RRZE\Video\Helper;
 use RRZE\Video\Player;
+use RRZE\Video\Main;
 
 defined('ABSPATH') || exit;
 
@@ -51,6 +52,7 @@ class Video extends Shortcodes {
 	    $content .= Helper::get_html_var_dump($oembeddata);
 	    $content .= Player::get_player_html($isoembed, $oembeddata);
 		
+	   Main::enqueueFrontendStyles('rrze-video');  
 	}
 	return $content;
 	
