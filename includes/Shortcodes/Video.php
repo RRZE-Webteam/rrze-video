@@ -40,23 +40,50 @@ class Video extends Shortcodes {
 	$arguments = Data::sanitize_shortcodeargs($arguments);
 	
 	$content = '';
-	$content .= Helper::get_html_var_dump($arguments);
 
 	if ($arguments['url']) {
 	    // check for oembed
 	    $isoembed = OEmbed::is_oembed_provider($arguments['url']);
 	    
-	    $content .= "Oembed: ".$isoembed;
-	    $oembeddata = OEmbed::get_oembed_data($isoembed,$arguments['url']);
-	    
-	    $content .= Helper::get_html_var_dump($oembeddata);
-	    $content .= Player::get_player_html($isoembed, $oembeddata);
+	    if (empty($isoembed)) {
+		$content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+		$content .= '<strong>';
+		$content .= __('Unbekannte Videoquelle','rrze-video');
+		$content .= '</strong><br>';
+		$content .= __('Der folgenden Adresse konnte keinem bekannten Videoprovider zugeordnet werden oder dieser verfügt nicht über eine geeignete Standard-API (oEmbed) zum Abruf von Videos.','rrze-video');
+		$content .= __('Bitte rufen Sie das Video daher auf, indem Sie direkt den folgenden Link folgen:','rrze-video');
+		$content .= ' <a href="'.$arguments['url'].'" rel="nofollow">'.$arguments['url'].'</a>';
+		$content .= '</div>';
 		
-	   Main::enqueueFrontendStyles('rrze-video');  
+	    } else {
+	//	$content .= "Oembed: ".$isoembed;
+		$oembeddata = OEmbed::get_oembed_data($isoembed,$arguments['url']);
+
+		if (isset($oembeddata['error']) && (!empty($oembeddata['error']))) {
+
+		    $content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+		    $content .= '<strong>';
+		    $content .= __('Fehler beim Abruf des Videos:','rrze-video');
+		    $content .= '</strong><br>';
+		    $content .= $oembeddata['error'];
+		    $content .= '</div>';
+
+		} else {
+		    $arguments['video'] = $oembeddata['video'];
+
+		    $content .= Helper::get_html_var_dump($arguments);
+		    $content .= Player::get_player_html($isoembed, $arguments);
+
+		    Main::enqueueFrontendStyles('rrze-video');  
+
+
+		}
+	    }
 	}
 	return $content;
 	
     }
+   
    
 }
 

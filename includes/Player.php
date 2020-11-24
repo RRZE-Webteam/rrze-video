@@ -36,11 +36,11 @@ class Player {
 	
 
 	$thumbnail = '';
-	if (isset($data['poster'])) {
+	if (isset($data['poster']) && (!empty($data['poster']))) {
 	    $poster = $data['poster'];
-	} elseif (isset($data['video']['preview_image'])) {
+	} elseif (isset($data['video']['preview_image']) && (!empty($data['video']['preview_image']))) {
 	    $poster = $data['video']['preview_image'];    
-	} elseif (isset($data['video']['thumbnail_url'])) {
+	} elseif (isset($data['video']['thumbnail_url']) && (!empty($data['video']['thumbnail_url']))) {
 	    $poster = $data['video']['thumbnail_url'];    
 	}
 	  $lang = $hreflang = '';
@@ -61,20 +61,37 @@ class Player {
 		    // This is need to display more as one video embed in the same page
 		    $id = self::$counter++;
 		}
-	$classname = 'plyr-videonum-'.$id;
+	$classname = 'plyr-instance plyr-videonum-'.$id;
 	
 	
 	if ($provider == 'youtube') {
-	    $id = $data['video']['v'];
 	    
-	    $res .= '<div class="youtube-video '.$classname.'" data-plyr-provider="youtube" data-plyr-embed-id="'.$data['video']['v'].'"></div>';
-	    
+	    $classname = 'plyr-videonum-'.$id;
+	    $res .= '<div class="youtube-video '.$classname.'"';
+	    $res .= ' itemscope itemtype="https://schema.org/Movie"';
+	    $res .= '>';
+	    $res .= self::get_html_structuredmeta($data);
+	    $res .= '<div class="plyr-instance" data-plyr-provider="youtube" data-plyr-embed-id="'.$data['video']['v'].'"';
+	    if ($data['video']['title']) {
+		$res .= ' data-plyr-config=\'{"title": "'.$data['video']['title'].'"}\'';
+	    } 
+	    $res .= '></div>';
+	    $res .= '</div>';
 	} elseif ($provider == 'vimeo') {    
-	    $res .= '<div class="vimeo-video '.$classname.'" data-plyr-provider="vimeo" data-plyr-embed-id="'.$data['video']['video_id'].'"></div>';
-
+	    $classname = 'plyr-videonum-'.$id;
+	    $res .= '<div class="vimeo-video '.$classname.'"';
+	    $res .= ' itemscope itemtype="https://schema.org/Movie"';
+	    $res .= '>';
+	    $res .= self::get_html_structuredmeta($data);
+	    $res .= '<div class="plyr-instance" data-plyr-provider="vimeo" data-plyr-embed-id="'.$data['video']['video_id'].'"';
+	    if ($data['video']['title']) {
+		$res .= ' data-plyr-config=\'{"title": "'.$data['video']['title'].'"}\'';
+	    } 
+	    $res .= '></div>';
+	    $res .= '</div>';
 	} elseif ($provider == 'fau') {
-
-	    $res .= '<video class="'.$classname.'" playsinline controls';
+	    $classname = 'plyr-instance plyr-videonum-'.$id;
+	    $res .= '<video class="'.$classname.'" playsinline controls crossorigin="anonymous"';
 	    
 	    if ($data['video']['title']) {
 		$res .= ' data-plyr-config=\'{"title": "'.$data['video']['title'].'"}\'';
@@ -133,13 +150,12 @@ class Player {
 	    
 	    $res .= '</video>';
 	} else {
-	     $res .= '<div class="alert clearfix clear alert-danger">';
+	    $res .= '<div class="alert clearfix clear alert-danger">';
 	    $res .= __('Videoprovider fehlerhaft definiert.', 'rrze-video');
-	    $res .= '</div>';	   
+	    $res .= '</div>';	
+	    return $res;
 	}
-	
-	
-	
+
 	 $res .= '</div>';
 	  return $res;
     }
@@ -149,11 +165,11 @@ class Player {
 	    if (isset($data['video']['title'])) {
 		 $res = '<meta itemprop="name" content="'.$data['video']['title'].'">';
 	    }
-	   if (isset($data['poster'])) {
+	   if (isset($data['poster']) && (!empty($data['poster']))) {
 		$poster = $data['poster'];
-	    } elseif (isset($data['video']['preview_image'])) {
+	    } elseif (isset($data['video']['preview_image']) && (!empty($data['video']['preview_image']))) {
 		$poster = $data['video']['preview_image'];    
-	    } elseif (isset($data['video']['thumbnail_url'])) {
+	    } elseif (isset($data['video']['thumbnail_url']) && (!empty($data['video']['thumbnail_url']))) {
 		$poster = $data['video']['thumbnail_url'];    
 	    }
 	    $lang = $hreflang = '';
@@ -171,13 +187,13 @@ class Player {
 	    if (isset($data['video']['upload_date'])) {
 		 $res .= '<meta itemprop="dateCreated" content="'.$data['video']['upload_date'].'">';
 	    }
-	    if (isset($data['video']['author_name'])) {
+	    if (isset($data['video']['author_name']) && (!empty($data['video']['author_name']))) {
 		 $res .= '<meta itemprop="director" content="'.$data['video']['author_name'].'">';
 	    }
 	    if ($hreflang) {
 		$res .= '<meta itemprop="inLanguage" content="'.$hreflang.'">';
 	    }
-	   if (isset($data['video']['provider_name'])) {
+	   if (isset($data['video']['provider_name']) && (!empty($data['video']['provider_name']))) {
 		$res .= '<meta itemprop="provider" content="'.$data['video']['provider_name'].'">';
 	    }
 	    if (isset($data['video']['thumbnail_url']) && ($data['video']['thumbnail_url'] != $poster) ) {
@@ -185,6 +201,9 @@ class Player {
 	    }
 	    if (isset($data['video']['duration'])) {
 		$res .= '<meta itemprop="duration" content="'.$data['video']['duration'].'">';
+	    }
+	    if (isset($data['video']['version'])) {
+		$res .= '<meta itemprop="version" content="'.$data['video']['version'].'">';
 	    }
 	    if (isset($data['video']['description']) && (!empty($data['video']['description']))) {
 		$res .= '<meta itemprop="abstract" content="'.$data['video']['description'].'">';

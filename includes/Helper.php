@@ -34,7 +34,23 @@ class Helper {
 	return $fautheme;   
     }
     
-    public static function get_html_var_dump($input) {
+    public static function get_html_var_dump($input, $nohtml = true) {
+	if ($nohtml) {
+	    foreach ($input as $key => $value) {
+	 
+		if (is_array($value)) {
+		    foreach ($value as $skey => $svalue) {
+			if (is_string($svalue)) {
+			    $input[$key][$skey] = '<em>'.esc_html($svalue).'</em>';
+			}
+		    }
+		} elseif (is_string($value)) {
+		     $input[$key] = esc_html($value);
+		}
+	    }
+	   
+	}
+	
 	$out = self::get_var_dump($input);
 	
 	$out = preg_replace("/=>[\r\n\s]+/", ' => ', $out);

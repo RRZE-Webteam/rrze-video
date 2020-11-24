@@ -93,18 +93,26 @@ class Main {
     
     public function registerFrontendStyles() {
 	wp_register_style('rrze-video', plugins_url('css/rrze-video.css', plugin_basename($this->pluginFile)));
-
+	wp_register_script('plyr', plugins_url('js/plyr.js', plugin_basename($this->pluginFile)), '', '', false);
+	wp_register_script('rrze-video-scripts', plugins_url('js/rrze-video.js', plugin_basename($this->pluginFile), array('plyr-js')));
+	
     }
     public function adminEnqueueScripts($hook) {
         global $post_type;
 
-        wp_enqueue_style('rrze-video-admin',plugins_url('assets/css/rrze-bideo-admin.css', plugin()->getBasename()), [], plugin()->getVersion() );
+        wp_enqueue_style('rrze-video-admin',plugins_url('assets/css/rrze-video-admin.css', plugin()->getBasename()), [], plugin()->getVersion() );
 
     }
     
     static function enqueueFrontendStyles() {
 	 wp_enqueue_style('rrze-video');  
+	 wp_enqueue_script('plyr',plugins_url('js/plyr.js',  plugin()->getBasename()), '', '', false);
+	 wp_enqueue_script('rrze-video-scripts');
+	 
+	
+	 
     }
+    
     
 
 	
