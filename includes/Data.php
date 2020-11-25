@@ -28,9 +28,10 @@ class Data {
 			    $value = sanitize_textarea_field($value);
 			    break;
 			case 'text':
+			case 'string':	    
 			    $value = sanitize_text_field($value);
 			    break;
-			case 'string':
+			
 			case 'slug':
 			    $value = sanitize_title($value);
 			    break;

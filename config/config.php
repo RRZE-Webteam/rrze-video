@@ -159,44 +159,38 @@ function getShortcodeSettings(){
 			'label' => __( 'URL (Vorschaubild)', 'rrze-video' ),
 			'type' => 'url' // Variablentyp der Eingabe
 		],
-		'category' => [
-			'default' => '',
-			'field_type' => 'text', // Art des Feldes im Gutenberg Editor
-			'label' => __( 'Kategorie', 'rrze-video' ),
-			'type' => 'text' // Variablentyp der Eingabe
-		],
-		'showinfo' => [
-		    'field_type' => 'toggle',
-		    'label' => __( 'Metadaten zeigen', 'rrze-video' ),
-		    'type' => 'boolean',
-		    'checked'   => false, // Vorauswahl: ausgewählt
-		    'default'	=> false
-		],
-		'showtitle' => [
-		    'field_type' => 'toggle',
-		    'label' => __( 'Titel zeigen', 'rrze-video' ),
-		    'type' => 'boolean',
-		    'checked'   => true, // Vorauswahl: ausgewählt
-		    'default'	=> true
-		],
 		'titletag' => [
 			'default' => 'h2',
 			'field_type' => 'text', // Art des Feldes im Gutenberg Editor
 			'label' => __( 'Titletag', 'rrze-video' ),
 			'type' => 'text' // Variablentyp der Eingabe
 		],
-		'hstart' => [
-			'default' => 2,
-			'field_type' => 'number',
-			'label' => __( 'Überschriftenebene des Titels', 'rrze-video' ),
-			'type' => 'integer' 
-		],
+
 		'class' => [
 			'default' => '',
 			'field_type' => 'text',
 			'label' => __( 'CSS Klassen, die der Shordcode erhalten soll.', 'rrze-video' ),
 			'type' => 'class' 
 		],
+		'showtitle' => [
+			'default' => false,
+			'field_type' => 'bool',
+			'label' => __( 'Titel über den Video anzeigen', 'rrze-video' ),
+			'type' => 'bool' 
+		],
+		'showinfo' => [
+			'default' => false,
+			'field_type' => 'bool',
+			'label' => __( 'Metainfo unter den Video anzeigen', 'rrze-video' ),
+			'type' => 'bool' 
+		],
+		'show' => [
+			'default' => '',
+			'field_type' => 'text',
+			'label' => __( 'Anzuzeigende Felder, obige Checkboxen überschreibend', 'rrze-video' ),
+			'type' => 'string' 
+		],
+	
 		
 	    ],
 

@@ -7,7 +7,7 @@ use function RRZE\Video\Config\getShortcodeSettings;
 use RRZE\Video\OEmbed;
 
 class Player {
-    private static $counter = 0;
+    private static $counter = 1;
 
     public function __construct() {
       self::$counter++;
@@ -33,7 +33,32 @@ class Player {
 	    $res .= '</div>';
 	    return $res;
 	}
+	$showvals = explode(',', $data['show']);
+	$showtitle = $showmeta =  $showdesc = $showlink = false;
 	
+	foreach ($showvals as $value) {
+	    $key = esc_attr(trim($value));
+	    switch($key) {
+		case 'title':
+		    $showtitle = true;
+		    break;
+		case 'info':
+		    $showmeta = true;
+		    $showlink = true;
+		    $showdesc = true;
+		    break;
+		case 'meta':
+		    $showmeta = true;
+		     break;
+		case 'desc':
+		    $showdesc = true;
+		     break;
+		case 'link':
+		    $showlink = true;
+		     break;
+	    }
+	    
+	}
 
 	$thumbnail = '';
 	if (isset($data['poster']) && (!empty($data['poster']))) {
@@ -54,7 +79,18 @@ class Player {
 	    }
 	
 	
-	$res .= '<div class="rrze-video">';
+	$res .= '<div class="rrze-video';
+	
+	if (isset($data['class']) && (!empty($data['class']))) {
+	    $res .= ' '.$data['class'];
+	}
+	$res .= '">';
+	
+	if ($showtitle) {
+	    $titletag = $data['titletag'];
+	    $res .= '<'.$titletag.'>'.$data['video']['title'].'</'.$titletag.'>';
+	}
+	
 	
 	if ($id == '') {
 		    // create Random number to make a uniq class name
@@ -72,9 +108,13 @@ class Player {
 	    $res .= '>';
 	    $res .= self::get_html_structuredmeta($data);
 	    $res .= '<div class="plyr-instance" data-plyr-provider="youtube" data-plyr-embed-id="'.$data['video']['v'].'"';
+	    
+	    $res .= ' data-plyr-config=\'{';
+	    $res .= ' "youtube": "{ noCookie: true }"';
 	    if ($data['video']['title']) {
-		$res .= ' data-plyr-config=\'{"title": "'.$data['video']['title'].'"}\'';
+		$res .= ', "title": "'.$data['video']['title'].'"';
 	    } 
+	    $res .= '}\'';
 	    $res .= '></div>';
 	    $res .= '</div>';
 	} elseif ($provider == 'vimeo') {    
@@ -131,23 +171,23 @@ class Player {
 		$res .= '<source src="'.$data['video']['alternative_Video_size_medium_url'].'" type="video/'.$ext.'" size="'.$data['video']['alternative_Video_size_medium_width'].'">';
 	    }
 	    
-	    if (isset($data['video']['transcript'])) {
+	    if (isset($data['video']['transcript']) && (!empty($data['video']['transcript']))) {
 		  $res .= '<track kind="captions" label="'.__('Audiotranskription','rrze-video').'" src="'.$data['video']['transcript'].'" default';
 		  if ($hreflang) {
 		      $res .= ' hreflang="'.$hreflang.'"';
 		  }
 		  $res .= '>';
 	    }
-	    $res .= '<p class="alert alert-warning">';
-	    $res .= __('Ihr Browser unterstützt leider keine HTML5 Videoformate. Bitte rufen Sie das Video direkt unter folgenden Adressen auf:', 'rrze-video');
-	    $res .= '</p>';	   
-	    $res .= '<ul>';
+	   // $res .= '<div class="alert alert-warning">';
+	    $res .= __('Ihr Browser unterstützt leider keine HTML5 Videoformate. ', 'rrze-video');
+
 	    if (isset($data['url'])) {
-		$res .= '<li>Video <a href="'.$data['url'].'">'.$data['video']['title'].' im Videoportal</a> anschauen</li>';
+		$res .= 'Rufen Sie daher das Video <a href="'.$data['url'].'">'.$data['video']['title'].'</a> im Videoportal auf.';
+	    } else {
+		$res .= 'Rufen Sie die Videodatei <a href="'.$data['video']['file'].'">'.$data['video']['title'].'</a> direkt auf.';
 	    }
-	    $res .= '<li>Video <a href="'.$data['video']['file'].'">'.$data['video']['title'].' als Datei laden</a> und anschauen</li>';
-	    $res .= '</ul>';
 	    
+
 	    $res .= '</video>';
 	} else {
 	    $res .= '<div class="alert clearfix clear alert-danger">';
@@ -155,7 +195,47 @@ class Player {
 	    $res .= '</div>';	
 	    return $res;
 	}
+	
+	if (($showdesc) && isset($data['video']['description']) && (!empty($data['video']['description']))) {
+	    $res .= '<p class="desc">'.$data['video']['description'].'</p>';
+	}
+	if ($showmeta) {
+	    $meta = '';
+	
+	    if (isset($data['video']['author_name']) && (!empty($data['video']['author_name']))) {
+		$meta .= '<dt>'.__('Autor','rrze-video').'</dt><dd>';
+		 if (isset($data['video']['author_url']) && (!empty($data['video']['author_url']))) {
+		      $meta .= '<a href="'.data['video']['author_url'].'">';
+		 }
+		 $meta .= $data['video']['author_name'];
+		 if (isset($data['video']['author_url']) && (!empty($data['video']['author_url']))) {
+		      $meta .= '</a>';
+		 }
+		$meta .=  '</dd>';    
+	    }
+	    if (isset($data['url']) && (!empty($data['url']))) {
+		$meta .= '<dt>'.__('Quelle','rrze-video').'</dt><dd><a href="'.$data['url'].'">'.$data['url'].'</a></dd>';    
+	    }
+	    if (isset($data['video']['provider_name']) && (!empty($data['video']['provider_name']))) {
+		$meta .= '<dt>'.__('Provider','rrze-video').'</dt><dd>';
+		if (isset($data['video']['provider_url']) && (!empty($data['video']['provider_url']))) {
+		    $meta .= '<a href="'.data['video']['provider_url'].'">';
+		}
+		$meta .= $data['video']['provider_name'];
+		
+		if (isset($data['video']['provider_url']) && (!empty($data['video']['provider_url']))) {
+		    $meta .= '</a>';
+		}
+		$meta .= '</dd>';    
+	    }
+	    if (!empty($meta)) {
+		$res .= '<dl class="meta">'.$meta.'</dl>';
+	    }
+	} elseif ($showlink && isset($data['url']) && (!empty($data['url']))) {
+	    $res .= '<p class="link">'.__('Quelle','rrze-video').': <a href="'.$data['url'].'">'.$data['url'].'</a></p>';    
+	}
 
+	
 	 $res .= '</div>';
 	  return $res;
     }

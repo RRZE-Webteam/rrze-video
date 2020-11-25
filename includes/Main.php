@@ -104,11 +104,12 @@ class Main {
 
     }
     
-    static function enqueueFrontendStyles() {
+    static function enqueueFrontendStyles( $plyr = true) {
 	 wp_enqueue_style('rrze-video');  
-	 wp_enqueue_script('plyr',plugins_url('js/plyr.js',  plugin()->getBasename()), '', '', false);
-	 wp_enqueue_script('rrze-video-scripts');
-	 
+	 if ($plyr) {
+	    wp_enqueue_script('plyr',plugins_url('js/plyr.js',  plugin()->getBasename()), '', '', false);
+	    wp_enqueue_script('rrze-video-scripts');
+	 }
 	
 	 
     }
