@@ -15,12 +15,14 @@ class OEmbed {
 			'www.video.uni-erlangen.de', 'www.video.fau.de',
 			'fau.tv'
 		    ],
+		'home'	=> 'https://www.video.uni-erlangen.de',
 		'api-endpoint'  => 'https://www.video.uni-erlangen.de/services/oembed'
 		],
 	    'youtube'	=> [
 		'domains'   => [
 		    'www.youtube.com', 'youtube.com', 'youtu.be',
 		],
+		'home'	=> 'https://www.youtube.com',
 		'api-endpoint'  => 'https://www.youtube.com/oembed'
 		
 	    ],
@@ -28,6 +30,7 @@ class OEmbed {
 		'domains'   => [
 		    'vimeo.com', 'player.vimeo.com'
 		],
+		'home'	=> 'https://vimeo.com',
 		'api-endpoint'  => 'https://vimeo.com/api/oembed.json'
 	    ],
 	 //    'instagram' => [
@@ -136,12 +139,24 @@ class OEmbed {
         if( ! is_array( $matches ) ){
             $fau_video['error'] = 'FAU-Video URL enthält keine gültige Video Id';
         } else {
-            $oembed_url    = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
+	    $endpoint_url = $known['fau']['api-endpoint'].'?url='.$url.'&format=json';
+	    $oembed_url    = $endpoint_url;
+   //         $oembed_url    = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
             $remote_get    = wp_safe_remote_get( $oembed_url, array( 'sslverify' => true ));
             if ( is_wp_error( $remote_get ) ) {
                 $fau_video['error'] = $remote_get->get_error_message();
             } else {
                 $fau_video['video'] = json_decode( wp_remote_retrieve_body( $remote_get ), true);
+		
+		if ((isset($fau_video['video']['provider_videoindex_url'])) && (preg_match('/^\//',$fau_video['video']['provider_videoindex_url']))) {
+		    $fau_video['video']['provider_videoindex_url'] = $endpoint_url = $known['fau']['home'].$fau_video['video']['provider_videoindex_url'];
+		}
+		if ((isset($fau_video['video']['alternative_VideoFolien_size_large'])) && (preg_match('/^\//',$fau_video['video']['alternative_VideoFolien_size_large']))) {
+		    $fau_video['video']['alternative_VideoFolien_size_large'] = $endpoint_url = $known['fau']['home'].$fau_video['video']['alternative_VideoFolien_size_large'];
+		}
+		if ((isset($fau_video['video']['alternative_Audio'])) && (preg_match('/^\//',$fau_video['video']['alternative_Audio']))) {
+		    $fau_video['video']['alternative_Audio'] = $endpoint_url = $known['fau']['home'].$fau_video['video']['alternative_Audio'];
+		}
             }
         }
 

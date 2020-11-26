@@ -114,6 +114,9 @@ class Player {
 	    if ($data['video']['title']) {
 		$res .= ', "title": "'.$data['video']['title'].'"';
 	    } 
+	    if ($poster) {
+		$res .= ', "poster": "'.$$poster.'"';
+	    } 
 	    $res .= '}\'';
 	    $res .= '></div>';
 	    $res .= '</div>';
@@ -178,7 +181,6 @@ class Player {
 		  }
 		  $res .= '>';
 	    }
-	   // $res .= '<div class="alert alert-warning">';
 	    $res .= __('Ihr Browser unterstützt leider keine HTML5 Videoformate. ', 'rrze-video');
 
 	    if (isset($data['url'])) {
@@ -216,6 +218,17 @@ class Player {
 	    if (isset($data['url']) && (!empty($data['url']))) {
 		$meta .= '<dt>'.__('Quelle','rrze-video').'</dt><dd><a href="'.$data['url'].'">'.$data['url'].'</a></dd>';    
 	    }
+	//    if (isset($data['video']['provider_videoindex_url']) && (!empty($data['video']['provider_videoindex_url'])) && ($data['video']['provider_videoindex_url'] !== $data['url'])) {
+	//	$meta .= '<dt>'.__('Video-Sammlung','rrze-video').'</dt><dd><a href="'.$data['video']['provider_videoindex_url'].'">'.$data['video']['provider_videoindex_url'].'</a></dd>';    
+	//    }
+	    if (isset($data['video']['alternative_VideoFolien_size_large']) && (!empty($data['video']['alternative_VideoFolien_size_large'])) && ($data['video']['alternative_VideoFolien_size_large'] !== $data['url'])) {
+		$meta .= '<dt>'.__('Video mit Vortragsfolien','rrze-video').'</dt><dd><a href="'.$data['video']['alternative_VideoFolien_size_large'].'">'.$data['video']['alternative_VideoFolien_size_large'].'</a></dd>';    
+	    }
+	    if (isset($data['video']['alternative_Audio']) && (!empty($data['video']['alternative_Audio'])) && ($data['video']['alternative_Audio'] !== $data['url'])) {
+		$meta .= '<dt>'.__('Audio-Format','rrze-video').'</dt><dd><a href="'.$data['video']['alternative_Audio'].'">'.$data['video']['alternative_Audio'].'</a></dd>';    
+	    }
+
+	    
 	    if (isset($data['video']['provider_name']) && (!empty($data['video']['provider_name']))) {
 		$meta .= '<dt>'.__('Provider','rrze-video').'</dt><dd>';
 		if (isset($data['video']['provider_url']) && (!empty($data['video']['provider_url']))) {
@@ -232,7 +245,12 @@ class Player {
 		$res .= '<dl class="meta">'.$meta.'</dl>';
 	    }
 	} elseif ($showlink && isset($data['url']) && (!empty($data['url']))) {
-	    $res .= '<p class="link">'.__('Quelle','rrze-video').': <a href="'.$data['url'].'">'.$data['url'].'</a></p>';    
+	    $res .= '<p class="link">'.__('Quelle','rrze-video').': <a href="'.$data['url'].'">'.$data['url'].'</a>';
+	    
+	     if (isset($data['video']['provider_videoindex_url']) && (!empty($data['video']['provider_videoindex_url']))) {
+		$res .= '<br>'.__('Dieses Video ist Teil einer Video-Sammlung','rrze-video').': <a href="'.$data['video']['provider_videoindex_url'].'">'.$data['video']['provider_videoindex_url'].'</a>';    
+	    }
+	    $res .= '</p>';    
 	}
 
 	

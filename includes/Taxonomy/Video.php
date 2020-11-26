@@ -33,22 +33,12 @@ class Video extends Taxonomy {
 	    'name'                  => _x( 'Videothek', 'Post Type General Name', 'rrze-video' ),
 	    'singular_name'         => _x( 'Video', 'Post Type Singular Name', 'rrze-video' ),
 	    'menu_name'             => __( 'Videothek', 'rrze-video' ),
-	    'parent_item_colon'     => __( 'Übergeordnetes Video', 'rrze-video' ),
-	    'all_items'             => __( 'Alle Videos', 'rrze-video' ),
-	    'add_new_item'          => __( 'Neues Video hinzufügen', 'rrze-video' ),
-	    'add_new'               => __( 'Video hinzufügen', 'rrze-video' ),
-	    'edit_item'             => __( 'Video bearbeiten', 'rrze-video' ),
-	    'update_item'           => __( 'Video aktualisieren', 'rrze-video' ),
-	    'view_item'             => __( 'Video anzeigen', 'rrze-video' ),
-	    'search_items'          => __( 'Video suchen', 'rrze-video' ),
-	    'not_found'             => __( 'Nicht gefunden', 'rrze-video' ),
-	    'not_found_in_trash'    => __( 'Nicht im Papierkorb gefunden', 'rrze-video' ),
         ];
 	
 	$caps = get_rrze_video_capabilities();
 	$video_args = array(
 	    'label'                 => __( 'Video', 'rrze-video' ),
-	    'description'           => __( 'Videos auf der Webseite anzeigen', 'rrze-video' ),
+	    'description'           => __( 'Videosammlung erstellen', 'rrze-video' ),
 	    'labels'                => $labels,
 	    'supports'              => array( 'title', 'thumbnail' ),
 	    'taxonomies'            => array( 'Genre' ),
@@ -59,8 +49,8 @@ class Video extends Taxonomy {
 	    'show_ui'               => true, 
 	    'show_in_menu'          => true,
 	    'menu_position'         => 5,
-	    'has_archive'           => true,		
-	    'exclude_from_search'   => false,
+	    'has_archive'           => false,		
+	    'exclude_from_search'   => true,
 	    'query_var'		=>  $this->postType,
 	    'rewrite'		=> [
 		'slug'	    => $this->postType,
@@ -97,8 +87,29 @@ class Video extends Taxonomy {
 	add_action('manage_video_posts_custom_column', array( $this, 'show_video_columns'), 10, 2 ); 	
 	add_filter('manage_edit-video_sortable_columns', array( $this, 'video_sortable_columns' ));
 	add_filter('manage_edit-video_columns', array( $this, 'video_columns')) ;
+	
+	// add_filter('post_row_actions', array( $this, 'remove_quickedit'), 10, 2 ); 
+	add_filter('bulk_actions-edit-video', array( $this, 'remove_bulkactions'), 10, 2 ); 	
+
     }
 
+    public function remove_quickedit ( $action, $post ) {
+	 if ($post->post_type == 'video') {
+	// Remove "Quick Edit"
+	    unset($actions['inline hide-if-no-js']);
+	}
+	return $actions;
+    }
+    public function remove_bulkactions ( $action ) {
+	
+	// Remove "Quick Edit"
+	    unset($actions['edit']);
+
+	return $actions;
+    }
+    
+    
+    
     
     public function taxonomy_filter_post_type_request( $query ) {
 	global $pagenow, $typenow;
@@ -139,14 +150,13 @@ class Video extends Taxonomy {
      
     public function video_columns( $columns ) {
 	$columns = array(
-            'cb'            => '<input type="checkbox" />',
-            'title'         => __( 'Title', 'rrze-video' ),
-            'id'            => __( 'ID', 'rrze-video'),
-            'url'           => __( 'Url', 'rrze-video' ),
-            'thumbnail'     => __( 'Thumbnail', 'rrze-video' ),
-            'description'   => __( 'Beschreibung', 'rrze-video' ),
+     //       'cb'            => '<input type="checkbox" />',
+	     'id'            => __( 'ID', 'rrze-video'),
+            'title'         => __( 'Titel', 'rrze-video' ),
+           
+            'url'           => __( 'URL', 'rrze-video' ),
+            'thumbnail'     => __( 'Vorschaubild', 'rrze-video' ),
              $this->taxonomy  => __( 'Kategorie', 'rrze-video' ),
-            'date'          => __( 'Datum', 'rrze-video' ),
 	);
 
 	return $columns;
@@ -167,20 +177,9 @@ class Video extends Taxonomy {
 		$video = get_post_meta($post->ID, 'url', true);
 		echo $video;
 		break;
-	    case 'video':
-		$video = get_post_meta($post->ID, 'video_id', true);
-		echo $video;
-		break;
-	    case 'youtube':
-		$youtube = get_post_meta($post->ID, 'youtube_id', true);
-		echo $youtube;
-		break;
-	    case 'description':
-		$description = get_post_meta($post->ID, 'description', true);
-		echo $description;
-		break;
+
 	    case 'thumbnail':
-		$thumbnail = get_the_post_thumbnail($post->ID,  array( 80, 45));
+		$thumbnail = get_the_post_thumbnail($post->ID,  'medium');
 		echo $thumbnail;
 		break;
 	     case 'genre':

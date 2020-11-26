@@ -77,13 +77,7 @@ function getFields() {
     return [
 
 	'constants' => [
-	     [
-		'name'  => 'youtube_activate_checkbox',
-		'label' => __('Nutze YouTube Player', 'rrze-video'),
-		'desc'  => __('Falls der Default YouTube-Player statt des WordPress Mediaelement-Players genutzt werden soll, hier aktivieren', 'rrze-video'),
-		'type'  => 'checkbox',
-		'default' => false,
-            ],
+	    
 	     [
 		'name'  => 'preview_image',
 		'label' => __('Video Thumbnail', 'rrze-video'),
@@ -165,7 +159,12 @@ function getShortcodeSettings(){
 			'label' => __( 'Titletag', 'rrze-video' ),
 			'type' => 'text' // Variablentyp der Eingabe
 		],
-
+		'rand' => [
+			'default' => '',
+			'field_type' => 'slug',
+			'label' => __( 'Kategorie (Slug) der Videothek aus der per Zufall ein Video gezeigt werden soll.', 'rrze-video' ),
+			'type' => 'slug' 
+		],
 		'class' => [
 			'default' => '',
 			'field_type' => 'text',

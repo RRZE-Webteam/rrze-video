@@ -43,13 +43,15 @@ class Video extends Metaboxes {
 		    'id' => $prefix . 'url',
 		    'default'	=> ''
 		),
-		
+	/*	
 		array(
 		    'name' => __('Beschreibung', 'rrze-video'),
 		    'desc' => __('', 'rrze-video'),
 		    'type' => 'textarea_small',
 		    'id' => $prefix . 'description',
 		),
+	  */
+	 
 	    )
 	);
 
