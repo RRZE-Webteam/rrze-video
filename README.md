@@ -18,9 +18,10 @@ GNU General Public License (GPL) Version 3
 ## Zweck 
 
 Mit dem RRZE-Video-Plugin kann man sowohl Videos aus dem FAU Videoportal, YouTube und Vimeo in eine Wordpress Website einbinden.
-
 Die Videos können als Shortcode sowie als Widget eingebunden werden.
 
+
+## Credits
 
 Als Player wird Plyr.io verwendet: 
 * Homepage https://plyr.io/
@@ -75,5 +76,26 @@ Folgender Parameter ist optional und beeinflussen die Ausgabe zusätzlicher Date
 
 
 
+## Beispielaufrufe als Shortcode
+
+* Anzeige eins Videos aus dem Videoportal der FAU
+
+```
+[fauvideo url="https://www.video.uni-erlangen.de/webplayer/id/36475"]
+```
+
+
+* Anzeige eins Videos aus YouTube
+
+```
+[fauvideo url="https://www.youtube.com/watch?v=3dMLwu8V3tI"]
+```
+
+
+* Anzeige eins Videos aus Vimeo
+
+```
+[fauvideo url="https://vimeo.com/335918196"]
+```
 
 
