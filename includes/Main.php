@@ -8,12 +8,11 @@ use RRZE\Video\Settings;
 use RRZE\Video\Taxonomy\Taxonomy;
 use RRZE\Video\Templates\Templates;
 use RRZE\Video\Shortcodes\Shortcodes;
-use RRZE\Video\Widgets\Widgets;
 use RRZE\Video\Metaboxes\Metaboxes;
+use RRZE\Video\Widget;
 use RRZE\Video\Helper;
 
 use function RRZE\Video\Config\getConstants;
-	
 	
 
 /**
@@ -44,10 +43,6 @@ class Main {
         $settings = new Settings($this->pluginFile);
         $settings->onLoaded();
 	$this->settings = $settings;
-	
-	
-	// $this->options = $settings->options;
-
 
 
 	// Posttypes 
@@ -62,29 +57,13 @@ class Main {
 		// Add Shortcodes
         $shortcodes = new Shortcodes($this->pluginFile, $settings); 
         $shortcodes->onLoaded();
-	
-		 /*
-	// Posttypes 
-        $plugins = new Plugins($this->pluginFile, $settings);
-        $plugins->onLoaded();
-
-	
-	// Templates 
-        $templates = new Templates($this->pluginFile, $settings);
-        $templates->onLoaded();
-		
-	
-	// Backend Setting pages
-        $backend = new BackendMenu($this->pluginFile, $settings);
-        $backend->onLoaded();
-	
 
 
 	// Add Widget
-        $widget = new Widgets($this->pluginFile, $settings); 
+        $widget = new Widget($this->pluginFile, $settings); 
         $widget->onLoaded();
 	
-	*/
+
 	return;			
     }
     

@@ -5,6 +5,7 @@ defined('ABSPATH') || exit;
 use function RRZE\Video\Config\getConstants;
 use function RRZE\Video\Config\getShortcodeSettings;
 use RRZE\Video\OEmbed;
+use RRZE\Video\Helper;
 
 class Player {
     private static $counter = 1;
@@ -13,6 +14,129 @@ class Player {
       self::$counter++;
     }
     
+    
+    static function get_player($arguments) {
+	$content = '';	
+	
+	if (!isset($arguments)) {
+	    $content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+	    $content .= __('Fehler bei der Anzeige des Videoplayers: Es wurden keine ausreichenden Daten übergeben.','rrze-video');
+	    $content .= '</div>';
+	    return $content;
+	}
+	if (empty($arguments['url'])) {
+	    // Try to get URL by ID or by Random
+	    if (($arguments['id']) && (intval($arguments['id'])>0)) {
+		    $post = get_post($arguments['id']);
+                    if ($post && $post->post_type == 'video') {
+			
+			$posterdata = wp_get_attachment_image_src(get_post_thumbnail_id($arguments['id']), 'full');
+			if (isset($posterdata) && is_array($posterdata)) {
+			    $arguments['poster'] = $posterdata[0];
+			}
+			
+			$url = get_post_meta($arguments['id'], 'url', true);
+			if (isset($url)) {
+			   $arguments['url'] = esc_url_raw($url);
+			}
+		    }		
+	    } elseif (isset($arguments['rand']) && (!empty($arguments['rand']))) {
+		
+		$term = get_term_by('slug', $arguments['rand'], 'genre');
+		if ($term) {
+		     $argumentsTaxonomy = array(
+			    'post_type'		=> 'video',
+			    'post_status'	=> array( 'published' ),
+			    'posts_per_page'	=> 1,
+			    'orderby'		=>  'rand',
+			    'tax_query' => array(
+				array(
+				    'taxonomy'      => $term->taxonomy,
+				    'field'         => 'term_id', 
+				    'terms'         => $term->term_id,
+				),
+			    ),
+			);
+		     $random_query = new \WP_Query( $argumentsTaxonomy );
+		   
+		     if ($random_query->have_posts()) {
+			while ($random_query->have_posts()) {
+			     $random_query->the_post();
+			     $randvideoid = get_the_ID() ;
+			   
+			    $posterdata = wp_get_attachment_image_src(get_post_thumbnail_id($randvideoid), 'full');
+			    if (isset($posterdata) && is_array($posterdata)) {
+				$arguments['poster'] = $posterdata[0];
+			    }
+
+			    $url = get_post_meta($randvideoid, 'url', true);
+			    if (isset($url)) {
+			       $arguments['url'] = esc_url_raw($url);
+			    }
+			}
+		    }
+		    wp_reset_postdata();
+		} 
+		
+	    }
+	}
+	if ($arguments['url']) {
+	    // check for oembed
+	    $isoembed = OEmbed::is_oembed_provider($arguments['url']);
+	    
+	    if (empty($isoembed)) {
+		$content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+		$content .= '<strong>';
+		$content .= __('Unbekannte Videoquelle','rrze-video');
+		$content .= '</strong><br>';
+		$content .= __('Der folgenden Adresse konnte keinem bekannten Videoprovider zugeordnet werden oder dieser verfügt nicht über eine geeignete Standard-API (oEmbed) zum Abruf von Videos.','rrze-video');
+		$content .= __('Bitte rufen Sie das Video daher auf, indem Sie direkt den folgenden Link folgen:','rrze-video');
+		$content .= ' <a href="'.$arguments['url'].'" rel="nofollow">'.$arguments['url'].'</a>';
+		$content .= '</div>';
+		
+	    } else {
+	//	$content .= "Oembed: ".$isoembed;
+		$oembeddata = OEmbed::get_oembed_data($isoembed,$arguments['url']);
+
+		if (isset($oembeddata['error']) && (!empty($oembeddata['error']))) {
+
+		    $content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+		    $content .= '<strong>';
+		    $content .= __('Fehler beim Abruf des Videos','rrze-video');
+		    $content .= '</strong><br>';
+		    $content .= $oembeddata['error'];
+		    $content .= '</div>';
+
+		} else {
+		    $arguments['video'] = $oembeddata['video'];
+		    		    
+		//    $content .= Helper::get_html_var_dump($arguments);
+		    $content .= self::get_player_html($isoembed, $arguments);
+
+		    Main::enqueueFrontendStyles(true);  
+
+
+		}
+	    }
+	} else {
+	    $content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+	    $content .= '<strong>';
+	    $content .= __('Fehler beim Abruf des Videos','rrze-video');
+	    $content .= '</strong><br>';
+	    if ((isset($arguments['id'])) && ($arguments['id']>0)) {
+		$content .= __('Die verwendete Id des Videos ist ungültig oder konnte keinem Video zugeordnet werden.','rrze-video');
+	    } elseif ($arguments['rand']) {
+		$content .= __('Es konnte kein Video aus der angegebenen Kategorie gefunden werden','rrze-video');
+		$content .= ': "'.$arguments['rand'].'"';
+	    } else {
+		$content .= __('Es wurde weder eine gültige Id noch eine keine gültige URL für ein Video angegeben.','rrze-video');
+	    }
+	//     $content .= Helper::get_html_var_dump($arguments);
+	    $content .= '</div>';
+	}
+	return $content;
+    }
+
     static function get_player_html($provider, $data, $id = '') {
 	$res = '';
 	$providerlist = OEmbed::get_known_provider();
@@ -60,7 +184,7 @@ class Player {
 	    
 	}
 
-	$thumbnail = '';
+
 	if (isset($data['poster']) && (!empty($data['poster']))) {
 	    $poster = $data['poster'];
 	} elseif (isset($data['video']['preview_image']) && (!empty($data['video']['preview_image']))) {
@@ -87,7 +211,11 @@ class Player {
 	$res .= '">';
 	
 	if ($showtitle) {
+	    if (!isset($data['titletag'])) {
+		$data['titletag'] = 'h2';
+	    }
 	    $titletag = $data['titletag'];
+	   
 	    $res .= '<'.$titletag.'>'.$data['video']['title'].'</'.$titletag.'>';
 	}
 	
