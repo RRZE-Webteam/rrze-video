@@ -61,6 +61,7 @@ class Video_Widget extends \WP_Widget {
         $arguments['url']   = ( !empty($instance['url']) ) ? $instance['url'] : '';	
         $arguments['rand']   = ( !empty($instance['genre']) ) ? $instance['genre'] : '';
 
+	$arguments['show'] = '';
 	if (!empty($instance['showtitle'])) {
 	    $arguments['show'] .= "title,";
 	}
@@ -90,9 +91,9 @@ class Video_Widget extends \WP_Widget {
      * @param array $instance The widget options
      */
     public function form( $instance ) {
-        $id = ! empty( $instance['id'] )  ? $instance['id'] : '';
-        $url	= ! empty( $instance['url'] ) ? $instance['url'] : '';
-        $rand	= ! empty( $instance['genre'] ) ? $instance['genre'] : '';
+        $id	= !empty( $instance['id'] )  ? $instance['id'] : '';
+        $url	= !empty( $instance['url'] ) ? $instance['url'] : '';
+        $rand	= !empty( $instance['genre'] ) ? $instance['genre'] : '';
 	
         $meta	= !empty($instance['meta']) ? true : false;
 	$title	= !empty($instance['showtitle']) ? true : false;
@@ -163,7 +164,7 @@ class Video_Widget extends \WP_Widget {
                                 $opts_select = 0;
                                 $opts_html   = '';
                                 foreach($terms as $term) {
-                                    if ($term->name == $genre) {
+                                    if ($term->name == $rand) {
                                         $selected = ' selected';
                                         $opts_select++;
                                     } else {
@@ -220,16 +221,29 @@ class Video_Widget extends \WP_Widget {
     public function update( $new_instance, $old_instance ) {
 
         $instance = $old_instance;
-        $instance[ 'id' ]             = sanitize_key( $new_instance[ 'id' ] );
-        $instance[ 'url' ]            = esc_url_raw( $new_instance[ 'url' ] );
+	if (isset( $new_instance[ 'id' ]))
+	    $instance[ 'id' ]             = sanitize_key( $new_instance[ 'id' ] );
+	
+	if (isset($new_instance[ 'url' ]))
+	    $instance[ 'url' ]            = esc_url_raw( $new_instance[ 'url' ] );
 
-	$instance[ 'meta' ]           = intval( $new_instance[ 'meta' ] );
-	$instance[ 'showtitle' ]      = intval( $new_instance[ 'showtitle' ] );
-	$instance[ 'desc' ]           = intval( $new_instance[ 'desc' ] );
-	$instance[ 'link' ]           = intval( $new_instance[ 'link' ] );
-	$instance[ 'info' ]           = intval( $new_instance[ 'info' ] );
+	if (isset($new_instance[ 'meta' ])) 
+	    $instance[ 'meta' ]           = intval( $new_instance[ 'meta' ] );
+	
+	if (isset($new_instance[ 'showtitle' ]))
+	    $instance[ 'showtitle' ]      = intval( $new_instance[ 'showtitle' ] );
+	
+	if (isset($new_instance[ 'desc' ]))
+	    $instance[ 'desc' ]           = intval( $new_instance[ 'desc' ] );
+	
+	if (isset( $new_instance[ 'link' ]))
+	    $instance[ 'link' ]           = intval( $new_instance[ 'link' ] );
+	
+	if (isset($new_instance[ 'info' ]))
+	    $instance[ 'info' ]           = intval( $new_instance[ 'info' ] );
 
-	$instance[ 'genre' ]          = sanitize_title( $new_instance[ 'genre' ] );
+	if (isset($new_instance[ 'genre' ]))
+	    $instance[ 'genre' ]          = strip_tags( $new_instance[ 'genre' ] );
 	
 
         return $instance;

@@ -243,7 +243,7 @@ class Player {
 		$res .= ', "title": "'.$data['video']['title'].'"';
 	    } 
 	    if ($poster) {
-		$res .= ', "poster": "'.$$poster.'"';
+		$res .= ', "poster": "'.$poster.'"';
 	    } 
 	    $res .= '}\'';
 	    $res .= '></div>';
@@ -335,7 +335,7 @@ class Player {
 	    if (isset($data['video']['author_name']) && (!empty($data['video']['author_name']))) {
 		$meta .= '<dt>'.__('Autor','rrze-video').'</dt><dd>';
 		 if (isset($data['video']['author_url']) && (!empty($data['video']['author_url']))) {
-		      $meta .= '<a href="'.data['video']['author_url'].'">';
+		      $meta .= '<a href="'.$data['video']['author_url'].'">';
 		 }
 		 $meta .= $data['video']['author_name'];
 		 if (isset($data['video']['author_url']) && (!empty($data['video']['author_url']))) {
@@ -360,7 +360,7 @@ class Player {
 	    if (isset($data['video']['provider_name']) && (!empty($data['video']['provider_name']))) {
 		$meta .= '<dt>'.__('Provider','rrze-video').'</dt><dd>';
 		if (isset($data['video']['provider_url']) && (!empty($data['video']['provider_url']))) {
-		    $meta .= '<a href="'.data['video']['provider_url'].'">';
+		    $meta .= '<a href="'.$data['video']['provider_url'].'">';
 		}
 		$meta .= $data['video']['provider_name'];
 		
