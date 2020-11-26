@@ -36,7 +36,6 @@ class Main {
      */
     public function onLoaded() {
 	add_action('wp_enqueue_scripts', [$this, 'registerFrontendStyles']);
-	add_action('admin_enqueue_scripts', [$this, 'adminEnqueueScripts']);
 	 
 
 	// Settings-Klasse wird instanziiert.
@@ -76,12 +75,7 @@ class Main {
 	wp_register_script('rrze-video-scripts', plugins_url('js/rrze-video.js', plugin_basename($this->pluginFile), array('plyr-js')));
 	
     }
-    public function adminEnqueueScripts($hook) {
-        global $post_type;
 
-        wp_enqueue_style('rrze-video-admin',plugins_url('assets/css/rrze-video-admin.css', plugin()->getBasename()), [], plugin()->getVersion() );
-
-    }
     
     static function enqueueFrontendStyles( $plyr = true) {
 	 wp_enqueue_style('rrze-video');  

@@ -17,23 +17,9 @@ function getOptionName() {
  * @return array 
  */
 function getConstants() {
-        $options = array(
-
-
-	    'fauthemes' => [
-		'FAU-Einrichtungen', 
-		'FAU-Philfak',
-		'FAU-Natfak', 
-		'FAU-RWFak', 
-		'FAU-Medfak', 
-		'FAU-Techfak',
-		'FAU-Jobs'
-		],
-	    'admin_posts_per_page'  => 25,
-
-        );               
+        $options = array();               
         // für ergänzende Optionen aus anderen Plugins
-        $options = apply_filters('rrze_video_constants', $options);
+    //    $options = apply_filters('rrze_video_constants', $options);
         return $options; // Standard-Array für zukünftige Optionen
     }
 
@@ -42,6 +28,8 @@ function getConstants() {
  * @return array [description]
  */
 function getMenuSettings() {
+    return;
+    /*
     return [
         'page_title'    => __('RRZE Video', 'rrze-video'),
         'menu_title'    => __('RRZE Video', 'rrze-video'),
@@ -49,6 +37,8 @@ function getMenuSettings() {
         'menu_slug'     => 'rrze-video',
         'title'         => __('RRZE-Video', 'rrze-video').' '.__('Einstellungen', 'rrze-video'),
     ];
+     * *
+     */
 }
 
 
@@ -74,31 +64,7 @@ function getFields() {
     $imagesizes = array();
     
     
-    return [
-
-	'constants' => [
-	    
-	     [
-		'name'  => 'preview_image',
-		'label' => __('Video Thumbnail', 'rrze-video'),
-		'desc'  => __('Allgemeines Video-Thumbnail, welches verwendet wird, wenn die Videos kein eigenes Vorschaubild mit bringen.', 'rrze-video'),
-		'type'  => 'file',
-		'default' => plugin_dir_url(__DIR__) . 'img/_preview.png'
-            ],
-	    [
-		'name'  => 'preview_image_vendor',
-		'label' => __('Vorschaubild vom Video-Providers', 'rrze-video'),		
-		'desc'  => __('Bei Auswahl dieser Option werden die Angaben zum lokalen Vorschau-Bild ignoriert und Besucher-Daten können schon vor Laden des Videos an den Server des Anbieters übertragen werden.', 'rrze-video'),
-		'type'  => 'checkbox',
-		'default' => false,
-		
-	    ],
-
-	     
-	],
-	
-       
-    ];
+    return [];
 }
 
 
@@ -127,10 +93,7 @@ function getShortcodeDefaults($field = ''){
  * @return array [description]
  */
 
-/*
-        'youtube-support'       => '0',
-        'rand'                  => ''
- */
+
 function getShortcodeSettings(){
     return [
 	    'fauvideo' => [
