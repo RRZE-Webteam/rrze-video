@@ -6,13 +6,10 @@ defined('ABSPATH') || exit;
 
 use RRZE\Video\Settings;
 use RRZE\Video\Taxonomy\Taxonomy;
-use RRZE\Video\Templates\Templates;
 use RRZE\Video\Shortcodes\Shortcodes;
 use RRZE\Video\Metaboxes\Metaboxes;
 use RRZE\Video\Widget;
-use RRZE\Video\Helper;
 
-use function RRZE\Video\Config\getConstants;
 	
 
 /**

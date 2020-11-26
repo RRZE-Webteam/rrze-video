@@ -3,11 +3,9 @@
 namespace RRZE\Video\Shortcodes;
 use function RRZE\Video\Config\getShortcodeSettings;
 use function RRZE\Video\Config\getShortcodeDefaults;
-use function RRZE\Video\Data\sanitize_shortcodeargs;
 
 use RRZE\Video\Data;
 use RRZE\Video\Player;
-use RRZE\Video\Main;
 
 defined('ABSPATH') || exit;
 

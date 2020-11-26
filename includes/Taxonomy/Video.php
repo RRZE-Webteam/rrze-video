@@ -44,8 +44,8 @@ class Video extends Taxonomy {
 	    'taxonomies'            => array( 'Genre' ),
 	    'menu_icon'             => 'dashicons-format-video',
 	    'hierarchical'          => false,
-	    'public'                => true,
-	    'publicly_queryable'    => true,
+	    'public'                => false,
+	    'publicly_queryable'    => false,
 	    'show_ui'               => true, 
 	    'show_in_menu'          => true,
 	    'menu_position'         => 5,
@@ -96,14 +96,14 @@ class Video extends Taxonomy {
     public function remove_quickedit ( $action, $post ) {
 	 if ($post->post_type == 'video') {
 	// Remove "Quick Edit"
-	    unset($actions['inline hide-if-no-js']);
+	    unset($action['inline hide-if-no-js']);
 	}
 	return $actions;
     }
     public function remove_bulkactions ( $action ) {
 	
 	// Remove "Quick Edit"
-	    unset($actions['edit']);
+	    unset($action['edit']);
 
 	return $actions;
     }
