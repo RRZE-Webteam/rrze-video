@@ -36,7 +36,7 @@ class Main {
      */
     public function onLoaded() {
 	add_action('wp_enqueue_scripts', [$this, 'registerFrontendStyles']);
-	 
+	add_action('admin_enqueue_scripts', [$this, 'adminEnqueueScripts']);
 
 	// Settings-Klasse wird instanziiert.
         $settings = new Settings($this->pluginFile);
@@ -86,6 +86,12 @@ class Main {
 	
 	 
     }
+    
+    public function adminEnqueueScripts($hook) {
+	wp_register_style('rrze-video-adminstyle', plugins_url('css/rrze-video-admin.css', plugin_basename($this->pluginFile)));
+	wp_enqueue_style('rrze-video-adminstyle');
+    }
+
     
     
 
