@@ -2,8 +2,6 @@
 
 namespace RRZE\Video;
 defined('ABSPATH') || exit;
-use function RRZE\Video\Config\getConstants;
-use function RRZE\Video\Config\getShortcodeSettings;
 
 
 class OEmbed {

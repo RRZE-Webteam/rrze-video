@@ -2,9 +2,10 @@
 
 namespace RRZE\Video;
 defined('ABSPATH') || exit;
-use function RRZE\Video\Config\getConstants;
-use function RRZE\Video\Config\getShortcodeSettings;
+
 use RRZE\Video\OEmbed;
+use RRZE\Video\IFrames;
+
 use RRZE\Video\Helper;
 
 class Player {
@@ -85,14 +86,60 @@ class Player {
 	    $isoembed = OEmbed::is_oembed_provider($arguments['url']);
 	    
 	    if (empty($isoembed)) {
-		$content .= '<div class="rrze-video alert clearfix clear alert-danger">';
-		$content .= '<strong>';
-		$content .= __('Unbekannte Videoquelle','rrze-video');
-		$content .= '</strong><br>';
-		$content .= __('Der folgenden Adresse konnte keinem bekannten Videoprovider zugeordnet werden oder dieser verfügt nicht über eine geeignete Standard-API (oEmbed) zum Abruf von Videos.','rrze-video');
-		$content .= __('Bitte rufen Sie das Video daher auf, indem Sie direkt den folgenden Link folgen:','rrze-video');
-		$content .= ' <a href="'.$arguments['url'].'" rel="nofollow">'.$arguments['url'].'</a>';
-		$content .= '</div>';
+		
+		// Ok no fancy oEmbed... so lets look if its a stupid iframe-provider...
+		
+		if (IFrames::is_iframe_provider($arguments['url'])) {
+		    
+		    
+		    $framedata = IFrames::get_iframe($arguments['url']);
+
+		    if (isset($framedata['error']) && (!empty($framedata['error']))) {
+
+			$content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+			$content .= '<strong>';
+			$content .= __('Fehler beim Abruf des Videos','rrze-video');
+			$content .= '</strong><br>';
+			$content .= $framedata['error'];
+			$content .= '</div>';
+
+		    } elseif (!isset($framedata['video']) || (!$framedata['video'])) {
+			 $content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+			$content .= '<strong>';
+			$content .= __('Fehler beim Abruf des Videos','rrze-video');
+			$content .= '</strong><br>';
+			$content .= __('Videodaten konnten nicht abgerufen werden.','rrze-video');
+			$content .= '</div>';
+
+		    } else {
+			$arguments['video'] = $framedata['video'];
+
+			$content .= '<div class="rrze-video">';
+			$content .= '<div class="iframecontainer '.$framedata['video']['provider'].'">';
+			$content .= $arguments['video']['html'];
+			$content .= '</div>';
+			if ((isset($arguments['show']) && preg_match('/link/', $arguments['show']))) {
+			    $content .= '<p class="link">'.__('Link','rrze-video').': <a href="'.$arguments['url'].'">'.$arguments['url'].'</a></p>';
+			}
+			if (isset($arguments['video']['provider_name']) && (!empty($arguments['video']['provider_name']))) {
+			    $content .= '<p>'.__('Quelle','rrze-video').': <a href="'.$arguments['video']['provider_url'].'">'.$arguments['video']['provider_name'].'</a></p>';
+			}
+			$content .= '</div>';
+			Main::enqueueFrontendStyles(false);  
+		    }
+
+		} else {
+
+		    $content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+		    $content .= '<strong>';
+		    $content .= __('Unbekannte Videoquelle','rrze-video');
+		    $content .= '</strong><br>';
+		    $content .= __('Der folgenden Adresse konnte keinem bekannten Videoprovider zugeordnet werden oder dieser verfügt nicht über eine geeignete Schnittstelle zum Abruf von Videos.','rrze-video');
+		    $content .= ' '.__('Bitte rufen Sie das Video daher auf, indem Sie direkt den folgenden Link folgen:','rrze-video');
+		    $content .= ' <a href="'.$arguments['url'].'" rel="nofollow">'.$arguments['url'].'</a>';
+		    $content .= '</div>';
+		
+		}
 		
 	    } else {
 	//	$content .= "Oembed: ".$isoembed;
@@ -117,7 +164,7 @@ class Player {
 		    $content .= __('Videodaten konnten nicht abgerufen werden.','rrze-video');
 		    $content .= '</div>';
 		    
-		    $content .= Helper::get_html_var_dump($oembeddata);
+		 //   $content .= Helper::get_html_var_dump($oembeddata);
 		} else {
 		    $arguments['video'] = $oembeddata['video'];
 		    $arguments['oembed_api_url'] = $oembeddata['oembed_api_url'];
