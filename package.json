@@ -1,0 +1,61 @@
+{
+  "name": "rrze-video",
+  "version": "3.0.9",
+  "description": "Einbindung von Videos in FAU Webauftritte.",
+  "main": "rrze-video.php",
+  "textdomain": "rrze-video",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dist": {
+    "jsdir": "./js/",
+    "cssdir": "./css/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RRZE-Webteam/rrze-video.git",
+    "issues": "https://github.com/RRZE-Webteam/rrze-video/issues",
+    "clone": "git+https://github.com/RRZE-Webteam/rrze-video.git"
+  },
+  "browserslist": [
+    "last 3 years",
+    "ie 11"
+  ],
+  "supports": {
+    "email": "webmaster@fau.de",
+    "docs": "https://www.wordpress.rrze.fau.de/plugins/fau-und-rrze-plugins/rrze-video/"
+  },
+  "author": "RRZE-Webteam <webmaster@fau.de> (https://www.wordpress.rrze.fau.de/person/webmaster)",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "autoprefixer": "^9.6.1",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-bump": "^3.1.3",
+    "gulp-clean-css": "^4.2.0",
+    "gulp-csso": "^3.0.1",
+    "gulp-postcss": "^8.0.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-touch-cmd": "0.0.1",
+    "gulp-uglify": "^3.0.2",
+    "gulp-wp-pot": "^2.3.6",
+    "semver": "^6.3.0"
+  },
+  "bugs": {
+    "url": "https://github.com/RRZE-Webteam/rrze-video/issues"
+  },
+  "homepage": "https://github.com/RRZE-Webteam/rrze-video#readme",
+  "keywords": [
+    "video",
+    "fau",
+    "plugin",
+    "rrze",
+    "embedding",
+    "youtube",
+    "videoportal",
+    "fau.tv"
+  ],
+  "dependencies": {}
+}
