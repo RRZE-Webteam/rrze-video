@@ -21,15 +21,9 @@ class Settings {
         $this->settingsPrefix = dirname(plugin_basename($this->pluginFile)) . '-';
     }
 
-    /**
-     * Er wird ausgeführt, sobald die Klasse instanziiert wird.
-     * @return void
-     */
+
     public function onLoaded() {
 	// Nothing... yet
     }
-
-
-  
 
 }

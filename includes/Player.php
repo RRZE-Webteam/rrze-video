@@ -106,11 +106,24 @@ class Player {
 		    $content .= '</strong><br>';
 		    $content .= $oembeddata['error'];
 		    $content .= '</div>';
-
+		    
+		//    $content .= Helper::get_html_var_dump($oembeddata);
+		     
+		} elseif (!isset($oembeddata['video']) || (!$oembeddata['video'])) {
+		     $content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+		    $content .= '<strong>';
+		    $content .= __('Fehler beim Abruf des Videos','rrze-video');
+		    $content .= '</strong><br>';
+		    $content .= __('Videodaten konnten nicht abgerufen werden.','rrze-video');
+		    $content .= '</div>';
+		    
+		    $content .= Helper::get_html_var_dump($oembeddata);
 		} else {
 		    $arguments['video'] = $oembeddata['video'];
+		    $arguments['oembed_api_url'] = $oembeddata['oembed_api_url'];
+		    $arguments['oembed_api_error'] = $oembeddata['error'];
 		    		    
-		//    $content .= Helper::get_html_var_dump($arguments);
+	//	    $content .= Helper::get_html_var_dump($arguments);
 		    $content .= self::get_player_html($isoembed, $arguments);
 
 		    Main::enqueueFrontendStyles(true);  
@@ -391,6 +404,7 @@ class Player {
 	    if (isset($data['video']['title'])) {
 		 $res = '<meta itemprop="name" content="'.$data['video']['title'].'">';
 	    }
+	    $poster = '';
 	   if (isset($data['poster']) && (!empty($data['poster']))) {
 		$poster = $data['poster'];
 	    } elseif (isset($data['video']['preview_image']) && (!empty($data['video']['preview_image']))) {

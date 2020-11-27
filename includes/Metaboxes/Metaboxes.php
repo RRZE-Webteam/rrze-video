@@ -19,11 +19,8 @@ class Metaboxes  {
     }
 
     public function onLoaded()     {
-	
-
 	require_once(plugin_dir_path($this->pluginFile) . 'vendor/cmb2/init.php');
-   
-
+  
 	$videometabox = new Video($this->pluginFile,  $this->settings);
 	$videometabox->onLoaded();
 

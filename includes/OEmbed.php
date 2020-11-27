@@ -90,6 +90,7 @@ class OEmbed {
 
             $oembed_url    = $endpoint_url;
             $remote_get    = wp_safe_remote_get( $oembed_url, array( 'sslverify' => true ));
+	    $videodata['oembed_api_url'] = $oembed_url;
             if ( is_wp_error( $remote_get ) ) {
                 $videodata['error'] = $remote_get->get_error_message();
             } else {
@@ -112,6 +113,7 @@ class OEmbed {
 
             $oembed_url    = $endpoint_url;
             $remote_get    = wp_safe_remote_get( $oembed_url, array( 'sslverify' => true ));
+	    $videodata['oembed_api_url'] = $oembed_url;
             if ( is_wp_error( $remote_get ) ) {
                 $videodata['error'] = $remote_get->get_error_message();
             } else {
@@ -133,16 +135,21 @@ class OEmbed {
             'error'   => false,
             'video'   => false,
         );
+	$fau_video['oembed_api_url'] = $known['fau']['api-endpoint'].'?url='.$url.'&format=json';
 
-        $fau_video_url = $known['fau']['api-endpoint'].'?url=https://www.video.uni-erlangen.de';
-        preg_match( '/(clip|webplayer)\/id\/(\d+)/', $url, $matches);
-        if( ! is_array( $matches ) ){
-            $fau_video['error'] = 'FAU-Video URL enthält keine gültige Video Id';
-        } else {
-	    $endpoint_url = $known['fau']['api-endpoint'].'?url='.$url.'&format=json';
-	    $oembed_url    = $endpoint_url;
-   //         $oembed_url    = $fau_video_url . '/' . $matches[1] . '/id/' . $matches[2] . '&format=json';
+	if (false===preg_match('/(clip|webplayer)\/id\/(\d+)/', $url)) {
+            $fau_video['error'] = __('Die FAU-Video URL enthält keine gültige Video Id','rrze-video');
+	} elseif (preg_match('/\/collection\/id\/[0-9]+$/', $url)) {
+	    $fau_video['error'] = __('Der Aufruf verweist auf eine Videosammlung. Diese kann nicht eingebunden werden. Rufen Sie das Video daher direkt unter der URL auf: ','rrze-video');
+	    $fau_video['error'] .= '<a href="'.$url.'">'.$url.'</a>';
+	} elseif (preg_match('/\/course\/id\/[0-9]+$/', $url)) {
+	    $fau_video['error'] = __('Der Aufruf verweist auf eine Kurssammlung. Diese kann nicht eingebunden werden. Rufen Sie das Video daher direkt unter der URL auf: ','rrze-video');
+	    $fau_video['error'] .= '<a href="'.$url.'">'.$url.'</a>';
+	} else {
+	  
+	    $oembed_url    = $known['fau']['api-endpoint'].'?url='.$url.'&format=json';
             $remote_get    = wp_safe_remote_get( $oembed_url, array( 'sslverify' => true ));
+	    $fau_video['oembed_api_url'] = $oembed_url;
             if ( is_wp_error( $remote_get ) ) {
                 $fau_video['error'] = $remote_get->get_error_message();
             } else {
@@ -156,6 +163,14 @@ class OEmbed {
 		}
 		if ((isset($fau_video['video']['alternative_Audio'])) && (preg_match('/^\//',$fau_video['video']['alternative_Audio']))) {
 		    $fau_video['video']['alternative_Audio'] = $endpoint_url = $known['fau']['home'].$fau_video['video']['alternative_Audio'];
+		}
+		
+		if (isset($fau_video['video']['status']) && ($fau_video['video']['status'] >= 400)) {
+		    // neue Fehlerausgabe; Derzeit leider noch nicht implementiert
+		    if (isset($fau_video['video']['message'])) {
+			$fau_video['error'] = $fau_video['video']['message'];
+		    }
+		    
 		}
             }
         }
@@ -174,7 +189,7 @@ class OEmbed {
 	
 	if (is_array($data)) {
 	    if (isset($data['error'])) {
-		$data['error'] = sanitize_text_field($data['error']);
+		$data['error'] = wp_kses_post($data['error']);
 	    }
 	    if (is_array($data['video'])) {
 		foreach ($data['video'] as $key => $value) {

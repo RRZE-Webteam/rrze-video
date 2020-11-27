@@ -19,18 +19,11 @@ use RRZE\Video\Widget;
 class Main {
     protected $pluginFile;
     private $settings = '';
-      /*    
-    public static $options;
-    
-    protected static $instance = null;
-    */
+
     public function __construct($pluginFile) {
         $this->pluginFile = $pluginFile;
     }
 
-    /**
-     * Es wird ausgeführt, sobald die Klasse instanziiert wird.
-     */
     public function onLoaded() {
 	add_action('wp_enqueue_scripts', [$this, 'registerFrontendStyles']);
 	add_action('admin_enqueue_scripts', [$this, 'adminEnqueueScripts']);
@@ -40,20 +33,17 @@ class Main {
         $settings->onLoaded();
 	$this->settings = $settings;
 
-
 	// Posttypes 
         $taxonomies = new Taxonomy($this->pluginFile, $settings);
         $taxonomies->onLoaded();
 	
-
 	// Add Metaboxes
 	$metaboxes = new Metaboxes($this->pluginFile, $settings); 
         $metaboxes->onLoaded();
 	
-		// Add Shortcodes
+	// Add Shortcodes
         $shortcodes = new Shortcodes($this->pluginFile, $settings); 
         $shortcodes->onLoaded();
-
 
 	// Add Widget
         $widget = new Widget($this->pluginFile, $settings); 
@@ -63,9 +53,6 @@ class Main {
 	return;			
     }
     
-    
-    
-    
     public function registerFrontendStyles() {
 	wp_register_style('rrze-video', plugins_url('css/rrze-video.css', plugin_basename($this->pluginFile)));
 	wp_register_script('plyr', plugins_url('js/plyr.js', plugin_basename($this->pluginFile)), '', '', false);
@@ -73,15 +60,12 @@ class Main {
 	
     }
 
-    
     static function enqueueFrontendStyles( $plyr = true) {
 	 wp_enqueue_style('rrze-video');  
 	 if ($plyr) {
 	    wp_enqueue_script('plyr',plugins_url('js/plyr.js',  plugin()->getBasename()), '', '', false);
 	    wp_enqueue_script('rrze-video-scripts');
 	 }
-	
-	 
     }
     
     public function adminEnqueueScripts($hook) {
@@ -89,10 +73,6 @@ class Main {
 	wp_enqueue_style('rrze-video-adminstyle');
     }
 
-    
-    
-
-	
 }
 
 
