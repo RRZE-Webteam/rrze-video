@@ -50,7 +50,7 @@ Einer der folgenden Parameter ist zwingend anzugeben:
 
 * url=""
     Angabe einer URL zu dem Video bei einem unterstützten Videoprovider.
-    Derzeit sind dies: Das Videoportal der FAU, YouTube und Vimeo.
+   
 * id=""
     Angabe einer Id eines Eintrags in der Videothek. Die Videothek kann genutzt 
     werden um die URLs zu Videos zu speichern und in Kategorien zu gruppieren. 
@@ -74,25 +74,35 @@ Folgender Parameter ist optional und beeinflussen die Ausgabe zusätzlicher Date
         Anzeige von link, desc und meta.
 
 
+## Unterstützte Video-Provider
+
+### Über oEmbed (mit der Ausgabe von Metadaten)
+- FAU.tv (https://www.fau.tv) - as Videoportal der Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU)
+- YouTube
+- Vimeo
+
+### Über IFrames, ohne Ausgabe von zusätzlichen Metadaten.
+- BR
+- Twitch
 
 
 ## Beispielaufrufe als Shortcode
 
-* Anzeige eins Videos aus dem Videoportal der FAU
+* Anzeige eines Videos aus dem Videoportal der FAU
 
 ```
 [fauvideo url="https://www.video.uni-erlangen.de/webplayer/id/36475"]
 ```
 
 
-* Anzeige eins Videos aus YouTube
+* Anzeige eines Videos aus YouTube
 
 ```
 [fauvideo url="https://www.youtube.com/watch?v=3dMLwu8V3tI"]
 ```
 
 
-* Anzeige eins Videos aus Vimeo
+* Anzeige eines Videos aus Vimeo
 
 ```
 [fauvideo url="https://vimeo.com/335918196"]
