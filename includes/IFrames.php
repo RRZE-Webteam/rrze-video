@@ -22,6 +22,13 @@ class IFrames {
 		'home'	=> 'https://www.twitch.tv',
 		'name'	=> 'twitch'
 		],
+	    'ard'   => [
+		'domains'	=> [
+			'www.ardmediathek.de'
+		    ],
+		'home'	=> 'https://www.ardmediathek.de',
+		'name'	=> 'ARD Mediathek'
+		],
         ];
     }
     
@@ -69,13 +76,35 @@ class IFrames {
 
 	if ($provider == 'br') {
 	    return self::fetch_iframe_br($url);
+	} elseif ($provider == 'ard') {
+	    return self::fetch_iframe_ard($url);
 	} elseif ($provider == 'twitch') {
 	    return self::fetch_iframe_twitch($url);
 	}
 	return;
 	
     }
-    
+     static function fetch_iframe_ard( $url ) {
+	$known = self::get_known_iframe_provider();
+        $videodata =  array(
+            'error'   => false,
+            'video'   => false,
+        );
+
+	if (preg_match('/\/[A-Za-z0-9]+\/?$/',$url)) {
+	    $embedurl = preg_replace('/\/([a-z0-9\-\/]+)\/([a-z0-9\-:\.]+)\/?$/','/embed/$2',$url);
+
+	    $videodata['video']['html'] = '<iframe class="remoteembed ard" allowfullscreen src="'.$embedurl.'" frameBorder="0" scrolling="no"></iframe>';
+	    $videodata['video']['orig_url'] = $url;
+	    $videodata['video']['embed_url'] = $embedurl;
+	    $videodata['video']['provider_url'] = $known['ard']['home'];
+	    $videodata['video']['provider_name'] = $known['ard']['name'];
+	    $videodata['video']['provider'] = 'ard';
+	} else {
+	    $videodata['error'] = __('Die URL für die ARD Mediathek ist ungültig oder fehlerhaft.','rrze-video');
+	}
+        return $videodata;
+    }
      static function fetch_iframe_twitch( $url ) {
 	$known = self::get_known_iframe_provider();
         $videodata =  array(

@@ -82,7 +82,8 @@ Folgender Parameter ist optional und beeinflussen die Ausgabe zusätzlicher Date
 - Vimeo
 
 ### Über IFrames, ohne Ausgabe von zusätzlichen Metadaten.
-- BR
+- ARD Mediathek
+- BR Mediathek
 - Twitch
 
 
