@@ -211,8 +211,8 @@ class Player {
 	if (!empty($data['error'])) {
 	     $res .= '<div class="rrze-video alert clearfix clear alert-danger">';
 	     $res .= '<strong>';
-	     $res .= __('fehler beim Abruf des Videos:','rrze-video');
-	     $res .= '</strong><br>';
+	     $res .= __('Fehler beim Abruf des Videos','rrze-video');
+	     $res .= ':</strong><br>';
 	    $res .= $data['error'];
 	    $res .= '</div>';
 	    return $res;
