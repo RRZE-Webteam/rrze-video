@@ -3,7 +3,7 @@
 Plugin Name: RRZE Video Plugin
 Plugin URI: https://github.com/RRZE-Webteam/rrze-video
 Description: This is a video plugin to show videos on pages and in the social media footer.
-Version: 3.0.10
+Version: 3.0.11
 Author: RRZE-Webteam
 Author URI: http://blogs.fau.de/webworking/
 License: GNU GPLv2
@@ -83,7 +83,7 @@ function activation()
         wp_die(sprintf(__('Plugins: %1$s: %2$s', 'rrze-log'), plugin_basename(__FILE__), $error));
     }
 
-  //  Users::addRoleCaps();
+    Roles::addRoleCaps();
   //  Users::createBookingRole();
 //    $cpt = new CPT;
 //    $cpt->activation();
@@ -94,10 +94,8 @@ function activation()
 /**
  * [deactivation description]
  */
-function deactivation()
-{
-    Users::removeRoleCaps();
-    Users::removeBookingRole();
+function deactivation() {
+    Roles::removeRoleCaps();
 
     flush_rewrite_rules();
 }
