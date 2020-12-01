@@ -131,7 +131,7 @@ function getShortcodeSettings(){
 		'class' => [
 			'default' => '',
 			'field_type' => 'text',
-			'label' => __( 'CSS Klassen, die der Shordcode erhalten soll.', 'rrze-video' ),
+			'label' => __( 'CSS Klassen, die der Shortcode erhalten soll.', 'rrze-video' ),
 			'type' => 'class' 
 		],
 		'showtitle' => [
