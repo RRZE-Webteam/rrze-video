@@ -1,7 +1,7 @@
 <?php
 
 namespace RRZE\Video\Taxonomy;
-use function RRZE\Video\Config\get_rrze_video_capabilities;
+use RRZE\Video\Capabilities;
 
 defined('ABSPATH') || exit;
 
@@ -35,7 +35,6 @@ class Video extends Taxonomy {
 	    'menu_name'             => __( 'Videothek', 'rrze-video' ),
         ];
 	
-	$caps = get_rrze_video_capabilities();
 	$video_args = array(
 	    'label'                 => __( 'Video', 'rrze-video' ),
 	    'description'           => __( 'Videosammlung erstellen', 'rrze-video' ),
@@ -43,30 +42,29 @@ class Video extends Taxonomy {
 	    'supports'              => array( 'title', 'thumbnail' ),
 	    'taxonomies'            => array( 'Genre' ),
 	    'menu_icon'             => 'dashicons-format-video',
-	    'hierarchical'          => false,
-	    'public'                => false,
-	    'publicly_queryable'    => false,
-	    'show_ui'               => true, 
-	    'show_in_menu'          => true,
-	    'menu_position'         => 5,
-	    'has_archive'           => false,		
-	    'exclude_from_search'   => true,
-	    'query_var'		=>  $this->postType,
-	    'rewrite'		=> [
-		'slug'	    => $this->postType,
-		'with_front' => true,
-		'pages'	    => true,
-		'feeds'	    => true,
-	    ],
-	    'capability_type' => $this->postType,
-	    'capabilities' => $caps,
-	    'map_meta_cap' => true
+    
+	    'hierarchical'              => false,
+            'public'                    => true,
+            'show_ui'                   => true,
+            'show_in_menu'              => true,
+            'show_in_admin_bar'         => true,
+            'can_export'                => false,
+            'has_archive'               => false,
+
+	    'exclude_from_search'       => true,
+            'publicly_queryable'        => true,
+            'delete_with_user'          => false,
+            'show_in_rest'              => false,
+           'capability_type'           => Capabilities::getCptCapabilityType('video'),
+            'capabilities'              => (array) Capabilities::getCptCaps('video'),
+            'map_meta_cap'              => Capabilities::getCptMapMetaCap('video')
+	   
+	    
 	);
 
 	register_post_type($this->postType, $video_args);	
-	
-	      
-         register_taxonomy(
+	    
+        register_taxonomy(
             $this->taxonomy,
             $this->postType,
             [
@@ -75,6 +73,12 @@ class Video extends Taxonomy {
 		'show_ui'                     => true,
 		'show_admin_column'           => true,
 		'show_in_nav_menus'           => true,
+		'capabilities' => [
+		    'manage_terms' => 'edit_videos',
+		    'edit_terms' => 'edit_videos',
+		    'delete_terms' => 'edit_videos',
+		    'assign_terms' => 'edit_videos'
+		]
             ]
         );
     }
@@ -88,7 +92,7 @@ class Video extends Taxonomy {
 	add_filter('manage_edit-video_sortable_columns', array( $this, 'video_sortable_columns' ));
 	add_filter('manage_edit-video_columns', array( $this, 'video_columns')) ;
 	
-	// add_filter('post_row_actions', array( $this, 'remove_quickedit'), 10, 2 ); 
+	add_filter('post_row_actions', array( $this, 'remove_quickedit'), 10, 2 ); 
 	add_filter('bulk_actions-edit-video', array( $this, 'remove_bulkactions'), 10, 2 ); 	
 
     }
@@ -98,14 +102,14 @@ class Video extends Taxonomy {
 	// Remove "Quick Edit"
 	    unset($action['inline hide-if-no-js']);
 	}
-	return $actions;
+	return $action;
     }
     public function remove_bulkactions ( $action ) {
 	
 	// Remove "Quick Edit"
 	    unset($action['edit']);
 
-	return $actions;
+	return $action;
     }
     
     

@@ -162,21 +162,3 @@ function getShortcodeSettings(){
     
 
 }
-
- function get_rrze_video_capabilities() {
-	return [
-		'edit_post'	=> 'edit_video',
-		'read_post'	=> 'read_video',
-		'delete_post'	=> 'delete_video',
-		'edit_posts'	=> 'edit_videos',
-		'edit_others_posts' => 'edit_others_videos',
-		'publish_posts'	=> 'publish_videos',
-		'read_private_posts' => 'read_private_videos',
-		'delete_posts'	=> 'delete_videos',
-		'delete_private_posts' => 'delete_private_videos',
-		'delete_published_posts' => 'delete_published_videos',
-		'delete_others_posts' => 'delete_others_videos',
-		'edit_private_posts' => 'edit_private_videos',
-		'edit_published_posts' => 'edit_published_videos'
-	    ];
-    }
