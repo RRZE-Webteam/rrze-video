@@ -5,6 +5,7 @@ defined('ABSPATH') || exit;
 
 use RRZE\Video\OEmbed;
 use RRZE\Video\IFrames;
+use RRZE\Video\Plugin;
 
 use RRZE\Video\Helper;
 
@@ -170,7 +171,7 @@ class Player {
 		    $arguments['oembed_api_url'] = $oembeddata['oembed_api_url'];
 		    $arguments['oembed_api_error'] = $oembeddata['error'];
 		    		    
-	//	    $content .= Helper::get_html_var_dump($arguments);
+//		    $content .= Helper::get_html_var_dump($arguments);
 		    $content .= self::get_player_html($isoembed, $arguments);
 
 		    Main::enqueueFrontendStyles(true);  
@@ -324,9 +325,23 @@ class Player {
 	    $classname = 'plyr-instance plyr-videonum-'.$id;
 	    $res .= '<video class="'.$classname.'" playsinline controls crossorigin="anonymous"';
 	    
+	    $plyrconfig = ' data-plyr-config=\'{ ';
+	    $plyrconfig .= ' "iconUrl": "';
+	    
+	    $plyrconfig .= plugins_url('/../img/plyr.svg', plugin_basename(__FILE__));
+	    $plyrconfig .= '"';
+	     
 	    if ($data['video']['title']) {
-		$res .= ' data-plyr-config=\'{"title": "'.$data['video']['title'].'"}\'';
+		if (!empty($plyrconfig)) {
+		    $plyrconfig .= ',';
+		}
+		$plyrconfig .= '"title": "'.$data['video']['title'].'"';
 	    } 
+	    $plyrconfig .= '}\'';
+	    $res .= $plyrconfig;
+	    
+	    
+	    
 	    if ($poster) {
 		$res .= ' poster="'.$poster.'" data-poster="'.$poster.'"';
 	    }
@@ -394,11 +409,14 @@ class Player {
 	
 	    if (isset($data['video']['author_name']) && (!empty($data['video']['author_name']))) {
 		$meta .= '<dt>'.__('Autor','rrze-video').'</dt><dd>';
-		 if (isset($data['video']['author_url']) && (!empty($data['video']['author_url']))) {
-		      $meta .= '<a href="'.$data['video']['author_url'].'">';
+		
+		
+		
+		 if (isset($data['video']['author_url_0']) && (!empty($data['video']['author_url_0']))) {
+		      $meta .= '<a href="'.$data['video']['author_url_0'].'">';
 		 }
 		 $meta .= $data['video']['author_name'];
-		 if (isset($data['video']['author_url']) && (!empty($data['video']['author_url']))) {
+		 if (isset($data['video']['author_url_0']) && (!empty($data['video']['author_url_0']))) {
 		      $meta .= '</a>';
 		 }
 		$meta .=  '</dd>';    
