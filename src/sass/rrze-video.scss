@@ -1,9 +1,28 @@
-
+/* RRZE Video SASS File */
 
 
 @import "plyr/plyr";
-@import "plyr/custom";
 
+.plyr,
+.rrze-video {
+     --plyr-color-main: #003366;
+     
+     .faculty-nat & {
+	 --plyr-color-main: #048767;
+     }
+     .faculty-phil & {
+	 --plyr-color-main: #A36B0D;
+     }
+     .faculty-rw & {
+	 --plyr-color-main: #8d1429;
+     }
+     .faculty-tf & {
+	 --plyr-color-main: #6E7881;
+     }
+     .faculty-med & {
+	 --plyr-color-main:  #0381A2;
+     }
+}
 .rrze-video {
     .youtube-video,
     .vimeo-video,

@@ -48,6 +48,12 @@ function js() {
 }
 
 
+function copy_img() {
+    return src(['./src/img/**/*'])
+	    .pipe(dest(info.dist.imgdir));
+    
+}
+
 
 function patchPackageVersion() {
     var newVer = semver.inc(info.version, 'patch');
@@ -94,8 +100,9 @@ function startWatch() {
 
 exports.css = css;
 exports.js = js;
-exports.dev = series(js, cssdev, prereleasePackageVersion);
-exports.build = series(js, css, patchPackageVersion);
+exports.img = copy_img;
+exports.dev = series(js, cssdev, copy_img, prereleasePackageVersion);
+exports.build = series(js, css, copy_img, patchPackageVersion);
 exports.pot = updatepot;
 
 exports.default = startWatch;
