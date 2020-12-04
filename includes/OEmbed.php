@@ -9,12 +9,15 @@ class OEmbed {
         return [
             'fau'	=> [
 		'domains'	=> [
-			'video.uni-erlangen.de', 'video.fau.de',
-			'www.video.uni-erlangen.de', 'www.video.fau.de',
-			'fau.tv'
+			'video.uni-erlangen.de', 
+			'video.fau.de',
+			'www.video.uni-erlangen.de', 
+			'www.video.fau.de',
+			'fau.tv',
+			'www.fau.tv'
 		    ],
-		'home'	=> 'https://www.video.uni-erlangen.de',
-		'api-endpoint'  => 'https://www.video.uni-erlangen.de/services/oembed'
+		'home'	=> 'https://www.fau.tv',
+		'api-endpoint'  => 'https://www.fau.tv/services/oembed'
 		],
 	    'youtube'	=> [
 		'domains'   => [
