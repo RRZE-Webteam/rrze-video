@@ -108,9 +108,10 @@ class Video_Widget extends \WP_Widget {
         $id	= !empty( $instance['id'] )  ? $instance['id'] : '';
         $url	= !empty( $instance['url'] ) ? $instance['url'] : '';
         $rand	= !empty( $instance['genre'] ) ? $instance['genre'] : '';
-	
+	$title = isset($instance['widget_title']) ? esc_html($instance['widget_title']) : '';
         $meta	= $instance['meta'];
-	$title	= $instance['showtitle'];
+	
+	$showtitle	= $instance['showtitle'];
         $info	= $instance['info'];
 	$desc	= $instance['desc'];
 	$link	= $instance['link'];
@@ -197,16 +198,20 @@ class Video_Widget extends \WP_Widget {
                
 		<?php } ?>
  
-		   
+	     
                 
             </div>
         </fieldset>
         <fieldset class="displayoptions">
             <legend><?php _e('Video Optionen','rrze-video'); ?></legend>
 	     <p>
-                <input type="checkbox" name="<?php echo $this->get_field_name( 'showtitle' ); ?>" id="<?php echo $this->get_field_id( 'showtitle' ); ?>" value="1" <?php checked( $title, 1 ); ?>>
+		<label for="<?php echo $this->get_field_id('widget_title'); ?>"><?php _e('Widget Titel:', 'rrze-video'); ?></label><br>
+		<input class="widefat" type ='text' id='<?php echo $this->get_field_id('widget_title'); ?>' name='<?php echo $this->get_field_name('widget_title'); ?>' value='<?php echo $title; ?>'>
+	    </p>
+	     <p>
+                <input type="checkbox" name="<?php echo $this->get_field_name( 'showtitle' ); ?>" id="<?php echo $this->get_field_id( 'showtitle' ); ?>" value="1" <?php checked( $showtitle, 1 ); ?>>
                 <label for="<?php echo $this->get_field_id( 'showtitle' ); ?>"><?php _e('Titel anzeigen','rrze-video') ?></label>
-                <br><em><?php _e('Videotitel oberhalb des Videos anzeigen','rrze-video') ?></em>
+                <br><em><?php _e('Videotitel oberhalb des Videos anzeigen; überschreibt Widget-Titel falls gesetzt.','rrze-video') ?></em>
             </p>
 	     <p>
                 <input type="checkbox" name="<?php echo $this->get_field_name( 'link' ); ?>" id="<?php echo $this->get_field_id( 'link' ); ?>" value="1" <?php checked( $link, 1 ); ?>>
@@ -237,14 +242,12 @@ class Video_Widget extends \WP_Widget {
         $instance = $old_instance;
 	    $instance[ 'id' ]             = sanitize_key( $new_instance[ 'id' ] );
 	    $instance[ 'url' ]            = esc_url_raw( $new_instance[ 'url' ] );
-
+	    $instance[ 'widget_title' ]   = sanitize_text_field($new_instance[ 'widget_title' ]);
 	    $instance[ 'meta' ]           =  $new_instance[ 'meta' ];
 	    $instance[ 'showtitle' ]      =  $new_instance[ 'showtitle' ];
 	    $instance[ 'desc' ]           =  $new_instance[ 'desc' ];
 	    $instance[ 'link' ]           = $new_instance[ 'link' ];
 	    $instance[ 'info' ]           = $new_instance[ 'info' ];
-
-	if (isset($new_instance[ 'genre' ]))
 	    $instance[ 'genre' ]          = strip_tags( $new_instance[ 'genre' ] );
 	
 
