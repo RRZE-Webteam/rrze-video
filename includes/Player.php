@@ -271,13 +271,25 @@ class Player {
 	}
 	$res .= '">';
 	
-	if ($showtitle) {
-	    if (!isset($data['titletag'])) {
-		$data['titletag'] = 'h2';
+	$beforetag = '<h2>'; 
+	$aftertag = '</h2>';
+	
+	if (isset($data['widgetargs'])) {
+	    if ((isset($data['widgetargs']['before'])) && (!empty($data['widgetargs']['before']))) {
+		$beforetag = $data['widgetargs']['before'];
 	    }
-	    $titletag = $data['titletag'];
-	   
-	    $res .= '<'.$titletag.'>'.$data['video']['title'].'</'.$titletag.'>';
+	     if ((isset($data['widgetargs']['after'])) && (!empty($data['widgetargs']['after']))) {
+		$aftertag = $data['widgetargs']['after'];
+	    }
+	} elseif ($data['titletag']) {
+	   $beforetag = '<'.$data['titletag'].'>';
+	   $aftertag = '</'.$data['titletag'].'>';
+	}
+	
+	if ($showtitle) {
+	    $res .= $beforetag.$data['video']['title'].$aftertag;
+	} elseif (isset($data['widgetargs']) && isset($data['widgetargs']['title']) && (!empty($data['widgetargs']['title']))) {
+	    $res .= $beforetag.$data['widgetargs']['title'].$aftertag;
 	}
 	
 	

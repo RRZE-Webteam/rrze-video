@@ -60,6 +60,8 @@ class Video_Widget extends \WP_Widget {
         $arguments['id']    = ( !empty($instance['id']) ) ? $instance['id'] : '';
         $arguments['url']   = ( !empty($instance['url']) ) ? $instance['url'] : '';	
         $arguments['rand']   = ( !empty($instance['genre']) ) ? $instance['genre'] : '';
+	$arguments['widget_title']   = ( !empty($instance['widget_title']) ) ? sanitize_text_field($instance['widget_title']) : '';
+	
 
 	$arguments['show'] = '';
 	if (!empty($instance['showtitle'])) {
@@ -77,7 +79,19 @@ class Video_Widget extends \WP_Widget {
 	if (!empty($instance['desc'])) {
 	    $arguments['show'] .= "desc";
 	}
+	
 	$arguments = Data::sanitize_shortcodeargs($arguments);
+	if (!empty($instance['widget_title'])) {
+	    $arguments['widgetargs']['title'] = $instance['widget_title']; 
+        }
+	if (!empty($before_title)) {
+	    $arguments['widgetargs']['before'] = $before_title;
+	}
+	if (!empty($after_title)) {
+	   $arguments['widgetargs']['after'] = $after_title;		
+	}
+	    
+	
 	
 	echo Player::get_player($arguments);
 	
@@ -94,12 +108,13 @@ class Video_Widget extends \WP_Widget {
         $id	= !empty( $instance['id'] )  ? $instance['id'] : '';
         $url	= !empty( $instance['url'] ) ? $instance['url'] : '';
         $rand	= !empty( $instance['genre'] ) ? $instance['genre'] : '';
+	$title = isset($instance['widget_title']) ? esc_html($instance['widget_title']) : '';
+        $meta	= $instance['meta'];
 	
-        $meta	= !empty($instance['meta']) ? true : false;
-	$title	= !empty($instance['showtitle']) ? true : false;
-        $info	= !empty($instance['info']) ? true : false;
-	$desc	= !empty($instance['desc']) ? true : false;
-	$link	= !empty($instance['link']) ? true : false;
+	$showtitle	= $instance['showtitle'];
+        $info	= $instance['info'];
+	$desc	= $instance['desc'];
+	$link	= $instance['link'];
 	
 
 	
@@ -183,29 +198,33 @@ class Video_Widget extends \WP_Widget {
                
 		<?php } ?>
  
-		   
+	     
                 
             </div>
         </fieldset>
         <fieldset class="displayoptions">
             <legend><?php _e('Video Optionen','rrze-video'); ?></legend>
 	     <p>
-                <input type="checkbox" name="<?php echo $this->get_field_name( 'showtitle' ); ?>" id="<?php echo $this->get_field_id( 'showtitle' ); ?>" value="1"<?php echo ( $title== '1' ) ? ' checked' : ''; ?>>
+		<label for="<?php echo $this->get_field_id('widget_title'); ?>"><?php _e('Widget Titel:', 'rrze-video'); ?></label><br>
+		<input class="widefat" type ='text' id='<?php echo $this->get_field_id('widget_title'); ?>' name='<?php echo $this->get_field_name('widget_title'); ?>' value='<?php echo $title; ?>'>
+	    </p>
+	     <p>
+                <input type="checkbox" name="<?php echo $this->get_field_name( 'showtitle' ); ?>" id="<?php echo $this->get_field_id( 'showtitle' ); ?>" value="1" <?php checked( $showtitle, 1 ); ?>>
                 <label for="<?php echo $this->get_field_id( 'showtitle' ); ?>"><?php _e('Titel anzeigen','rrze-video') ?></label>
-                <br><em><?php _e('Videotitel oberhalb des Videos anzeigen','rrze-video') ?></em>
+                <br><em><?php _e('Videotitel oberhalb des Videos anzeigen; überschreibt Widget-Titel falls gesetzt.','rrze-video') ?></em>
             </p>
 	     <p>
-                <input type="checkbox" name="<?php echo $this->get_field_name( 'link' ); ?>" id="<?php echo $this->get_field_id( 'link' ); ?>" value="1"<?php echo ( $link== '1' ) ? ' checked' : ''; ?>>
+                <input type="checkbox" name="<?php echo $this->get_field_name( 'link' ); ?>" id="<?php echo $this->get_field_id( 'link' ); ?>" value="1" <?php checked( $link, 1 ); ?>>
                 <label for="<?php echo $this->get_field_id( 'link' ); ?>"><?php _e('Link auf Quelle','rrze-video') ?></label>
                 <br><em><?php _e('Link zur Originalquelle bei dem Videoprovider angeben','rrze-video') ?></em>
             </p>
             <p>
-                <input type="checkbox" name="<?php echo $this->get_field_name( 'meta' ); ?>" id="<?php echo $this->get_field_id( 'meta' ); ?>" value="1"<?php echo ( $meta == '1' ) ? ' checked' : ''; ?>>
+                <input type="checkbox" name="<?php echo $this->get_field_name( 'meta' ); ?>" id="<?php echo $this->get_field_id( 'meta' ); ?>" value="1" <?php checked( $meta, 1 ); ?>>
                 <label for="<?php echo $this->get_field_id( 'meta' ); ?>"><?php _e('Metaangaben anzeigen','rrze-video') ?></label>
                 <br><em><?php _e('Autor, Copyright, Quelle und Beschreibung, falls angegeben','rrze-video') ?></em>
             </p>
 	    <p>
-                <input type="checkbox" name="<?php echo $this->get_field_name( 'info' ); ?>" id="<?php echo $this->get_field_id( 'info' ); ?>" value="1"<?php echo ( $info == '1' ) ? ' checked' : ''; ?>>
+                <input type="checkbox" name="<?php echo $this->get_field_name( 'info' ); ?>" id="<?php echo $this->get_field_id( 'info' ); ?>" value="1" <?php checked( $info, 1 ); ?>>
                 <label for="<?php echo $this->get_field_id( 'info' ); ?>"><?php _e('Vollständige Info angeben','rrze-video') ?></label>
                 <br><em><?php _e('Metaangaben, Link und Beschreibung ausgeben','rrze-video') ?></em>
             </p>
@@ -221,28 +240,14 @@ class Video_Widget extends \WP_Widget {
     public function update( $new_instance, $old_instance ) {
 
         $instance = $old_instance;
-	if (isset( $new_instance[ 'id' ]))
 	    $instance[ 'id' ]             = sanitize_key( $new_instance[ 'id' ] );
-	
-	if (isset($new_instance[ 'url' ]))
 	    $instance[ 'url' ]            = esc_url_raw( $new_instance[ 'url' ] );
-
-	if (isset($new_instance[ 'meta' ])) 
-	    $instance[ 'meta' ]           = intval( $new_instance[ 'meta' ] );
-	
-	if (isset($new_instance[ 'showtitle' ]))
-	    $instance[ 'showtitle' ]      = intval( $new_instance[ 'showtitle' ] );
-	
-	if (isset($new_instance[ 'desc' ]))
-	    $instance[ 'desc' ]           = intval( $new_instance[ 'desc' ] );
-	
-	if (isset( $new_instance[ 'link' ]))
-	    $instance[ 'link' ]           = intval( $new_instance[ 'link' ] );
-	
-	if (isset($new_instance[ 'info' ]))
-	    $instance[ 'info' ]           = intval( $new_instance[ 'info' ] );
-
-	if (isset($new_instance[ 'genre' ]))
+	    $instance[ 'widget_title' ]   = sanitize_text_field($new_instance[ 'widget_title' ]);
+	    $instance[ 'meta' ]           =  $new_instance[ 'meta' ];
+	    $instance[ 'showtitle' ]      =  $new_instance[ 'showtitle' ];
+	    $instance[ 'desc' ]           =  $new_instance[ 'desc' ];
+	    $instance[ 'link' ]           = $new_instance[ 'link' ];
+	    $instance[ 'info' ]           = $new_instance[ 'info' ];
 	    $instance[ 'genre' ]          = strip_tags( $new_instance[ 'genre' ] );
 	
 
