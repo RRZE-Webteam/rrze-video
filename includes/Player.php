@@ -311,6 +311,7 @@ class Player {
 	    $res .= '<div class="plyr-instance" data-plyr-provider="youtube" data-plyr-embed-id="'.$data['video']['v'].'"';
 	    
 	    $res .= ' data-plyr-config=\'{';
+	    $res .= ' "preload": "none", ';
 	    $res .= ' "youtube": "{ noCookie: true }"';
 	    if ($data['video']['title']) {
 		$res .= ', "title": "'.$data['video']['title'].'"';
@@ -329,15 +330,16 @@ class Player {
 	    $res .= self::get_html_structuredmeta($data);
 	    $res .= '<div class="plyr-instance" data-plyr-provider="vimeo" data-plyr-embed-id="'.$data['video']['video_id'].'"';
 	    if ($data['video']['title']) {
-		$res .= ' data-plyr-config=\'{"title": "'.$data['video']['title'].'"}\'';
+		$res .= ' data-plyr-config=\'{ "preload": "none",  "title": "'.$data['video']['title'].'" }\'';
 	    } 
 	    $res .= '></div>';
 	    $res .= '</div>';
 	} elseif ($provider == 'fau') {
 	    $classname = 'plyr-instance plyr-videonum-'.$id;
-	    $res .= '<video class="'.$classname.'" playsinline controls crossorigin="anonymous"';
+	    $res .= '<video preload="none" class="'.$classname.'" playsinline controls crossorigin="anonymous"';
 	    
 	    $plyrconfig = ' data-plyr-config=\'{ ';
+	    $plyrconfig .= ' "preload": "none", ';
 	    $plyrconfig .= ' "iconUrl": "';
 	    
 	    $plyrconfig .= plugins_url('/../img/plyr.svg', plugin_basename(__FILE__));
