@@ -150,6 +150,7 @@ class OEmbed {
 	    $fau_video['error'] = __('Der Aufruf verweist auf eine Kurssammlung. Diese kann nicht eingebunden werden. Rufen Sie das Video daher direkt unter der URL auf: ','rrze-video');
 	    $fau_video['error'] .= '<a href="'.$url.'">'.$url.'</a>';
 	} else {
+	    $transient = 'rrze_video_fau_' . md5($url);
 	    $fau_video['video'] = get_transient($transient);
 	    if (false === $fau_video['video']) {
 		$oembed_url    = $known['fau']['api-endpoint'].'?url='.$url.'&format=json';
