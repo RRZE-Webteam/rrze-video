@@ -3,7 +3,7 @@
 Plugin Name: RRZE Video
 Plugin URI: https://github.com/RRZE-Webteam/rrze-video
 Description: Plugin zum Embedding von Videos 
-Version: 3.1.7
+Version: 3.1.8-3
 Author: RRZE-Webteam
 Author URI: http://blogs.fau.de/webworking/
 License: GNU GPLv2

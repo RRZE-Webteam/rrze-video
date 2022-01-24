@@ -1,12 +1,13 @@
 /* RRZE Video SASS File */
 
 
-@import "plyr/plyr";
 
+/*
 .plyr,
 .rrze-video {
      --plyr-color-main: #003366;
-     
+     --plyr-video-control-background-hover: #003366;
+	 
      .faculty-nat & {
 	 --plyr-color-main: #048767;
      }
@@ -23,6 +24,9 @@
 	 --plyr-color-main:  #0381A2;
      }
 }
+*/
+@import "plyr/plyr";
+
 .rrze-video {
     .youtube-video,
     .vimeo-video,
@@ -81,5 +85,10 @@
      .iframecontainer.ard {
 	padding-bottom: 62%;
     }
-    
+    .plyr__control--overlaid {
+	background: transparent;
+    }
+    .plyr__control {
+	background: transparent;
+    }
 }
