@@ -183,7 +183,7 @@ class OEmbed {
     static function sanitize_oembed_data($data) {
 	// dont trust them ;)
 	$urllist = array("file", "url", "preview_image", "poster", "thumbnail_url", "alternative_Video_size_large_url", "alternative_Video_size_medium_url", "transcript","provider_url");
-	$textstrings = array("inLanguage", "author_name", "title", "provider_name", "type", "version");
+	$textstrings = array("inLanguage", "author_name", "title", "provider_name", "type", "version", "name");
 	$textareastrings  = array("description");
 	$htmllist = array("html");
 	$numbers = array("width", "height", "thumbnail_width", "thumbnail_height", "alternative_Video_size_large_width", "alternative_Video_size_large_height", "alternative_Video_size_medium_width", "alternative_Video_size_medium_height");
@@ -197,7 +197,7 @@ class OEmbed {
 		    if (in_array($key, $urllist)) {
 			$data['video'][$key] = esc_url_raw($data['video'][$key]);
 		    } elseif (in_array($key, $textstrings)) {
-			$data['video'][$key] = sanitize_text_field($data['video'][$key]);
+			$data['video'][$key] = esc_html($data['video'][$key]);
 		    } elseif (in_array($key, $textareastrings)) {
 			$data['video'][$key] = sanitize_textarea_field($data['video'][$key]);
 		    } elseif (in_array($key, $htmllist)) {
@@ -206,7 +206,7 @@ class OEmbed {
 		    } elseif (in_array($key, $numbers)) {
 			$data['video'][$key] = intval($data['video'][$key]);	
 		    } else {
-			$data['video'][$key] = sanitize_text_field($data['video'][$key]);
+			$data['video'][$key] = esc_html($data['video'][$key]);
 		    }
 		}
 	    }

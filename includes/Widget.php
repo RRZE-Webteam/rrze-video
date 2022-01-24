@@ -109,12 +109,14 @@ class Video_Widget extends \WP_Widget {
         $url	= !empty( $instance['url'] ) ? $instance['url'] : '';
         $rand	= !empty( $instance['genre'] ) ? $instance['genre'] : '';
 	$title = isset($instance['widget_title']) ? esc_html($instance['widget_title']) : '';
-        $meta	= $instance['meta'];
 	
-	$showtitle	= $instance['showtitle'];
-        $info	= $instance['info'];
-	$desc	= $instance['desc'];
-	$link	= $instance['link'];
+	$meta = isset($instance['meta']) ? true : false;
+	$showtitle = isset($instance['showtitle']) ? true : false;
+	$info = isset($instance['info']) ? true : false;
+	$desc = isset($instance['desc']) ? true : false;
+	$link = isset($instance['link']) ? true : false;
+	
+       
 	
 
 	
