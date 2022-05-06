@@ -36,7 +36,11 @@ class Video extends Shortcodes {
 	$arguments = self::translate_parameters($arguments);
 	$arguments = Data::sanitize_shortcodeargs($arguments);
 	
-	return Player::get_player($arguments);
+    return apply_filters(
+        'rrze_video_widget_player_content',
+        Player::get_player($arguments),
+        $arguments
+    );
 	
     }
     // Copies old direkt parameters of the shortcode into show/hide-Parameter
