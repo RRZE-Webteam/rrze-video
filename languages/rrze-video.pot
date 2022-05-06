@@ -1,18 +1,38 @@
-# Copyright (C) 2020 rrze-video
-# This file is distributed under the same license as the rrze-video package.
+# Copyright (C) 2022 RRZE-Webteam
+# This file is distributed under the GNU GPLv2.
 msgid ""
 msgstr ""
-"Project-Id-Version: rrze-video\n"
+"Project-Id-Version: RRZE Video 3.2.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-video\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: https://github.com/RRZE-Webteam/rrze-video/issues\n"
-"X-Poedit-Basepath: ..\n"
-"X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
-"X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: *.js\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: 2022-05-06T08:06:29+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.6.0\n"
+"X-Domain: rrze-video\n"
+
+#. Plugin Name of the plugin
+msgid "RRZE Video"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://github.com/RRZE-Webteam/rrze-video"
+msgstr ""
+
+#. Description of the plugin
+msgid "Plugin zum Embedding von Videos"
+msgstr ""
+
+#. Author of the plugin
+msgid "RRZE-Webteam"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "http://blogs.fau.de/webworking/"
+msgstr ""
 
 #: config/config.php:53
 msgid "Einstellungen"
@@ -43,7 +63,7 @@ msgid "Kategorie (Slug) der Videothek aus der per Zufall ein Video gezeigt werde
 msgstr ""
 
 #: config/config.php:134
-msgid "CSS Klassen, die der Shordcode erhalten soll."
+msgid "CSS Klassen, die der Shortcode erhalten soll."
 msgstr ""
 
 #: config/config.php:140
@@ -58,208 +78,130 @@ msgstr ""
 msgid "Anzuzeigende Felder, obige Checkboxen überschreibend"
 msgstr ""
 
-#: includes/IFrames.php:44
+#: includes/IFrames.php:37
 msgid "Der Video-Provider ist unbekannt. Ein Embedding des Videos ist daher nicht möglich."
 msgstr ""
 
-#: includes/IFrames.php:104
+#: includes/IFrames.php:95
 msgid "Die URL für die ARD Mediathek ist ungültig oder fehlerhaft."
 msgstr ""
 
-#: includes/IFrames.php:129
-msgid "Die URL für das Twitch Video ist ungültig oder fehlerhaft."
-msgstr ""
-
-#: includes/IFrames.php:150
+#: includes/IFrames.php:117
 msgid "Die URL für die BR Mediathek ist ungültig oder fehlerhaft."
-msgstr ""
-
-#: includes/OEmbed.php:144
-msgid "Der Aufruf verweist auf eine Kurssammlung. Diese kann nicht eingebunden werden. Rufen Sie das Video daher direkt unter der URL auf: "
-msgstr ""
-
-#: includes/OEmbed.php:141
-msgid "Der Aufruf verweist auf eine Videosammlung. Diese kann nicht eingebunden werden. Rufen Sie das Video daher direkt unter der URL auf: "
-msgstr ""
-
-#: includes/OEmbed.php:139
-msgid "Die FAU-Video URL enthält keine gültige Video Id"
-msgstr ""
-
-#: includes/Player.php:24
-msgid "Fehler bei der Anzeige des Videoplayers: Es wurden keine ausreichenden Daten übergeben."
-msgstr ""
-
-#: includes/Player.php:184, includes/Player.php:162, includes/Player.php:152, includes/Player.php:109, includes/Player.php:101
-msgid "Fehler beim Abruf des Videos"
-msgstr ""
-
-#: includes/Player.php:192
-msgid "Es wurde weder eine gültige Id noch eine keine gültige URL für ein Video angegeben."
-msgstr ""
-
-#: includes/Player.php:189
-msgid "Es konnte kein Video aus der angegebenen Kategorie gefunden werden"
-msgstr ""
-
-#: includes/Player.php:187
-msgid "Die verwendete Id des Videos ist ungültig oder konnte keinem Video zugeordnet werden."
-msgstr ""
-
-#: includes/Player.php:164, includes/Player.php:111
-msgid "Videodaten konnten nicht abgerufen werden."
-msgstr ""
-
-#: includes/Player.php:135
-msgid "Unbekannte Videoquelle"
-msgstr ""
-
-#: includes/Player.php:137
-msgid "Der folgenden Adresse konnte keinem bekannten Videoprovider zugeordnet werden oder dieser verfügt nicht über eine geeignete Schnittstelle zum Abruf von Videos."
-msgstr ""
-
-#: includes/Player.php:138
-msgid "Bitte rufen Sie das Video daher auf, indem Sie direkt den folgenden Link folgen:"
-msgstr ""
-
-#: includes/Player.php:122
-msgid "Link"
-msgstr ""
-
-#: includes/Player.php:125, includes/Player.php:436, includes/Player.php:407
-msgid "Quelle"
-msgstr ""
-
-#: includes/Player.php:205
-msgid "Es wurde kein gültiger Videoprovider gefunden. Das Video kann daher nicht abgespielt werden oder konnte nicht erkannt werden."
-msgstr ""
-
-#: includes/Player.php:214
-msgid "fehler beim Abruf des Videos:"
-msgstr ""
-
-#: includes/Player.php:384
-msgid "Videoprovider fehlerhaft definiert."
-msgstr ""
-
-#: includes/Player.php:366
-msgid "Audiotranskription"
-msgstr ""
-
-#: includes/Player.php:372
-msgid "Ihr Browser unterstützt leider keine HTML5 Videoformate. "
-msgstr ""
-
-#: includes/Player.php:439
-msgid "Dieses Video ist Teil einer Video-Sammlung"
-msgstr ""
-
-#: includes/Player.php:396
-msgid "Autor"
-msgstr ""
-
-#: includes/Player.php:413
-msgid "Video mit Vortragsfolien"
-msgstr ""
-
-#: includes/Player.php:416
-msgid "Audio-Format"
-msgstr ""
-
-#: includes/Player.php:421
-msgid "Provider"
-msgstr ""
-
-#: includes/Widget.php:40
-msgid "Zeigt Videos in der Sidebar oder im Footer an."
-msgstr ""
-
-#: includes/Widget.php:127
-msgid "Es sind noch keine Videos in Ihrer Mediathek vorhanden."
-msgstr ""
-
-#: includes/Widget.php:117
-msgid "Bitte wählen Sie ein Video aus Ihrer lokalen Videothek aus:"
-msgstr ""
-
-#: includes/Widget.php:119
-msgid "Video aus der Mediathek auswählen"
-msgstr ""
-
-#: includes/Widget.php:137
-msgid "Videoquelle"
-msgstr ""
-
-#: includes/Widget.php:139
-msgid "Auswahl über URL"
-msgstr ""
-
-#: includes/Widget.php:142
-msgid "Geben Sie eine URL zum gewünschten Video an:"
-msgstr ""
-
-#: includes/Widget.php:143, includes/Metaboxes/Video.php:40, includes/Taxonomy/Video.php:161
-msgid "URL"
-msgstr ""
-
-#: includes/Widget.php:146
-msgid "z. B. https://www.video.uni-erlangen.de/webplayer/id/13953"
-msgstr ""
-
-#: includes/Widget.php:153
-msgid "Alternativ Auswahl über Videothek"
-msgstr ""
-
-#: includes/Widget.php:157
-msgid "Oder wählen Sie eine Kategorie aus Ihrer lokalen Videothek aus um aus dieser ein zufälliges Video anzuzeigen:"
-msgstr ""
-
-#: includes/Widget.php:176
-msgid "Kategorie auswählen"
-msgstr ""
-
-#: includes/Widget.php:191
-msgid "Video Optionen"
-msgstr ""
-
-#: includes/Widget.php:194
-msgid "Titel anzeigen"
-msgstr ""
-
-#: includes/Widget.php:195
-msgid "Videotitel oberhalb des Videos anzeigen"
-msgstr ""
-
-#: includes/Widget.php:199
-msgid "Link auf Quelle"
-msgstr ""
-
-#: includes/Widget.php:200
-msgid "Link zur Originalquelle bei dem Videoprovider angeben"
-msgstr ""
-
-#: includes/Widget.php:204
-msgid "Metaangaben anzeigen"
-msgstr ""
-
-#: includes/Widget.php:205
-msgid "Autor, Copyright, Quelle und Beschreibung, falls angegeben"
-msgstr ""
-
-#: includes/Widget.php:209
-msgid "Vollständige Info angeben"
-msgstr ""
-
-#: includes/Widget.php:210
-msgid "Metaangaben, Link und Beschreibung ausgeben"
 msgstr ""
 
 #: includes/Metaboxes/Video.php:33
 msgid "Video-Daten"
 msgstr ""
 
+#: includes/Metaboxes/Video.php:40
+#: includes/Taxonomy/Video.php:161
+#: includes/Widget.php:164
+msgid "URL"
+msgstr ""
+
 #: includes/Metaboxes/Video.php:41
 msgid "Webadresse (URL) zum Video auf dem verwendeten Videoportal (FAU-Videoportal, YouTube, Vimeo oder andere)."
+msgstr ""
+
+#: includes/OEmbed.php:145
+msgid "Die FAU-Video URL enthält keine gültige Video Id"
+msgstr ""
+
+#: includes/OEmbed.php:147
+msgid "Der Aufruf verweist auf eine Videosammlung. Diese kann nicht eingebunden werden. Rufen Sie das Video daher direkt unter der URL auf: "
+msgstr ""
+
+#: includes/OEmbed.php:150
+msgid "Der Aufruf verweist auf eine Kurssammlung. Diese kann nicht eingebunden werden. Rufen Sie das Video daher direkt unter der URL auf: "
+msgstr ""
+
+#: includes/Player.php:25
+msgid "Fehler bei der Anzeige des Videoplayers: Es wurden keine ausreichenden Daten übergeben."
+msgstr ""
+
+#: includes/Player.php:102
+#: includes/Player.php:110
+#: includes/Player.php:153
+#: includes/Player.php:163
+#: includes/Player.php:185
+#: includes/Player.php:215
+msgid "Fehler beim Abruf des Videos"
+msgstr ""
+
+#: includes/Player.php:112
+#: includes/Player.php:165
+msgid "Videodaten konnten nicht abgerufen werden."
+msgstr ""
+
+#: includes/Player.php:123
+msgid "Link"
+msgstr ""
+
+#: includes/Player.php:126
+#: includes/Player.php:439
+#: includes/Player.php:468
+msgid "Quelle"
+msgstr ""
+
+#: includes/Player.php:136
+msgid "Unbekannte Videoquelle"
+msgstr ""
+
+#: includes/Player.php:138
+msgid "Der folgenden Adresse konnte keinem bekannten Videoprovider zugeordnet werden oder dieser verfügt nicht über eine geeignete Schnittstelle zum Abruf von Videos."
+msgstr ""
+
+#: includes/Player.php:139
+msgid "Bitte rufen Sie das Video daher auf, indem Sie direkt den folgenden Link folgen:"
+msgstr ""
+
+#: includes/Player.php:188
+msgid "Die verwendete Id des Videos ist ungültig oder konnte keinem Video zugeordnet werden."
+msgstr ""
+
+#: includes/Player.php:190
+msgid "Es konnte kein Video aus der angegebenen Kategorie gefunden werden"
+msgstr ""
+
+#: includes/Player.php:193
+msgid "Es wurde weder eine gültige Id noch eine keine gültige URL für ein Video angegeben."
+msgstr ""
+
+#: includes/Player.php:206
+msgid "Es wurde kein gültiger Videoprovider gefunden. Das Video kann daher nicht abgespielt werden oder konnte nicht erkannt werden."
+msgstr ""
+
+#: includes/Player.php:395
+msgid "Audiotranskription"
+msgstr ""
+
+#: includes/Player.php:401
+msgid "Ihr Browser unterstützt leider keine HTML5 Videoformate. "
+msgstr ""
+
+#: includes/Player.php:413
+msgid "Videoprovider fehlerhaft definiert."
+msgstr ""
+
+#: includes/Player.php:425
+msgid "Autor"
+msgstr ""
+
+#: includes/Player.php:445
+msgid "Video mit Vortragsfolien"
+msgstr ""
+
+#: includes/Player.php:448
+msgid "Audio-Format"
+msgstr ""
+
+#: includes/Player.php:453
+msgid "Provider"
+msgstr ""
+
+#: includes/Player.php:471
+msgid "Dieses Video ist Teil einer Video-Sammlung"
 msgstr ""
 
 #: includes/Taxonomy/Video.php:33
@@ -302,4 +244,88 @@ msgstr ""
 
 #: includes/Taxonomy/Video.php:163
 msgid "Kategorie"
+msgstr ""
+
+#: includes/Widget.php:40
+msgid "Zeigt Videos in der Sidebar oder im Footer an."
+msgstr ""
+
+#: includes/Widget.php:138
+msgid "Bitte wählen Sie ein Video aus Ihrer lokalen Videothek aus:"
+msgstr ""
+
+#: includes/Widget.php:140
+msgid "Video aus der Mediathek auswählen"
+msgstr ""
+
+#: includes/Widget.php:148
+msgid "Es sind noch keine Videos in Ihrer Mediathek vorhanden."
+msgstr ""
+
+#: includes/Widget.php:158
+msgid "Videoquelle"
+msgstr ""
+
+#: includes/Widget.php:160
+msgid "Auswahl über URL"
+msgstr ""
+
+#: includes/Widget.php:163
+msgid "Geben Sie eine URL zum gewünschten Video an:"
+msgstr ""
+
+#: includes/Widget.php:167
+msgid "z. B. https://www.video.uni-erlangen.de/webplayer/id/13953"
+msgstr ""
+
+#: includes/Widget.php:174
+msgid "Alternativ Auswahl über Videothek"
+msgstr ""
+
+#: includes/Widget.php:178
+msgid "Oder wählen Sie eine Kategorie aus Ihrer lokalen Videothek aus um aus dieser ein zufälliges Video anzuzeigen:"
+msgstr ""
+
+#: includes/Widget.php:197
+msgid "Kategorie auswählen"
+msgstr ""
+
+#: includes/Widget.php:212
+msgid "Video Optionen"
+msgstr ""
+
+#: includes/Widget.php:214
+msgid "Widget Titel:"
+msgstr ""
+
+#: includes/Widget.php:219
+msgid "Titel anzeigen"
+msgstr ""
+
+#: includes/Widget.php:220
+msgid "Videotitel oberhalb des Videos anzeigen; überschreibt Widget-Titel falls gesetzt."
+msgstr ""
+
+#: includes/Widget.php:224
+msgid "Link auf Quelle"
+msgstr ""
+
+#: includes/Widget.php:225
+msgid "Link zur Originalquelle bei dem Videoprovider angeben"
+msgstr ""
+
+#: includes/Widget.php:229
+msgid "Metaangaben anzeigen"
+msgstr ""
+
+#: includes/Widget.php:230
+msgid "Autor, Copyright, Quelle und Beschreibung, falls angegeben"
+msgstr ""
+
+#: includes/Widget.php:234
+msgid "Vollständige Info angeben"
+msgstr ""
+
+#: includes/Widget.php:235
+msgid "Metaangaben, Link und Beschreibung ausgeben"
 msgstr ""
