@@ -37,7 +37,7 @@ class Video extends Shortcodes {
 	$arguments = Data::sanitize_shortcodeargs($arguments);
 	
     return apply_filters(
-        'rrze_video_widget_player_content',
+        'rrze_video_player_content',
         Player::get_player($arguments),
         $arguments
     );
