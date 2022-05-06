@@ -15,13 +15,6 @@ class IFrames {
 		'home'	=> 'https://www.br.de',
 		'name'	=> 'BR Mediathek'
 		],
-	   'twitch' => [
-		'domains'	=> [
-			'www.twitch.tv'
-		    ],
-		'home'	=> 'https://www.twitch.tv',
-		'name'	=> 'twitch'
-		],
 	    'ard'   => [
 		'domains'	=> [
 			'www.ardmediathek.de'
@@ -78,8 +71,6 @@ class IFrames {
 	    return self::fetch_iframe_br($url);
 	} elseif ($provider == 'ard') {
 	    return self::fetch_iframe_ard($url);
-	} elseif ($provider == 'twitch') {
-	    return self::fetch_iframe_twitch($url);
 	}
 	return;
 	
@@ -105,31 +96,7 @@ class IFrames {
 	}
         return $videodata;
     }
-     static function fetch_iframe_twitch( $url ) {
-	$known = self::get_known_iframe_provider();
-        $videodata =  array(
-            'error'   => false,
-            'video'   => false,
-        );
-	// example Video URL: https://www.twitch.tv/videos/442305299
-	// Docs: https://dev.twitch.tv/docs/embed/video-and-clips
-	
-	if (preg_match('/\/videos\/[a-z0-9\-:\.]+$/',$url)) {
-	    $embedurl = preg_replace('/\/videos\/([a-z0-9\-:\.]+)$/','/?video=$1',$url);
-	    $siteurl = get_site_url();
-	    $parent = parse_url($siteurl, PHP_URL_HOST);
-	    $embedurl .= '&parent='.$parent;
-	    $videodata['video']['html'] = '<iframe class="remoteembed" frameborder="0" scrolling="no" allowfullscreen="true" src="'.$embedurl.'"></iframe>';
-	    $videodata['video']['orig_url'] = $url;
-	    $videodata['video']['embed_url'] = $embedurl;
-	    $videodata['video']['provider_url'] = $known['twitch']['home'];
-	    $videodata['video']['provider_name'] = $known['twitch']['name'];
-	    $videodata['video']['provider'] = 'twitch';
-	} else {
-	    $videodata['error'] = __('Die URL für das Twitch Video ist ungültig oder fehlerhaft.','rrze-video');
-	}
-        return $videodata;
-    }
+
     static function fetch_iframe_br( $url ) {
 	$known = self::get_known_iframe_provider();
         $videodata =  array(
