@@ -1,17 +1,16 @@
 <?php
-/**
+
+/*
 Plugin Name: RRZE Video
 Plugin URI: https://github.com/RRZE-Webteam/rrze-video
 Description: Plugin zum Embedding von Videos 
-Version: 3.1.8-3
+Version: 3.2.0
 Author: RRZE-Webteam
 Author URI: http://blogs.fau.de/webworking/
 License: GNU GPLv2
 License URI: https://gnu.org/licenses/gpl.html
 Text Domain: rrze-video
- */
-
-	
+*/
 
 namespace RRZE\Video;
 
@@ -42,7 +41,7 @@ spl_autoload_register(function ($class) {
 });
 
 const RRZE_PHP_VERSION = '7.4';
-const RRZE_WP_VERSION = '5.5';
+const RRZE_WP_VERSION = '5.9';
 
 register_activation_hook(__FILE__, __NAMESPACE__ . '\activation');
 register_deactivation_hook(__FILE__, __NAMESPACE__ . '\deactivation');
@@ -91,7 +90,8 @@ function activation()
 /**
  * Remove Roles and Caps
  */
-function deactivation() {
+function deactivation()
+{
     Roles::removeRoleCaps();
 
     flush_rewrite_rules();
@@ -142,6 +142,3 @@ function loaded()
     $main = new Main(__FILE__);
     $main->onLoaded();
 }
-
-
-    
