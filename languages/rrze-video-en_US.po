@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: rrze-video\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-video\n"
 "POT-Creation-Date: 2022-05-06T08:06:29+00:00\n"
-"PO-Revision-Date: 2022-05-06 10:09+0200\n"
-"Last-Translator: Wolfgang Wiese <wolfgang.wiese@fau.de>\n"
+"PO-Revision-Date: 2022-05-06 11:05+0200\n"
+"Last-Translator: RRZE Webteam\n"
 "Language-Team: English (United States)\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
@@ -134,7 +134,7 @@ msgid ""
 "werden. Rufen Sie das Video daher direkt unter der URL auf: "
 msgstr ""
 "The call refers to a video collection. This cannot be integrated. So call up "
-"the video directly under the URL:"
+"the video directly under the URL: "
 
 #: includes/OEmbed.php:150
 msgid ""
@@ -142,7 +142,7 @@ msgid ""
 "werden. Rufen Sie das Video daher direkt unter der URL auf: "
 msgstr ""
 "The call refers to a collection of courses. This cannot be integrated. So "
-"call up the video directly under the URL:"
+"call up the video directly under the URL: "
 
 #: includes/Player.php:25
 msgid ""
@@ -218,7 +218,7 @@ msgstr "Audio transcription"
 
 #: includes/Player.php:401
 msgid "Ihr Browser unterstützt leider keine HTML5 Videoformate. "
-msgstr "Unfortunately, your browser does not support HTML5 video formats."
+msgstr "Unfortunately, your browser does not support HTML5 video formats. "
 
 #: includes/Player.php:413
 msgid "Videoprovider fehlerhaft definiert."
