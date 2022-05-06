@@ -84,7 +84,6 @@ Folgender Parameter ist optional und beeinflussen die Ausgabe zusätzlicher Date
 ### Über IFrames, ohne Ausgabe von zusätzlichen Metadaten.
 - ARD Mediathek
 - BR Mediathek
-- Twitch
 
 
 ## Beispielaufrufe als Shortcode
