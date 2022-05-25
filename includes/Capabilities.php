@@ -4,6 +4,10 @@ namespace RRZE\Video;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Class Capabilities
+ * @package RRZE\Video
+ */
 class Capabilities
 {
     protected static function currentCptArgs()
@@ -14,7 +18,7 @@ class Capabilities
                 'capabilities' => [],
                 'map_meta_cap' => true
             ]
-           
+
         ];
     }
 
