@@ -4,75 +4,71 @@ namespace RRZE\Video;
 
 defined('ABSPATH') || exit;
 
-use RRZE\Video\Settings;
-use RRZE\Video\Taxonomy\Taxonomy;
-use RRZE\Video\Shortcodes\Shortcodes;
-use RRZE\Video\Metaboxes\Metaboxes;
-use RRZE\Video\Widget;
-
-	
-
 /**
- * Hauptklasse (Main)
+ * Class Main
+ * @package RRZE\Video
  */
+class Main
+{
+    public function __construct()
+    {
+        // Set the video custom post type.
+        new CPT();
 
-class Main {
-    protected $pluginFile;
-    private $settings = '';
+        // Metabox
+        new Metabox();
 
-    public function __construct($pluginFile) {
-        $this->pluginFile = $pluginFile;
+        // Set the video shortcode.
+        new Shortcode();
+
+        // Set the video widget.
+        add_action('widgets_init', [$this, 'registerWidget']);
+
+        // Enqueue scripts.
+        add_action('wp_enqueue_scripts', [$this, 'registerFrontendStyles']);
+        add_action('admin_enqueue_scripts', [$this, 'adminEnqueueScripts']);
     }
 
-    public function onLoaded() {
-	add_action('wp_enqueue_scripts', [$this, 'registerFrontendStyles']);
-	add_action('admin_enqueue_scripts', [$this, 'adminEnqueueScripts']);
-
-	// Settings-Klasse wird instanziiert.
-        $settings = new Settings($this->pluginFile);
-        $settings->onLoaded();
-	$this->settings = $settings;
-
-	// Posttypes 
-        $taxonomies = new Taxonomy($this->pluginFile, $settings);
-        $taxonomies->onLoaded();
-	
-	// Add Metaboxes
-	$metaboxes = new Metaboxes($this->pluginFile, $settings); 
-        $metaboxes->onLoaded();
-	
-	// Add Shortcodes
-        $shortcodes = new Shortcodes($this->pluginFile, $settings); 
-        $shortcodes->onLoaded();
-
-	// Add Widget
-        $widget = new Widget($this->pluginFile, $settings); 
-        $widget->onLoaded();
-	
-
-	return;			
-    }
-    
-    public function registerFrontendStyles() {
-	wp_register_style('rrze-video', plugins_url('css/rrze-video.css', plugin_basename($this->pluginFile)));
-	wp_register_script('plyr', plugins_url('js/plyr.js', plugin_basename($this->pluginFile)), '', '', false);
-	wp_register_script('rrze-video-scripts', plugins_url('js/rrze-video.js', plugin_basename($this->pluginFile), array('plyr-js')));
-	
+    /**
+     * Register the video widget.
+     */
+    public function registerWidget()
+    {
+        register_widget(__NAMESPACE__ . '\Widget');
     }
 
-    static function enqueueFrontendStyles( $plyr = true) {
-	 wp_enqueue_style('rrze-video');  
-	 if ($plyr) {
-	    wp_enqueue_script('plyr',plugins_url('js/plyr.js',  plugin()->getBasename()), '', '', false);
-	    wp_enqueue_script('rrze-video-scripts');
-	 }
-    }
-    
-    public function adminEnqueueScripts($hook) {
-	wp_register_style('rrze-video-adminstyle', plugins_url('css/rrze-video-admin.css', plugin_basename($this->pluginFile)));
-	wp_enqueue_style('rrze-video-adminstyle');
+    /**
+     * Register the scripts for the frontend.
+     */
+    public function registerFrontendStyles()
+    {
+        wp_register_style(
+            'rrze-video',
+            plugins_url('css/rrze-video.css', plugin()->getBasename()),
+            [],
+            plugin()->getVersion()
+        );
+        wp_register_script(
+            'plyr',
+            plugins_url('js/plyr.js', plugin()->getBasename()),
+            [],
+            plugin()->getVersion()
+        );
+        wp_register_script(
+            'rrze-video-scripts',
+            plugins_url('js/rrze-video.js', plugin()->getBasename()),
+            ['plyr'],
+            plugin()->getVersion()
+        );
     }
 
+    public function adminEnqueueScripts()
+    {
+        wp_enqueue_style(
+            'rrze-video-adminstyle',
+            plugins_url('css/rrze-video-admin.css', plugin()->getBasename()),
+            [],
+            plugin()->getVersion()
+        );
+    }
 }
-
-
