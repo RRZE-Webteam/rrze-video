@@ -32,18 +32,16 @@ class Widget extends \WP_Widget
      */
     public function widget($args, $instance)
     {
-        global $post;
         extract($args);
 
         echo $before_widget;
 
-        $arguments = array();
+        $arguments = [];
 
-        $arguments['id']    = (!empty($instance['id'])) ? $instance['id'] : '';
-        $arguments['url']   = (!empty($instance['url'])) ? $instance['url'] : '';
-        $arguments['rand']   = (!empty($instance['genre'])) ? $instance['genre'] : '';
-        $arguments['widget_title']   = (!empty($instance['widget_title'])) ? sanitize_text_field($instance['widget_title']) : '';
-
+        $arguments['id'] = $instance['id'] ?? '';
+        $arguments['url'] = $instance['url'] ?? '';
+        $arguments['rand'] = $instance['genre'] ?? '';
+        $arguments['widget_title'] = !empty($instance['widget_title']) ? sanitize_text_field($instance['widget_title']) : '';
 
         $arguments['show'] = '';
         if (!empty($instance['showtitle'])) {
@@ -63,6 +61,7 @@ class Widget extends \WP_Widget
         }
 
         $arguments = Shortcode::instance()->sanitizeArgs($arguments, 'rrzevideo');
+        
         if (!empty($instance['widget_title'])) {
             $arguments['widgetargs']['title'] = $instance['widget_title'];
         }
@@ -82,7 +81,6 @@ class Widget extends \WP_Widget
         echo $after_widget;
     }
 
-
     /**
      * Outputs the options form on admin
      *
@@ -90,10 +88,10 @@ class Widget extends \WP_Widget
      */
     public function form($instance)
     {
-        $id    = !empty($instance['id'])  ? $instance['id'] : '';
-        $url    = !empty($instance['url']) ? $instance['url'] : '';
-        $rand    = !empty($instance['genre']) ? $instance['genre'] : '';
-        $title = isset($instance['widget_title']) ? esc_html($instance['widget_title']) : '';
+        $id = $instance['id'] ?? '';
+        $url = $instance['url'] ?? '';
+        $rand = $instance['genre'] ?? '';
+        $title = !empty($instance['widget_title']) ? esc_html($instance['widget_title']) : '';
 
         $meta = isset($instance['meta']) ? true : false;
         $showtitle = isset($instance['showtitle']) ? true : false;
@@ -126,7 +124,7 @@ class Widget extends \WP_Widget
         }
         wp_reset_postdata();
         // : end post-type video videos select
-    ?>
+?>
         <div class="rrze-video-admin">
             <fieldset>
                 <legend><?php _e('Video source', 'rrze-video'); ?></legend>
@@ -139,7 +137,7 @@ class Widget extends \WP_Widget
                         <input class="widefat code" id="<?php echo esc_attr($this->get_field_id('url')); ?>" name="<?php echo esc_attr($this->get_field_name('url')); ?>" type="text" value="<?php echo esc_attr($url); ?>">
 
                         <p><em><?php _e('e.g. https://www.video.uni-erlangen.de/webplayer/id/13953', 'rrze-video') ?></em><br>
-                           <?php _e('Supported video sources are currently: FAU video portal, YouTube and Vimeo.', 'rrze-video') ?>
+                            <?php _e('Supported video sources are currently: FAU video portal, YouTube and Vimeo.', 'rrze-video') ?>
                         </p>
                     </div>
 
@@ -178,8 +176,6 @@ class Widget extends \WP_Widget
 
                     <?php } ?>
 
-
-
                 </div>
             </fieldset>
             <fieldset class="displayoptions">
@@ -210,7 +206,7 @@ class Widget extends \WP_Widget
                 </p>
             </fieldset>
         </div>
-    <?php
+<?php
     }
 
     /*
@@ -219,17 +215,16 @@ class Widget extends \WP_Widget
      */
     public function update($new_instance, $old_instance)
     {
-
         $instance = $old_instance;
-        $instance['id']             = sanitize_key($new_instance['id']);
-        $instance['url']            = esc_url_raw($new_instance['url']);
-        $instance['widget_title']   = sanitize_text_field($new_instance['widget_title']);
-        $instance['meta']           =  $new_instance['meta'];
-        $instance['showtitle']      =  $new_instance['showtitle'];
-        $instance['desc']           =  $new_instance['desc'];
-        $instance['link']           = $new_instance['link'];
-        $instance['info']           = $new_instance['info'];
-        $instance['genre']          = strip_tags($new_instance['genre']);
+        $instance['id'] = sanitize_key($new_instance['id']);
+        $instance['url'] = esc_url_raw($new_instance['url']);
+        $instance['widget_title'] = sanitize_text_field($new_instance['widget_title']);
+        $instance['meta'] = $new_instance['meta'];
+        $instance['showtitle'] = $new_instance['showtitle'];
+        $instance['desc'] = $new_instance['desc'];
+        $instance['link'] = $new_instance['link'];
+        $instance['info'] = $new_instance['info'];
+        $instance['genre'] = strip_tags($new_instance['genre']);
 
         return $instance;
     }
