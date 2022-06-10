@@ -19,7 +19,7 @@ class Main
         new Metabox();
 
         // Set the video shortcode.
-        new Shortcode();
+        Shortcode::instance()->loaded();
 
         // Set the video widget.
         add_action('widgets_init', [$this, 'registerWidget']);
@@ -43,30 +43,25 @@ class Main
     public function registerFrontendStyles()
     {
         wp_register_style(
-            'rrze-video',
-            plugins_url('css/rrze-video.css', plugin()->getBasename()),
+            'rrze-video-plyr',
+            plugins_url('build/front.css', plugin()->getBasename()),
             [],
             plugin()->getVersion()
         );
         wp_register_script(
-            'plyr',
-            plugins_url('js/plyr.js', plugin()->getBasename()),
-            [],
-            plugin()->getVersion()
-        );
-        wp_register_script(
-            'rrze-video-scripts',
-            plugins_url('js/rrze-video.js', plugin()->getBasename()),
-            ['plyr'],
-            plugin()->getVersion()
+            'rrze-video-plyr',
+            plugins_url('build/front.js', plugin()->getBasename()),
+            ['jquery-core'],
+            plugin()->getVersion(),
+            true
         );
     }
 
     public function adminEnqueueScripts()
     {
         wp_enqueue_style(
-            'rrze-video-adminstyle',
-            plugins_url('css/rrze-video-admin.css', plugin()->getBasename()),
+            'rrze-video-admin',
+            plugins_url('build/admin.css', plugin()->getBasename()),
             [],
             plugin()->getVersion()
         );
