@@ -2,8 +2,8 @@
 /*
 Plugin Name:    RRZE Video
 Plugin URI:     https://github.com/RRZE-Webteam/rrze-video
-Description:    Embedding videos via a shortcode or widget based on the media player "Plyr". 
-Version:        3.3.0
+Description:    Embedding videos via a shortcode or widget based on the Plyr video player. 
+Version:        3.4.0
 Author:         RRZE-Webteam
 Author URI:     http://blogs.fau.de/webworking/
 License:        GNU General Public License Version 3
@@ -12,17 +12,12 @@ Domain Path:    /languages
 Text Domain:    rrze-video
 */
 
-
-
 namespace RRZE\Video;
 
 defined('ABSPATH') || exit;
 
 const RRZE_PHP_VERSION = '7.4';
 const RRZE_WP_VERSION  = '5.9';
-
-// Laden der Konfigurationsdatei
-require_once __DIR__ . '/config/config.php';
 
 /**
  * SPL Autoloader (PSR-4).
@@ -57,7 +52,7 @@ add_action('plugins_loaded', __NAMESPACE__ . '\loaded');
  */
 function loadTextdomain()
 {
-    load_plugin_textdomain('rrze-legal', false, dirname(plugin_basename(__FILE__)) . '/languages');
+    load_plugin_textdomain('rrze-video', false, dirname(plugin_basename(__FILE__)) . '/languages');
 }
 
 /**
