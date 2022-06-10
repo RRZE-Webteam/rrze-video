@@ -34,7 +34,7 @@ class CPT
 
         $video_args = array(
             'label'                 => __('Video', 'rrze-video'),
-            'description'           => __('Videosammlung erstellen', 'rrze-video'),
+            'description'           => __('Create video collection', 'rrze-video'),
             'labels'                => $labels,
             'supports'              => array('title', 'thumbnail'),
             'taxonomies'            => array('Genre'),
@@ -121,7 +121,11 @@ class CPT
             foreach ($filters as $tax_slug) {
                 $tax_obj = get_taxonomy($tax_slug);
                 wp_dropdown_categories(array(
-                    'show_option_all' => sprintf(__('Alle %s anzeigen', 'rrze-video'), $tax_obj->label),
+                    'show_option_all' => sprintf(
+                        /* translators: %s: Categories. */
+                        __('Display all %s', 'rrze-video'),
+                        $tax_obj->label
+                    ),
                     'taxonomy' => $tax_slug,
                     'name' => $tax_obj->name,
                     'orderby' => 'name',
@@ -138,11 +142,11 @@ class CPT
     {
         $columns = [
             'cb'                => '<input type="checkbox" />',
-            'title'             => __('Titel', 'rrze-video'),
-            self::TAX_CATEGORY  => __('Kategorie', 'rrze-video'),
+            'title'             => __('Title', 'rrze-video'),
+            self::TAX_CATEGORY  => __('Category', 'rrze-video'),
             'id'                => __('ID', 'rrze-video'),
             'url'               => __('URL', 'rrze-video'),
-            'thumbnail'         => __('Vorschaubild', 'rrze-video'),
+            'thumbnail'         => __('Thumbnail', 'rrze-video'),
         ];
         return $columns;
     }
