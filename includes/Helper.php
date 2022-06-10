@@ -2,8 +2,6 @@
 
 namespace RRZE\Video;
 
-use function RRZE\Video\Config\getConstants;
-
 defined('ABSPATH') || exit;
 
 class Helper
@@ -21,21 +19,6 @@ class Helper
             include_once(ABSPATH . 'wp-admin/includes/plugin.php');
         }
         return is_plugin_active($plugin);
-    }
-
-
-
-    public static function isFAUTheme()
-    {
-        $constants = getConstants();
-        $themelist = $constants['fauthemes'];
-        $fautheme = false;
-        $active_theme = wp_get_theme();
-        $active_theme = $active_theme->get('Name');
-        if (in_array($active_theme, $themelist)) {
-            $fautheme = true;
-        }
-        return $fautheme;
     }
 
     public static function get_html_var_dump($input, $nohtml = true)
