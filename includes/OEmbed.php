@@ -7,7 +7,7 @@ defined('META_EXPIRATION') || define('META_EXPIRATION', 60 * 60 * 4);
 
 class OEmbed
 {
-    static function get_known_provider()
+    public static function get_known_provider()
     {
         return [
             'fau'    => [
@@ -48,7 +48,7 @@ class OEmbed
     }
 
 
-    static function is_oembed_provider($url)
+    public static function is_oembed_provider($url)
     {
         if (!isset($url)) {
             return '';
@@ -70,7 +70,7 @@ class OEmbed
         return $res;
     }
 
-    static function get_oembed_data($provider, $url)
+    public static function get_oembed_data($provider, $url)
     {
         if (!isset($provider)) {
             return;
@@ -84,7 +84,8 @@ class OEmbed
             return self::sanitize_oembed_data(self::fetch_defaultoembed_video($provider, $url));
         }
     }
-    static function fetch_defaultoembed_video($provider, $url)
+
+    public static function fetch_defaultoembed_video($provider, $url)
     {
         $known = self::get_known_provider();
         $transient = 'rrze_video_default_' . md5($url);
@@ -109,8 +110,7 @@ class OEmbed
         return $videodata;
     }
 
-
-    static function fetch_youtube_video($url)
+    public static function fetch_youtube_video($url)
     {
         $known = self::get_known_provider();
         $transient = 'rrze_video_youtube_' . md5($url);
@@ -138,7 +138,7 @@ class OEmbed
         return $videodata;
     }
 
-    static function fetch_fau_video($url)
+    public static function fetch_fau_video($url)
     {
         $known = self::get_known_provider();
         $fau_video =  array(
@@ -148,12 +148,12 @@ class OEmbed
         $fau_video['oembed_api_url'] = $known['fau']['api-endpoint'] . '?url=' . $url . '&format=json';
 
         if (false === preg_match('/(clip|webplayer)\/id\/(\d+)/', $url)) {
-            $fau_video['error'] = __('Die FAU-Video URL enthält keine gültige Video Id', 'rrze-video');
+            $fau_video['error'] = __('The FAU-Video URL does not contain a valid video ID', 'rrze-video');
         } elseif (preg_match('/\/collection\/id\/[0-9]+$/', $url)) {
-            $fau_video['error'] = __('Der Aufruf verweist auf eine Videosammlung. Diese kann nicht eingebunden werden. Rufen Sie das Video daher direkt unter der URL auf: ', 'rrze-video');
+            $fau_video['error'] = __('The call refers to a video collection. This cannot be integrated. So call up the video directly under the URL:', 'rrze-video');
             $fau_video['error'] .= '<a href="' . $url . '">' . $url . '</a>';
         } elseif (preg_match('/\/course\/id\/[0-9]+$/', $url)) {
-            $fau_video['error'] = __('Der Aufruf verweist auf eine Kurssammlung. Diese kann nicht eingebunden werden. Rufen Sie das Video daher direkt unter der URL auf: ', 'rrze-video');
+            $fau_video['error'] = __('The call refers to a collection of courses. This cannot be integrated. So call up the video directly under the URL:', 'rrze-video');
             $fau_video['error'] .= '<a href="' . $url . '">' . $url . '</a>';
         } else {
             $transient = 'rrze_video_fau_' . md5($url);
@@ -192,14 +192,48 @@ class OEmbed
         return $fau_video;
     }
 
-    static function sanitize_oembed_data($data)
+    public static function sanitize_oembed_data($data)
     {
-        // dont trust them ;)
-        $urllist = array("file", "url", "preview_image", "poster", "thumbnail_url", "alternative_Video_size_large_url", "alternative_Video_size_medium_url", "transcript", "provider_url");
-        $textstrings = array("inLanguage", "author_name", "title", "provider_name", "type", "version", "name");
-        $textareastrings  = array("description");
-        $htmllist = array("html");
-        $numbers = array("width", "height", "thumbnail_width", "thumbnail_height", "alternative_Video_size_large_width", "alternative_Video_size_large_height", "alternative_Video_size_medium_width", "alternative_Video_size_medium_height");
+        $urllist = [
+            'file',
+            'url',
+            'preview_image',
+            'poster',
+            'thumbnail_url',
+            'alternative_Video_size_large_url',
+            'alternative_Video_size_medium_url',
+            'transcript',
+            'provider_url'
+        ];
+
+        $textstrings = [
+            'inLanguage',
+            'author_name',
+            'title',
+            'provider_name',
+            'type',
+            'version',
+            'name'
+        ];
+
+        $textareastrings  = [
+            'description'
+        ];
+
+        $htmllist = [
+            'html'
+        ];
+
+        $numbers = [
+            'width',
+            'height',
+            'thumbnail_width',
+            'thumbnail_height',
+            'alternative_Video_size_large_width',
+            'alternative_Video_size_large_height',
+            'alternative_Video_size_medium_width',
+            'alternative_Video_size_medium_height'
+        ];
 
         if (is_array($data)) {
             if (isset($data['error'])) {
