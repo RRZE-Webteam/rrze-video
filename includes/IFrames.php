@@ -4,30 +4,34 @@ namespace RRZE\Video;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Class IFrames
+ * @package RRZE\Video
+ */
 class IFrames
 {
-    static function get_known_iframe_provider()
+    public static function get_known_iframe_provider()
     {
         return [
             'br'    => [
                 'domains'    => [
                     'www.br.de',
-                    'br.de'
+                    'br.de',
                 ],
                 'home'    => 'https://www.br.de',
-                'name'    => 'BR Mediathek'
+                'name'    => 'BR Mediathek',
             ],
             'ard'   => [
                 'domains'    => [
-                    'www.ardmediathek.de'
+                    'www.ardmediathek.de',
                 ],
                 'home'    => 'https://www.ardmediathek.de',
-                'name'    => 'ARD Mediathek'
+                'name'    => 'ARD Mediathek',
             ],
         ];
     }
 
-    static function get_iframe($url)
+    public static function get_iframe($url)
     {
         if (!isset($url)) {
             return '';
@@ -36,15 +40,15 @@ class IFrames
         if ($provider) {
             return self::get_iframe_data($provider, $url);
         } else {
-            $videodata =  array(
-                'error'   => __('Der Video-Provider ist unbekannt. Ein Embedding des Videos ist daher nicht möglich.', 'rrze-video'),
+            $data =  array(
+                'error'   => __('The video provider is unknown. It is therefore not possible to embed the video.', 'rrze-video'),
                 'video'   => false,
             );
-            return $videodata;
+            return $data;
         }
     }
 
-    static function is_iframe_provider($url)
+    public static function is_iframe_provider($url)
     {
         if (!isset($url)) {
             return '';
@@ -66,7 +70,7 @@ class IFrames
         return $res;
     }
 
-    static function get_iframe_data($provider, $url)
+    public static function get_iframe_data($provider, $url)
     {
         if (!isset($provider)) {
             return;
@@ -79,49 +83,50 @@ class IFrames
         }
         return;
     }
-    static function fetch_iframe_ard($url)
+
+    public static function fetch_iframe_ard($url)
     {
         $known = self::get_known_iframe_provider();
-        $videodata =  array(
-            'error'   => false,
-            'video'   => false,
-        );
+        $data =  [
+            'error' => false,
+            'video' => false,
+        ];
 
         if (preg_match('/\/[A-Za-z0-9]+\/?$/', $url)) {
             $embedurl = preg_replace('/\/([a-z0-9\-\/]+)\/([a-z0-9\-:\.]+)\/?$/', '/embed/$2', $url);
 
-            $videodata['video']['html'] = '<iframe class="remoteembed ard" allowfullscreen src="' . $embedurl . '" frameBorder="0" scrolling="no"></iframe>';
-            $videodata['video']['orig_url'] = $url;
-            $videodata['video']['embed_url'] = $embedurl;
-            $videodata['video']['provider_url'] = $known['ard']['home'];
-            $videodata['video']['provider_name'] = $known['ard']['name'];
-            $videodata['video']['provider'] = 'ard';
+            $data['video']['html'] = '<iframe class="remoteembed ard" allowfullscreen src="' . $embedurl . '" frameBorder="0" scrolling="no"></iframe>';
+            $data['video']['orig_url'] = $url;
+            $data['video']['embed_url'] = $embedurl;
+            $data['video']['provider_url'] = $known['ard']['home'];
+            $data['video']['provider_name'] = $known['ard']['name'];
+            $data['video']['provider'] = 'ard';
         } else {
-            $videodata['error'] = __('Die URL für die ARD Mediathek ist ungültig oder fehlerhaft.', 'rrze-video');
+            $data['error'] = __('The URL for the ARD Mediathek is invalid or incorrect.', 'rrze-video');
         }
-        return $videodata;
+        return $data;
     }
 
-    static function fetch_iframe_br($url)
+    public static function fetch_iframe_br($url)
     {
         $known = self::get_known_iframe_provider();
-        $videodata =  array(
-            'error'   => false,
-            'video'   => false,
-        );
+        $data =  [
+            'error' => false,
+            'video' => false,
+        ];
 
         if (preg_match('/\/mediathek\/video\/[a-z0-9\-:\.]+$/', $url)) {
             $embedurl = preg_replace('/\/mediathek\/video\/([a-z0-9\-:\.]+)$/', '/mediathek/embed/$1', $url);
 
-            $videodata['video']['html'] = '<iframe class="remoteembed" allowfullscreen src="' . $embedurl . '"></iframe>';
-            $videodata['video']['orig_url'] = $url;
-            $videodata['video']['embed_url'] = $embedurl;
-            $videodata['video']['provider_url'] = $known['br']['home'];
-            $videodata['video']['provider_name'] = $known['br']['name'];
-            $videodata['video']['provider'] = 'br';
+            $data['video']['html'] = '<iframe class="remoteembed" allowfullscreen src="' . $embedurl . '"></iframe>';
+            $data['video']['orig_url'] = $url;
+            $data['video']['embed_url'] = $embedurl;
+            $data['video']['provider_url'] = $known['br']['home'];
+            $data['video']['provider_name'] = $known['br']['name'];
+            $data['video']['provider'] = 'br';
         } else {
-            $videodata['error'] = __('Die URL für die BR Mediathek ist ungültig oder fehlerhaft.', 'rrze-video');
+            $data['error'] = __('The URL for the BR Mediathek is invalid or incorrect.', 'rrze-video');
         }
-        return $videodata;
+        return $data;
     }
 }
