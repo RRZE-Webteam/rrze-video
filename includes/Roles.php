@@ -4,11 +4,14 @@ namespace RRZE\Video;
 
 defined('ABSPATH') || exit;
 
-use RRZE\Video\Capabilities;
-
-class Roles {
-
-    protected static function getRolesArgs()  {
+/**
+ * Class Roles
+ * @package RRZE\Video
+ */
+class Roles
+{
+    protected static function getRolesArgs()
+    {
         return [
             'administrator' => [
                 'cpts' => array_keys(Capabilities::getCurrentCptArgs()),
@@ -68,5 +71,4 @@ class Roles {
             }
         }
     }
-
 }
