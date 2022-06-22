@@ -12,7 +12,6 @@ class Metabox
 {
     public function __construct()
     {
-        require_once(plugin()->getPath('vendor/CMB2-2.10.1') . 'init.php');
         add_filter('cmb2_meta_boxes', [$this, 'cmb2VideoMetabox']);
     }
 
