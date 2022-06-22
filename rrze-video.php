@@ -2,8 +2,8 @@
 /*
 Plugin Name:    RRZE Video
 Plugin URI:     https://github.com/RRZE-Webteam/rrze-video
-Description:    Embedding videos via a shortcode or widget based on the Plyr video player. 
-Version:        3.3.0
+Description:    Embedding videos via a shortcode or widget based on the Plyr video player.
+Version:        3.4.0
 Author:         RRZE-Webteam
 Author URI:     http://blogs.fau.de/webworking/
 License:        GNU General Public License Version 3
@@ -17,7 +17,12 @@ namespace RRZE\Video;
 defined('ABSPATH') || exit;
 
 const RRZE_PHP_VERSION = '7.4';
-const RRZE_WP_VERSION  = '5.9';
+const RRZE_WP_VERSION  = '6.0';
+
+/**
+ * Composer autoload
+ */
+require_once __DIR__ . '/vendor/autoload.php';
 
 /**
  * SPL Autoloader (PSR-4).
