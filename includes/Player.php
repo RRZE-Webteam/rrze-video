@@ -420,8 +420,8 @@ class Player
 
             $res .= __('Unfortunately, your browser does not support HTML5 video formats.', 'rrze-video');
             $res .= ' ';
-            $url = $data['url'] ?? '';
-            $file = $data['video']['file'] ?? '';
+            $url = !empty($data['url']) ? esc_url($data['url']) : '';
+            $file = !empty($data['video']['file']) ? esc_url($data['video']['file']) : '';
             $title = $data['video']['title'] ?? '';
             if ($url) {
                 $res .= sprintf(
@@ -467,17 +467,20 @@ class Player
                 $meta .=  '</dd>';
             }
 
-            $url = $data['url'] ?? '';
+            $url = !empty($data['url']) ? esc_url($data['url']) : '';
+            $altVideofolienUrl = !empty($data['video']['alternative_VideoFolien_size_large']) ? esc_url($data['video']['alternative_VideoFolien_size_large']) : '';
+            $altAudioUrl = !empty($data['video']['alternative_Audio']) ? esc_url($data['video']['alternative_Audio']) : '';
+
             if ($url) {
                 $meta .= '<dt>' . __('Source', 'rrze-video') . '</dt><dd><a href="' . $url . '">' . $url . '</a></dd>';
             }
 
-            if (!empty($data['video']['alternative_VideoFolien_size_large']) && ($data['video']['alternative_VideoFolien_size_large'] !== $data['url'])) {
-                $meta .= '<dt>' . __('Video with presentation slides', 'rrze-video') . '</dt><dd><a href="' . $data['video']['alternative_VideoFolien_size_large'] . '">' . $data['video']['alternative_VideoFolien_size_large'] . '</a></dd>';
+            if ($altVideofolienUrl && $altVideofolienUrl !== $url) {
+                $meta .= '<dt>' . __('Video with presentation slides', 'rrze-video') . '</dt><dd><a href="' . $altVideofolienUrl . '">' . $altVideofolienUrl . '</a></dd>';
             }
 
-            if (!empty($data['video']['alternative_Audio']) && ($data['video']['alternative_Audio'] !== $url)) {
-                $meta .= '<dt>' . __('Audio Format', 'rrze-video') . '</dt><dd><a href="' . $data['video']['alternative_Audio'] . '">' . $data['video']['alternative_Audio'] . '</a></dd>';
+            if ($altAudioUrl && $altAudioUrl !== $url) {
+                $meta .= '<dt>' . __('Audio Format', 'rrze-video') . '</dt><dd><a href="' . $altAudioUrl . '">' . $altAudioUrl . '</a></dd>';
             }
 
             if (!empty($data['video']['provider_name'])) {
