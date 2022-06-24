@@ -60,8 +60,6 @@ class Widget extends \WP_Widget
             $arguments['show'] .= "desc";
         }
 
-        $arguments = Shortcode::instance()->sanitizeArgs($arguments, 'rrzevideo');
-        
         if (!empty($instance['widget_title'])) {
             $arguments['widgetargs']['title'] = $instance['widget_title'];
         }
@@ -93,11 +91,11 @@ class Widget extends \WP_Widget
         $rand = $instance['genre'] ?? '';
         $title = !empty($instance['widget_title']) ? esc_html($instance['widget_title']) : '';
 
-        $meta = isset($instance['meta']) ? true : false;
-        $showtitle = isset($instance['showtitle']) ? true : false;
-        $info = isset($instance['info']) ? true : false;
-        $desc = isset($instance['desc']) ? true : false;
-        $link = isset($instance['link']) ? true : false;
+        $meta = !empty($instance['meta']) ? 1 : 0;
+        $showtitle = !empty($instance['showtitle']) ? 1 : 0;
+        $info = !empty($instance['info']) ? 1 : 0;
+        $desc = !empty($instance['desc']) ? 1 : 0;
+        $link = !empty($instance['link']) ? 1 : 0;
 
         $novideos = false;
 
@@ -150,10 +148,10 @@ class Widget extends \WP_Widget
                                 <label for="<?php echo $this->get_field_id('genre'); ?>"><?php _e('Or select a category from your local video library to display a random video from this:', 'rrze-video'); ?></label>
                                 <select class="widefat" id="<?php echo $this->get_field_id('genre'); ?>" name="<?php echo $this->get_field_name('genre'); ?>">
                                     <?php
-                                    $terms = get_terms(array(
+                                    $terms = get_terms([
                                         'taxonomy' => 'genre',
                                         'hide_empty' => true,
-                                    ));
+                                    ]);
                                     $opts_select = 0;
                                     $opts_html   = '';
                                     foreach ($terms as $term) {
@@ -215,16 +213,29 @@ class Widget extends \WP_Widget
      */
     public function update($new_instance, $old_instance)
     {
+        $id = $new_instance['id'] ?? '';
+        $url = $new_instance['url'] ?? '';
+        $genre = $new_instance['genre'] ?? '';
+        $title = !empty($new_instance['widget_title']) ? sanitize_text_field($new_instance['widget_title']) : '';
+
+        $meta = !empty($new_instance['meta']) ? true : false;
+        $showtitle = !empty($new_instance['showtitle']) ? true : false;
+        $info = !empty($new_instance['info']) ? true : false;
+        $desc = !empty($new_instance['desc']) ? true : false;
+        $link = !empty($new_instance['link']) ? true : false;
+
         $instance = $old_instance;
-        $instance['id'] = sanitize_key($new_instance['id']);
-        $instance['url'] = esc_url_raw($new_instance['url']);
-        $instance['widget_title'] = sanitize_text_field($new_instance['widget_title']);
-        $instance['meta'] = $new_instance['meta'];
-        $instance['showtitle'] = $new_instance['showtitle'];
-        $instance['desc'] = $new_instance['desc'];
-        $instance['link'] = $new_instance['link'];
-        $instance['info'] = $new_instance['info'];
-        $instance['genre'] = strip_tags($new_instance['genre']);
+
+        $instance['id'] = sanitize_key($id);
+        $instance['url'] = esc_url_raw($url);
+        $instance['genre'] = strip_tags($genre);
+        $instance['widget_title'] =  esc_html($title);
+
+        $instance['meta'] = $meta;
+        $instance['showtitle'] = $showtitle;
+        $instance['info'] = $info;
+        $instance['desc'] = $desc;
+        $instance['link'] = $link;
 
         return $instance;
     }
