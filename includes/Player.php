@@ -364,87 +364,94 @@ class Player
 
             $res .= '</div>';
         } elseif ($provider == 'fau') {
-            $classname = 'plyr-instance plyr-videonum-' . $id;
-            $res .= '<video class="' . $classname . '" playsinline controls crossorigin="anonymous"';
+            if (isset($data['video']['type']) && $data['video']['type'] == 'audio' && isset($data['video']['file'])) {
+                $res .= '<audio class="' . $classname . '" controls crossorigin="anonymous">'
+                        . '<source src="' . $data['video']['file'] . '" type="audio/mp3" />'
+                        . '</audio>';
+            } else {
+                $classname = 'plyr-instance plyr-videonum-' . $id;
+                $res       .= '<video class="' . $classname . '" playsinline controls crossorigin="anonymous"';
 
-            $plyrconfig = ' data-plyr-config=\'{ ';
-            $plyrconfig .= '"preload": "none", ';
-            $plyrconfig .= '"loadSprite": "false", ';
-            $plyrconfig .= ' "iconUrl": "' . plugin()->getUrl('assets/plyr') . 'plyr.svg", ';
-            $plyrconfig .= ' "blankVideo": "' . plugin()->getUrl('assets/plyr') . 'blank.mp4"';
+                $plyrconfig = ' data-plyr-config=\'{ ';
+                $plyrconfig .= '"preload": "none", ';
+                $plyrconfig .= '"loadSprite": "false", ';
+                $plyrconfig .= ' "iconUrl": "' . plugin()->getUrl( 'assets/plyr' ) . 'plyr.svg", ';
+                $plyrconfig .= ' "blankVideo": "' . plugin()->getUrl( 'assets/plyr' ) . 'blank.mp4"';
 
-            if (!empty($data['video']['title'])) {
-                $plyrconfig .= ', "title": "' . $data['video']['title'] . '"';
-            }
-            $plyrconfig .= ' }\'';
-            $res .= $plyrconfig;
-
-            if ($poster) {
-                $res .= ' poster="' . $poster . '" data-poster="' . $poster . '"';
-            }
-
-            if (!empty($data['video']['width'])) {
-                $res .= ' width="' . $data['video']['width'] . '"';
-            }
-
-            if (!empty($data['video']['height'])) {
-                $res .= ' height="' . $data['video']['height'] . '"';
-            }
-
-            $res .= ' itemscope itemtype="https://schema.org/Movie"';
-            $res .= '>';
-
-            $res .= $this->get_html_structuredmeta($data);
-
-            $path = parse_url($data['video']['file'], PHP_URL_PATH);
-            $ext = pathinfo($path, PATHINFO_EXTENSION);
-
-            $res .= '<source src="' . $data['video']['file'] . '" type="video/' . $ext . '">';
-            if ($ext == 'm4v') {
-                $res .= '<source src="' . $data['video']['file'] . '" type="video/mp4">';
-            }
-
-            if (!empty($data['video']['alternative_Video_size_large']) && !empty($data['video']['alternative_Video_size_large_url'])) {
-                $path = parse_url($data['video']['alternative_Video_size_large_url'], PHP_URL_PATH);
-                $ext = pathinfo($path, PATHINFO_EXTENSION);
-                $res .= '<source src="' . $data['video']['alternative_Video_size_large_url'] . '" type="video/' . $ext . '" size="' . $data['video']['alternative_Video_size_large_width'] . '">';
-            }
-
-            if (!empty($data['video']['alternative_Video_size_medium']) && !empty($data['video']['alternative_Video_size_medium_url'])) {
-                $path = parse_url($data['video']['alternative_Video_size_medium_url'], PHP_URL_PATH);
-                $ext = pathinfo($path, PATHINFO_EXTENSION);
-                $res .= '<source src="' . $data['video']['alternative_Video_size_medium_url'] . '" type="video/' . $ext . '" size="' . $data['video']['alternative_Video_size_medium_width'] . '">';
-            }
-
-            if (!empty($data['video']['transcript'])) {
-                $res .= '<track kind="captions" label="' . __('Audio transcription', 'rrze-video') . '" src="' . $data['video']['transcript'] . '" default';
-                if ($hreflang) {
-                    $res .= ' hreflang="' . $hreflang . '"';
+                if ( ! empty( $data[ 'video' ][ 'title' ] ) ) {
+                    $plyrconfig .= ', "title": "' . $data[ 'video' ][ 'title' ] . '"';
                 }
+                $plyrconfig .= ' }\'';
+                $res        .= $plyrconfig;
+
+                if ( $poster ) {
+                    $res .= ' poster="' . $poster . '" data-poster="' . $poster . '"';
+                }
+
+                if ( ! empty( $data[ 'video' ][ 'width' ] ) ) {
+                    $res .= ' width="' . $data[ 'video' ][ 'width' ] . '"';
+                }
+
+                if ( ! empty( $data[ 'video' ][ 'height' ] ) ) {
+                    $res .= ' height="' . $data[ 'video' ][ 'height' ] . '"';
+                }
+
+                $res .= ' itemscope itemtype="https://schema.org/Movie"';
                 $res .= '>';
-            }
 
-            $res .= __('Unfortunately, your browser does not support HTML5 video formats.', 'rrze-video');
-            $res .= ' ';
-            $url = !empty($data['url']) ? esc_url($data['url']) : '';
-            $file = !empty($data['video']['file']) ? esc_url($data['video']['file']) : '';
-            $title = $data['video']['title'] ?? '';
-            if ($url) {
-                $res .= sprintf(
+                $res .= $this->get_html_structuredmeta( $data );
+
+                $path = parse_url( $data[ 'video' ][ 'file' ], PHP_URL_PATH );
+                $ext  = pathinfo( $path, PATHINFO_EXTENSION );
+
+                $res .= '<source src="' . $data[ 'video' ][ 'file' ] . '" type="video/' . $ext . '">';
+                if ( $ext == 'm4v' ) {
+                    $res .= '<source src="' . $data[ 'video' ][ 'file' ] . '" type="video/mp4">';
+                }
+
+                if ( ! empty( $data[ 'video' ][ 'alternative_Video_size_large' ] ) && ! empty( $data[ 'video' ][ 'alternative_Video_size_large_url' ] ) ) {
+                    $path = parse_url( $data[ 'video' ][ 'alternative_Video_size_large_url' ], PHP_URL_PATH );
+                    $ext  = pathinfo( $path, PATHINFO_EXTENSION );
+                    $res  .= '<source src="' . $data[ 'video' ][ 'alternative_Video_size_large_url' ] . '" type="video/' . $ext . '" size="' . $data[ 'video' ][ 'alternative_Video_size_large_width' ] . '">';
+                }
+
+                if ( ! empty( $data[ 'video' ][ 'alternative_Video_size_medium' ] ) && ! empty( $data[ 'video' ][ 'alternative_Video_size_medium_url' ] ) ) {
+                    $path = parse_url( $data[ 'video' ][ 'alternative_Video_size_medium_url' ], PHP_URL_PATH );
+                    $ext  = pathinfo( $path, PATHINFO_EXTENSION );
+                    $res  .= '<source src="' . $data[ 'video' ][ 'alternative_Video_size_medium_url' ] . '" type="video/' . $ext . '" size="' . $data[ 'video' ][ 'alternative_Video_size_medium_width' ] . '">';
+                }
+
+                if ( ! empty( $data[ 'video' ][ 'transcript' ] ) ) {
+                    $res .= '<track kind="captions" label="' . __( 'Audio transcription',
+                                                                   'rrze-video' ) . '" src="' . $data[ 'video' ][ 'transcript' ] . '" default';
+                    if ( $hreflang ) {
+                        $res .= ' hreflang="' . $hreflang . '"';
+                    }
+                    $res .= '>';
+                }
+
+                $res   .= __( 'Unfortunately, your browser does not support HTML5 video formats.', 'rrze-video' );
+                $res   .= ' ';
+                $url   = ! empty( $data[ 'url' ] ) ? esc_url( $data[ 'url' ] ) : '';
+                $file  = ! empty( $data[ 'video' ][ 'file' ] ) ? esc_url( $data[ 'video' ][ 'file' ] ) : '';
+                $title = $data[ 'video' ][ 'title' ] ?? '';
+                if ( $url ) {
+                    $res .= sprintf(
                     /* translators: %s: URL of the video. */
-                    __('Therefore call up the video %s from the FAU video portal.', 'rrze-video'),
-                    '<a href="' . $url . '">' . $title . '</a>'
-                );
-            } elseif ($file) {
-                $res .= 'Call the video file  directly.';
-                $res .= sprintf(
+                        __( 'Therefore call up the video %s from the FAU video portal.', 'rrze-video' ),
+                        '<a href="' . $url . '">' . $title . '</a>'
+                    );
+                } elseif ( $file ) {
+                    $res .= 'Call the video file  directly.';
+                    $res .= sprintf(
                     /* translators: %s: File name of the video. */
-                    __('Call the video file %s directly.', 'rrze-video'),
-                    '<a href="' . $file . '">' . $title . '</a>'
-                );
-            }
+                        __( 'Call the video file %s directly.', 'rrze-video' ),
+                        '<a href="' . $file . '">' . $title . '</a>'
+                    );
+                }
 
-            $res .= '</video>';
+                $res .= '</video>';
+            }
         } else {
             $res .= '<div class="alert clearfix clear alert-danger">';
             $res .= __('Video provider incorrectly defined.', 'rrze-video');
