@@ -36,6 +36,6 @@
         "webpack-cli": "^4.7.2"
     },
     "dependencies": {
-        "plyr": "^3.7.2"
+        "plyr": "^3.7.8"
     }
 }
