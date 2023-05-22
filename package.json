@@ -1,5 +1,6 @@
 {
     "name": "rrze-video",
+    "version": "3.4.4",
     "main": "webpack.config.js",
     "scripts": {
         "start": "webpack --mode=development --watch",
@@ -35,6 +36,6 @@
         "webpack-cli": "^4.7.2"
     },
     "dependencies": {
-        "plyr": "^3.7.2"
+        "plyr": "^3.7.8"
     }
 }

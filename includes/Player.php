@@ -325,7 +325,7 @@ class Player
             $res .= '<div class="plyr__video-embed">';
             $res .= '<iframe';
 	    if (!empty($data['video']['title'])) {
-		$res .= ' title="'.esc_html($data['video']['title']).'"';
+		    $res .= ' title="'.esc_html($data['video']['title']).'"';
 	    }
             $res .= '  src="https://www.youtube-nocookie.com/embed/' . $data['video']['v'] . '?rel=0&showinfo=0&iv_load_policy=3&modestbranding=1"';
             $res .= '  allowfullscreen';
@@ -353,7 +353,7 @@ class Player
             $res .= '<div class="plyr__video-embed">';
             $res .= '<iframe';
 	    if (!empty($data['video']['title'])) {
-		$res .= ' title="'.esc_html($data['video']['title']).'"';
+		    $res .= ' title="'.esc_html($data['video']['title']).'"';
 	    }
             $res .= '  src="https://player.vimeo.com/video/' . $data['video']['video_id'] . '?autoplay=0&loop=0&title=0&byline=0&portrait=0"';
             $res .= '  allowfullscreen';
@@ -548,6 +548,8 @@ class Player
             $lang = $data['language'];
             $hreflang = explode("-", $lang)[0];
         }
+
+        $res = empty($res) ? '' : $res;
 
         $res .= '<meta itemprop="image" content="' . $poster . '">';
         if (!empty($data['video']['upload_date'])) {
