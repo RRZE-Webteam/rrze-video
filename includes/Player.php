@@ -422,12 +422,8 @@ class Player
                 }
 
                 if ( ! empty( $data[ 'video' ][ 'transcript' ] ) ) {
-                    $res .= '<track kind="captions" label="' . __( 'Audio transcription',
-                                                                   'rrze-video' ) . '" src="' . $data[ 'video' ][ 'transcript' ] . '" default';
-                    if ( $hreflang ) {
-                        $res .= ' hreflang="' . $hreflang . '"';
-                    }
-                    $res .= '>';
+                    $transcriptHtml = Self::get_fauvideo_transcript_tracks($data);
+                    $res .= $transcriptHtml;
                 }
 
                 $res   .= __( 'Unfortunately, your browser does not support HTML5 video formats.', 'rrze-video' );
@@ -589,5 +585,53 @@ class Player
         if ($plyr) {
             wp_enqueue_script('rrze-video-plyr');
         }
+    }
+
+    /**
+     * Iterates through available transcripts from FAUVideo oEmbed response and returns the needed track html response. The function assumes that the default track is German.
+     * @param array $data
+     * @return string
+     * @since 3.4.5
+     */
+    public function get_fauvideo_transcript_tracks($data){
+        $transcriptKeys = ['transcript', 'transcript_en', 'transcript_de'];
+        $outputTemp = '';
+        $langKeys = [
+            'de' => 'Deutsch',
+            'en' => 'English',
+            'es' => 'Español',
+        ];
+
+        if (empty($data['video'])){
+            return $outputTemp;
+        }
+
+        foreach ($transcriptKeys as $key) {
+            if (isset($data['video'][$key]) && !empty($data['video'][$key])){
+                $langEvaluate = str_replace('transcript', '', $key); //Extract the language shorthand from the key
+                if ($langEvaluate == ''){
+                    $lang = 'de';
+                } else {
+                    $lang = str_replace('_', '', $langEvaluate);
+                }
+
+                //Get the full language label
+                $labelEvaluate = 'Deutsch';
+                if (isset($langKeys[$lang])){
+                    $labelEvaluate = $langKeys[$lang];
+                }
+                
+                $url = $data['video'][$key];
+
+                if (empty($outputTemp)){
+                    //Set the first track always as default
+                    $outputTemp .= '<track kind="captions" src="' . $url . '" srclang="' . $lang . '" label="' . $labelEvaluate . '" default>';
+                } else {
+                    $outputTemp .= '<track kind="captions" src="' . $url . '" srclang="' . $lang . '" label="' . $labelEvaluate . '">';
+                }
+            }
+        }
+
+        return $outputTemp;
     }
 }
