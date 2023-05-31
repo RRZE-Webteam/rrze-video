@@ -421,6 +421,7 @@ class Player
                     $res  .= '<source src="' . $data[ 'video' ][ 'alternative_Video_size_medium_url' ] . '" type="video/' . $ext . '" size="' . $data[ 'video' ][ 'alternative_Video_size_medium_width' ] . '">';
                 }
 
+                Helper::debug($data);
                 if ( ! empty( $data[ 'video' ][ 'transcript' ] ) ) {
                     $transcriptHtml = Self::get_fauvideo_transcript_tracks($data);
                     $res .= $transcriptHtml;
@@ -600,6 +601,7 @@ class Player
             'de' => 'Deutsch',
             'en' => 'English',
             'es' => 'Español',
+            'ut' => 'Untertitel',
         ];
 
         if (empty($data['video'])){
@@ -610,7 +612,13 @@ class Player
             if (isset($data['video'][$key]) && !empty($data['video'][$key])){
                 $langEvaluate = str_replace('transcript', '', $key); //Extract the language shorthand from the key
                 if ($langEvaluate == ''){
-                    $lang = 'de';
+                    if (isset($data['video']['inLanguage']) && !empty($data['video']['inLanguage'])){
+                        $langEvaluate = substr($data['video']['inLanguage'], 0, 2);
+                    } else {
+                        $langEvaluate = 'de';
+                    }
+
+                    $lang = $langEvaluate;
                 } else {
                     $lang = str_replace('_', '', $langEvaluate);
                 }
