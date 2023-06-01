@@ -22,7 +22,7 @@ const RRZE_WP_VERSION  = '6.0';
 /**
  * Composer autoload
  */
-require_once __DIR__ . '/vendor/autoload.php';
+// require_once __DIR__ . '/vendor/autoload.php';
 
 /**
  * SPL Autoloader (PSR-4).
