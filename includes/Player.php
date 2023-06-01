@@ -600,6 +600,7 @@ class Player
             'de' => 'Deutsch',
             'en' => 'English',
             'es' => 'Español',
+            'ut' => 'Unknown',
         ];
 
         if (empty($data['video'])){
@@ -607,10 +608,16 @@ class Player
         }
 
         foreach ($transcriptKeys as $key) {
-            if (isset($data['video'][$key]) && !empty($data['video'][$key])){
+            if (isset($data['video'][$key]) && !empty($data['video'][$key]) && strpos($data['video'][$key], '.vtt')){
                 $langEvaluate = str_replace('transcript', '', $key); //Extract the language shorthand from the key
                 if ($langEvaluate == ''){
-                    $lang = 'de';
+                    if (isset($data['video']['inLanguage']) && !empty($data['video']['inLanguage'])){
+                        $langEvaluate = substr($data['video']['inLanguage'], 0, 2);
+                    } else {
+                        $langEvaluate = 'ut';
+                    }
+
+                    $lang = $langEvaluate;
                 } else {
                     $lang = str_replace('_', '', $langEvaluate);
                 }
@@ -618,6 +625,9 @@ class Player
                 //Get the full language label
                 $labelEvaluate = 'Deutsch';
                 if (isset($langKeys[$lang])){
+                    $labelEvaluate = $langKeys[$lang];
+                } else{
+                    $lang = 'ut';
                     $labelEvaluate = $langKeys[$lang];
                 }
                 
@@ -627,8 +637,14 @@ class Player
                     //Set the first track always as default
                     $outputTemp .= '<track kind="captions" src="' . $url . '" srclang="' . $lang . '" label="' . $labelEvaluate . '" default>';
                 } else {
-                    $outputTemp .= '<track kind="captions" src="' . $url . '" srclang="' . $lang . '" label="' . $labelEvaluate . '">';
+                    $trackTemp = '<track kind="captions" src="' . $url . '" srclang="' . $lang . '" label="' . $labelEvaluate . '">';
+                    
+                    if (strpos($outputTemp, $url) === false){
+                        $outputTemp .= $trackTemp;
+                    }
                 }
+            } else {
+                Helper::debug('RRZE Video: No or invalid transcript file found for key: ' . $key);
             }
         }
 
