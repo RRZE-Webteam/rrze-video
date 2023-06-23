@@ -7,11 +7,15 @@ const path = require("path");
 const admin = path.join(__dirname, "src", "admin");
 const front = path.join(__dirname, "src", "front");
 
+const defaultConfig = require( '@wordpress/scripts/config/webpack.config.js' );
+
 module.exports = (env, argv) => {
     function isDevelopment() {
         return argv.mode === "development";
     }
     var config = {
+        ...defaultConfig,
+        ...{
         entry: {
             admin,
             front,
@@ -68,6 +72,7 @@ module.exports = (env, argv) => {
                 },
             ],
         },
-    };
+    }
+};
     return config;
 };

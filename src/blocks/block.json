@@ -1,0 +1,17 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "create-block/rrze-video",
+	"version": "0.1.0",
+	"title": "RRZE Video",
+	"category": "widgets",
+	"icon": "smiley",
+	"description": "Embeds videos from FAUVideo, YouTube & Co.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "rrze-video",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}

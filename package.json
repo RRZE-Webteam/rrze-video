@@ -1,12 +1,17 @@
 {
     "name": "rrze-video",
-    "version": "3.4.7",
+    "version": "3.4.8",
     "main": "webpack.config.js",
     "scripts": {
-        "start": "webpack --mode=development --watch",
-        "build": "webpack --mode=production",
+        "start": "wp-scripts start",
+        "build": "wp-scripts build",
         "clean": "rm -rf build/",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip"
     },
     "repository": {
         "type": "git",
@@ -33,7 +38,8 @@
         "style-loader": "^3.2.1",
         "terser-webpack-plugin": "^5.1.4",
         "webpack": "^5.46.0",
-        "webpack-cli": "^4.7.2"
+        "webpack-cli": "^4.7.2",
+        "@wordpress/scripts": "^26.6.0"
     },
     "dependencies": {
         "plyr": "^3.7.8"
