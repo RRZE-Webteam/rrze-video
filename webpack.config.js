@@ -49,8 +49,8 @@
                     chunkFilename: "[id].css",
                     filename: (chunkData) => {
                         let name = chunkData.chunk.name;
-                        if (name === 'blocks') {
-                            return 'blocks/index.css';  // Adjusted here
+                        if (name === 'blocks' || name === './style-blocks') {
+                            return 'blocks/[name].css';  // Adjusted here
                         } else if (name === 'admin') {
                             return '[name].css';
                         } else if (name === 'front') {

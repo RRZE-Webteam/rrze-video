@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const filesToRemove = ['admin.asset.php', 'front.asset.php', 'blocks.css', 'style-blocks.css'];
+const filesToRemove = ['admin.asset.php', 'front.asset.php', 'style-blocks.css', 'blocks.css'];
 
 filesToRemove.forEach((file) => {
     fs.unlink(path.join(__dirname, 'build', file), (err) => {
