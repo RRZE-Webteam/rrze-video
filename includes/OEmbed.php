@@ -257,7 +257,6 @@ class OEmbed
                 }
             }
         }
-        Helper::debug($data, 'sanitize_oembed_data');
         return $data;
     }
 }

@@ -76,6 +76,7 @@ module.exports = (env, argv) => {
                 },
                 ...defaultConfig.module.rules,
             ],
+            ...defaultConfig.module,
         },
     }
 };
