@@ -188,7 +188,6 @@ class OEmbed
                 }
             }
         }
-
         return $fau_video;
     }
 
@@ -258,6 +257,7 @@ class OEmbed
                 }
             }
         }
+        Helper::debug($data, 'sanitize_oembed_data');
         return $data;
     }
 }

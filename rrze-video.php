@@ -171,5 +171,5 @@ function loaded()
         return;
     }
     new Main;
-    //add_action( 'init', __NAMESPACE__ . '\create_block_rrze_video_block_init' );
+    add_action( 'init', __NAMESPACE__ . '\create_block_rrze_video_block_init' );
 }

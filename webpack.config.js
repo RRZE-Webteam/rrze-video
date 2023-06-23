@@ -17,19 +17,22 @@ module.exports = (env, argv) => {
         ...defaultConfig,
         ...{
         entry: {
-            admin,
-            front,
+            admin: admin,
+            front: front,
+            ...defaultConfig.entry,
         },
         output: {
             path: path.resolve(__dirname, "build"),
             filename: "[name].js",
             clean: true,
+            ...defaultConfig.output,
         },
         optimization: {
             minimizer: [
                 new CSSMinimizerPlugin(),
                 new TerserPlugin({ terserOptions: { sourceMap: true } }),
             ],
+            ...defaultConfig.optimization,
         },
         plugins: [
             new MiniCSSExtractPlugin({
@@ -38,6 +41,7 @@ module.exports = (env, argv) => {
                     return "[name].css";
                 },
             }),
+            ...defaultConfig.plugins,
         ],
         devtool: isDevelopment() ? "cheap-module-source-map" : "source-map",
         module: {
@@ -70,6 +74,7 @@ module.exports = (env, argv) => {
                         "sass-loader",
                     ],
                 },
+                ...defaultConfig.module.rules,
             ],
         },
     }
