@@ -139,7 +139,11 @@ function plugin()
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
  */
 function create_block_rrze_video_block_init() {
-	register_block_type( __DIR__ . '/build/blocks' );
+    $gutenberg_instance = new Gutenberg();
+
+	register_block_type( __DIR__ . '/build/blocks', [
+        'render_callback' => [$gutenberg_instance, 'rrze_video_render_block']
+    ] );
 }
 
 /**
@@ -171,5 +175,6 @@ function loaded()
         return;
     }
     new Main;
+    new RestApi;
     add_action( 'init', __NAMESPACE__ . '\create_block_rrze_video_block_init' );
 }

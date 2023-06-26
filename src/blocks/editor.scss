@@ -4,6 +4,25 @@
  * Replace them with your own styles or remove the file completely.
  */
 
- .wp-block-create-block-rrze-video {
-	border: 1px dotted #f00;
+.wp-block-rrze-rrze-video {
+	// position: relative;
+	width: 100%;
+	// padding-bottom:175%;
+	border: 1px solid lavender;
+	padding: 0;
+	aspect-ratio: 16/9;
+	background: #04316a;
+	margin-bottom: 0;
+
+	.plyr-instance {
+
+		aspect-ratio: 16/9;
+		height: auto;
+	}
+}
+
+.wp-block-rrze-rrze-video>* {
+	position: relative;
+	padding: 0;
+	margin: 0;
 }
