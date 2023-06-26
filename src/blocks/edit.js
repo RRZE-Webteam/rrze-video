@@ -2,6 +2,7 @@ import { __ } from "@wordpress/i18n";
 import {
   Placeholder,
   Button,
+  ButtonGroup,
   ToolbarGroup,
   ToolbarItem,
   PanelBody,
@@ -11,7 +12,6 @@ import {
   useBlockProps,
   BlockControls,
   InspectorControls,
-  inputURL,
 } from "@wordpress/block-editor";
 import { ServerSideRender } from "@wordpress/editor";
 import { useState } from "@wordpress/element";
@@ -39,10 +39,10 @@ export default function Edit(props) {
       {id || url ? (
         <>
           <InspectorControls>
-            <PanelBody 
+            <PanelBody
               title={__("URL Settings", "rrze-video")}
               icon="format-video"
-              >
+            >
               <form onSubmit={handleSubmit}>
                 <input
                   className="rrze-video-input-field"
@@ -57,6 +57,28 @@ export default function Edit(props) {
                   {__("Embed Video from URL", "rrze-video")}
                 </Button>
               </form>
+            </PanelBody>
+            <PanelBody
+              title={__("Display Settings", "rrze-video")}
+              icon="admin-appearance"
+            >
+              <ButtonGroup
+                className="rrze-video-button-group"
+                aria-label={__("Display Settings", "rrze-video")}
+              >
+                <Button isPrimary type="submit">
+                  {__("Title", "rrze-video")}
+                </Button>
+                <Button isPrimary type="submit">
+                  {__("Videolink", "rrze-video")}
+                </Button>
+                <Button isSecondary type="submit">
+                  {__("Metadata", "rrze-video")}
+                </Button>
+                <Button isSecondary type="submit">
+                  {__("Description", "rrze-video")}
+                </Button>
+              </ButtonGroup>
             </PanelBody>
           </InspectorControls>
           <BlockControls>
