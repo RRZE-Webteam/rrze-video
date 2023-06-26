@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "title": "RRZE Video",
   "category": "widgets",
-  "icon": "smiley",
+  "icon": "format-video",
   "description": "Embeds videos from FAUVideo, YouTube & Co.",
   "supports": {
     "html": false
@@ -17,27 +17,31 @@
   "attributes": {
     "id": {
       "type": "number",
-      "default": null
+      "default": 0
     },
     "url": {
       "type": "string",
-      "default": "https://www.fau.tv/webplayer/id/95867"
+      "default": ""
     },
     "class": {
       "type": "string",
-      "default": null
+      "default": ""
     },
     "titletag": {
       "type": "string",
-      "default": null
+      "default": ""
     },
     "poster": {
       "type": "string",
-      "default": null
+      "default": ""
     },
     "rand": {
       "type": "boolean",
-      "default": null
+      "default": false
+    },
+    "show": {
+      "type": "string",
+      "default": "title"
     }
   }
 }

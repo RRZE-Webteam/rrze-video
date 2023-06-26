@@ -175,6 +175,5 @@ function loaded()
         return;
     }
     new Main;
-    new RestApi;
     add_action( 'init', __NAMESPACE__ . '\create_block_rrze_video_block_init' );
 }

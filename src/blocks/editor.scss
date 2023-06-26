@@ -19,6 +19,22 @@
 		aspect-ratio: 16/9;
 		height: auto;
 	}
+
+	.rrze-video-input-field{
+		padding-bottom: 0.5rem;
+		padding-top: 0.5rem;
+		margin-bottom: 1rem;
+	}
+
+}
+
+div.rrze-video.alert.clearfix.clear.alert-danger{
+	color: #fff;
+	padding: 1rem;
+	
+	a {
+		color: #fff;
+	}
 }
 
 .wp-block-rrze-rrze-video>* {
