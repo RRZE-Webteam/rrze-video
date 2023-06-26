@@ -17,6 +17,23 @@ import { ServerSideRender } from "@wordpress/editor";
 import { useState } from "@wordpress/element";
 import "./editor.scss";
 
+/**
+ * Checks if a text is part of a comma separated string
+ * @param {*} text The text to check
+ * @param {*} commaSeparatedString The comma separated string to check against
+ * @returns
+ */
+const isTextInString = (text, commaSeparatedString) => {
+  let commaSeparatedStringLowerCase = commaSeparatedString.toLowerCase();
+  let array = commaSeparatedStringLowerCase.split(",");
+
+  if (array.includes(text.toLowerCase())) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 export default function Edit(props) {
   const blockProps = useBlockProps();
   const { attributes, setAttributes } = props;
@@ -24,16 +41,40 @@ export default function Edit(props) {
 
   const [inputURL, setInputURL] = useState(url);
 
+  /**
+   * Handles the submit event of the form
+   * @param {*} event
+   */
   const handleSubmit = (event) => {
     event.preventDefault();
     setAttributes({ url: inputURL });
   };
 
+  /**
+   * Resets the VideoURL Parameter
+   */
   const resetUrl = () => {
     setAttributes({ url: "" });
     setInputURL("");
   };
 
+  const updateShowAttribute = (newValue) => {
+    let existingValues = attributes.show ? attributes.show.toLowerCase().split(",") : [];
+    if (!existingValues.includes(newValue.toLowerCase())) {
+      setAttributes({ show: attributes.show ? `${attributes.show},${newValue}` : newValue });
+    }
+
+    if (existingValues.includes(newValue.toLowerCase())) {
+      let newValues = existingValues.filter((value) => value !== newValue.toLowerCase());
+      setAttributes({ show: newValues.join(",") });
+    }
+
+    console.log(attributes.show);
+  }
+
+  /**
+   * Renders the block
+   */
   return (
     <div {...blockProps}>
       {id || url ? (
@@ -66,16 +107,36 @@ export default function Edit(props) {
                 className="rrze-video-button-group"
                 aria-label={__("Display Settings", "rrze-video")}
               >
-                <Button isPrimary type="submit">
+                <Button
+                  isPrimary={isTextInString("Title", attributes.show)}
+                  isSecondary={!isTextInString("Title", attributes.show)}
+                  type="submit"
+                  onClick={() => updateShowAttribute("title")}
+                >
                   {__("Title", "rrze-video")}
                 </Button>
-                <Button isPrimary type="submit">
+                <Button
+                  isPrimary={isTextInString("link", attributes.show)}
+                  isSecondary={!isTextInString("link", attributes.show)}
+                  type="submit"
+                  onClick={() => updateShowAttribute("link")}
+                >
                   {__("Videolink", "rrze-video")}
                 </Button>
-                <Button isSecondary type="submit">
+                <Button
+                  isPrimary={isTextInString("meta", attributes.show)}
+                  isSecondary={!isTextInString("meta", attributes.show)}
+                  type="submit"
+                  onClick={() => updateShowAttribute("meta")}
+                >
                   {__("Metadata", "rrze-video")}
                 </Button>
-                <Button isSecondary type="submit">
+                <Button
+                  isPrimary={isTextInString("desc", attributes.show)}
+                  isSecondary={!isTextInString("desc", attributes.show)}
+                  type="submit"
+                  onClick={() => updateShowAttribute("desc")}
+                >
                   {__("Description", "rrze-video")}
                 </Button>
               </ButtonGroup>
@@ -96,7 +157,7 @@ export default function Edit(props) {
           </BlockControls>
           <ServerSideRender
             block="rrze/rrze-video"
-            attributes={{ url: attributes.url }}
+            attributes={{ url: attributes.url, show: attributes.show }}
           />
         </>
       ) : (

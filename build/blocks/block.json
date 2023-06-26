@@ -41,7 +41,7 @@
     },
     "show": {
       "type": "string",
-      "default": "title"
+      "default": ""
     }
   }
 }
