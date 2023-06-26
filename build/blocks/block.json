@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "rrze/rrze-video",
+  "version": "0.1.0",
+  "title": "RRZE Video",
+  "category": "widgets",
+  "icon": "format-video",
+  "description": "Embeds videos from FAUVideo, YouTube & Co.",
+  "supports": {
+    "html": false
+  },
+  "textdomain": "rrze-video",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "attributes": {
+    "id": {
+      "type": "number",
+      "default": 0
+    },
+    "url": {
+      "type": "string",
+      "default": ""
+    },
+    "class": {
+      "type": "string",
+      "default": ""
+    },
+    "titletag": {
+      "type": "string",
+      "default": ""
+    },
+    "poster": {
+      "type": "string",
+      "default": ""
+    },
+    "rand": {
+      "type": "boolean",
+      "default": false
+    },
+    "show": {
+      "type": "string",
+      "default": "title"
+    }
+  }
+}

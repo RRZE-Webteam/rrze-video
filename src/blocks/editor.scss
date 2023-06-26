@@ -1,0 +1,44 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-rrze-rrze-video {
+	// position: relative;
+	width: 100%;
+	// padding-bottom:175%;
+	border: 1px solid lavender;
+	padding: 0;
+	aspect-ratio: 16/9;
+	background: #04316a;
+	margin-bottom: 0;
+
+	.plyr-instance {
+
+		aspect-ratio: 16/9;
+		height: auto;
+	}
+
+	.rrze-video-input-field{
+		padding-bottom: 0.5rem;
+		padding-top: 0.5rem;
+		margin-bottom: 1rem;
+	}
+
+}
+
+div.rrze-video.alert.clearfix.clear.alert-danger{
+	color: #fff;
+	padding: 1rem;
+	
+	a {
+		color: #fff;
+	}
+}
+
+.wp-block-rrze-rrze-video>* {
+	position: relative;
+	padding: 0;
+	margin: 0;
+}

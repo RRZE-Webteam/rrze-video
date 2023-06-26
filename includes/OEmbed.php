@@ -188,7 +188,6 @@ class OEmbed
                 }
             }
         }
-
         return $fau_video;
     }
 
