@@ -22,24 +22,9 @@ import { useState, useEffect } from "@wordpress/element";
 import apiFetch from "@wordpress/api-fetch";
 
 import CategorySelector from "./CategorySelector";
+import { isTextInString } from './utils';
 import "./editor.scss";
 
-/**
- * Checks if a text is part of a comma separated string
- * @param {*} text The text to check
- * @param {*} commaSeparatedString The comma separated string to check against
- * @returns
- */
-const isTextInString = (text, commaSeparatedString) => {
-  let commaSeparatedStringLowerCase = commaSeparatedString.toLowerCase();
-  let array = commaSeparatedStringLowerCase.split(",");
-
-  if (array.includes(text.toLowerCase())) {
-    return true;
-  } else {
-    return false;
-  }
-};
 
 export default function Edit(props) {
   const blockProps = useBlockProps();
@@ -146,10 +131,10 @@ export default function Edit(props) {
             | Video library | Add new.
           </Text>
           <Divider />
-          <CategorySelector />
+          <CategorySelector attributes={attributes ?? {}} setAttributes={setAttributes} />
         </PanelBody>
       </InspectorControls>
-      {id || url ? (
+      {id || url || rand ? (
         <>
           <BlockControls>
             <ToolbarGroup>
@@ -166,7 +151,7 @@ export default function Edit(props) {
           </BlockControls>
           <ServerSideRender
             block="rrze/rrze-video"
-            attributes={{ url: attributes.url, show: attributes.show }}
+            attributes={{ url: attributes.url, show: attributes.show, rand: attributes.rand }}
           />
         </>
       ) : (

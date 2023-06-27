@@ -20,9 +20,32 @@ import {
 import { ServerSideRender } from "@wordpress/editor";
 import { useState, useEffect } from "@wordpress/element";
 import apiFetch from "@wordpress/api-fetch";
+import { isTextInString } from './utils';
 
-const CategorySelector = () => {
-  const handleOnChangeVideoCat = (categoryId) => {
+const CategorySelector = (props) => {
+  const [videoCategories, setVideoCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState({});
+
+  const blockProps = useBlockProps();
+  const { attributes, setAttributes } = props;
+  
+  const handleOnChangeVideoCat = (categoryId, newValue) => {
+    let existingValues = attributes.rand
+      ? attributes.rand.toLowerCase().split(",")
+      : [];
+    if (!existingValues.includes(newValue.toLowerCase())) {
+      setAttributes({
+        rand: attributes.rand ? `${attributes.rand},${newValue}` : newValue,
+      });
+    }
+
+    if (existingValues.includes(newValue.toLowerCase())) {
+      let newValues = existingValues.filter(
+        (value) => value !== newValue.toLowerCase()
+      );
+      setAttributes({ rand: newValues.join(",") });
+    }
+
     setSelectedCategories((prevState) => {
       const newState = { ...prevState };
       newState[categoryId] = !newState[categoryId];
@@ -35,6 +58,7 @@ const CategorySelector = () => {
    * @returns Array of VideoIDs
    */
   const retrieveAvailableCategoryId = () => {
+
     return wp
       .apiFetch({
         path: "/wp/v2/rrze-video/",
@@ -80,7 +104,7 @@ const CategorySelector = () => {
       });
   };
 
-  const [videoCategories, setVideoCategories] = useState([]);
+
 
   useEffect(() => {
     retrieveAvailableCategoryId().then((categoryIds) => {
@@ -99,8 +123,10 @@ const CategorySelector = () => {
       {videoCategories &&
         videoCategories.map((cat) => (
           <CheckboxControl
+            key={cat.id}
             label={cat.name}
-            onChange={() => handleOnChangeVideoCat(cat.id)}
+            onChange={() => handleOnChangeVideoCat(cat.id, cat.slug)}
+            checked={isTextInString(`${cat.slug}`, attributes.rand)}
           />
         ))}
     </>
