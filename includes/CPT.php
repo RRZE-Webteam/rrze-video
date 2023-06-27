@@ -51,7 +51,9 @@ class CPT
             'menu_icon'             => false,
             'rewrite'               => false,
             'has_archive'           => false,
-            'show_in_rest'          => false,
+            'show_in_rest'          => true,
+            'rest_base'             => 'rrze-video',
+            'rest_controller_class' => 'WP_REST_Posts_Controller',
 
             'capability_type'       => Capabilities::getCptCapabilityType('video'),
             'capabilities'          => (array) Capabilities::getCptCaps('video'),
@@ -69,6 +71,7 @@ class CPT
                 'show_ui'                     => true,
                 'show_admin_column'           => true,
                 'show_in_nav_menus'           => true,
+                'show_in_rest'                => true,
                 'capabilities' => [
                     'manage_terms' => 'edit_videos',
                     'edit_terms' => 'edit_videos',

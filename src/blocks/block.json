@@ -36,8 +36,8 @@
 			"default": ""
 		},
 		"rand": {
-			"type": "boolean",
-			"default": false
+			"type": "string",
+			"default": ""
 		},
 		"show": {
 			"type": "string",

@@ -6,6 +6,10 @@ import {
   ToolbarGroup,
   ToolbarItem,
   PanelBody,
+  BaseControl,
+  CheckboxControl,
+  __experimentalText as Text,
+  __experimentalDivider as Divider,
 } from "@wordpress/components";
 import { more, reset, video } from "@wordpress/icons";
 import {
@@ -14,7 +18,10 @@ import {
   InspectorControls,
 } from "@wordpress/block-editor";
 import { ServerSideRender } from "@wordpress/editor";
-import { useState } from "@wordpress/element";
+import { useState, useEffect } from "@wordpress/element";
+import apiFetch from "@wordpress/api-fetch";
+
+import CategorySelector from "./CategorySelector";
 import "./editor.scss";
 
 /**
@@ -37,7 +44,7 @@ const isTextInString = (text, commaSeparatedString) => {
 export default function Edit(props) {
   const blockProps = useBlockProps();
   const { attributes, setAttributes } = props;
-  const { id, url } = attributes;
+  const { id, url, rand } = attributes;
 
   const [inputURL, setInputURL] = useState(url);
 
@@ -59,89 +66,91 @@ export default function Edit(props) {
   };
 
   const updateShowAttribute = (newValue) => {
-    let existingValues = attributes.show ? attributes.show.toLowerCase().split(",") : [];
+    let existingValues = attributes.show
+      ? attributes.show.toLowerCase().split(",")
+      : [];
     if (!existingValues.includes(newValue.toLowerCase())) {
-      setAttributes({ show: attributes.show ? `${attributes.show},${newValue}` : newValue });
+      setAttributes({
+        show: attributes.show ? `${attributes.show},${newValue}` : newValue,
+      });
     }
 
     if (existingValues.includes(newValue.toLowerCase())) {
-      let newValues = existingValues.filter((value) => value !== newValue.toLowerCase());
+      let newValues = existingValues.filter(
+        (value) => value !== newValue.toLowerCase()
+      );
       setAttributes({ show: newValues.join(",") });
     }
+  };
 
-    console.log(attributes.show);
-  }
-
+ 
   /**
    * Renders the block
    */
   return (
     <div {...blockProps}>
+      <InspectorControls>
+        <PanelBody title={__("URL Settings", "rrze-video")} icon="format-video">
+          <Text>
+            Enter a video url from FAU Videoportal, YouTube, Vimeo, ARD, BR or
+            Twitter.
+          </Text>
+          <Divider />
+          <form onSubmit={handleSubmit}>
+            <BaseControl
+              label={__("Video URL", "rrze-video")}
+              id="rrze-video-url"
+            >
+              <input
+                className="rrze-video-input-field"
+                type="url"
+                value={inputURL}
+                onChange={(event) => setInputURL(event.target.value)}
+                placeholder={__("Update the Video URL", "rrze-video")}
+                style={{ width: "100%" }}
+              />
+            </BaseControl>
+            <Button isPrimary type="submit">
+              {__("Embed Video from URL", "rrze-video")}
+            </Button>
+          </form>
+        </PanelBody>
+        <PanelBody
+          title={__("Video Display Settings", "rrze-video")}
+          icon="admin-appearance"
+        >
+          <CheckboxControl
+            label={__("Show Title", "rrze-video")}
+            checked={isTextInString("Title", attributes.show)}
+            onChange={() => updateShowAttribute("title")}
+          />
+          <CheckboxControl
+            label={__("Show Videolink", "rrze-video")}
+            checked={isTextInString("link", attributes.show)}
+            onChange={() => updateShowAttribute("link")}
+          />
+          <CheckboxControl
+            label={__("Show Metadata", "rrze-video")}
+            checked={isTextInString("meta", attributes.show)}
+            onChange={() => updateShowAttribute("meta")}
+          />
+          <CheckboxControl
+            label={__("Show Description", "rrze-video")}
+            checked={isTextInString("desc", attributes.show)}
+            onChange={() => updateShowAttribute("desc")}
+          />
+        </PanelBody>
+        <PanelBody title={__("Video Library", "rrze-video")} icon="video-alt3">
+          <Text>
+            You can add videos to your video library by navigating to Dashboard
+            | Video library | Add new.
+          </Text>
+          <Divider />
+          <CategorySelector />
+        </PanelBody>
+      </InspectorControls>
       {id || url ? (
         <>
-          <InspectorControls>
-            <PanelBody
-              title={__("URL Settings", "rrze-video")}
-              icon="format-video"
-            >
-              <form onSubmit={handleSubmit}>
-                <input
-                  className="rrze-video-input-field"
-                  type="url"
-                  value={inputURL}
-                  onChange={(event) => setInputURL(event.target.value)}
-                  placeholder={__("Update the Video URL", "rrze-video")}
-                  style={{ width: "100%" }}
-                />
-                <br />
-                <Button isPrimary type="submit">
-                  {__("Embed Video from URL", "rrze-video")}
-                </Button>
-              </form>
-            </PanelBody>
-            <PanelBody
-              title={__("Display Settings", "rrze-video")}
-              icon="admin-appearance"
-            >
-              <ButtonGroup
-                className="rrze-video-button-group"
-                aria-label={__("Display Settings", "rrze-video")}
-              >
-                <Button
-                  isPrimary={isTextInString("Title", attributes.show)}
-                  isSecondary={!isTextInString("Title", attributes.show)}
-                  type="submit"
-                  onClick={() => updateShowAttribute("title")}
-                >
-                  {__("Title", "rrze-video")}
-                </Button>
-                <Button
-                  isPrimary={isTextInString("link", attributes.show)}
-                  isSecondary={!isTextInString("link", attributes.show)}
-                  type="submit"
-                  onClick={() => updateShowAttribute("link")}
-                >
-                  {__("Videolink", "rrze-video")}
-                </Button>
-                <Button
-                  isPrimary={isTextInString("meta", attributes.show)}
-                  isSecondary={!isTextInString("meta", attributes.show)}
-                  type="submit"
-                  onClick={() => updateShowAttribute("meta")}
-                >
-                  {__("Metadata", "rrze-video")}
-                </Button>
-                <Button
-                  isPrimary={isTextInString("desc", attributes.show)}
-                  isSecondary={!isTextInString("desc", attributes.show)}
-                  type="submit"
-                  onClick={() => updateShowAttribute("desc")}
-                >
-                  {__("Description", "rrze-video")}
-                </Button>
-              </ButtonGroup>
-            </PanelBody>
-          </InspectorControls>
           <BlockControls>
             <ToolbarGroup>
               <ToolbarItem>
