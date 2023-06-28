@@ -16,8 +16,8 @@
   "style": "file:./style-index.css",
   "attributes": {
     "id": {
-      "type": "number",
-      "default": 0
+      "type": "string",
+      "default": ""
     },
     "url": {
       "type": "string",
@@ -29,19 +29,23 @@
     },
     "titletag": {
       "type": "string",
-      "default": ""
+      "default": "h2"
     },
     "poster": {
       "type": "string",
       "default": ""
     },
     "rand": {
-      "type": "boolean",
-      "default": false
+      "type": "string",
+      "default": ""
     },
     "show": {
       "type": "string",
       "default": ""
+    },
+    "bgImageId": {
+      "type": "number",
+      "default": 0
     }
   }
 }
