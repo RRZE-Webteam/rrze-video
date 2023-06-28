@@ -42,6 +42,10 @@
 		"show": {
 			"type": "string",
 			"default": ""
-		}
+		},
+		"bgImageId": {
+            "type": "number",
+			"default": 0
+        }
 	}
 }

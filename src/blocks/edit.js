@@ -28,13 +28,14 @@ import apiFetch from "@wordpress/api-fetch";
 
 import CategorySelector from "./CategorySelector";
 import VideoIDSelector from "./VideoIDSelector";
+import ImageSelectorEdit from "./ImageSelector";
 import { isTextInString } from "./utils";
 import "./editor.scss";
 
 export default function Edit(props) {
   const blockProps = useBlockProps();
   const { attributes, setAttributes } = props;
-  const { id, url, rand, titletag } = attributes;
+  const { id, url, rand, titletag, poster } = attributes;
 
   const [inputURL, setInputURL] = useState(url);
 
@@ -170,6 +171,11 @@ export default function Edit(props) {
             checked={isTextInString("desc", attributes.show)}
             onChange={() => updateShowAttribute("desc")}
           />
+          <Divider />
+          <ImageSelectorEdit 
+            attributes={attributes}
+            setAttributes={setAttributes}
+          />
         </PanelBody>
         <PanelBody title={__("Video Library", "rrze-video")} icon="video-alt3">
           <Text>
@@ -266,6 +272,7 @@ export default function Edit(props) {
               rand: attributes.rand,
               id: attributes.id,
               titletag: attributes.titletag,
+              poster: attributes.poster,
             }}
           />
         </>
