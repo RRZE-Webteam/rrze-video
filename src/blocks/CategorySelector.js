@@ -1,26 +1,14 @@
 import { __ } from "@wordpress/i18n";
 import {
-  Placeholder,
-  Button,
-  ButtonGroup,
-  ToolbarGroup,
-  ToolbarItem,
-  PanelBody,
-  BaseControl,
+  RadioControl,
   CheckboxControl,
   __experimentalText as Text,
   __experimentalDivider as Divider,
 } from "@wordpress/components";
-import { more, reset, video } from "@wordpress/icons";
-import {
-  useBlockProps,
-  BlockControls,
-  InspectorControls,
-} from "@wordpress/block-editor";
-import { ServerSideRender } from "@wordpress/editor";
+import { useBlockProps } from "@wordpress/block-editor";
 import { useState, useEffect } from "@wordpress/element";
 import apiFetch from "@wordpress/api-fetch";
-import { isTextInString } from './utils';
+import { isTextInString } from "./utils";
 
 const CategorySelector = (props) => {
   const [videoCategories, setVideoCategories] = useState([]);
@@ -28,28 +16,10 @@ const CategorySelector = (props) => {
 
   const blockProps = useBlockProps();
   const { attributes, setAttributes } = props;
-  
+
   const handleOnChangeVideoCat = (categoryId, newValue) => {
-    let existingValues = attributes.rand
-      ? attributes.rand.toLowerCase().split(",")
-      : [];
-    if (!existingValues.includes(newValue.toLowerCase())) {
-      setAttributes({
-        rand: attributes.rand ? `${attributes.rand},${newValue}` : newValue,
-      });
-    }
-
-    if (existingValues.includes(newValue.toLowerCase())) {
-      let newValues = existingValues.filter(
-        (value) => value !== newValue.toLowerCase()
-      );
-      setAttributes({ rand: newValues.join(",") });
-    }
-
-    setSelectedCategories((prevState) => {
-      const newState = { ...prevState };
-      newState[categoryId] = !newState[categoryId];
-      return newState;
+    setAttributes({
+      rand: newValue,
     });
   };
 
@@ -58,7 +28,6 @@ const CategorySelector = (props) => {
    * @returns Array of VideoIDs
    */
   const retrieveAvailableCategoryId = () => {
-
     return wp
       .apiFetch({
         path: "/wp/v2/rrze-video/",
@@ -104,8 +73,6 @@ const CategorySelector = (props) => {
       });
   };
 
-
-
   useEffect(() => {
     retrieveAvailableCategoryId().then((categoryIds) => {
       Promise.all(categoryIds.map(retrieveCategoryInformation))
@@ -120,15 +87,38 @@ const CategorySelector = (props) => {
 
   return (
     <>
-      {videoCategories &&
-        videoCategories.map((cat) => (
-          <CheckboxControl
-            key={cat.id}
-            label={cat.name}
-            onChange={() => handleOnChangeVideoCat(cat.id, cat.slug)}
-            checked={isTextInString(`${cat.slug}`, attributes.rand)}
-          />
-        ))}
+      {videoCategories && (
+        <RadioControl
+          label="Categories"
+          options={[
+            {
+              label: __(
+                "Don't show random videos.",
+                "rrze-video"
+              ),
+              value: "",
+            },
+            ...videoCategories.map((cat) => ({
+              label: cat.name,
+              value: cat.slug,
+            })),
+          ]}
+          onChange={(value) => {
+            if (value === "") {
+              handleOnChangeVideoCat(null, "");
+            } else {
+              const selectedCategory = videoCategories.find(
+                (cat) => cat.slug === value
+              );
+              handleOnChangeVideoCat(
+                selectedCategory.id,
+                selectedCategory.slug
+              );
+            }
+          }}
+          selected={attributes.rand}
+        />
+      )}
     </>
   );
 };
