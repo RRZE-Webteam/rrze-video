@@ -6,6 +6,7 @@ import {
   ToolbarGroup,
   ToolbarDropdownMenu,
   ToolbarItem,
+  ToolbarButton,
   PanelBody,
   BaseControl,
   CheckboxControl,
@@ -70,7 +71,7 @@ export default function Edit(props) {
       });
     }
 
-    if (existingValues.includes(newValue.toLowerCase())) {
+    else {
       let newValues = existingValues.filter(
         (value) => value !== newValue.toLowerCase()
       );
@@ -94,8 +95,6 @@ export default function Edit(props) {
           return headingLevel2; // default icon if none matches
   }
   };
-
-  console.log(checkHeadingLevelIcon("h2"));
 
   /**
    * Renders the block
@@ -172,6 +171,15 @@ export default function Edit(props) {
             onChange={() => updateShowAttribute("desc")}
           />
           <Divider />
+          <Spacer>
+            <Heading level={3}>{__("Individual Thumbnail", "rrze-video")}</Heading>
+            <Text>
+              {__(
+                `Replaces the Thumbnail with the image you selected.`,
+                "rrze-video"
+              )}
+            </Text>
+          </Spacer>
           <ImageSelectorEdit 
             attributes={attributes}
             setAttributes={setAttributes}
@@ -255,7 +263,7 @@ export default function Edit(props) {
               )}
               <ToolbarItem>
                 {() => (
-                  <Button
+                  <ToolbarButton
                     icon={reset}
                     label={__("Reset URL", "rrze-video")}
                     onClick={resetUrl}
