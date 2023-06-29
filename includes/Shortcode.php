@@ -55,17 +55,18 @@ class Shortcode
     }
 
     /**
-     * Sanitize shortcode atts & display shortcode output.
+     * Sanitize shortcode atts & display shortcode output. Also adds the aspect-ratio as inline-style
      * @param array $atts
      * @return array
      */
     public function shortcodeVideo($atts)
     {
         $defaults = $this->getShortcodeDefaults('rrzevideo');
-
         $args = shortcode_atts($defaults, $atts);
         $args = $this->translateParameters($args);
+        Helper::debug($args);
         $args = $this->sanitizeArgs($args, 'rrzevideo');
+
 
         return apply_filters(
             'rrze_video_player_content',
@@ -86,7 +87,7 @@ class Shortcode
         }
 
         // First we copy arguments, that stay as they was
-        $validpars = 'id, url, class, titletag, poster, rand';
+        $validpars = 'id, url, class, titletag, poster, rand, aspectratio';
 
         $oldargs = explode(',', $validpars);
         foreach ($oldargs as $value) {

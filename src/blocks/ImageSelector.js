@@ -3,7 +3,7 @@
  *
  * This is an adapted copy of the PostFeaturedImage component.
  * Source: https://github.com/WordPress/gutenberg/blob/master/packages/editor/src/components/post-featured-image/index.js
- * 
+ *
  * This is an adapted copy of the ImageSelector component here:
  * https://github.com/liip/image-selector-example-wp-plugin/blob/master/assets/blocks/image-selector-example/edit.js
  */
@@ -12,7 +12,6 @@
 const { __ } = wp.i18n;
 const { Component, Fragment } = wp.element;
 const {
-  InspectorControls,
   InnerBlocks,
   MediaUpload,
   MediaUploadCheck,
@@ -56,74 +55,62 @@ const ImageSelectorEdit = (props) => {
   };
 
   return (
-    <Fragment>
-      <InspectorControls>
-        <PanelBody
-          title={__("Background settings", "rrze-video")}
-          initialOpen={true}
-        >
-          <div className="rrze-video-block-image">
-            <MediaUploadCheck fallback={instructions}>
-              <MediaUpload
-                title={__("Background image", "rrze-video")}
-                onSelect={onUpdateImage}
-                allowedTypes={ALLOWED_MEDIA_TYPES}
-                value={bgImageId}
-                render={({ open }) => (
-                  <Button
-                    className={
-                      !bgImageId
-                        ? "editor-post-featured-image__toggle"
-                        : "editor-post-featured-image__preview"
-                    }
-                    onClick={open}
+      <div className="rrze-video-block-image">
+        <MediaUploadCheck fallback={instructions}>
+          <MediaUpload
+            title={__("Background image", "rrze-video")}
+            onSelect={onUpdateImage}
+            allowedTypes={ALLOWED_MEDIA_TYPES}
+            value={bgImageId}
+            render={({ open }) => (
+              <Button
+                className={
+                  !bgImageId
+                    ? "editor-post-featured-image__toggle"
+                    : "editor-post-featured-image__preview"
+                }
+                onClick={open}
+              >
+                {!bgImageId && __("Set Video Thumbnail", "rrze-video")}
+                {!!bgImageId && !bgImage && <Spinner />}
+                {!!bgImageId && bgImage && (
+                  <ResponsiveWrapper
+                    naturalWidth={bgImage.media_details.width}
+                    naturalHeight={bgImage.media_details.height}
                   >
-                    {!bgImageId && __("Set background image", "rrze-video")}
-                    {!!bgImageId && !bgImage && <Spinner />}
-                    {!!bgImageId && bgImage && (
-                      <ResponsiveWrapper
-                        naturalWidth={bgImage.media_details.width}
-                        naturalHeight={bgImage.media_details.height}
-                      >
-                        <img
-                          src={bgImage.source_url}
-                          alt={__("Background image", "rrze-video")}
-                        />
-                      </ResponsiveWrapper>
-                    )}
-                  </Button>
+                    <img
+                      src={bgImage.source_url}
+                      alt={__("Video Thumbnail", "rrze-video")}
+                    />
+                  </ResponsiveWrapper>
                 )}
-              />
-            </MediaUploadCheck>
-            {!!bgImageId && bgImage && (
-              <MediaUploadCheck>
-                <MediaUpload
-                  title={__("Background image", "rrze-video")}
-                  onSelect={onUpdateImage}
-                  allowedTypes={ALLOWED_MEDIA_TYPES}
-                  value={bgImageId}
-                  render={({ open }) => (
-                    <Button onClick={open} isDefault isLarge>
-                      {__("Replace background image", "rrze-video")}
-                    </Button>
-                  )}
-                />
-              </MediaUploadCheck>
+              </Button>
             )}
-            {!!bgImageId && (
-              <MediaUploadCheck>
-                <Button onClick={onRemoveImage} isLink isDestructive>
-                  {__("Remove background image", "rrze-video")}
+          />
+        </MediaUploadCheck>
+        {!!bgImageId && bgImage && (
+          <MediaUploadCheck>
+            <MediaUpload
+              title={__("Video Thumbnail", "rrze-video")}
+              onSelect={onUpdateImage}
+              allowedTypes={ALLOWED_MEDIA_TYPES}
+              value={bgImageId}
+              render={({ open }) => (
+                <Button onClick={open} isDefault isLarge>
+                  {__("Replace Video Thumbnail", "rrze-video")}
                 </Button>
-              </MediaUploadCheck>
-            )}
-          </div>
-        </PanelBody>
-      </InspectorControls>
-      <div className={className} style={styles}>
-        <InnerBlocks />
+              )}
+            />
+          </MediaUploadCheck>
+        )}
+        {!!bgImageId && (
+          <MediaUploadCheck>
+            <Button onClick={onRemoveImage} isLink isDestructive>
+              {__("Remove Video Thumbnail", "rrze-video")}
+            </Button>
+          </MediaUploadCheck>
+        )}
       </div>
-    </Fragment>
   );
 };
 
