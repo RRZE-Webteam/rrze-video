@@ -46,6 +46,10 @@
     "bgImageId": {
       "type": "number",
       "default": 0
+    },
+    "aspectratio": {
+      "type": "string",
+      "default": "16/9"
     }
   }
 }

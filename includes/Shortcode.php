@@ -64,7 +64,6 @@ class Shortcode
         $defaults = $this->getShortcodeDefaults('rrzevideo');
         $args = shortcode_atts($defaults, $atts);
         $args = $this->translateParameters($args);
-        Helper::debug($args);
         $args = $this->sanitizeArgs($args, 'rrzevideo');
 
 
