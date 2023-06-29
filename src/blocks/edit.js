@@ -17,14 +17,24 @@ import {
   __experimentalToggleGroupControl as ToggleGroupControl,
   __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
-import { check, headingLevel2, headingLevel3, headingLevel4, headingLevel5, headingLevel6, more, reset, video } from "@wordpress/icons";
+import {
+  check,
+  headingLevel2,
+  headingLevel3,
+  headingLevel4,
+  headingLevel5,
+  headingLevel6,
+  more,
+  reset,
+  video,
+} from "@wordpress/icons";
 import {
   useBlockProps,
   BlockControls,
   InspectorControls,
 } from "@wordpress/block-editor";
 import { ServerSideRender } from "@wordpress/editor";
-import { useState, useEffect } from "@wordpress/element";
+import { useState, useEffect, useRef } from "@wordpress/element";
 import apiFetch from "@wordpress/api-fetch";
 
 import CategorySelector from "./CategorySelector";
@@ -34,9 +44,14 @@ import { isTextInString } from "./utils";
 import "./editor.scss";
 
 export default function Edit(props) {
+  const uniqueId = Math.random().toString(36).substring(2, 15);
+
+  // Create a ref to the container div
+  const containerRef = useRef();
+
   const blockProps = useBlockProps();
   const { attributes, setAttributes } = props;
-  const { id, url, rand, titletag, poster } = attributes;
+  const { id, url, rand, titletag, poster, aspectratio } = attributes;
 
   const [inputURL, setInputURL] = useState(url);
 
@@ -52,6 +67,35 @@ export default function Edit(props) {
   const handleToggleHeadingGroup = (newValue) => {
     setAttributes({ titletag: newValue });
   };
+
+  const handleToggleAspectRatio = (aspectratio) => {
+    setAttributes({ aspectratio: aspectratio });
+  };
+
+  useEffect(() => {
+    try {
+      // Create an observer instance linked to the callback function
+      const observer = new MutationObserver(() => {
+        // Use the ref to find the video element and apply the style
+        const video = containerRef.current.querySelector("video");
+        if (video) {
+          video.style.aspectRatio = aspectratio;
+          video.style.backgroundColor = "#000000";
+        }
+      });
+
+      // Start observing the container with configuration
+      observer.observe(containerRef.current, {
+        childList: true,
+        subtree: true,
+      });
+
+      // Cleanup: disconnect the observer when the component is unmounted
+      return () => observer.disconnect();
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
   /**
    * Resets the VideoURL Parameter
@@ -69,9 +113,7 @@ export default function Edit(props) {
       setAttributes({
         show: attributes.show ? `${attributes.show},${newValue}` : newValue,
       });
-    }
-
-    else {
+    } else {
       let newValues = existingValues.filter(
         (value) => value !== newValue.toLowerCase()
       );
@@ -81,19 +123,19 @@ export default function Edit(props) {
 
   const checkHeadingLevelIcon = (headinglevel) => {
     switch (attributes.titletag) {
-      case 'h2':
-          return headingLevel2;
-      case 'h3':
-          return headingLevel3;
-      case 'h4':
-          return headingLevel4;
-      case 'h5':
-          return headingLevel5;
-      case 'h6':
-          return headingLevel6;
+      case "h2":
+        return headingLevel2;
+      case "h3":
+        return headingLevel3;
+      case "h4":
+        return headingLevel4;
+      case "h5":
+        return headingLevel5;
+      case "h6":
+        return headingLevel6;
       default:
-          return headingLevel2; // default icon if none matches
-  }
+        return headingLevel2; // default icon if none matches
+    }
   };
 
   /**
@@ -172,7 +214,9 @@ export default function Edit(props) {
           />
           <Divider />
           <Spacer>
-            <Heading level={3}>{__("Individual Thumbnail", "rrze-video")}</Heading>
+            <Heading level={3}>
+              {__("Individual Thumbnail", "rrze-video")}
+            </Heading>
             <Text>
               {__(
                 `Replaces the Thumbnail with the image you selected.`,
@@ -180,10 +224,31 @@ export default function Edit(props) {
               )}
             </Text>
           </Spacer>
-          <ImageSelectorEdit 
+          <ImageSelectorEdit
             attributes={attributes}
             setAttributes={setAttributes}
           />
+          <Divider />
+          <Heading level={3}>{__("Aspect Ratio", "rrze-video")}</Heading>
+          <Text>
+            {__(
+              "In rare cases it can be useful to select an aspect ratio to prevent black borders. Only affects FAU Video embeds."
+            )}
+          </Text>
+          <Spacer>
+            <ToggleGroupControl
+              label={__("Heading level", "rrze-video")}
+              value={attributes.aspectratio}
+              onChange={handleToggleAspectRatio}
+              isBlock
+            >
+              <ToggleGroupControlOption value="16/9" label="16:9" />
+              <ToggleGroupControlOption value="4/3" label="4:3" />
+              <ToggleGroupControlOption value="1/1" label="1:1" />
+              <ToggleGroupControlOption value="2.35/1" label="2.35:1" />
+              <ToggleGroupControlOption value="2.40/1" label="2.40:1" />
+            </ToggleGroupControl>
+          </Spacer>
         </PanelBody>
         <PanelBody title={__("Video Library", "rrze-video")} icon="video-alt3">
           <Text>
@@ -272,17 +337,23 @@ export default function Edit(props) {
               </ToolbarItem>
             </ToolbarGroup>
           </BlockControls>
-          <ServerSideRender
-            block="rrze/rrze-video"
-            attributes={{
-              url: attributes.url,
-              show: attributes.show,
-              rand: attributes.rand,
-              id: attributes.id,
-              titletag: attributes.titletag,
-              poster: attributes.poster,
-            }}
-          />
+          <div
+            className={`rrze-video-container-${uniqueId}`}
+            ref={containerRef}
+          >
+            <ServerSideRender
+              block="rrze/rrze-video"
+              attributes={{
+                url: attributes.url,
+                show: attributes.show,
+                rand: attributes.rand,
+                id: attributes.id,
+                titletag: attributes.titletag,
+                poster: attributes.poster,
+                aspectratio: attributes.aspectratio,
+              }}
+            />
+          </div>
         </>
       ) : (
         <Placeholder icon={more} label={__("Add your Video URL", "rrze-video")}>
