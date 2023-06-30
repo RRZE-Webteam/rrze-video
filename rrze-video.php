@@ -141,14 +141,14 @@ function plugin()
 function create_block_rrze_video_block_init()
 {
     $gutenberg_instance = new Gutenberg();
-    Helper::debug(plugins_url('build/blocks/index.js', __FILE__));
-    Helper::debug(plugins_url(plugin_dir_path(__FILE__) . 'languages'));
-
-    wp_set_script_translations('rrze/rrze-video', 'rrze-video', plugin_dir_path(__FILE__) . 'languages');
+    Helper::debug(is_textdomain_loaded('rrze-video'));
 
     register_block_type(__DIR__ . '/build/blocks', [
         'render_callback' => [$gutenberg_instance, 'rrze_video_render_block']
     ]);
+
+    $script_handle = generate_block_asset_handle( 'rrze/rrze-video', 'editorScript' );
+    wp_set_script_translations( $script_handle, 'rrze-video', plugin_dir_path( __FILE__ ) . 'languages' );
 }
 
 /**
