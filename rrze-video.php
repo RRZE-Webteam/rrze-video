@@ -138,12 +138,17 @@ function plugin()
  *
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
  */
-function create_block_rrze_video_block_init() {
+function create_block_rrze_video_block_init()
+{
     $gutenberg_instance = new Gutenberg();
+    Helper::debug(plugins_url('build/blocks/index.js', __FILE__));
+    Helper::debug(plugins_url(plugin_dir_path(__FILE__) . 'languages'));
 
-	register_block_type( __DIR__ . '/build/blocks', [
+    wp_set_script_translations('rrze/rrze-video', 'rrze-video', plugin_dir_path(__FILE__) . 'languages');
+
+    register_block_type(__DIR__ . '/build/blocks', [
         'render_callback' => [$gutenberg_instance, 'rrze_video_render_block']
-    ] );
+    ]);
 }
 
 /**
@@ -175,5 +180,5 @@ function loaded()
         return;
     }
     new Main;
-    add_action( 'init', __NAMESPACE__ . '\create_block_rrze_video_block_init' );
+    add_action('init', __NAMESPACE__ . '\create_block_rrze_video_block_init');
 }

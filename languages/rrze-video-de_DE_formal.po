@@ -1,8 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: RRZE Video\n"
-"POT-Creation-Date: 2023-06-30 11:49+0200\n"
-"PO-Revision-Date: 2023-06-30 13:50+0200\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-video\n"
+"POT-Creation-Date: 2023-06-30T12:36:55+00:00\n"
+"PO-Revision-Date: 2023-06-30 15:11+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE@formal\n"
@@ -22,32 +23,28 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-1: vendor\n"
 "X-Poedit-SearchPathExcluded-2: node_modules\n"
 
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:32
-msgid "To edit the background image, you need permission to upload media."
+#. Plugin Name of the plugin
+msgid "RRZE Video"
+msgstr "RRZE Video"
+
+#. Plugin URI of the plugin
+msgid "https://github.com/RRZE-Webteam/rrze-video"
+msgstr "https://github.com/RRZE-Webteam/rrze-video"
+
+#. Description of the plugin
+msgid ""
+"Embedding videos via a shortcode or widget based on the Plyr video player."
 msgstr ""
-"Um das Hintergrundbild bearbeiten zu können, werden Berechtigungen zum "
-"Hochladen von Medien benötigt."
+"Einbetten von Videos über einen Shortcode oder ein Widget, das auf dem Plyr-"
+"Video-Player basiert."
 
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:61
-msgid "Background image"
-msgstr "Hintergrundbild"
+#. Author of the plugin
+msgid "RRZE-Webteam"
+msgstr "RRZE-Webteam"
 
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:74
-msgid "Set Video Thumbnail"
-msgstr "Vorschaubild festlegen"
-
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:83
-#: src/blocks/ImageSelector.js:94
-msgid "Video Thumbnail"
-msgstr "Video Vorschaubild"
-
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:100
-msgid "Replace Video Thumbnail"
-msgstr "Video-Vorschaubild ersetzen"
-
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:109
-msgid "Remove Video Thumbnail"
-msgstr "Video-Vorschaubild entfernen"
+#. Author URI of the plugin
+msgid "http://blogs.fau.de/webworking/"
+msgstr "http://blogs.fau.de/webworking/"
 
 #: includes/CPT.php:30
 msgctxt "Post Type General Name"
@@ -73,7 +70,6 @@ msgstr "Videosammlung erstellen"
 
 #. translators: %s: Categories.
 #: includes/CPT.php:129
-#, php-format
 msgid "Display all %s"
 msgstr "Alle anzeigen %s"
 
@@ -217,13 +213,11 @@ msgstr "Ihr Browser unterstützt das HTML5 Videoformat nicht."
 
 #. translators: %s: URL of the video.
 #: includes/Player.php:456
-#, php-format
 msgid "Therefore call up the video %s from the FAU video portal."
 msgstr "Hierzu öffnen Sie das Video im FAU Videoportal unter %s."
 
 #. translators: %s: File name of the video.
 #: includes/Player.php:463
-#, php-format
 msgid "Call the video file %s directly."
 msgstr "Öffnen Sie den Videolink %s direkt."
 
@@ -346,32 +340,6 @@ msgstr "Vollständige Informationen anzeigen"
 msgid "Metadata, link to source and description if given."
 msgstr "Metadaten, Link zur Quelle und Beschreibung, falls vorhanden."
 
-#. translators: 1: Server PHP version number, 2: Required PHP version number.
-#: rrze-video.php:73
-#, php-format
-msgid ""
-"The server is running PHP version %1$s. The Plugin requires at least PHP "
-"version %2$s."
-msgstr ""
-"Auf dem Server wird die PHP-Version %1$s ausgeführt. Das Plugin benötigt "
-"mindestens die PHP-Version %2$s."
-
-#. translators: 1: Server WordPress version number, 2: Required WordPress version number.
-#: rrze-video.php:80
-#, php-format
-msgid ""
-"The server is running WordPress version %1$s. The Plugin requires at least "
-"WordPress version %2$s."
-msgstr ""
-"Auf dem Server wird die WordPress-Version %1$s ausgeführt. Das Plugin "
-"benötigt mindestens die WordPress-Version %2$s."
-
-#. translators: 1: The plugin name, 2: The error string.
-#: rrze-video.php:99 rrze-video.php:167
-#, php-format
-msgid "Plugins: %1$s: %2$s"
-msgstr "Plugins: %1$s: %2$s"
-
 #: settings/shortcode.php:11
 msgid "ID Number"
 msgstr "ID-Νummer"
@@ -408,7 +376,8 @@ msgstr "CSS Klassen"
 msgid "CSS classes that the shortcode should receive."
 msgstr "CSS-Klassen, die der Shortcode erhalten soll."
 
-#: settings/shortcode.php:51 src/blocks/edit.js:178
+#: settings/shortcode.php:51 build/blocks/index.js:1 src/blocks/edit.js:178
+#: build/blocks/index.js:798
 msgid "Show Title"
 msgstr "Titel anzeigen"
 
@@ -432,7 +401,8 @@ msgstr "Felder"
 msgid "Fields to be displayed, overwriting the above checkboxes."
 msgstr "Die anzuzeigenden Felder überschreiben die obigen Kontrollkästchen."
 
-#: settings/shortcode.php:72 src/blocks/edit.js:232
+#: settings/shortcode.php:72 build/blocks/index.js:1 src/blocks/edit.js:232
+#: build/blocks/index.js:852
 msgid "Aspect Ratio"
 msgstr "Seitenverhältnis"
 
@@ -440,11 +410,13 @@ msgstr "Seitenverhältnis"
 msgid "Aspect ratio of the video."
 msgstr "Seitenverhältnis des Videos."
 
-#: src/blocks/CategorySelector.js:98
+#: build/blocks/index.js:1 src/blocks/CategorySelector.js:98
+#: build/blocks/index.js:231
 msgid "Don't show random videos."
 msgstr "Keine zufälligen Videos zeigen."
 
-#: src/blocks/CategorySelector.js:129
+#: build/blocks/index.js:1 src/blocks/CategorySelector.js:128
+#: build/blocks/index.js:261
 msgid ""
 "Add Categories via Dashboard > Video Library > Categories to use this "
 "feature."
@@ -452,78 +424,119 @@ msgstr ""
 "Fügen Sie Kategorien über Dashboard > Videothek > Kategorien hinzu, um diese "
 "Funktion zu nutzen."
 
-#: src/blocks/VideoIDSelector.js:73
+#: build/blocks/index.js:1 src/blocks/VideoIDSelector.js:73
+#: build/blocks/index.js:348
 msgid "No video selected"
 msgstr "Kein Video ausgewählt"
 
-#: src/blocks/edit.js:146
+#: build/blocks/index.js:1 src/blocks/VideoIDSelector.js:87
+#: build/blocks/index.js:362
+#, fuzzy
+#| msgid ""
+#| "Add Categories via Dashboard > Video Library > Categories to use this "
+#| "feature."
+msgid "Add Videos via Dashboard > Video Library to use this feature."
+msgstr ""
+"Fügen Sie Kategorien über Dashboard > Videothek > Kategorien hinzu, um diese "
+"Funktion zu nutzen."
+
+#: build/blocks/index.js:1 src/blocks/ImageSelector.js:31
+#: build/blocks/index.js:407
+msgid "To edit the background image, you need permission to upload media."
+msgstr ""
+"Um das Hintergrundbild bearbeiten zu können, werden Berechtigungen zum "
+"Hochladen von Medien benötigt."
+
+#: build/blocks/index.js:1 src/blocks/ImageSelector.js:61
+#: build/blocks/index.js:437
+msgid "Background image"
+msgstr "Hintergrundbild"
+
+#: build/blocks/index.js:1 src/blocks/ImageSelector.js:74
+#: build/blocks/index.js:450
+msgid "Set Video Thumbnail"
+msgstr "Vorschaubild festlegen"
+
+#: build/blocks/index.js:1 src/blocks/ImageSelector.js:83
+#: src/blocks/ImageSelector.js:94 build/blocks/index.js:459
+#: build/blocks/index.js:470
+msgid "Video Thumbnail"
+msgstr "Video Vorschaubild"
+
+#: build/blocks/index.js:1 src/blocks/ImageSelector.js:100
+#: build/blocks/index.js:476
+msgid "Replace Video Thumbnail"
+msgstr "Video-Vorschaubild ersetzen"
+
+#: build/blocks/index.js:1 src/blocks/ImageSelector.js:109
+#: build/blocks/index.js:485
+msgid "Remove Video Thumbnail"
+msgstr "Video-Vorschaubild entfernen"
+
+#: build/blocks/index.js:1 src/blocks/edit.js:146 build/blocks/index.js:766
 msgid "URL Settings"
 msgstr "URL Einstellungen"
 
-#: src/blocks/edit.js:156
+#: build/blocks/index.js:1 src/blocks/edit.js:156 src/blocks/edit.js:369
+#: build/blocks/index.js:776 build/blocks/index.js:989
 msgid "Video URL"
 msgstr "Video URL"
 
-#: src/blocks/edit.js:164
+#: build/blocks/index.js:1 src/blocks/edit.js:164 src/blocks/edit.js:379
+#: build/blocks/index.js:784 build/blocks/index.js:999
 msgid "Update the Video URL"
 msgstr "Video URL aktualisieren"
 
-#: src/blocks/edit.js:169
+#: build/blocks/index.js:1 src/blocks/edit.js:169 src/blocks/edit.js:384
+#: build/blocks/index.js:789 build/blocks/index.js:1004
 msgid "Embed Video from URL"
 msgstr "Video aus URL einbinden"
 
-#: src/blocks/edit.js:174
+#: build/blocks/index.js:1 src/blocks/edit.js:174 build/blocks/index.js:794
 msgid "Video Display Settings"
 msgstr "Video Anzeigeoptionen"
 
-#: src/blocks/edit.js:185 src/blocks/edit.js:240
+#: build/blocks/index.js:1 src/blocks/edit.js:185 src/blocks/edit.js:240
+#: build/blocks/index.js:805 build/blocks/index.js:860
 msgid "Heading level"
 msgstr "Überschriftebene"
 
-#: src/blocks/edit.js:200
+#: build/blocks/index.js:1 src/blocks/edit.js:200 build/blocks/index.js:820
 msgid "Show Videolink"
 msgstr "Videolink anzeigen"
 
-#: src/blocks/edit.js:205
+#: build/blocks/index.js:1 src/blocks/edit.js:205 build/blocks/index.js:825
 msgid "Show Metadata"
 msgstr "Metadaten anzeigen"
 
-#: src/blocks/edit.js:210
+#: build/blocks/index.js:1 src/blocks/edit.js:210 build/blocks/index.js:830
 msgid "Show Description"
 msgstr "Videobeschreibung anzeigen"
 
-#: src/blocks/edit.js:217
+#: build/blocks/index.js:1 src/blocks/edit.js:217 build/blocks/index.js:837
 msgid "Individual Thumbnail"
 msgstr "Individuelles Vorschaubild"
 
-#: src/blocks/edit.js:221
+#: build/blocks/index.js:1 src/blocks/edit.js:220 build/blocks/index.js:840
 msgid "Replaces the Thumbnail with the image you selected."
 msgstr "Ersetzt das Vorschaubild durch das von Ihnen ausgewählte Bild."
 
-#: src/blocks/edit.js:235
-msgid ""
-"In rare cases it can be useful to select an aspect ratio to prevent black "
-"borders. Only affects FAU Video embeds."
-msgstr ""
-"In seltenen Fällen kann es sinnvoll sein, ein Seitenverhältnis zu wählen, um "
-"schwarze Ränder zu vermeiden. Betrifft nur FAU-Video-Einbettungen."
-
-#: src/blocks/edit.js:252
+#: build/blocks/index.js:1 src/blocks/edit.js:252 build/blocks/index.js:872
 msgid "Video Library"
 msgstr "Videothek"
 
-#: src/blocks/edit.js:255
+#: build/blocks/index.js:1 src/blocks/edit.js:254 build/blocks/index.js:874
 msgid ""
 "You can add videos to your video library by navigating to Dashboard\n"
 "            | Video library | Add new."
 msgstr ""
 "Sie können unter Dashboard > Videothek > Neu Videos zur Videothek hinzufügen."
 
-#: src/blocks/edit.js:262
+#: build/blocks/index.js:1 src/blocks/edit.js:262 build/blocks/index.js:882
 msgid "Random Output"
 msgstr "Zufällige Ausgabe"
 
-#: src/blocks/edit.js:265
+#: build/blocks/index.js:1 src/blocks/edit.js:264 build/blocks/index.js:884
 msgid ""
 "You can select a Video library category and a random video will be displayed "
 "from this category."
@@ -531,37 +544,107 @@ msgstr ""
 "Wählen Sie eine Kategorie aus der Videothek, um ein zufälliges Video daraus "
 "abzuspielen."
 
-#: src/blocks/edit.js:276
+#: build/blocks/index.js:1 src/blocks/edit.js:276 build/blocks/index.js:896
 msgid "Individual Videos"
 msgstr "Einzelne Videos"
 
-#: src/blocks/edit.js:279
+#: build/blocks/index.js:1 src/blocks/edit.js:278 build/blocks/index.js:898
 msgid "You can select a Video from within your Video library."
 msgstr "Sie können ein Video aus Ihrer Videothek auswählen."
 
-#: src/blocks/edit.js:332
+#: build/blocks/index.js:1 src/blocks/edit.js:332 build/blocks/index.js:952
 msgid "Reset Video block"
 msgstr "Videoblock zurücksetzen"
 
-#. Plugin Name of the plugin/theme
-msgid "RRZE Video"
-msgstr "RRZE Video"
+#: build/blocks/index.js:1 src/blocks/edit.js:359 build/blocks/index.js:979
+msgid "Add your Video URL"
+msgstr "Fügen Sie Ihre Video URL hinzu"
 
-#. Plugin URI of the plugin/theme
-msgid "https://github.com/RRZE-Webteam/rrze-video"
-msgstr "https://github.com/RRZE-Webteam/rrze-video"
-
-#. Description of the plugin/theme
-msgid ""
-"Embedding videos via a shortcode or widget based on the Plyr video player."
+#: build/blocks/index.js:1 src/blocks/edit.js:361 build/blocks/index.js:981
+msgid "Add your Video URL from FAU Videoportal, YouTube, ARD, ZDF or Vimeo."
 msgstr ""
-"Einbetten von Videos über einen Shortcode oder ein Widget, das auf dem Plyr-"
-"Video-Player basiert."
+"Fügen Sie Ihre Videos aus dem FAU Videoportal, YouTube, ARD-Mediathek oder "
+"BR-Mediathek hinzu."
 
-#. Author of the plugin/theme
-msgid "RRZE-Webteam"
-msgstr "RRZE-Webteam"
+#: build/blocks/block.json src/blocks/block.json
+#, fuzzy
+#| msgid "Video"
+msgctxt "block title"
+msgid "Video"
+msgstr "Video"
 
-#. Author URI of the plugin/theme
-msgid "http://blogs.fau.de/webworking/"
-msgstr "http://blogs.fau.de/webworking/"
+#: build/blocks/block.json src/blocks/block.json
+#, fuzzy
+#| msgid "Video"
+msgctxt "block keyword"
+msgid "video"
+msgstr "Video"
+
+#: build/blocks/block.json src/blocks/block.json
+#, fuzzy
+#| msgid "Video"
+msgctxt "block keyword"
+msgid "fauvideo"
+msgstr "Video"
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block keyword"
+msgid "fautv"
+msgstr ""
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block keyword"
+msgid "youtube"
+msgstr ""
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block keyword"
+msgid "vimeo"
+msgstr ""
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block keyword"
+msgid "embed"
+msgstr ""
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block keyword"
+msgid "rrze video"
+msgstr ""
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block keyword"
+msgid "rrze"
+msgstr ""
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block description"
+msgid "Embeds videos from FAUVideo, YouTube & Co."
+msgstr ""
+
+#, php-format
+#~ msgid ""
+#~ "The server is running PHP version %1$s. The Plugin requires at least PHP "
+#~ "version %2$s."
+#~ msgstr ""
+#~ "Auf dem Server wird die PHP-Version %1$s ausgeführt. Das Plugin benötigt "
+#~ "mindestens die PHP-Version %2$s."
+
+#, php-format
+#~ msgid ""
+#~ "The server is running WordPress version %1$s. The Plugin requires at "
+#~ "least WordPress version %2$s."
+#~ msgstr ""
+#~ "Auf dem Server wird die WordPress-Version %1$s ausgeführt. Das Plugin "
+#~ "benötigt mindestens die WordPress-Version %2$s."
+
+#, php-format
+#~ msgid "Plugins: %1$s: %2$s"
+#~ msgstr "Plugins: %1$s: %2$s"
+
+#~ msgid ""
+#~ "In rare cases it can be useful to select an aspect ratio to prevent black "
+#~ "borders. Only affects FAU Video embeds."
+#~ msgstr ""
+#~ "In seltenen Fällen kann es sinnvoll sein, ein Seitenverhältnis zu wählen, "
+#~ "um schwarze Ränder zu vermeiden. Betrifft nur FAU-Video-Einbettungen."
