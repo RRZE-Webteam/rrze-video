@@ -2,10 +2,19 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
   "name": "rrze/rrze-video",
-  "version": "0.1.0",
-  "title": "RRZE Video",
-  "category": "widgets",
-  "icon": "format-video",
+  "version": "1.0.1",
+  "title": "Video",
+  "keywords": [
+    "video",
+    "fauvideo",
+    "fautv",
+    "youtube",
+    "vimeo",
+    "embed",
+    "rrze video",
+    "rrze"
+  ],
+  "category": "embed",
   "description": "Embeds videos from FAUVideo, YouTube & Co.",
   "supports": {
     "html": false
