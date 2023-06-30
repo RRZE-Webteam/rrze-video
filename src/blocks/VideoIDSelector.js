@@ -3,6 +3,9 @@ import {
   RadioControl,
   __experimentalText as Text,
   __experimentalDivider as Divider,
+  __experimentalSpacer as Spacer,
+  __experimentalHeading as Heading,
+  Notice,
 } from "@wordpress/components";
 import { useBlockProps } from "@wordpress/block-editor";
 import { useState, useEffect } from "@wordpress/element";
@@ -62,7 +65,7 @@ const VideoIDSelector = (props) => {
 
   return (
     <>
-      {videoInformation && (
+      {videoInformation.length !== 0 && (
         <RadioControl
           label="Video ID"
           selected={attributes.id}
@@ -75,6 +78,19 @@ const VideoIDSelector = (props) => {
           ]}
           onChange={(value) => handleOnChangeVideoCat(value)}
         />
+      )}
+      {videoInformation.length === 0 && (
+        <>
+          <Divider />
+          <Spacer>
+            <Notice status="info" isDismissible={false}>
+              {__(
+                "Add Videos via Dashboard > Video Library to use this feature.",
+                "rrze-video"
+              )}
+            </Notice>
+          </Spacer>
+        </>
       )}
     </>
   );

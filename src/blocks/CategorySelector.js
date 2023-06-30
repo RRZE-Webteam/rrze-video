@@ -4,6 +4,9 @@ import {
   CheckboxControl,
   __experimentalText as Text,
   __experimentalDivider as Divider,
+  __experimentalSpacer as Spacer,
+  __experimentalHeading as Heading,
+  Notice,
 } from "@wordpress/components";
 import { useBlockProps } from "@wordpress/block-editor";
 import { useState, useEffect } from "@wordpress/element";
@@ -87,15 +90,12 @@ const CategorySelector = (props) => {
 
   return (
     <>
-      {videoCategories && (
+      {videoCategories.length > 0 && (
         <RadioControl
           label="Categories"
           options={[
             {
-              label: __(
-                "Don't show random videos.",
-                "rrze-video"
-              ),
+              label: __("Don't show random videos.", "rrze-video"),
               value: "",
             },
             ...videoCategories.map((cat) => ({
@@ -118,6 +118,20 @@ const CategorySelector = (props) => {
           }}
           selected={attributes.rand}
         />
+      )}
+      {videoCategories.length === 0 && (
+        <>
+
+          <Divider />
+          <Spacer>
+            <Notice status="info" isDismissible={false}>
+              {__(
+                "Add Categories via Dashboard > Video Library > Categories to use this feature.",
+                "rrze-video"
+              )}
+            </Notice>
+          </Spacer>
+        </>
       )}
     </>
   );
