@@ -27,6 +27,10 @@ import metadata from "./block.json";
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
 registerBlockType(metadata.name, {
+  icon: {
+		src: "format-video",
+		background: "#00458c"
+	},
   transforms: {
     from: [
       {

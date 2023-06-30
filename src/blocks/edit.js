@@ -74,9 +74,8 @@ export default function Edit(props) {
 
   useEffect(() => {
     try {
-      // Create an observer instance linked to the callback function
       const observer = new MutationObserver(() => {
-        // Use the ref to find the video element and apply the style
+
         const video = containerRef.current.querySelector("video");
         if (video) {
           video.style.aspectRatio = aspectratio;
@@ -84,16 +83,13 @@ export default function Edit(props) {
         }
       });
   
-      // Check if containerRef.current exists before observing
       if (containerRef.current) {
-        // Start observing the container with configuration
         observer.observe(containerRef.current, {
           childList: true,
           subtree: true,
         });
       }
   
-      // Cleanup: disconnect the observer when the component is unmounted
       return () => observer.disconnect();
     } catch (error) {
       console.log(error);
@@ -104,7 +100,7 @@ export default function Edit(props) {
    * Resets the VideoURL Parameter
    */
   const resetUrl = () => {
-    setAttributes({ url: "" });
+    setAttributes({ url: "", rand: "", id: "" });
     setInputURL("");
   };
 
@@ -333,7 +329,7 @@ export default function Edit(props) {
                 {() => (
                   <ToolbarButton
                     icon={reset}
-                    label={__("Reset URL", "rrze-video")}
+                    label={__("Reset Video block", "rrze-video")}
                     onClick={resetUrl}
                   />
                 )}
@@ -354,12 +350,13 @@ export default function Edit(props) {
                 titletag: attributes.titletag,
                 poster: attributes.poster,
                 aspectratio: attributes.aspectratio,
+                class: attributes.class,
               }}
             />
           </div>
         </>
       ) : (
-        <Placeholder icon={more} label={__("Add your Video URL", "rrze-video")}>
+        <Placeholder icon={video} label={__("Add your Video URL", "rrze-video")}>
           <p>
             {__(
               "Add your Video URL from FAU Videoportal, YouTube, ARD, ZDF or Vimeo.",
