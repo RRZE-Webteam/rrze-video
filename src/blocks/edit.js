@@ -83,13 +83,16 @@ export default function Edit(props) {
           video.style.backgroundColor = "#000000";
         }
       });
-
-      // Start observing the container with configuration
-      observer.observe(containerRef.current, {
-        childList: true,
-        subtree: true,
-      });
-
+  
+      // Check if containerRef.current exists before observing
+      if (containerRef.current) {
+        // Start observing the container with configuration
+        observer.observe(containerRef.current, {
+          childList: true,
+          subtree: true,
+        });
+      }
+  
       // Cleanup: disconnect the observer when the component is unmounted
       return () => observer.disconnect();
     } catch (error) {
@@ -229,26 +232,26 @@ export default function Edit(props) {
             setAttributes={setAttributes}
           />
           <Divider />
-          <Heading level={3}>{__("Aspect Ratio", "rrze-video")}</Heading>
-          <Text>
-            {__(
-              "In rare cases it can be useful to select an aspect ratio to prevent black borders. Only affects FAU Video embeds."
-            )}
-          </Text>
           <Spacer>
-            <ToggleGroupControl
-              label={__("Heading level", "rrze-video")}
-              value={attributes.aspectratio}
-              onChange={handleToggleAspectRatio}
-              isBlock
-            >
-              <ToggleGroupControlOption value="16/9" label="16:9" />
-              <ToggleGroupControlOption value="4/3" label="4:3" />
-              <ToggleGroupControlOption value="1/1" label="1:1" />
-              <ToggleGroupControlOption value="2.35/1" label="2.35:1" />
-              <ToggleGroupControlOption value="2.40/1" label="2.40:1" />
-            </ToggleGroupControl>
+            <Heading level={3}>{__("Aspect Ratio", "rrze-video")}</Heading>
+            <Text>
+              {__(
+                "In rare cases it can be useful to select an aspect ratio to prevent black borders. Only affects FAU Video embeds."
+              )}
+            </Text>
           </Spacer>
+          <ToggleGroupControl
+            label={__("Heading level", "rrze-video")}
+            value={attributes.aspectratio}
+            onChange={handleToggleAspectRatio}
+            isBlock
+          >
+            <ToggleGroupControlOption value="16/9" label="16:9" />
+            <ToggleGroupControlOption value="4/3" label="4:3" />
+            <ToggleGroupControlOption value="1/1" label="1:1" />
+            <ToggleGroupControlOption value="2.35/1" label="2.35:1" />
+            <ToggleGroupControlOption value="2.40/1" label="2.40:1" />
+          </ToggleGroupControl>
         </PanelBody>
         <PanelBody title={__("Video Library", "rrze-video")} icon="video-alt3">
           <Text>
@@ -365,15 +368,21 @@ export default function Edit(props) {
           </p>
           <br />
           <form onSubmit={handleSubmit}>
-            <input
-              className="rrze-video-input-field"
-              type="url"
-              value={inputURL}
-              onChange={(event) => setInputURL(event.target.value)}
-              placeholder={__("Insert your Video URL", "rrze-video")}
-              style={{ width: "100%" }}
-            />
-            <br />
+            <BaseControl
+              label={__("Video URL", "rrze-video")}
+              id="rrze-video-url"
+              style={{width: "100%"}}
+              className="rrze-video-editor-input"
+            >
+              <input
+                className="rrze-video-input-field"
+                type="url"
+                value={inputURL}
+                onChange={(event) => setInputURL(event.target.value)}
+                placeholder={__("Update the Video URL", "rrze-video")}
+                style={{ width: "100%"}}
+              />
+            </BaseControl>
             <Button isPrimary type="submit">
               {__("Embed Video from URL", "rrze-video")}
             </Button>
