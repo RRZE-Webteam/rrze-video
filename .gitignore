@@ -49,3 +49,7 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+# Loco translate ignore
+*.po~
+*.pot~
