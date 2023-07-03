@@ -143,11 +143,14 @@ export default function Edit(props) {
   return (
     <div {...blockProps}>
       <InspectorControls>
-        <PanelBody title={__("URL Settings", "rrze-video")} icon="format-video">
+        <PanelBody 
+        title={__("URL Settings", "rrze-video")} 
+        icon="format-video" 
+        initialOpen={false}
+        >
           <Spacer>
             <Text>
-              Enter a video url from FAU Videoportal, YouTube, Vimeo, ARD, BR or
-              Twitter.
+              {__("Enter a video url from FAU Videoportal, YouTube, Vimeo, ARD, BR or Twitter.", "rrze-video")}
             </Text>
           </Spacer>
 
@@ -173,6 +176,7 @@ export default function Edit(props) {
         <PanelBody
           title={__("Video Display Settings", "rrze-video")}
           icon="admin-appearance"
+          initialOpen={true}
         >
           <CheckboxControl
             label={__("Show Title", "rrze-video")}
@@ -231,13 +235,11 @@ export default function Edit(props) {
           <Spacer>
             <Heading level={3}>{__("Aspect Ratio", "rrze-video")}</Heading>
             <Text>
-              {__(
-                "In rare cases it can be useful to select an aspect ratio to prevent black borders. Only affects FAU Video embeds."
-              )}
+              {__("In rare cases it can be useful to select an aspect ratio to prevent black borders. Only affects FAU Video embeds.", "rrze-video")}
             </Text>
           </Spacer>
           <ToggleGroupControl
-            label={__("Heading level", "rrze-video")}
+            label={__("Aspect ratio", "rrze-video")}
             value={attributes.aspectratio}
             onChange={handleToggleAspectRatio}
             isBlock
@@ -249,7 +251,11 @@ export default function Edit(props) {
             <ToggleGroupControlOption value="2.40/1" label="2.40:1" />
           </ToggleGroupControl>
         </PanelBody>
-        <PanelBody title={__("Video Library", "rrze-video")} icon="video-alt3">
+        <PanelBody 
+        title={__("Video Library", "rrze-video")} 
+        icon="video-alt3"
+        initialOpen={false}
+        >
           <Text>
             {__(
               `You can add videos to your video library by navigating to Dashboard

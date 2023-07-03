@@ -92,7 +92,7 @@ const CategorySelector = (props) => {
     <>
       {videoCategories.length > 0 && (
         <RadioControl
-          label="Categories"
+          label={__("Categories", "rrze-video")}
           options={[
             {
               label: __("Don't show random videos.", "rrze-video"),

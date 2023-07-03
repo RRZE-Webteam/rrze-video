@@ -1,0 +1,616 @@
+# Copyright (C) 2023 RRZE-Webteam
+# This file is distributed under the GNU General Public License Version 3.
+msgid ""
+msgstr ""
+"Project-Id-Version: RRZE Video 3.5.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-video\n"
+"Last-Translator: \n"
+"Language-Team: Deutsch (Sie)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2023-07-03T06:11:20+00:00\n"
+"PO-Revision-Date: 2023-07-03 07:14+0000\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Domain: rrze-video\n"
+"Language: de_DE_formal\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Loco-Version: 2.6.4; wp-6.2.2"
+
+#. Plugin Name of the plugin
+msgid "RRZE Video"
+msgstr "RRZE Video"
+
+#. Plugin URI of the plugin
+msgid "https://github.com/RRZE-Webteam/rrze-video"
+msgstr "https://github.com/RRZE-Webteam/rrze-video"
+
+#. Description of the plugin
+msgid ""
+"Embedding videos via a shortcode or widget based on the Plyr video player."
+msgstr ""
+"Videos über einen Shortcode oder ein Widget einbinden. Basiert auf dem Plyr "
+"Videoplayer."
+
+#. Author of the plugin
+msgid "RRZE-Webteam"
+msgstr "RRZE-Webteam"
+
+#. Author URI of the plugin
+msgid "http://blogs.fau.de/webworking/"
+msgstr "http://blogs.fau.de/webworking/"
+
+#: includes/CPT.php:30
+msgctxt "Post Type General Name"
+msgid "Videothek"
+msgstr "Videothek"
+
+#: includes/CPT.php:31
+msgctxt "Post Type Singular Name"
+msgid "Video"
+msgstr "Video"
+
+#: includes/CPT.php:32
+msgid "Videothek"
+msgstr "Videothek"
+
+#: includes/CPT.php:36
+msgid "Video"
+msgstr "Video"
+
+#: includes/CPT.php:37
+msgid "Create video collection"
+msgstr "Erstellen Sie eine Videosammlung"
+
+#. translators: %s: Categories.
+#: includes/CPT.php:129
+msgid "Display all %s"
+msgstr "Alle %s anzeigen"
+
+#: includes/CPT.php:148
+msgid "Title"
+msgstr "Titel"
+
+#: includes/CPT.php:149 settings/shortcode.php:37
+msgid "Category"
+msgstr "Kategorie"
+
+#: includes/CPT.php:150
+msgid "ID"
+msgstr "ID"
+
+#: includes/CPT.php:151 includes/Metabox.php:36 includes/Widget.php:134
+msgid "URL"
+msgstr "URL"
+
+#: includes/CPT.php:152
+msgid "Thumbnail"
+msgstr "Vorschaubild"
+
+#: includes/IFrames.php:44
+msgid ""
+"The video provider is unknown. It is therefore not possible to embed the "
+"video."
+msgstr ""
+"Der Videoprovider ist unbekannt. Es ist deshalb nicht möglich, ein Video von "
+"der Quelle einzubinden."
+
+#: includes/IFrames.php:98
+msgid "Video from ARD Mediathek"
+msgstr "Video aus der ARD Mediathek"
+
+#: includes/IFrames.php:105
+msgid "The URL for the ARD Mediathek is invalid or incorrect."
+msgstr "Die URL für die ARD Mediathek ist ungültig oder falsch."
+
+#: includes/IFrames.php:121
+msgid "Video from BR Mediathek"
+msgstr "Video aus der BR Mediathek"
+
+#: includes/IFrames.php:128
+msgid "The URL for the BR Mediathek is invalid or incorrect."
+msgstr "Die URL für die BR Mediathek ist ungültig oder falsch."
+
+#: includes/Metabox.php:23
+msgid "Video data"
+msgstr "Videodaten"
+
+#: includes/Metabox.php:34
+msgid ""
+"Web address (URL) for the video on the video portal used (FAU video portal, "
+"YouTube, Vimeo or others)."
+msgstr ""
+"Webadresse (URL) für das Video, wie Sie im Videoportal genutzt wird (FAU "
+"Videoportal, YouTube, Vimeo und andere)."
+
+#: includes/OEmbed.php:151
+msgid "The FAU-Video URL does not contain a valid video ID"
+msgstr ""
+"Die FAUVideo-URL enthält keine gültige VideoID. Überprüfen Sie die VideoURL."
+
+#: includes/OEmbed.php:153
+msgid ""
+"The call refers to a video collection. This cannot be integrated. So call up "
+"the video directly under the URL:"
+msgstr ""
+"Der Aufruf bezieht sich auf eine Videosammlung. Diese kann nicht integriert "
+"werden. Rufen Sie daher das Video direkt unter der URL auf:"
+
+#: includes/OEmbed.php:156
+msgid ""
+"The call refers to a collection of courses. This cannot be integrated. So "
+"call up the video directly under the URL:"
+msgstr ""
+"Der Aufruf bezieht sich auf eine Sammlung von Kursen. Diese kann nicht "
+"eingebunden werden. Rufen Sie daher das Video direkt unter der URL auf:"
+
+#: includes/Player.php:53
+msgid ""
+"Error when displaying the video player: Insufficient data was transferred."
+msgstr ""
+"Fehler bei der Ausgabe des Videoplayers: Nur ein Bruchteil der benötigten "
+"Daten wurde übertragen."
+
+#: includes/Player.php:126 includes/Player.php:133 includes/Player.php:175
+#: includes/Player.php:182 includes/Player.php:203 includes/Player.php:237
+msgid "Error getting the video"
+msgstr "Fehler beim Abruf des Videos"
+
+#: includes/Player.php:135 includes/Player.php:184
+msgid "Video data could not be obtained."
+msgstr "Videodaten konnten nicht abgerufen werden."
+
+#: includes/Player.php:146
+msgid "Link"
+msgstr "Link"
+
+#: includes/Player.php:149 includes/Player.php:503 includes/Player.php:531
+msgid "Source"
+msgstr "Quelle"
+
+#: includes/Player.php:162
+msgid "Unknown video source"
+msgstr "Unbekannte Videoquelle"
+
+#: includes/Player.php:164
+msgid ""
+"The following address could not be assigned to a known video provider or it "
+"does not have a suitable interface for retrieving videos."
+msgstr ""
+"Die folgende URL konnte zu keinem bekannten Videoprovider zugeordnet werden "
+"oder nutzt kein passendes Interface, um Videodaten abzurufen."
+
+#: includes/Player.php:165
+msgid "So please call up the video by directly following the link below:"
+msgstr ""
+"Rufen Sie das Video also bitte direkt über den unten stehenden Link auf:"
+
+#: includes/Player.php:206
+msgid "The video ID used is invalid or could not be assigned to a video."
+msgstr ""
+"Die verwendete Video-ID ist ungültig oder konnte keinem Video zugeordnet "
+"werden."
+
+#: includes/Player.php:208
+msgid "No video from the specified category could be found."
+msgstr "In der gewählten Kategorie wurde kein Video gefunden."
+
+#: includes/Player.php:211
+msgid "Neither a valid ID nor a valid URL was specified for a video."
+msgstr ""
+"Weder eine gültige ID, noch eine gültige URL wurden für das Video angegeben."
+
+#: includes/Player.php:228
+msgid ""
+"No valid video provider was found. As a result, the video cannot be played "
+"or could not be recognized."
+msgstr ""
+"Kein gültiger Videoprovider wurde gefunden. Aus diesem Grund kann das Video "
+"nicht abgespielt oder erkannt werden."
+
+#: includes/Player.php:448
+msgid "Unfortunately, your browser does not support HTML5 video formats."
+msgstr "Leider unterstützt Ihr Browser keine HTML5 Videoformate."
+
+#. translators: %s: URL of the video.
+#: includes/Player.php:456
+msgid "Therefore call up the video %s from the FAU video portal."
+msgstr "Deshalb rufen Sie Ihr Video %s direkt aus dem FAU Videoportal auf."
+
+#. translators: %s: File name of the video.
+#: includes/Player.php:463
+msgid "Call the video file %s directly."
+msgstr "Rufen Sie das Video %s direkt auf."
+
+#: includes/Player.php:472
+msgid "Video provider incorrectly defined."
+msgstr "Der Videoprovider wurde falsch definiert."
+
+#: includes/Player.php:485
+msgid "Author"
+msgstr "Autor"
+
+#: includes/Player.php:507
+msgid "Video with presentation slides"
+msgstr "Video mit Präsentationsfolien"
+
+#: includes/Player.php:511
+msgid "Audio Format"
+msgstr "Audioformat"
+
+#: includes/Player.php:515
+msgid "Provider"
+msgstr "Provider"
+
+#: includes/Player.php:534
+msgid "This video is part of a video collection"
+msgstr "Dieses Video ist Teil einer Videosammlung"
+
+#: includes/Widget.php:22
+msgid "Displays videos in the sidebar or in the footer."
+msgstr "Gibt Videos in der Sidebar oder im Footer der Website aus."
+
+#: includes/Widget.php:110
+msgid "Please select a video from your local video library:"
+msgstr "Bitte wählen Sie ein Video aus Ihrer Videothek:"
+
+#: includes/Widget.php:112
+msgid "Select a video from the video library"
+msgstr "Wählen Sie ein Video aus der Videothek"
+
+#: includes/Widget.php:120
+msgid "There are no videos in your video library yet."
+msgstr "Aktuell sind keine Videos in Ihrer Videothek."
+
+#: includes/Widget.php:128
+msgid "Video source"
+msgstr "Videoquelle"
+
+#: includes/Widget.php:130
+msgid "Selection via URL"
+msgstr "Auswahl über die URL"
+
+#: includes/Widget.php:133
+msgid "Enter a URL to the video you want:"
+msgstr "Geben Sie eine Video-URL ein:"
+
+#: includes/Widget.php:137
+msgid "e.g. https://www.video.uni-erlangen.de/webplayer/id/13953"
+msgstr "z.B. https://www.video.uni-erlangen.de/webplayer/id/13953"
+
+#: includes/Widget.php:138
+msgid ""
+"Supported video sources are currently: FAU video portal, YouTube and Vimeo."
+msgstr "Unterstützte Videoprovider: FAU Videoportal, YouTube, Vimeo, ARD, BR."
+
+#: includes/Widget.php:144
+msgid "Alternative chose a video by list"
+msgstr "Alternativ wählen Sie ein Video aus der Liste"
+
+#: includes/Widget.php:148
+msgid ""
+"Or select a category from your local video library to display a random video "
+"from this:"
+msgstr ""
+"Oder wählen Sie eine Kategorie aus Ihrer lokalen Videothek, um ein "
+"zufälliges Video daraus anzuzeigen:"
+
+#: includes/Widget.php:167
+msgid "Choose a category"
+msgstr "Wählen Sie eine Kategorie"
+
+#: includes/Widget.php:180
+msgid "Video options"
+msgstr "Video-Optionen"
+
+#: includes/Widget.php:182
+msgid "Widget Title:"
+msgstr "Widget-Titel:"
+
+#: includes/Widget.php:187
+msgid "Show title"
+msgstr "Titel ausgeben"
+
+#: includes/Widget.php:188
+msgid "Show video title above the video; override widget title if set."
+msgstr ""
+"Videotitel über dem Video ausgeben; Überschreibt den Widget-Titel, falls "
+"dieser gesetzt wurde."
+
+#: includes/Widget.php:192
+msgid "Link to source"
+msgstr "Link zur Quelle"
+
+#: includes/Widget.php:193
+msgid "Provide a link to the original source at the video provider."
+msgstr "Gibt einen Link zum Originalvideo des Videoproviders an."
+
+#: includes/Widget.php:197
+msgid "Show metadata"
+msgstr "Metadaten ausgeben"
+
+#: includes/Widget.php:198
+msgid "Author, copyright, link to source and description if given."
+msgstr "Autor, Copyright, Link zur Quelle und Beschreibung, falls vorhanden."
+
+#: includes/Widget.php:202
+msgid "Show complete information"
+msgstr "Alle Informationen ausgeben"
+
+#: includes/Widget.php:203
+msgid "Metadata, link to source and description if given."
+msgstr "Metadaten, Link zur Quelle und Beschreibung, falls gegeben."
+
+#: settings/shortcode.php:11
+msgid "ID Number"
+msgstr "ID-Nummer"
+
+#: settings/shortcode.php:12
+msgid "ID number of the video in the video library in the backend."
+msgstr "ID-Nummer des Videos in der Videothek im Backend."
+
+#: settings/shortcode.php:19
+msgid "URL (Video)"
+msgstr "URL(Video)"
+
+#: settings/shortcode.php:25
+msgid "URL (thumbnail)"
+msgstr "URL (Vorschaubild)"
+
+#: settings/shortcode.php:31
+msgid "Titletag"
+msgstr "Titletag"
+
+#: settings/shortcode.php:38
+msgid ""
+"Category (slug) of the video library from which a video is to be shown "
+"randomly."
+msgstr ""
+"Kategorie (slug) aus der Videothek, um ein zufälliges Video daraus "
+"auszugeben."
+
+#: settings/shortcode.php:44
+msgid "CSS Classes"
+msgstr "CSS Klassen"
+
+#: settings/shortcode.php:45
+msgid "CSS classes that the shortcode should receive."
+msgstr "CSS Klassen, die dem Shortcode übergeben werden sollen."
+
+#: settings/shortcode.php:51 build/blocks/index.js:1 src/blocks/edit.js:178
+#: build/blocks/index.js:798
+msgid "Show Title"
+msgstr "Titel ausgeben"
+
+#: settings/shortcode.php:52
+msgid "Display the title over the video."
+msgstr "Gibt den Titel über dem Video aus."
+
+#: settings/shortcode.php:58
+msgid "Show Info"
+msgstr "Info ausgeben"
+
+#: settings/shortcode.php:59
+msgid "Show metainfo under the video."
+msgstr "Metadaten unter dem Video ausgeben"
+
+#: settings/shortcode.php:65
+msgid "Fields"
+msgstr "Felder"
+
+#: settings/shortcode.php:66
+msgid "Fields to be displayed, overwriting the above checkboxes."
+msgstr ""
+"Felder, die ausgegeben werden überschreiben die gewählten Kontrollkästen."
+
+#: settings/shortcode.php:72 build/blocks/index.js:1 src/blocks/edit.js:232
+#: build/blocks/index.js:852
+msgid "Aspect Ratio"
+msgstr "Seitenverhältnis"
+
+#: settings/shortcode.php:73
+msgid "Aspect ratio of the video."
+msgstr "Seitenverhältnis des Videos."
+
+#: build/blocks/index.js:1 src/blocks/CategorySelector.js:98
+#: build/blocks/index.js:231
+msgid "Don't show random videos."
+msgstr "Zeige keine zufälligen Videos."
+
+#: build/blocks/index.js:1 src/blocks/CategorySelector.js:128
+#: build/blocks/index.js:261
+msgid ""
+"Add Categories via Dashboard > Video Library > Categories to use this "
+"feature."
+msgstr ""
+"Fügen Sie Kategorien in Ihrer Mediathek über \"Dashboard > Videothek > "
+"Kategorien\" hinzu, um diese Funktion zu nutzen.\n"
+
+#: build/blocks/index.js:1 src/blocks/VideoIDSelector.js:73
+#: build/blocks/index.js:348
+msgid "No video selected"
+msgstr "Kein Video aus der Videothek ausgeben"
+
+#: build/blocks/index.js:1 src/blocks/VideoIDSelector.js:87
+#: build/blocks/index.js:362
+msgid "Add Videos via Dashboard > Video Library to use this feature."
+msgstr ""
+"Fügen Sie individuelle Videos zu Ihrer Videothek unter \"Dashboard > "
+"Videothek > Neu\" hinzu, um diese Funktion zu nutzen."
+
+#: build/blocks/index.js:1 src/blocks/ImageSelector.js:31
+#: build/blocks/index.js:407
+msgid "To edit the background image, you need permission to upload media."
+msgstr ""
+"Um das Vorschaubild zu bearbeiten, benötigen Sie die passende Berechtigung, "
+"um Medien in die WordPress-Mediathek hochzuladen."
+
+#: build/blocks/index.js:1 src/blocks/ImageSelector.js:61
+#: build/blocks/index.js:437
+msgid "Background image"
+msgstr "Hintergrundbild"
+
+#: build/blocks/index.js:1 src/blocks/ImageSelector.js:74
+#: build/blocks/index.js:450
+msgid "Set Video Thumbnail"
+msgstr "Video Vorschaubild festlegen"
+
+#: build/blocks/index.js:1 src/blocks/ImageSelector.js:83
+#: src/blocks/ImageSelector.js:94 build/blocks/index.js:459
+#: build/blocks/index.js:470
+msgid "Video Thumbnail"
+msgstr "Video-Vorschaubild"
+
+#: build/blocks/index.js:1 src/blocks/ImageSelector.js:100
+#: build/blocks/index.js:476
+msgid "Replace Video Thumbnail"
+msgstr "Video Vorschaubild ersetzen"
+
+#: build/blocks/index.js:1 src/blocks/ImageSelector.js:109
+#: build/blocks/index.js:485
+msgid "Remove Video Thumbnail"
+msgstr "Vorschaubild des Videos entfernen"
+
+#: build/blocks/index.js:1 src/blocks/edit.js:146 build/blocks/index.js:766
+msgid "URL Settings"
+msgstr "URL-Einstellungen"
+
+#: build/blocks/index.js:1 src/blocks/edit.js:156 src/blocks/edit.js:369
+#: build/blocks/index.js:776 build/blocks/index.js:989
+msgid "Video URL"
+msgstr "Video-URL"
+
+#: build/blocks/index.js:1 src/blocks/edit.js:164 src/blocks/edit.js:379
+#: build/blocks/index.js:784 build/blocks/index.js:999
+msgid "Update the Video URL"
+msgstr "Geben Sie hier die Video-URL ein."
+
+#: build/blocks/index.js:1 src/blocks/edit.js:169 src/blocks/edit.js:384
+#: build/blocks/index.js:789 build/blocks/index.js:1004
+msgid "Embed Video from URL"
+msgstr "Video von einer URL einbinden"
+
+#: build/blocks/index.js:1 src/blocks/edit.js:174 build/blocks/index.js:794
+msgid "Video Display Settings"
+msgstr "Video-Anzeigeoptionen"
+
+#: build/blocks/index.js:1 src/blocks/edit.js:185 src/blocks/edit.js:240
+#: build/blocks/index.js:805 build/blocks/index.js:860
+msgid "Heading level"
+msgstr "Überschriftebene"
+
+#: build/blocks/index.js:1 src/blocks/edit.js:200 build/blocks/index.js:820
+msgid "Show Videolink"
+msgstr "Videolink ausgeben"
+
+#: build/blocks/index.js:1 src/blocks/edit.js:205 build/blocks/index.js:825
+msgid "Show Metadata"
+msgstr "Metadaten ausgeben"
+
+#: build/blocks/index.js:1 src/blocks/edit.js:210 build/blocks/index.js:830
+msgid "Show Description"
+msgstr "Beschreibung ausgeben"
+
+#: build/blocks/index.js:1 src/blocks/edit.js:217 build/blocks/index.js:837
+msgid "Individual Thumbnail"
+msgstr "Individuelles Vorschaubild"
+
+#: build/blocks/index.js:1 src/blocks/edit.js:220 build/blocks/index.js:840
+msgid "Replaces the Thumbnail with the image you selected."
+msgstr "Ersetzt das Vorschaubild durch das gewählte Bild."
+
+#: build/blocks/index.js:1 src/blocks/edit.js:252 build/blocks/index.js:872
+msgid "Video Library"
+msgstr "Videothek"
+
+#: build/blocks/index.js:1 src/blocks/edit.js:254 build/blocks/index.js:874
+msgid ""
+"You can add videos to your video library by navigating to Dashboard\n"
+"            | Video library | Add new."
+msgstr ""
+"Sie können Videos über \"Dashboard > Videothek > Neu\" zu Ihrer Videothek "
+"hinzufügen."
+
+#: build/blocks/index.js:1 src/blocks/edit.js:262 build/blocks/index.js:882
+msgid "Random Output"
+msgstr "Zufällige Ausgabe"
+
+#: build/blocks/index.js:1 src/blocks/edit.js:264 build/blocks/index.js:884
+msgid ""
+"You can select a Video library category and a random video will be displayed "
+"from this category."
+msgstr ""
+"Sie können eine Kategorie aus Ihrer Videothek wählen, um ein zufälliges "
+"Video daraus auszugeben."
+
+#: build/blocks/index.js:1 src/blocks/edit.js:276 build/blocks/index.js:896
+msgid "Individual Videos"
+msgstr "Individuelle Videos"
+
+#: build/blocks/index.js:1 src/blocks/edit.js:278 build/blocks/index.js:898
+msgid "You can select a Video from within your Video library."
+msgstr "Sie können ein Video aus Ihrer Videothek auswählen."
+
+#: build/blocks/index.js:1 src/blocks/edit.js:332 build/blocks/index.js:952
+msgid "Reset Video block"
+msgstr "Videoblock zurücksetzen."
+
+#: build/blocks/index.js:1 src/blocks/edit.js:359 build/blocks/index.js:979
+msgid "Add your Video URL"
+msgstr "Video-URL eingeben"
+
+#: build/blocks/index.js:1 src/blocks/edit.js:361 build/blocks/index.js:981
+msgid "Add your Video URL from FAU Videoportal, YouTube, ARD, ZDF or Vimeo."
+msgstr ""
+"Fügen Sie Ihre Video-URL aus dem FAU Videoportal, YouTube, ARD- oder BR-"
+"Mediathek hinzu."
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block title"
+msgid "Video"
+msgstr "Video"
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block keyword"
+msgid "video"
+msgstr "video"
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block keyword"
+msgid "fauvideo"
+msgstr "fauvideo"
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block keyword"
+msgid "fautv"
+msgstr "faut"
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block keyword"
+msgid "youtube"
+msgstr "youtube"
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block keyword"
+msgid "vimeo"
+msgstr "vimeo"
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block keyword"
+msgid "embed"
+msgstr "einbinden"
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block keyword"
+msgid "rrze video"
+msgstr "rrze video"
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block keyword"
+msgid "rrze"
+msgstr "rrze"
+
+#: build/blocks/block.json src/blocks/block.json
+msgctxt "block description"
+msgid "Embeds videos from FAUVideo, YouTube & Co."
+msgstr "Bindet ein Video von FAUVideo, YouTube & Co ein."
