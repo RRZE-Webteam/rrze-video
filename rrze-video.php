@@ -141,7 +141,6 @@ function plugin()
 function create_block_rrze_video_block_init()
 {
     $gutenberg_instance = new Gutenberg();
-    Helper::debug(is_textdomain_loaded('rrze-video'));
 
     register_block_type(__DIR__ . '/build/blocks', [
         'render_callback' => [$gutenberg_instance, 'rrze_video_render_block']
