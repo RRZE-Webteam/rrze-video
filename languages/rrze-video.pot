@@ -1,51 +1,37 @@
-#, fuzzy
+# Copyright (C) 2023 RRZE-Webteam
+# This file is distributed under the GNU General Public License Version 3.
 msgid ""
 msgstr ""
-"Project-Id-Version: RRZE Video\n"
-"POT-Creation-Date: 2023-06-30 16:18+0200\n"
-"PO-Revision-Date: 2023-06-30 16:17+0200\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Project-Id-Version: RRZE Video 3.5.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-video\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"X-Generator: Poedit 3.3.2\n"
-"X-Poedit-Basepath: ..\n"
-"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
-"X-Poedit-WPHeader: rrze-video.php\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
-"X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: *.min.js\n"
-"X-Poedit-SearchPathExcluded-1: vendor\n"
-"X-Poedit-SearchPathExcluded-2: node_modules\n"
+"POT-Creation-Date: 2023-07-03T07:24:53+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.7.1\n"
+"X-Domain: rrze-video\n"
 
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:32
-msgid "To edit the background image, you need permission to upload media."
+#. Plugin Name of the plugin
+msgid "RRZE Video"
 msgstr ""
 
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:61
-msgid "Background image"
+#. Plugin URI of the plugin
+msgid "https://github.com/RRZE-Webteam/rrze-video"
 msgstr ""
 
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:74
-msgid "Set Video Thumbnail"
+#. Description of the plugin
+msgid "Embedding videos via a shortcode or widget based on the Plyr video player."
 msgstr ""
 
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:83
-#: src/blocks/ImageSelector.js:94
-msgid "Video Thumbnail"
+#. Author of the plugin
+msgid "RRZE-Webteam"
 msgstr ""
 
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:100
-msgid "Replace Video Thumbnail"
-msgstr ""
-
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:109
-msgid "Remove Video Thumbnail"
+#. Author URI of the plugin
+msgid "http://blogs.fau.de/webworking/"
 msgstr ""
 
 #: includes/CPT.php:30
@@ -72,7 +58,6 @@ msgstr ""
 
 #. translators: %s: Categories.
 #: includes/CPT.php:129
-#, php-format
 msgid "Display all %s"
 msgstr ""
 
@@ -80,7 +65,8 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-#: includes/CPT.php:149 settings/shortcode.php:37
+#: includes/CPT.php:149
+#: settings/shortcode.php:37
 msgid "Category"
 msgstr ""
 
@@ -88,7 +74,9 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: includes/CPT.php:151 includes/Metabox.php:36 includes/Widget.php:134
+#: includes/CPT.php:151
+#: includes/Metabox.php:36
+#: includes/Widget.php:134
 msgid "URL"
 msgstr ""
 
@@ -97,9 +85,7 @@ msgid "Thumbnail"
 msgstr ""
 
 #: includes/IFrames.php:44
-msgid ""
-"The video provider is unknown. It is therefore not possible to embed the "
-"video."
+msgid "The video provider is unknown. It is therefore not possible to embed the video."
 msgstr ""
 
 #: includes/IFrames.php:98
@@ -123,9 +109,7 @@ msgid "Video data"
 msgstr ""
 
 #: includes/Metabox.php:34
-msgid ""
-"Web address (URL) for the video on the video portal used (FAU video portal, "
-"YouTube, Vimeo or others)."
+msgid "Web address (URL) for the video on the video portal used (FAU video portal, YouTube, Vimeo or others)."
 msgstr ""
 
 #: includes/OEmbed.php:151
@@ -133,28 +117,28 @@ msgid "The FAU-Video URL does not contain a valid video ID"
 msgstr ""
 
 #: includes/OEmbed.php:153
-msgid ""
-"The call refers to a video collection. This cannot be integrated. So call up "
-"the video directly under the URL:"
+msgid "The call refers to a video collection. This cannot be integrated. So call up the video directly under the URL:"
 msgstr ""
 
 #: includes/OEmbed.php:156
-msgid ""
-"The call refers to a collection of courses. This cannot be integrated. So "
-"call up the video directly under the URL:"
+msgid "The call refers to a collection of courses. This cannot be integrated. So call up the video directly under the URL:"
 msgstr ""
 
 #: includes/Player.php:53
-msgid ""
-"Error when displaying the video player: Insufficient data was transferred."
+msgid "Error when displaying the video player: Insufficient data was transferred."
 msgstr ""
 
-#: includes/Player.php:126 includes/Player.php:133 includes/Player.php:175
-#: includes/Player.php:182 includes/Player.php:203 includes/Player.php:237
+#: includes/Player.php:126
+#: includes/Player.php:133
+#: includes/Player.php:175
+#: includes/Player.php:182
+#: includes/Player.php:203
+#: includes/Player.php:237
 msgid "Error getting the video"
 msgstr ""
 
-#: includes/Player.php:135 includes/Player.php:184
+#: includes/Player.php:135
+#: includes/Player.php:184
 msgid "Video data could not be obtained."
 msgstr ""
 
@@ -162,7 +146,9 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
-#: includes/Player.php:149 includes/Player.php:503 includes/Player.php:531
+#: includes/Player.php:149
+#: includes/Player.php:503
+#: includes/Player.php:531
 msgid "Source"
 msgstr ""
 
@@ -171,9 +157,7 @@ msgid "Unknown video source"
 msgstr ""
 
 #: includes/Player.php:164
-msgid ""
-"The following address could not be assigned to a known video provider or it "
-"does not have a suitable interface for retrieving videos."
+msgid "The following address could not be assigned to a known video provider or it does not have a suitable interface for retrieving videos."
 msgstr ""
 
 #: includes/Player.php:165
@@ -193,9 +177,7 @@ msgid "Neither a valid ID nor a valid URL was specified for a video."
 msgstr ""
 
 #: includes/Player.php:228
-msgid ""
-"No valid video provider was found. As a result, the video cannot be played "
-"or could not be recognized."
+msgid "No valid video provider was found. As a result, the video cannot be played or could not be recognized."
 msgstr ""
 
 #: includes/Player.php:448
@@ -204,13 +186,11 @@ msgstr ""
 
 #. translators: %s: URL of the video.
 #: includes/Player.php:456
-#, php-format
 msgid "Therefore call up the video %s from the FAU video portal."
 msgstr ""
 
 #. translators: %s: File name of the video.
 #: includes/Player.php:463
-#, php-format
 msgid "Call the video file %s directly."
 msgstr ""
 
@@ -271,8 +251,7 @@ msgid "e.g. https://www.video.uni-erlangen.de/webplayer/id/13953"
 msgstr ""
 
 #: includes/Widget.php:138
-msgid ""
-"Supported video sources are currently: FAU video portal, YouTube and Vimeo."
+msgid "Supported video sources are currently: FAU video portal, YouTube and Vimeo."
 msgstr ""
 
 #: includes/Widget.php:144
@@ -280,9 +259,7 @@ msgid "Alternative chose a video by list"
 msgstr ""
 
 #: includes/Widget.php:148
-msgid ""
-"Or select a category from your local video library to display a random video "
-"from this:"
+msgid "Or select a category from your local video library to display a random video from this:"
 msgstr ""
 
 #: includes/Widget.php:167
@@ -329,28 +306,6 @@ msgstr ""
 msgid "Metadata, link to source and description if given."
 msgstr ""
 
-#. translators: 1: Server PHP version number, 2: Required PHP version number.
-#: rrze-video.php:73
-#, php-format
-msgid ""
-"The server is running PHP version %1$s. The Plugin requires at least PHP "
-"version %2$s."
-msgstr ""
-
-#. translators: 1: Server WordPress version number, 2: Required WordPress version number.
-#: rrze-video.php:80
-#, php-format
-msgid ""
-"The server is running WordPress version %1$s. The Plugin requires at least "
-"WordPress version %2$s."
-msgstr ""
-
-#. translators: 1: The plugin name, 2: The error string.
-#: rrze-video.php:99 rrze-video.php:172
-#, php-format
-msgid "Plugins: %1$s: %2$s"
-msgstr ""
-
 #: settings/shortcode.php:11
 msgid "ID Number"
 msgstr ""
@@ -372,9 +327,7 @@ msgid "Titletag"
 msgstr ""
 
 #: settings/shortcode.php:38
-msgid ""
-"Category (slug) of the video library from which a video is to be shown "
-"randomly."
+msgid "Category (slug) of the video library from which a video is to be shown randomly."
 msgstr ""
 
 #: settings/shortcode.php:44
@@ -385,7 +338,10 @@ msgstr ""
 msgid "CSS classes that the shortcode should receive."
 msgstr ""
 
-#: settings/shortcode.php:51 src/blocks/edit.js:178
+#: settings/shortcode.php:51
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:182
+#: build/blocks/index.js:802
 msgid "Show Title"
 msgstr ""
 
@@ -409,7 +365,10 @@ msgstr ""
 msgid "Fields to be displayed, overwriting the above checkboxes."
 msgstr ""
 
-#: settings/shortcode.php:72 src/blocks/edit.js:232
+#: settings/shortcode.php:72
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:236
+#: build/blocks/index.js:856
 msgid "Aspect Ratio"
 msgstr ""
 
@@ -417,119 +376,276 @@ msgstr ""
 msgid "Aspect ratio of the video."
 msgstr ""
 
+#: build/blocks/index.js:1
+#: src/blocks/CategorySelector.js:95
+#: build/blocks/index.js:228
+msgid "Categories"
+msgstr ""
+
+#: build/blocks/index.js:1
 #: src/blocks/CategorySelector.js:98
+#: build/blocks/index.js:231
 msgid "Don't show random videos."
 msgstr ""
 
-#: src/blocks/CategorySelector.js:129
-msgid ""
-"Add Categories via Dashboard > Video Library > Categories to use this "
-"feature."
+#: build/blocks/index.js:1
+#: src/blocks/CategorySelector.js:128
+#: build/blocks/index.js:261
+msgid "Add Categories via Dashboard > Video Library > Categories to use this feature."
 msgstr ""
 
+#: build/blocks/index.js:1
 #: src/blocks/VideoIDSelector.js:73
+#: build/blocks/index.js:348
 msgid "No video selected"
 msgstr ""
 
-#: src/blocks/edit.js:146
+#: build/blocks/index.js:1
+#: src/blocks/VideoIDSelector.js:87
+#: build/blocks/index.js:362
+msgid "Add Videos via Dashboard > Video Library to use this feature."
+msgstr ""
+
+#: build/blocks/index.js:1
+#: src/blocks/ImageSelector.js:31
+#: build/blocks/index.js:407
+msgid "To edit the background image, you need permission to upload media."
+msgstr ""
+
+#: build/blocks/index.js:1
+#: src/blocks/ImageSelector.js:61
+#: build/blocks/index.js:437
+msgid "Background image"
+msgstr ""
+
+#: build/blocks/index.js:1
+#: src/blocks/ImageSelector.js:74
+#: build/blocks/index.js:450
+msgid "Set Video Thumbnail"
+msgstr ""
+
+#: build/blocks/index.js:1
+#: src/blocks/ImageSelector.js:83
+#: src/blocks/ImageSelector.js:94
+#: build/blocks/index.js:459
+#: build/blocks/index.js:470
+msgid "Video Thumbnail"
+msgstr ""
+
+#: build/blocks/index.js:1
+#: src/blocks/ImageSelector.js:100
+#: build/blocks/index.js:476
+msgid "Replace Video Thumbnail"
+msgstr ""
+
+#: build/blocks/index.js:1
+#: src/blocks/ImageSelector.js:109
+#: build/blocks/index.js:485
+msgid "Remove Video Thumbnail"
+msgstr ""
+
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:147
+#: build/blocks/index.js:767
 msgid "URL Settings"
 msgstr ""
 
-#: src/blocks/edit.js:156
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:153
+#: build/blocks/index.js:773
+msgid "Enter a video url from FAU Videoportal, YouTube, Vimeo, ARD, BR or Twitter."
+msgstr ""
+
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:159
+#: src/blocks/edit.js:375
+#: build/blocks/index.js:779
+#: build/blocks/index.js:995
 msgid "Video URL"
 msgstr ""
 
-#: src/blocks/edit.js:164
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:167
+#: src/blocks/edit.js:385
+#: build/blocks/index.js:787
+#: build/blocks/index.js:1005
 msgid "Update the Video URL"
 msgstr ""
 
-#: src/blocks/edit.js:169
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:172
+#: src/blocks/edit.js:390
+#: build/blocks/index.js:792
+#: build/blocks/index.js:1010
 msgid "Embed Video from URL"
 msgstr ""
 
-#: src/blocks/edit.js:174
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:177
+#: build/blocks/index.js:797
 msgid "Video Display Settings"
 msgstr ""
 
-#: src/blocks/edit.js:185 src/blocks/edit.js:240
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:189
+#: build/blocks/index.js:809
 msgid "Heading level"
 msgstr ""
 
-#: src/blocks/edit.js:200
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:204
+#: build/blocks/index.js:824
 msgid "Show Videolink"
 msgstr ""
 
-#: src/blocks/edit.js:205
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:209
+#: build/blocks/index.js:829
 msgid "Show Metadata"
 msgstr ""
 
-#: src/blocks/edit.js:210
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:214
+#: build/blocks/index.js:834
 msgid "Show Description"
 msgstr ""
 
-#: src/blocks/edit.js:217
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:221
+#: build/blocks/index.js:841
 msgid "Individual Thumbnail"
 msgstr ""
 
-#: src/blocks/edit.js:221
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:224
+#: build/blocks/index.js:844
 msgid "Replaces the Thumbnail with the image you selected."
 msgstr ""
 
-#: src/blocks/edit.js:235
-msgid ""
-"In rare cases it can be useful to select an aspect ratio to prevent black "
-"borders. Only affects FAU Video embeds."
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:238
+#: build/blocks/index.js:858
+msgid "In rare cases it can be useful to select an aspect ratio to prevent black borders. Only affects FAU Video embeds."
 msgstr ""
 
-#: src/blocks/edit.js:252
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:242
+#: build/blocks/index.js:862
+msgid "Aspect ratio"
+msgstr ""
+
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:255
+#: build/blocks/index.js:875
 msgid "Video Library"
 msgstr ""
 
-#: src/blocks/edit.js:255
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:260
+#: build/blocks/index.js:880
 msgid ""
 "You can add videos to your video library by navigating to Dashboard\n"
 "            | Video library | Add new."
 msgstr ""
 
-#: src/blocks/edit.js:262
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:268
+#: build/blocks/index.js:888
 msgid "Random Output"
 msgstr ""
 
-#: src/blocks/edit.js:265
-msgid ""
-"You can select a Video library category and a random video will be displayed "
-"from this category."
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:270
+#: build/blocks/index.js:890
+msgid "You can select a Video library category and a random video will be displayed from this category."
 msgstr ""
 
-#: src/blocks/edit.js:276
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:282
+#: build/blocks/index.js:902
 msgid "Individual Videos"
 msgstr ""
 
-#: src/blocks/edit.js:279
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:284
+#: build/blocks/index.js:904
 msgid "You can select a Video from within your Video library."
 msgstr ""
 
-#: src/blocks/edit.js:332
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:338
+#: build/blocks/index.js:958
 msgid "Reset Video block"
 msgstr ""
 
-#. Plugin Name of the plugin/theme
-msgid "RRZE Video"
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:365
+#: build/blocks/index.js:985
+msgid "Add your Video URL"
 msgstr ""
 
-#. Plugin URI of the plugin/theme
-msgid "https://github.com/RRZE-Webteam/rrze-video"
+#: build/blocks/index.js:1
+#: src/blocks/edit.js:367
+#: build/blocks/index.js:987
+msgid "Add your Video URL from FAU Videoportal, YouTube, ARD, ZDF or Vimeo."
 msgstr ""
 
-#. Description of the plugin/theme
-msgid ""
-"Embedding videos via a shortcode or widget based on the Plyr video player."
+#: build/blocks/block.json
+#: src/blocks/block.json
+msgctxt "block title"
+msgid "Video"
 msgstr ""
 
-#. Author of the plugin/theme
-msgid "RRZE-Webteam"
+#: build/blocks/block.json
+#: src/blocks/block.json
+msgctxt "block keyword"
+msgid "video"
 msgstr ""
 
-#. Author URI of the plugin/theme
-msgid "http://blogs.fau.de/webworking/"
+#: build/blocks/block.json
+#: src/blocks/block.json
+msgctxt "block keyword"
+msgid "fauvideo"
+msgstr ""
+
+#: build/blocks/block.json
+#: src/blocks/block.json
+msgctxt "block keyword"
+msgid "fautv"
+msgstr ""
+
+#: build/blocks/block.json
+#: src/blocks/block.json
+msgctxt "block keyword"
+msgid "youtube"
+msgstr ""
+
+#: build/blocks/block.json
+#: src/blocks/block.json
+msgctxt "block keyword"
+msgid "vimeo"
+msgstr ""
+
+#: build/blocks/block.json
+#: src/blocks/block.json
+msgctxt "block keyword"
+msgid "embed"
+msgstr ""
+
+#: build/blocks/block.json
+#: src/blocks/block.json
+msgctxt "block keyword"
+msgid "rrze video"
+msgstr ""
+
+#: build/blocks/block.json
+#: src/blocks/block.json
+msgctxt "block keyword"
+msgid "rrze"
+msgstr ""
+
+#: build/blocks/block.json
+#: src/blocks/block.json
+msgctxt "block description"
+msgid "Embeds videos from FAUVideo, YouTube & Co."
 msgstr ""
