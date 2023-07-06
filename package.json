@@ -1,12 +1,18 @@
 {
     "name": "rrze-video",
-    "version": "3.4.7",
+    "version": "3.5.0",
     "main": "webpack.config.js",
     "scripts": {
-        "start": "webpack --mode=development --watch",
-        "build": "webpack --mode=production",
+        "start": "wp-scripts start",
+        "build": "wp-scripts build",
         "clean": "rm -rf build/",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "format": "wp-scripts format",
+        "lint:css": "wp-scripts lint-style",
+        "lint:js": "wp-scripts lint-js",
+        "packages-update": "wp-scripts packages-update",
+        "plugin-zip": "wp-scripts plugin-zip",
+        "postbuild": "node remove-assets.js"
     },
     "repository": {
         "type": "git",
@@ -20,6 +26,8 @@
     "devDependencies": {
         "@babel/core": "^7.14",
         "@babel/preset-env": "^7.14",
+        "@wordpress/babel-plugin-makepot": "^5.20.0",
+        "@wordpress/scripts": "^26.6.0",
         "autoprefixer": "^10.3.1",
         "babel-loader": "^8.2.2",
         "clean-webpack-plugin": "^3.0.0",
@@ -36,6 +44,10 @@
         "webpack-cli": "^4.7.2"
     },
     "dependencies": {
+        "@wordpress/api-fetch": "^6.33.0",
+        "@wordpress/i18n": "^4.36.0",
+        "@wordpress/icons": "^9.26.0",
+        "@wordpress/server-side-render": "^4.12.0",
         "plyr": "^3.7.8"
     }
 }

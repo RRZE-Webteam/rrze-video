@@ -66,5 +66,12 @@ $settings = [
             'message' => __('Fields to be displayed, overwriting the above checkboxes.', 'rrze-video'),
             'type' => 'string'
         ],
+        'aspectratio' => [
+            'default' => '16/9',
+            'field_type' => 'text',
+            'label' => __('Aspect Ratio', 'rrze-video'),
+            'message' => __('Aspect ratio of the video.', 'rrze-video'),
+            'type' => 'string'
+        ],
     ],
 ];

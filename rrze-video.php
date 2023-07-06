@@ -3,7 +3,7 @@
 Plugin Name:    RRZE Video
 Plugin URI:     https://github.com/RRZE-Webteam/rrze-video
 Description:    Embedding videos via a shortcode or widget based on the Plyr video player.
-Version:        3.4.7
+Version:        3.5.0
 Author:         RRZE-Webteam
 Author URI:     http://blogs.fau.de/webworking/
 License:        GNU General Public License Version 3
@@ -132,6 +132,25 @@ function plugin()
 }
 
 /**
+ * Registers the block using the metadata loaded from the `block.json` file.
+ * Behind the scenes, it registers also all assets so they can be enqueued
+ * through the block editor in the corresponding context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/register_block_type/
+ */
+function create_block_rrze_video_block_init()
+{
+    $gutenberg_instance = new Gutenberg();
+
+    register_block_type(__DIR__ . '/build/blocks', [
+        'render_callback' => [$gutenberg_instance, 'rrze_video_render_block']
+    ]);
+
+    $script_handle = generate_block_asset_handle( 'rrze/rrze-video', 'editorScript' );
+    wp_set_script_translations( $script_handle, 'rrze-video', plugin_dir_path( __FILE__ ) . 'languages' );
+}
+
+/**
  * Execute on 'plugins_loaded' API/action.
  * @return void
  */
@@ -160,4 +179,5 @@ function loaded()
         return;
     }
     new Main;
+    add_action('init', __NAMESPACE__ . '\create_block_rrze_video_block_init');
 }

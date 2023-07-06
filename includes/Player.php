@@ -16,6 +16,7 @@ class Player
     private static $instance = null;
 
     private $counter = 1;
+    private $id = '';
 
     /**
      * Singleton
@@ -30,6 +31,10 @@ class Player
         return self::$instance;
     }
 
+    public static function getRenderID(){
+        return self::instance()->counter++;
+    }
+
     /**
      * Constructor
      */
@@ -40,6 +45,8 @@ class Player
 
     public function get_player($arguments)
     {
+        $id = $this->getRenderID();
+
         $content = '';
         if (empty($arguments)) {
             $content .= '<div class="rrze-video alert clearfix clear alert-danger">';
@@ -105,20 +112,23 @@ class Player
         if (!empty($arguments['url'])) {
             // check for oEmbed
             $isoembed = OEmbed::is_oembed_provider($arguments['url']);
+        
             if (empty($isoembed)) {
                 // OK, no fancy oEmbed... so let's see if its a boring iframe-provider...
                 if (IFrames::is_iframe_provider($arguments['url'])) {
                     $framedata = IFrames::get_iframe($arguments['url']);
 
+                    
+
                     if (!empty($framedata['error'])) {
-                        $content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+                        $content .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
                         $content .= '<strong>';
                         $content .= __('Error getting the video', 'rrze-video');
                         $content .= '</strong><br>';
                         $content .= $framedata['error'];
                         $content .= '</div>';
                     } elseif (empty($framedata['video'])) {
-                        $content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+                        $content .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
                         $content .= '<strong>';
                         $content .= __('Error getting the video', 'rrze-video');
                         $content .= '</strong><br>';
@@ -127,7 +137,7 @@ class Player
                     } else {
                         $arguments['video'] = $framedata['video'];
 
-                        $content .= '<div class="rrze-video">';
+                        $content .= '<div class="rrze-video rrze-video-container-' . $id . '"';
                         $content .= '<div class="iframecontainer ' . $framedata['video']['provider'] . '">';
                         $content .= $arguments['video']['html'];
                         $content .= '</div>';
@@ -139,10 +149,15 @@ class Player
                             $content .= '<p>' . __('Source', 'rrze-video') . ': <a href="' . $arguments['video']['provider_url'] . '">' . $arguments['video']['provider_name'] . '</a></p>';
                         }
                         $content .= '</div>';
-                        $this->enqueueFrontendStyles(false);
+                        if(!empty($arguments['aspectratio']))
+                        {
+                            $this->enqueueFrontendStyles(false, $arguments, $id);
+                        } else {
+                            $this->enqueueFrontendStyles(false, [], $id);
+                        }
                     }
                 } else {
-                    $content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+                    $content .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
                     $content .= '<strong>';
                     $content .= __('Unknown video source', 'rrze-video');
                     $content .= '</strong><br>';
@@ -155,14 +170,14 @@ class Player
                 $oembeddata = OEmbed::get_oembed_data($isoembed, $arguments['url']);
 
                 if (!empty($oembeddata['error'])) {
-                    $content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+                    $content .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
                     $content .= '<strong>';
                     $content .= __('Error getting the video', 'rrze-video');
                     $content .= '</strong><br>';
                     $content .= $oembeddata['error'];
                     $content .= '</div>';
                 } elseif (empty($oembeddata['video'])) {
-                    $content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+                    $content .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
                     $content .= '<strong>';
                     $content .= __('Error getting the video', 'rrze-video');
                     $content .= '</strong><br>';
@@ -172,13 +187,18 @@ class Player
                     $arguments['video'] = $oembeddata['video'];
                     $arguments['oembed_api_url'] = $oembeddata['oembed_api_url'] ?? '';
                     $arguments['oembed_api_error'] = $oembeddata['error'] ?? '';
-                    $content .= $this->get_player_html($isoembed, $arguments);
+                    $content .= $this->get_player_html($isoembed, $arguments, $id);
 
-                    $this->enqueueFrontendStyles();
+                    if(!empty($arguments['aspectratio']))
+                    {
+                        $this->enqueueFrontendStyles(true, $arguments, $id);
+                    } else {
+                        $this->enqueueFrontendStyles(true, [], $id);
+                    }
                 }
             }
         } else {
-            $content .= '<div class="rrze-video alert clearfix clear alert-danger">';
+            $content .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
             $content .= '<strong>';
             $content .= __('Error getting the video', 'rrze-video');
             $content .= '</strong><br>';
@@ -195,12 +215,16 @@ class Player
         return $content;
     }
 
-    public function get_player_html($provider, $data, $id = '')
+    public function get_player_html($provider, $data, $id='')
     {
+        if ($id == '') {
+            $id = $this->getRenderID();
+        }
+
         $res = '';
         $providerlist = OEmbed::get_known_provider();
         if (empty($provider) || empty($providerlist[$provider])) {
-            $res .= '<div class="rrze-video alert clearfix clear alert-danger">';
+            $res .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
             $res .= __('No valid video provider was found. As a result, the video cannot be played or could not be recognized.', 'rrze-video');
             $res .= '</div>';
 
@@ -208,7 +232,7 @@ class Player
         }
 
         if (!empty($data['error'])) {
-            $res .= '<div class="rrze-video alert clearfix clear alert-danger">';
+            $res .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
             $res .= '<strong>';
             $res .= __('Error getting the video', 'rrze-video');
             $res .= ':</strong><br>';
@@ -260,7 +284,7 @@ class Player
         }
 
 
-        $res .= '<div class="rrze-video';
+        $res .= '<div class="rrze-video rrze-video-container-' . $id . '"';
 
         if (!empty($data['class'])) {
             $res .= ' ' . $data['class'];
@@ -289,11 +313,6 @@ class Player
         }
 
 
-        if ($id == '') {
-            // create Random number to make a uniq class name
-            // This is need to display more as one video embed in the same page
-            $id = $this->counter++;
-        }
         $classname = 'plyr-instance plyr-videonum-' . $id;
 
 
@@ -579,11 +598,20 @@ class Player
      * Enqueue scripts and styles.
      * @param boolean $plyr
      */
-    public function enqueueFrontendStyles($plyr = true)
+    public function enqueueFrontendStyles($plyr = true, $args = [], $id = '')
     {
+         if($id == '') {
+            $id = $this->getRenderID();
+        }
         wp_enqueue_style('rrze-video-plyr');
         if ($plyr) {
             wp_enqueue_script('rrze-video-plyr');
+        }
+
+        if (isset($args['aspectratio']) && !empty($args['aspectratio'])) {
+
+            $custom_css = ".rrze-video-container-" .$id. " .plyr { aspect-ratio: ". $args['aspectratio'] ."; }";
+            wp_add_inline_style('rrze-video-plyr', $custom_css);
         }
     }
 
