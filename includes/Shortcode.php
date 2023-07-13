@@ -152,6 +152,15 @@ class Shortcode
                 case 'string':
                     $value = sanitize_text_field($value);
                     break;
+                case 'aspectratio':
+                    $value = sanitize_text_field($value);
+
+                    // Check if the value matches the regex
+                    if (!preg_match("/^(\d*\.?\d+)\/(\d*\.?\d+)$/", $value)) {
+                        Helper::debug('The following invalid aspect ratio was entered inside a video shortcode: ' . $value . '. Using the default value 16/9 instead.', 'i');
+                        $value = '16/9';
+                    } 
+                    break;
                 case 'slug':
                     $value = sanitize_title($value);
                     break;
