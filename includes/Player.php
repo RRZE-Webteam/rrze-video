@@ -388,7 +388,7 @@ class Player
                         . '<source src="' . $data['video']['file'] . '" type="audio/mp3" />'
                         . '</audio>';
             } else {
-                $classname = 'plyr-instance plyr-videonum-' . $id;
+                $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Self::get_aspectratio_class($data);
                 $res       .= '<video class="' . $classname . '" playsinline controls crossorigin="anonymous"';
 
                 $plyrconfig = ' data-plyr-config=\'{ ';
@@ -600,18 +600,12 @@ class Player
      */
     public function enqueueFrontendStyles($plyr = true, $args = [], $id = '')
     {
-         if($id == '') {
+        if($id == '') {
             $id = $this->getRenderID();
         }
         wp_enqueue_style('rrze-video-plyr');
         if ($plyr) {
             wp_enqueue_script('rrze-video-plyr');
-        }
-
-        if (isset($args['aspectratio']) && !empty($args['aspectratio'])) {
-
-            $custom_css = ".rrze-video-container-" .$id. " .plyr { aspect-ratio: ". $args['aspectratio'] ."; }";
-            wp_add_inline_style('rrze-video-plyr', $custom_css);
         }
     }
 
@@ -677,5 +671,40 @@ class Player
         }
 
         return $outputTemp;
+    }
+
+    /**
+     * Retrieves the right AspectRatio Class for FAU Video Embeds by checking user input
+     * @param array $arguments 
+     * @return String $class
+     * @since 3.5.1
+     */
+    public function get_aspectratio_class($arguments){
+        if(empty($arguments['aspectratio'])){
+            return 'ar-16-9';
+        } else {
+            switch ( $arguments['aspectratio'] ) {
+                case('4/3'):
+                    return 'ar-4-3';
+                    break;
+                case('21/9'):
+                    return 'ar-21-9';
+                    break;
+                case('1/1'):
+                    return 'ar-1-1';
+                    break;
+                case('2.35/1'):
+                    return 'ar-234-1';
+                    break;
+                case('2.40/1'):
+                    return 'ar-240-1';
+                    break;
+                case('9/16'):
+                    return 'ar-9-16';
+                    break;    
+                default:
+                    return 'ar-16-9';
+            }
+        } 
     }
 }
