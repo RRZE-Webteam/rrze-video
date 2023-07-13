@@ -71,7 +71,7 @@ $settings = [
             'field_type' => 'text',
             'label' => __('Aspect Ratio', 'rrze-video'),
             'message' => __('Aspect ratio of the video.', 'rrze-video'),
-            'type' => 'string'
+            'type' => 'aspectratio'
         ],
     ],
 ];
