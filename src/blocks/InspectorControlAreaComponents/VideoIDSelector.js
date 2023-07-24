@@ -1,3 +1,4 @@
+//Imports for necessary WordPress libraries
 import { __ } from "@wordpress/i18n";
 import {
   RadioControl,
@@ -7,6 +8,12 @@ import {
 } from "@wordpress/components";
 import { useState, useEffect } from "@wordpress/element";
 
+/**
+ * Creates the ID Selection for the video library selector inside the InspectorControls
+ * @param {*} props 
+ * @returns 
+ * @see CustomInspectorControls
+ */
 const VideoIDSelector = (props) => {
   const [videoInformation, setVideoInformation] = useState([]);
   const { attributes, setAttributes } = props;

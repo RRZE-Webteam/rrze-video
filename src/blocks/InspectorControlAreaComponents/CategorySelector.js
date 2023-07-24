@@ -1,3 +1,4 @@
+//Imports for necessary WordPress libraries
 import { __ } from "@wordpress/i18n";
 import {
   RadioControl,
@@ -7,7 +8,13 @@ import {
 } from "@wordpress/components";
 import { useState, useEffect } from "@wordpress/element"; // eslint-disable-line import/no-unresolved
 
-const CategorySelector = (attributes, setAttributes) => {
+/**
+ * Creates the Category Selection for the video library of the videoblock
+ * @param {*} param0 
+ * @returns
+ * @see CustomInspectorControls
+ */
+const CategorySelector = ({attributes, setAttributes}) => {
   const [videoCategories, setVideoCategories] = useState([]);
 
   const handleOnChangeVideoCat = (categoryId, newValue) => {
