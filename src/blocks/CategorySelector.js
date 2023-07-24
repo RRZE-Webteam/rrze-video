@@ -1,24 +1,14 @@
 import { __ } from "@wordpress/i18n";
 import {
   RadioControl,
-  CheckboxControl,
-  __experimentalText as Text,
   __experimentalDivider as Divider,
   __experimentalSpacer as Spacer,
-  __experimentalHeading as Heading,
   Notice,
 } from "@wordpress/components";
-import { useBlockProps } from "@wordpress/block-editor";
-import { useState, useEffect } from "@wordpress/element";
-import apiFetch from "@wordpress/api-fetch";
-import { isTextInString } from "./utils";
+import { useState, useEffect } from "@wordpress/element"; // eslint-disable-line import/no-unresolved
 
-const CategorySelector = (props) => {
+const CategorySelector = (attributes, setAttributes) => {
   const [videoCategories, setVideoCategories] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState({});
-
-  const blockProps = useBlockProps();
-  const { attributes, setAttributes } = props;
 
   const handleOnChangeVideoCat = (categoryId, newValue) => {
     setAttributes({
@@ -31,6 +21,7 @@ const CategorySelector = (props) => {
    * @returns Array of VideoIDs
    */
   const retrieveAvailableCategoryId = () => {
+    // eslint-disable-next-line no-undef
     return wp
       .apiFetch({
         path: "/wp/v2/rrze-video/",
@@ -57,6 +48,7 @@ const CategorySelector = (props) => {
    * @see retrieveAvailableCategoryId
    */
   const retrieveCategoryInformation = (categoryId) => {
+    // eslint-disable-next-line no-undef
     return wp
       .apiFetch({
         path: `/wp/v2/genre/${categoryId}`,
@@ -121,7 +113,6 @@ const CategorySelector = (props) => {
       )}
       {videoCategories.length === 0 && (
         <>
-
           <Divider />
           <Spacer>
             <Notice status="info" isDismissible={false}>

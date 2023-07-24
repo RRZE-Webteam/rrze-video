@@ -1,21 +1,14 @@
 import { __ } from "@wordpress/i18n";
 import {
   RadioControl,
-  __experimentalText as Text,
   __experimentalDivider as Divider,
   __experimentalSpacer as Spacer,
-  __experimentalHeading as Heading,
   Notice,
 } from "@wordpress/components";
-import { useBlockProps } from "@wordpress/block-editor";
 import { useState, useEffect } from "@wordpress/element";
-import apiFetch from "@wordpress/api-fetch";
-import { isTextInString } from "./utils";
 
 const VideoIDSelector = (props) => {
   const [videoInformation, setVideoInformation] = useState([]);
-
-  const blockProps = useBlockProps();
   const { attributes, setAttributes } = props;
 
   const handleOnChangeVideoCat = (videoID) => {
@@ -29,6 +22,7 @@ const VideoIDSelector = (props) => {
    * @returns Array of VideoIDs
    */
   const retrieveAvailableVideoId = () => {
+    // eslint-disable-next-line no-undef
     return wp
       .apiFetch({
         path: "/wp/v2/rrze-video/",

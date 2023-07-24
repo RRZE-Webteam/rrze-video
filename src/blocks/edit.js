@@ -2,9 +2,7 @@ import { __ } from "@wordpress/i18n";
 import {
   Placeholder,
   Button,
-  ButtonGroup,
   ToolbarGroup,
-  ToolbarDropdownMenu,
   ToolbarItem,
   ToolbarButton,
   PanelBody,
@@ -18,13 +16,6 @@ import {
   __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
 import {
-  check,
-  headingLevel2,
-  headingLevel3,
-  headingLevel4,
-  headingLevel5,
-  headingLevel6,
-  more,
   reset,
   video,
 } from "@wordpress/icons";
@@ -32,14 +23,14 @@ import {
   useBlockProps,
   BlockControls,
   InspectorControls,
-} from "@wordpress/block-editor";
-import { ServerSideRender } from "@wordpress/editor";
+} from "@wordpress/block-editor"; // eslint-disable-line import/no-unresolved
+import { ServerSideRender } from "@wordpress/editor"; // eslint-disable-line import/no-unresolved
 import { useState, useEffect, useRef } from "@wordpress/element";
-import apiFetch from "@wordpress/api-fetch";
 
 import CategorySelector from "./CategorySelector";
 import VideoIDSelector from "./VideoIDSelector";
 import ImageSelectorEdit from "./ImageSelector";
+import {HeadingSelector, HeadingSelectorInspector} from "./HeadingSelector";
 import { isTextInString } from "./utils";
 import "./editor.scss";
 
@@ -51,7 +42,7 @@ export default function Edit(props) {
 
   const blockProps = useBlockProps();
   const { attributes, setAttributes } = props;
-  const { id, url, rand, titletag, poster, aspectratio } = attributes;
+  const { id, url, rand, aspectratio } = attributes;
 
   const [inputURL, setInputURL] = useState(url);
 
@@ -64,9 +55,6 @@ export default function Edit(props) {
     setAttributes({ url: inputURL });
   };
 
-  const handleToggleHeadingGroup = (newValue) => {
-    setAttributes({ titletag: newValue });
-  };
 
   const handleToggleAspectRatio = (aspectratio) => {
     setAttributes({ aspectratio: aspectratio });
@@ -120,22 +108,6 @@ export default function Edit(props) {
     }
   };
 
-  const checkHeadingLevelIcon = (headinglevel) => {
-    switch (attributes.titletag) {
-      case "h2":
-        return headingLevel2;
-      case "h3":
-        return headingLevel3;
-      case "h4":
-        return headingLevel4;
-      case "h5":
-        return headingLevel5;
-      case "h6":
-        return headingLevel6;
-      default:
-        return headingLevel2; // default icon if none matches
-    }
-  };
 
   /**
    * Renders the block
@@ -184,21 +156,7 @@ export default function Edit(props) {
             onChange={() => updateShowAttribute("title")}
           />
           {isTextInString("Title", attributes.show) && (
-            <>
-              <ToggleGroupControl
-                label={__("Heading level", "rrze-video")}
-                value={attributes.titletag}
-                onChange={handleToggleHeadingGroup}
-                isBlock
-              >
-                <ToggleGroupControlOption value="h2" label="H2" />
-                <ToggleGroupControlOption value="h3" label="H3" />
-                <ToggleGroupControlOption value="h4" label="H4" />
-                <ToggleGroupControlOption value="h5" label="H5" />
-                <ToggleGroupControlOption value="h6" label="H6" />
-              </ToggleGroupControl>
-              <Divider />
-            </>
+            <HeadingSelectorInspector attributes={attributes} setAttributes={setAttributes} />
           )}
           <CheckboxControl
             label={__("Show Videolink", "rrze-video")}
@@ -298,38 +256,7 @@ export default function Edit(props) {
           <BlockControls>
             <ToolbarGroup>
               {isTextInString("Title", attributes.show) && (
-                <ToolbarDropdownMenu
-                  icon={checkHeadingLevelIcon()}
-                  label="Select heading level"
-                  value={attributes.titletag}
-                  controls={[
-                    {
-                      title: "H2",
-                      isDisabled: attributes.titletag === "h2",
-                      onClick: () => handleToggleHeadingGroup("h2"),
-                    },
-                    {
-                      title: "H3",
-                      isDisabled: attributes.titletag === "h3",
-                      onClick: () => handleToggleHeadingGroup("h3"),
-                    },
-                    {
-                      title: "H4",
-                      isDisabled: attributes.titletag === "h4",
-                      onClick: () => handleToggleHeadingGroup("h4"),
-                    },
-                    {
-                      title: "H5",
-                      isDisabled: attributes.titletag === "h5",
-                      onClick: () => handleToggleHeadingGroup("h5"),
-                    },
-                    {
-                      title: "H6",
-                      isDisabled: attributes.titletag === "h6",
-                      onClick: () => handleToggleHeadingGroup("h6"),
-                    },
-                  ]}
-                />
+                <HeadingSelector attributes={attributes} setAttributes={setAttributes} />
               )}
               <ToolbarItem>
                 {() => (
