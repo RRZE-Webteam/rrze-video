@@ -31,7 +31,8 @@ class Player
         return self::$instance;
     }
 
-    public static function getRenderID(){
+    public static function getRenderID()
+    {
         return self::instance()->counter++;
     }
 
@@ -112,13 +113,13 @@ class Player
         if (!empty($arguments['url'])) {
             // check for oEmbed
             $isoembed = OEmbed::is_oembed_provider($arguments['url']);
-        
+
             if (empty($isoembed)) {
                 // OK, no fancy oEmbed... so let's see if its a boring iframe-provider...
                 if (IFrames::is_iframe_provider($arguments['url'])) {
                     $framedata = IFrames::get_iframe($arguments['url']);
 
-                    
+
 
                     if (!empty($framedata['error'])) {
                         $content .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
@@ -149,8 +150,7 @@ class Player
                             $content .= '<p>' . __('Source', 'rrze-video') . ': <a href="' . $arguments['video']['provider_url'] . '">' . $arguments['video']['provider_name'] . '</a></p>';
                         }
                         $content .= '</div>';
-                        if(!empty($arguments['aspectratio']))
-                        {
+                        if (!empty($arguments['aspectratio'])) {
                             $this->enqueueFrontendStyles(false, $arguments, $id);
                         } else {
                             $this->enqueueFrontendStyles(false, [], $id);
@@ -189,8 +189,7 @@ class Player
                     $arguments['oembed_api_error'] = $oembeddata['error'] ?? '';
                     $content .= $this->get_player_html($isoembed, $arguments, $id);
 
-                    if(!empty($arguments['aspectratio']))
-                    {
+                    if (!empty($arguments['aspectratio'])) {
                         $this->enqueueFrontendStyles(true, $arguments, $id);
                     } else {
                         $this->enqueueFrontendStyles(true, [], $id);
@@ -215,7 +214,7 @@ class Player
         return $content;
     }
 
-    public function get_player_html($provider, $data, $id='')
+    public function get_player_html($provider, $data, $id = '')
     {
         if ($id == '') {
             $id = $this->getRenderID();
@@ -343,9 +342,9 @@ class Player
             //
             $res .= '<div class="plyr__video-embed">';
             $res .= '<iframe';
-	    if (!empty($data['video']['title'])) {
-		    $res .= ' title="'.esc_html($data['video']['title']).'"';
-	    }
+            if (!empty($data['video']['title'])) {
+                $res .= ' title="' . esc_html($data['video']['title']) . '"';
+            }
             $res .= '  src="https://www.youtube-nocookie.com/embed/' . $data['video']['v'] . '?rel=0&showinfo=0&iv_load_policy=3&modestbranding=1"';
             $res .= '  allowfullscreen';
             $res .= '  allowtransparency';
@@ -371,9 +370,9 @@ class Player
 
             $res .= '<div class="plyr__video-embed">';
             $res .= '<iframe';
-	    if (!empty($data['video']['title'])) {
-		    $res .= ' title="'.esc_html($data['video']['title']).'"';
-	    }
+            if (!empty($data['video']['title'])) {
+                $res .= ' title="' . esc_html($data['video']['title']) . '"';
+            }
             $res .= '  src="https://player.vimeo.com/video/' . $data['video']['video_id'] . '?autoplay=0&loop=0&title=0&byline=0&portrait=0"';
             $res .= '  allowfullscreen';
             $res .= '  allowtransparency';
@@ -385,8 +384,8 @@ class Player
         } elseif ($provider == 'fau') {
             if (isset($data['video']['type']) && $data['video']['type'] == 'audio' && isset($data['video']['file'])) {
                 $res .= '<audio class="' . $classname . '" controls crossorigin="anonymous">'
-                        . '<source src="' . $data['video']['file'] . '" type="audio/mp3" />'
-                        . '</audio>';
+                    . '<source src="' . $data['video']['file'] . '" type="audio/mp3" />'
+                    . '</audio>';
             } else {
                 $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Self::get_aspectratio_class($data);
                 $res       .= '<video class="' . $classname . '" playsinline controls crossorigin="anonymous"';
@@ -394,78 +393,86 @@ class Player
                 $plyrconfig = ' data-plyr-config=\'{ ';
                 $plyrconfig .= '"preload": "none", ';
                 $plyrconfig .= '"loadSprite": "false", ';
-                $plyrconfig .= ' "iconUrl": "' . plugin()->getUrl( 'assets/plyr' ) . 'plyr.svg", ';
-                $plyrconfig .= ' "blankVideo": "' . plugin()->getUrl( 'assets/plyr' ) . 'blank.mp4"';
+                $plyrconfig .= ' "iconUrl": "' . plugin()->getUrl('assets/plyr') . 'plyr.svg", ';
+                $plyrconfig .= ' "blankVideo": "' . plugin()->getUrl('assets/plyr') . 'blank.mp4"';
 
-                if ( ! empty( $data[ 'video' ][ 'title' ] ) ) {
-                    $plyrconfig .= ', "title": "' . $data[ 'video' ][ 'title' ] . '"';
+                if (!empty($data['video']['title'])) {
+                    $plyrconfig .= ', "title": "' . $data['video']['title'] . '"';
                 }
                 $plyrconfig .= ' }\'';
                 $res        .= $plyrconfig;
 
-                if ( $poster ) {
+                if ($poster) {
                     $res .= ' poster="' . $poster . '" data-poster="' . $poster . '"';
                 }
 
-                if ( ! empty( $data[ 'video' ][ 'width' ] ) ) {
-                    $res .= ' width="' . $data[ 'video' ][ 'width' ] . '"';
+                if (!empty($data['video']['width'])) {
+                    $res .= ' width="' . $data['video']['width'] . '"';
                 }
 
-                if ( ! empty( $data[ 'video' ][ 'height' ] ) ) {
-                    $res .= ' height="' . $data[ 'video' ][ 'height' ] . '"';
+                if (!empty($data['video']['height'])) {
+                    $res .= ' height="' . $data['video']['height'] . '"';
                 }
 
                 $res .= ' itemscope itemtype="https://schema.org/Movie"';
                 $res .= '>';
 
-                $res .= $this->get_html_structuredmeta( $data );
+                $res .= $this->get_html_structuredmeta($data);
 
-                $path = parse_url( $data[ 'video' ][ 'file' ], PHP_URL_PATH );
-                $ext  = pathinfo( $path, PATHINFO_EXTENSION );
 
-                $res .= '<source src="' . $data[ 'video' ][ 'file' ] . '" type="video/' . $ext . '">';
-                if ( $ext == 'm4v' ) {
-                    $res .= '<source src="' . $data[ 'video' ][ 'file' ] . '" type="video/mp4">';
+                $path = parse_url($data['video']['file'], PHP_URL_PATH);
+                $ext  = pathinfo($path, PATHINFO_EXTENSION);
+
+                $res .= '<source src="' . $data['video']['file'] . '" type="video/' . $ext . '">';
+                if ($ext == 'm4v') {
+                    $res .= '<source src="' . $data['video']['file'] . '" type="video/mp4">';
                 }
 
-                if ( ! empty( $data[ 'video' ][ 'alternative_Video_size_large' ] ) && ! empty( $data[ 'video' ][ 'alternative_Video_size_large_url' ] ) ) {
-                    $path = parse_url( $data[ 'video' ][ 'alternative_Video_size_large_url' ], PHP_URL_PATH );
-                    $ext  = pathinfo( $path, PATHINFO_EXTENSION );
-                    $res  .= '<source src="' . $data[ 'video' ][ 'alternative_Video_size_large_url' ] . '" type="video/' . $ext . '" size="' . $data[ 'video' ][ 'alternative_Video_size_large_width' ] . '">';
+                if (!empty($data['video']['alternative_Video_size_large']) && !empty($data['video']['alternative_Video_size_large_url'])) {
+                    $path = parse_url($data['video']['alternative_Video_size_large_url'], PHP_URL_PATH);
+                    $ext  = pathinfo($path, PATHINFO_EXTENSION);
+                    $res  .= '<source src="' . $data['video']['alternative_Video_size_large_url'] . '" type="video/' . $ext . '" size="' . $data['video']['alternative_Video_size_large_width'] . '">';
                 }
 
-                if ( ! empty( $data[ 'video' ][ 'alternative_Video_size_medium' ] ) && ! empty( $data[ 'video' ][ 'alternative_Video_size_medium_url' ] ) ) {
-                    $path = parse_url( $data[ 'video' ][ 'alternative_Video_size_medium_url' ], PHP_URL_PATH );
-                    $ext  = pathinfo( $path, PATHINFO_EXTENSION );
-                    $res  .= '<source src="' . $data[ 'video' ][ 'alternative_Video_size_medium_url' ] . '" type="video/' . $ext . '" size="' . $data[ 'video' ][ 'alternative_Video_size_medium_width' ] . '">';
+                if (!empty($data['video']['alternative_Video_size_medium']) && !empty($data['video']['alternative_Video_size_medium_url'])) {
+                    $path = parse_url($data['video']['alternative_Video_size_medium_url'], PHP_URL_PATH);
+                    $ext  = pathinfo($path, PATHINFO_EXTENSION);
+                    $res  .= '<source src="' . $data['video']['alternative_Video_size_medium_url'] . '" type="video/' . $ext . '" size="' . $data['video']['alternative_Video_size_medium_width'] . '">';
                 }
 
-                if ( ! empty( $data[ 'video' ][ 'transcript' ] ) ) {
+                if (!empty($data['video']['transcript'])) {
                     $transcriptHtml = Self::get_fauvideo_transcript_tracks($data);
                     $res .= $transcriptHtml;
                 }
 
-                $res   .= __( 'Unfortunately, your browser does not support HTML5 video formats.', 'rrze-video' );
+                $res   .= __('Unfortunately, your browser does not support HTML5 video formats.', 'rrze-video');
                 $res   .= ' ';
-                $url   = ! empty( $data[ 'url' ] ) ? esc_url( $data[ 'url' ] ) : '';
-                $file  = ! empty( $data[ 'video' ][ 'file' ] ) ? esc_url( $data[ 'video' ][ 'file' ] ) : '';
-                $title = $data[ 'video' ][ 'title' ] ?? '';
-                if ( $url ) {
+                $url   = !empty($data['url']) ? esc_url($data['url']) : '';
+                $file  = !empty($data['video']['file']) ? esc_url($data['video']['file']) : '';
+                $title = $data['video']['title'] ?? '';
+                if ($url) {
                     $res .= sprintf(
-                    /* translators: %s: URL of the video. */
-                        __( 'Therefore call up the video %s from the FAU video portal.', 'rrze-video' ),
+                        /* translators: %s: URL of the video. */
+                        __('Therefore call up the video %s from the FAU video portal.', 'rrze-video'),
                         '<a href="' . $url . '">' . $title . '</a>'
                     );
-                } elseif ( $file ) {
+                } elseif ($file) {
                     $res .= 'Call the video file  directly.';
                     $res .= sprintf(
-                    /* translators: %s: File name of the video. */
-                        __( 'Call the video file %s directly.', 'rrze-video' ),
+                        /* translators: %s: File name of the video. */
+                        __('Call the video file %s directly.', 'rrze-video'),
                         '<a href="' . $file . '">' . $title . '</a>'
                     );
                 }
 
                 $res .= '</video>';
+
+                if (!$showtitle) {
+                    //Adds the visible title for the overlay
+                    if (!empty($title)) {
+                        $res .= '<p class="rrze-video-title" id="rrze-video-title-' . $id . '">' . $title . '</p>';
+                    }
+                }
             }
         } else {
             $res .= '<div class="alert clearfix clear alert-danger">';
@@ -537,7 +544,7 @@ class Player
         }
 
         $res .= '</div>';
-
+        Helper::debug($res);
         return $res;
     }
 
@@ -600,7 +607,7 @@ class Player
      */
     public function enqueueFrontendStyles($plyr = true, $args = [], $id = '')
     {
-        if($id == '') {
+        if ($id == '') {
             $id = $this->getRenderID();
         }
         wp_enqueue_style('rrze-video-plyr');
@@ -615,7 +622,8 @@ class Player
      * @return string
      * @since 3.4.5
      */
-    public function get_fauvideo_transcript_tracks($data){
+    public function get_fauvideo_transcript_tracks($data)
+    {
         $transcriptKeys = ['transcript', 'transcript_en', 'transcript_de'];
         $outputTemp = '';
         $langKeys = [
@@ -625,15 +633,15 @@ class Player
             'ut' => 'Unknown',
         ];
 
-        if (empty($data['video'])){
+        if (empty($data['video'])) {
             return $outputTemp;
         }
 
         foreach ($transcriptKeys as $key) {
-            if (isset($data['video'][$key]) && !empty($data['video'][$key]) && strpos($data['video'][$key], '.vtt')){
+            if (isset($data['video'][$key]) && !empty($data['video'][$key]) && strpos($data['video'][$key], '.vtt')) {
                 $langEvaluate = str_replace('transcript', '', $key); //Extract the language shorthand from the key
-                if ($langEvaluate == ''){
-                    if (isset($data['video']['inLanguage']) && !empty($data['video']['inLanguage'])){
+                if ($langEvaluate == '') {
+                    if (isset($data['video']['inLanguage']) && !empty($data['video']['inLanguage'])) {
                         $langEvaluate = substr($data['video']['inLanguage'], 0, 2);
                     } else {
                         $langEvaluate = 'ut';
@@ -646,22 +654,22 @@ class Player
 
                 //Get the full language label
                 $labelEvaluate = 'Deutsch';
-                if (isset($langKeys[$lang])){
+                if (isset($langKeys[$lang])) {
                     $labelEvaluate = $langKeys[$lang];
-                } else{
+                } else {
                     $lang = 'ut';
                     $labelEvaluate = $langKeys[$lang];
                 }
-                
+
                 $url = $data['video'][$key];
 
-                if (empty($outputTemp)){
+                if (empty($outputTemp)) {
                     //Set the first track always as default
                     $outputTemp .= '<track kind="captions" src="' . $url . '" srclang="' . $lang . '" label="' . $labelEvaluate . '" default>';
                 } else {
                     $trackTemp = '<track kind="captions" src="' . $url . '" srclang="' . $lang . '" label="' . $labelEvaluate . '">';
-                    
-                    if (strpos($outputTemp, $url) === false){
+
+                    if (strpos($outputTemp, $url) === false) {
                         $outputTemp .= $trackTemp;
                     }
                 }
@@ -679,32 +687,33 @@ class Player
      * @return String $class
      * @since 3.5.1
      */
-    public function get_aspectratio_class($arguments){
-        if(empty($arguments['aspectratio'])){
+    public function get_aspectratio_class($arguments)
+    {
+        if (empty($arguments['aspectratio'])) {
             return 'ar-16-9';
         } else {
-            switch ( $arguments['aspectratio'] ) {
-                case('4/3'):
+            switch ($arguments['aspectratio']) {
+                case ('4/3'):
                     return 'ar-4-3';
                     break;
-                case('21/9'):
+                case ('21/9'):
                     return 'ar-21-9';
                     break;
-                case('1/1'):
+                case ('1/1'):
                     return 'ar-1-1';
                     break;
-                case('2.35/1'):
+                case ('2.35/1'):
                     return 'ar-234-1';
                     break;
-                case('2.40/1'):
+                case ('2.40/1'):
                     return 'ar-240-1';
                     break;
-                case('9/16'):
+                case ('9/16'):
                     return 'ar-9-16';
-                    break;    
+                    break;
                 default:
                     return 'ar-16-9';
             }
-        } 
+        }
     }
 }
