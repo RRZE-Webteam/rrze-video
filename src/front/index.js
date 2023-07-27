@@ -5,6 +5,7 @@ import Plyr from "plyr";
 import "plyr/src/sass/plyr.scss";
 import "./custom.scss";
 
+try{
 const players = Plyr.setup(".plyr-instance");
 console.log("I am here!");
 
@@ -26,3 +27,6 @@ players.forEach((player, index) => {
         }
     });
 });
+} catch (error) {
+    console.error('Error in rrze-video/src/front/index.js: ', error);
+}
