@@ -383,7 +383,7 @@ class Player
             $res .= '</div>';
         } elseif ($provider == 'fau') {
             if (isset($data['video']['type']) && $data['video']['type'] == 'audio' && isset($data['video']['file'])) {
-                $res .= '<audio class="' . $classname . '" controls crossorigin="anonymous">'
+                $res .= '<audio preload="none" class="' . $classname . '" controls crossorigin="anonymous">'
                     . '<source src="' . $data['video']['file'] . '" type="audio/mp3" />'
                     . '</audio>';
             } else {
