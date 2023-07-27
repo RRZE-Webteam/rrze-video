@@ -7,25 +7,31 @@
  * This is an adapted copy of the ImageSelector component here:
  * https://github.com/liip/image-selector-example-wp-plugin/blob/master/assets/blocks/image-selector-example/edit.js
  */
-
-// Load dependencies
-const { __ } = wp.i18n;
-const { Component, Fragment } = wp.element;
-const {
-  InnerBlocks,
-  MediaUpload,
-  MediaUploadCheck,
-  useBlockProps,
-} = wp.blockEditor;
-const { PanelBody, Button, ResponsiveWrapper, Spinner } = wp.components;
-const { compose } = wp.compose;
+// Imports for necessary WordPress libraries
+import { __ } from "@wordpress/i18n";
 import { withSelect } from "@wordpress/data";
 
+const {
+  MediaUpload,
+  MediaUploadCheck,
+// eslint-disable-next-line no-undef
+} = wp.blockEditor;
+// eslint-disable-next-line no-undef
+const { Button, ResponsiveWrapper, Spinner } = wp.components;
+// eslint-disable-next-line no-undef
+const { compose } = wp.compose;
 const ALLOWED_MEDIA_TYPES = ["image"];
 
+/**
+ * Creates a button to select an image from the media library 
+ * for the InspectorControls Sidebar. HOC withSelect is used to
+ * retrieve the image from the media library.
+ * @param {*} props 
+ * @returns 
+ */
 const ImageSelectorEdit = (props) => {
-  const { attributes, setAttributes, bgImage, className } = props;
-  const { bgImageId, poster } = attributes;
+  const { attributes, setAttributes, bgImage } = props;
+  const { bgImageId } = attributes;
   const instructions = (
     <p>
       {__(
@@ -37,6 +43,7 @@ const ImageSelectorEdit = (props) => {
 
   let styles = {};
   if (bgImage && bgImage.source_url) {
+    // eslint-disable-next-line no-unused-vars
     styles = { backgroundImage: `url(${bgImage.source_url})` };
   }
 
@@ -96,7 +103,7 @@ const ImageSelectorEdit = (props) => {
               allowedTypes={ALLOWED_MEDIA_TYPES}
               value={bgImageId}
               render={({ open }) => (
-                <Button onClick={open} isDefault isLarge>
+                <Button onClick={open} variant="secondary">
                   {__("Replace Video Thumbnail", "rrze-video")}
                 </Button>
               )}
@@ -114,6 +121,9 @@ const ImageSelectorEdit = (props) => {
   );
 };
 
+/**
+ * HOC withSelect is used to retrieve the image from the media library.
+ */
 export default compose([
   withSelect((select, props) => {
     const { getMedia } = select("core");
