@@ -544,7 +544,6 @@ class Player
         }
 
         $res .= '</div>';
-        Helper::debug($res);
         return $res;
     }
 
