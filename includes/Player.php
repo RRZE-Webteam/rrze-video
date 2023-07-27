@@ -388,7 +388,7 @@ class Player
                     . '</audio>';
             } else {
                 $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Self::get_aspectratio_class($data);
-                $res       .= '<video class="' . $classname . '" playsinline controls crossorigin="anonymous"';
+                $res       .= '<video preload="none" class="' . $classname . '" playsinline controls crossorigin="anonymous"';
 
                 $plyrconfig = ' data-plyr-config=\'{ ';
                 $plyrconfig .= '"preload": "none", ';
