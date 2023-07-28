@@ -53,3 +53,10 @@ node_modules/
 # Loco translate ignore
 *.po~
 *.pot~
+
+bin/install-wp-tests.sh
+.phpunit.cache
+.phpunit.result.cache
+.phpcs.xml.dist
+.phpunit.xml.dist
+phpunit.xml.dist.bak
