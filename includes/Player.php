@@ -389,6 +389,7 @@ class Player
             } else {
                 $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Self::get_aspectratio_class($data);
                 $res       .= '<video preload="none" class="' . $classname . '" playsinline controls crossorigin="anonymous"';
+                $res .= ' data-video-title-id="' . $id . '"';  // Pass the id to the player
 
                 $plyrconfig = ' data-plyr-config=\'{ ';
                 $plyrconfig .= '"preload": "none", ';
@@ -470,7 +471,7 @@ class Player
                 if (!$showtitle) {
                     //Adds the visible title for the overlay
                     if (!empty($title)) {
-                        $res .= '<p class="rrze-video-title" id="rrze-video-title-' . $id . '">' . $title . '</p>';
+                        $res .= '<p class="rrze-video-title rrze-video-hide" id="rrze-video-title-' . $id . '">' . $title . '</p>';
                     }
                 }
             }
