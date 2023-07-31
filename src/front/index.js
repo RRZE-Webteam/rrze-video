@@ -5,7 +5,7 @@ import Plyr from "plyr";
 import "plyr/src/sass/plyr.scss";
 import "./custom.scss";
 
-document.addEventListener("DOMContentLoaded", function () {
+window.onload = function () {
   try {
     const players = Plyr.setup(".plyr-instance");
 
@@ -32,4 +32,4 @@ document.addEventListener("DOMContentLoaded", function () {
   } catch (error) {
     console.error("Error in rrze-video/src/front/index.js: ", error);
   }
-});
+};
