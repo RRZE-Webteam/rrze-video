@@ -5,6 +5,14 @@ import Plyr from "plyr";
 import "plyr/src/sass/plyr.scss";
 import "./custom.scss";
 
+const getVideoTitle = (player) => {
+  const container = player.elements?.container;
+  if (!container) return null;
+  const potentialTitleElem = container.nextSibling?.nextSibling;
+  if (!potentialTitleElem || potentialTitleElem.id === undefined) return null;
+  return document.getElementById(potentialTitleElem.id);
+};
+
 document.addEventListener("DOMContentLoaded", function () {
   try {
     const players = Plyr.setup(".plyr-instance", {
@@ -12,14 +20,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     players.forEach((player) => {
-      let videoTitleId =
-        player.elements?.container?.nextSibling?.nextSibling?.id;
-      let videoTitle = document.getElementById(videoTitleId);
+      const videoTitle = getVideoTitle(player);
+      if (!videoTitle) return;
 
-      if (videoTitle === null) {
-        return;
-      }
-
+      videoTitle.style.zIndex = "1";
       videoTitle.classList.remove("rrze-video-hide");
 
       player.on("play", function () {
@@ -31,7 +35,9 @@ document.addEventListener("DOMContentLoaded", function () {
         videoTitle.style.opacity = "1"; // Reset opacity to 1 immediately to make fadeIn work correctly
       });
 
-      if (/(iPhone|iPod|iPad).*AppleWebKit/i.test(navigator.userAgent)) {
+      const isIOSWithWebkit =
+        "webkitEnterFullscreen" in document.createElement("video");
+      if (isIOSWithWebkit) {
         ["webkitbeginfullscreen", "webkitendfullscreen"].forEach((event) => {
           player.media.addEventListener(event, (e) => {
             if (e.type === "webkitbeginfullscreen") {
