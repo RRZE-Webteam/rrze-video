@@ -1,6 +1,8 @@
 /* 
  * RRZE-Video Plugin: Plyr Custom Style
  */
+ :root { --webkit-text-track-display: none; }
+
 .plyr__video-embed iframe,
 .plyr__video-wrapper--fixed-ratio video {
     border: 0;
@@ -9,6 +11,10 @@
     position: inherit;
     top: 0;
     width: 100%;
+}
+
+.plyr--full-ui ::-webkit-media-text-track-container {
+	display: var(--webkit-text-track-display);
 }
 
 .rrze-video {
