@@ -3,7 +3,7 @@
 Plugin Name:    RRZE Video
 Plugin URI:     https://github.com/RRZE-Webteam/rrze-video
 Description:    Embedding videos via a shortcode or widget based on the Plyr video player.
-Version:        3.5.5
+Version:        3.5.6
 Author:         RRZE-Webteam
 Author URI:     http://blogs.fau.de/webworking/
 License:        GNU General Public License Version 3

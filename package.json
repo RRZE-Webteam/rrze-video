@@ -1,6 +1,6 @@
 {
     "name": "rrze-video",
-    "version": "3.5.5",
+    "version": "3.5.6",
     "main": "webpack.config.js",
     "scripts": {
         "start": "wp-scripts start",
