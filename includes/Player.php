@@ -138,7 +138,7 @@ class Player
                     } else {
                         $arguments['video'] = $framedata['video'];
 
-                        $content .= '<div class="rrze-video rrze-video-container-' . $id . '"';
+                        $content .= '<div class="rrze-video rrze-video-container-' . $id . '">';
                         $content .= '<div class="iframecontainer ' . $framedata['video']['provider'] . '">';
                         $content .= $arguments['video']['html'];
                         $content .= '</div>';
@@ -283,7 +283,7 @@ class Player
         }
 
 
-        $res .= '<div class="rrze-video rrze-video-container-' . $id . '"';
+        $res .= '<div class="rrze-video rrze-video-container-' . $id ;
 
         if (!empty($data['class'])) {
             $res .= ' ' . $data['class'];

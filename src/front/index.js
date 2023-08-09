@@ -5,57 +5,76 @@ import Plyr from "plyr";
 import "plyr/src/sass/plyr.scss";
 import "./custom.scss";
 
-const getVideoTitle = (player) => {
-  const container = player.elements?.container;
-  if (!container) return null;
-  const potentialTitleElem = container.nextSibling?.nextSibling;
-  if (!potentialTitleElem || potentialTitleElem.id === undefined) return null;
-  return document.getElementById(potentialTitleElem.id);
+const isIOSWithWebkit = "webkitEnterFullscreen" in document.createElement("video");
+const VIDEO_CONTAINER_PREFIX = "rrze-video-container-";
+const VIDEO_TITLE_PREFIX_LENGTH = VIDEO_CONTAINER_PREFIX.length;
+
+const handlePlayerPlay = (videoTitle) => {
+  videoTitle.classList.add("rrze-video-hide");
 };
 
-document.addEventListener("DOMContentLoaded", function () {
+const handlePlayerPause = (videoTitle) => {
+  videoTitle.classList.remove("rrze-video-hide");
+  videoTitle.style.opacity = "1"; // Reset opacity to 1 for fadeIn effect
+};
+
+document.addEventListener("DOMContentLoaded", () => {
   try {
+    console.log("Successfully loaded front.js for rrze-video.");
     const players = Plyr.setup(".plyr-instance", {
       fullscreen: { iosNative: true },
     });
 
     players.forEach((player) => {
-      const videoTitle = getVideoTitle(player);
-      if (!videoTitle) return;
+      try {
+        const parentElementClass =
+          player?.elements?.container?.parentElement?.classList[1];
 
-      videoTitle.style.zIndex = "1";
-      videoTitle.classList.remove("rrze-video-hide");
+        if (
+          parentElementClass &&
+          parentElementClass.startsWith(VIDEO_CONTAINER_PREFIX)
+        ) {
+          const videoTitleId = `rrze-video-title-${parentElementClass.slice(
+            VIDEO_TITLE_PREFIX_LENGTH
+          )}`;
+          const videoTitle = document.getElementById(videoTitleId);
 
-      player.on("play", function () {
-        videoTitle.classList.add("rrze-video-hide");
-      });
+          if (videoTitle) {
+            videoTitle.style.zIndex = "1";
+            videoTitle.classList.remove("rrze-video-hide");
 
-      player.on("pause", function () {
-        videoTitle.classList.remove("rrze-video-hide");
-        videoTitle.style.opacity = "1"; // Reset opacity to 1 immediately to make fadeIn work correctly
-      });
+            player.on("play", () => handlePlayerPlay(videoTitle));
+            player.on("pause", () => handlePlayerPause(videoTitle));
+          } else {
+            console.log(
+              `Video Title not found or disabled for video with id: ${videoTitleId}`
+            );
+          }
+        } else {
+          console.log(
+            "No matching parent class inside the Plyr video container. Check the template."
+          );
+        }
 
-      const isIOSWithWebkit =
-        "webkitEnterFullscreen" in document.createElement("video");
-      if (isIOSWithWebkit) {
-        ["webkitbeginfullscreen", "webkitendfullscreen"].forEach((event) => {
-          player.media.addEventListener(event, (e) => {
-            if (e.type === "webkitbeginfullscreen") {
-              document.documentElement.style.setProperty(
-                "--webkit-text-track-display",
-                "block"
-              );
-            } else {
-              document.documentElement.style.setProperty(
-                "--webkit-text-track-display",
-                "none"
-              );
-            }
+        if (isIOSWithWebkit) {
+          const handleFullscreenChange = (e) => {
+            const displayMode =
+              e.type === "webkitbeginfullscreen" ? "block" : "none";
+            document.documentElement.style.setProperty(
+              "--webkit-text-track-display",
+              displayMode
+            );
+          };
+
+          ["webkitbeginfullscreen", "webkitendfullscreen"].forEach((event) => {
+            player.media.addEventListener(event, handleFullscreenChange);
           });
-        });
+        }
+      } catch (playerError) {
+        console.error(`Error processing player: ${playerError}`);
       }
     });
-  } catch (error) {
-    console.error("Error in rrze-video/src/front/index.js: ", error);
+  } catch (generalError) {
+    console.error("Error in rrze-video/src/front/index.js: ", generalError);
   }
 });
