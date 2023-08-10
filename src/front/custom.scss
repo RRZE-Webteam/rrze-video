@@ -183,6 +183,14 @@
 		}
 	}
 
+	p.rrze-video-hide {
+		animation: fadeOut 0.5s forwards;
+
+		@media (prefers-reduced-motion: reduce) {
+			animation: none;
+		}
+	}
+
 	.rrze-video-hide {
 		animation: fadeOut 0.5s forwards;
 
