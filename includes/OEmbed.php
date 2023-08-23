@@ -37,13 +37,6 @@ class OEmbed
                 'home'    => 'https://vimeo.com',
                 'api-endpoint'  => 'https://vimeo.com/api/oembed.json'
             ],
-            //    'instagram' => [
-            //	'domains'   => [
-            //	    'instagram.com', 'www.instagram.com','instagr.am','www.instagr.am'
-            //	],
-            //	'api-endpoint'  => 'https://api.instagram.com/oembed'
-            //   ]
-            // Facebook wants an access token :/
         ];
     }
 
