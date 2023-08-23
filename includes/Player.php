@@ -6,6 +6,7 @@ defined('ABSPATH') || exit;
 
 use RRZE\Video\OEmbed;
 use RRZE\Video\IFrames;
+use RRZE\Video\Helper;
 
 class Player
 {
@@ -36,181 +37,259 @@ class Player
         return self::instance()->counter++;
     }
 
-    /**
-     * Constructor
-     */
     private function __construct()
     {
         $this->counter++;
     }
 
+    /**
+     * Fetches and processes the video player.
+     * 
+     * This function tries to retrieve the video from the provided URL, ID, or
+     * random genre. The video content can be either an oEmbed or an iFrame.
+     *
+     * @param array $arguments Associative array containing one of the keys: 
+     *                         'url' (the video URL), 'id' (video post ID), 
+     *                         'rand' (slug of the genre for random video fetching).
+     * @return string HTML content of the video player or an error message.
+     */
     public function get_player($arguments)
     {
         $id = $this->getRenderID();
-
         $content = '';
+
         if (empty($arguments)) {
-            $content .= '<div class="rrze-video alert clearfix clear alert-danger">';
-            $content .= __('Error when displaying the video player: Insufficient data was transferred.', 'rrze-video');
-            $content .= '</div>';
-            return $content;
+            return $this->handleError(__('Error when displaying the video player: Insufficient data was transferred.', 'rrze-video'));
         }
 
         if (empty($arguments['url'])) {
-            // Try to get URL by ID or by Random
-            if (!empty($arguments['id']) && (intval($arguments['id']) > 0)) {
-                $post = get_post($arguments['id']);
-                if ($post && $post->post_type == 'video') {
-                    $posterdata = wp_get_attachment_image_src(get_post_thumbnail_id($arguments['id']), 'full');
+            $this->getUrlByIdOrRandom($arguments);
+        }
+
+        if (!empty($arguments['url'])) {
+            if ($isoembed = OEmbed::is_oembed_provider($arguments['url'])) {
+                $content .= $this->processOEmbed($isoembed, $arguments, $id);
+                $this->enqueueFrontendStyles(true, [], $id);
+            } else if (IFrames::is_iframe_provider($arguments['url'])) {
+                $content .= $this->processIFrame($arguments, $id);
+            } else {
+                $content .= $this->handleError(__('Unknown video source', 'rrze-video'));
+            }
+        } else {
+            $content .= $this->handleNoVideoError($arguments, $id);
+        }
+
+        return $content;
+    }
+
+    /**
+     * Returns an error message wrapped in an HTML div element.
+     * 
+     * @param string $message The error message to display.
+     * @return string Error message wrapped in an HTML div with error styling.
+     */
+    private function handleError($message)
+    {
+        return '<div class="rrze-video alert clearfix clear alert-danger">' . $message . '</div>';
+    }
+
+    /**
+     * Generates an error message with a header, wrapped in an HTML div element.
+     * 
+     * @param mixed $id      The video or container ID.
+     * @param string $header The header/title of the error message.
+     * @param string $message The detailed error message.
+     * @return string Error message with a header wrapped in an HTML div with error styling.
+     */
+    private function generateErrorContent($id, $header, $message)
+    {
+        return '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">' .
+            '<strong>' . $header . '</strong><br>' . $message . '</div>';
+    }
+
+    /**
+     * Determines the URL for the video based on an ID or fetches a random video URL.
+     * 
+     * @param array $arguments Associative array containing 'id' or 'rand' key for fetching.
+     */
+    private function getUrlByIdOrRandom(&$arguments)
+    {
+        if (!empty($arguments['id']) && (intval($arguments['id']) > 0)) {
+            $this->getUrlById($arguments);
+        } elseif (!empty($arguments['rand'])) {
+            $this->getUrlRandomly($arguments);
+        }
+    }
+
+    /**
+     * Fetches the URL of a video by its post ID.
+     * 
+     * If the post with the provided ID is of type 'video', it retrieves its URL 
+     * and optional poster image.
+     *
+     * @param array $arguments Associative array containing 'id' key to fetch the URL.
+     */
+    private function getUrlById(&$arguments)
+    {
+        $post = get_post($arguments['id']);
+        if ($post && $post->post_type == 'video') {
+            $posterdata = wp_get_attachment_image_src(get_post_thumbnail_id($arguments['id']), 'full');
+            if (!empty($posterdata[0])) {
+                $arguments['poster'] = $posterdata[0];
+            }
+
+            $url = get_post_meta($arguments['id'], 'url', true);
+            if (!empty($url)) {
+                $arguments['url'] = esc_url_raw($url);
+            }
+        }
+    }
+
+    /**
+     * Fetches a random video URL from a specified genre.
+     * 
+     * This function tries to fetch a random video of a specific genre, based on the slug.
+     * If found, it retrieves its URL and optional poster image.
+     *
+     * @param array $arguments Associative array containing 'rand' key to fetch the URL.
+     */
+    private function getUrlRandomly(&$arguments)
+    {
+        $term = get_term_by('slug', $arguments['rand'], 'genre');
+        if ($term) {
+            $argumentsTaxonomy = [
+                'post_type'         => 'video',
+                'post_status'       => ['published'],
+                'posts_per_page'    => 1,
+                'orderby'           =>  'rand',
+                'tax_query'         => [
+                    [
+                        'taxonomy'  => $term->taxonomy,
+                        'field'     => 'term_id',
+                        'terms'     => $term->term_id,
+                    ],
+                ],
+            ];
+            $random_query = new \WP_Query($argumentsTaxonomy);
+
+            if ($random_query->have_posts()) {
+                while ($random_query->have_posts()) {
+                    $random_query->the_post();
+                    $randvideoid = get_the_ID();
+
+                    $posterdata = wp_get_attachment_image_src(get_post_thumbnail_id($randvideoid), 'full');
                     if (!empty($posterdata[0])) {
                         $arguments['poster'] = $posterdata[0];
                     }
 
-                    $url = get_post_meta($arguments['id'], 'url', true);
+                    $url = get_post_meta($randvideoid, 'url', true);
                     if (!empty($url)) {
                         $arguments['url'] = esc_url_raw($url);
                     }
                 }
-            } elseif (!empty($arguments['rand'])) {
-                $term = get_term_by('slug', $arguments['rand'], 'genre');
-                if ($term) {
-                    $argumentsTaxonomy = [
-                        'post_type'         => 'video',
-                        'post_status'       => ['published'],
-                        'posts_per_page'    => 1,
-                        'orderby'           =>  'rand',
-                        'tax_query'         => [
-                            [
-                                'taxonomy'  => $term->taxonomy,
-                                'field'     => 'term_id',
-                                'terms'     => $term->term_id,
-                            ],
-                        ],
-                    ];
-                    $random_query = new \WP_Query($argumentsTaxonomy);
-
-                    if ($random_query->have_posts()) {
-                        while ($random_query->have_posts()) {
-                            $random_query->the_post();
-                            $randvideoid = get_the_ID();
-
-                            $posterdata = wp_get_attachment_image_src(get_post_thumbnail_id($randvideoid), 'full');
-                            if (!empty($posterdata[0])) {
-                                $arguments['poster'] = $posterdata[0];
-                            }
-
-                            $url = get_post_meta($randvideoid, 'url', true);
-                            if (!empty($url)) {
-                                $arguments['url'] = esc_url_raw($url);
-                            }
-                        }
-                    }
-                    wp_reset_postdata();
-                }
             }
+            wp_reset_postdata();
         }
+    }
 
-        if (!empty($arguments['url'])) {
-            // check for oEmbed
-            $isoembed = OEmbed::is_oembed_provider($arguments['url']);
+    /**
+     * Processes an oEmbed video source.
+     * 
+     * This function tries to retrieve video content using an oEmbed provider.
+     * If successful, it returns the video player's HTML. Otherwise, it returns an error message.
+     *
+     * @param mixed $isoembed  The oEmbed provider or configuration.
+     * @param array $arguments Associative array containing video details.
+     * @param mixed $id        The video or container ID.
+     * @return string HTML content of the video player or an error message.
+     */
+    private function processOEmbed($isoembed, $arguments, $id)
+    {
+        $oembeddata = OEmbed::get_oembed_data($isoembed, $arguments['url']);
+        if (!empty($oembeddata['error'])) {
+            return $this->handleError(__('Error getting the video', 'rrze-video') . '<br>' . $oembeddata['error']);
+        } elseif (empty($oembeddata['video'])) {
+            return $this->handleError(__('Error getting the video', 'rrze-video') . '<br>' . __('Video data could not be obtained.', 'rrze-video'));
+        } else {
+            $arguments['video'] = $oembeddata['video'];
+            $arguments['oembed_api_url'] = $oembeddata['oembed_api_url'] ?? '';
+            $arguments['oembed_api_error'] = $oembeddata['error'] ?? '';
+            return $this->get_player_html($isoembed, $arguments, $id);
+        }
+    }
 
-            if (empty($isoembed)) {
-                // OK, no fancy oEmbed... so let's see if its a boring iframe-provider...
-                if (IFrames::is_iframe_provider($arguments['url'])) {
-                    $framedata = IFrames::get_iframe($arguments['url']);
+    /**
+     * Processes an iFrame video source.
+     * 
+     * This function tries to retrieve video content using an iFrame provider.
+     * If successful, it returns the video player's HTML. Otherwise, it returns an error message.
+     *
+     * @param array $arguments Associative array containing video details.
+     * @param mixed $id        The video or container ID.
+     * @return string HTML content of the video player or an error message.
+     */
+    private function processIFrame($arguments, $id)
+    {
+        $content = '';
 
+        if (IFrames::is_iframe_provider($arguments['url'])) {
+            $framedata = IFrames::get_iframe($arguments['url']);
 
-
-                    if (!empty($framedata['error'])) {
-                        $content .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
-                        $content .= '<strong>';
-                        $content .= __('Error getting the video', 'rrze-video');
-                        $content .= '</strong><br>';
-                        $content .= $framedata['error'];
-                        $content .= '</div>';
-                    } elseif (empty($framedata['video'])) {
-                        $content .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
-                        $content .= '<strong>';
-                        $content .= __('Error getting the video', 'rrze-video');
-                        $content .= '</strong><br>';
-                        $content .= __('Video data could not be obtained.', 'rrze-video');
-                        $content .= '</div>';
-                    } else {
-                        $arguments['video'] = $framedata['video'];
-
-                        $content .= '<div class="rrze-video rrze-video-container-' . $id . '">';
-                        $content .= '<div class="iframecontainer ' . $framedata['video']['provider'] . '">';
-                        $content .= $arguments['video']['html'];
-                        $content .= '</div>';
-
-                        if (!empty($arguments['show']) && preg_match('/link/', $arguments['show'])) {
-                            $content .= '<p class="link">' . __('Link', 'rrze-video') . ': <a href="' . $arguments['url'] . '">' . $arguments['url'] . '</a></p>';
-                        }
-                        if (!empty($arguments['video']['provider_name'])) {
-                            $content .= '<p>' . __('Source', 'rrze-video') . ': <a href="' . $arguments['video']['provider_url'] . '">' . $arguments['video']['provider_name'] . '</a></p>';
-                        }
-                        $content .= '</div>';
-                        if (!empty($arguments['aspectratio'])) {
-                            $this->enqueueFrontendStyles(false, $arguments, $id);
-                        } else {
-                            $this->enqueueFrontendStyles(false, [], $id);
-                        }
-                    }
-                } else {
-                    $content .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
-                    $content .= '<strong>';
-                    $content .= __('Unknown video source', 'rrze-video');
-                    $content .= '</strong><br>';
-                    $content .= __('The following address could not be assigned to a known video provider or it does not have a suitable interface for retrieving videos.', 'rrze-video');
-                    $content .= ' ' . __('So please call up the video by directly following the link below:', 'rrze-video');
-                    $content .= ' <a href="' . $arguments['url'] . '" rel="nofollow">' . $arguments['url'] . '</a>';
-                    $content .= '</div>';
-                }
+            if (!empty($framedata['error'])) {
+                $content .= $this->generateErrorContent($id, __('Error getting the video', 'rrze-video'), $framedata['error']);
+            } elseif (empty($framedata['video'])) {
+                $content .= $this->generateErrorContent($id, __('Error getting the video', 'rrze-video'), __('Video data could not be obtained.', 'rrze-video'));
             } else {
-                $oembeddata = OEmbed::get_oembed_data($isoembed, $arguments['url']);
+                $arguments['video'] = $framedata['video'];
 
-                if (!empty($oembeddata['error'])) {
-                    $content .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
-                    $content .= '<strong>';
-                    $content .= __('Error getting the video', 'rrze-video');
-                    $content .= '</strong><br>';
-                    $content .= $oembeddata['error'];
-                    $content .= '</div>';
-                } elseif (empty($oembeddata['video'])) {
-                    $content .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
-                    $content .= '<strong>';
-                    $content .= __('Error getting the video', 'rrze-video');
-                    $content .= '</strong><br>';
-                    $content .= __('Video data could not be obtained.', 'rrze-video');
-                    $content .= '</div>';
-                } else {
-                    $arguments['video'] = $oembeddata['video'];
-                    $arguments['oembed_api_url'] = $oembeddata['oembed_api_url'] ?? '';
-                    $arguments['oembed_api_error'] = $oembeddata['error'] ?? '';
-                    $content .= $this->get_player_html($isoembed, $arguments, $id);
+                $content .= '<div class="rrze-video rrze-video-container-' . $id . '">';
+                $content .= '<div class="iframecontainer ' . $framedata['video']['provider'] . '">';
+                $content .= $arguments['video']['html'];
+                $content .= '</div>';
 
-                    if (!empty($arguments['aspectratio'])) {
-                        $this->enqueueFrontendStyles(true, $arguments, $id);
-                    } else {
-                        $this->enqueueFrontendStyles(true, [], $id);
-                    }
+                if (!empty($arguments['show']) && preg_match('/link/', $arguments['show'])) {
+                    $content .= '<p class="link">' . __('Link', 'rrze-video') . ': <a href="' . $arguments['url'] . '">' . $arguments['url'] . '</a></p>';
                 }
+                if (!empty($arguments['video']['provider_name'])) {
+                    $content .= '<p>' . __('Source', 'rrze-video') . ': <a href="' . $arguments['video']['provider_url'] . '">' . $arguments['video']['provider_name'] . '</a></p>';
+                }
+                $content .= '</div>';
+
+                $aspectratioArgs = !empty($arguments['aspectratio']) ? $arguments : [];
+                $this->enqueueFrontendStyles(false, $aspectratioArgs, $id);
             }
         } else {
-            $content .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
-            $content .= '<strong>';
-            $content .= __('Error getting the video', 'rrze-video');
-            $content .= '</strong><br>';
-            if (empty($arguments['id'])) {
-                $content .= __('The video ID used is invalid or could not be assigned to a video.', 'rrze-video');
-            } elseif ($arguments['rand']) {
-                $content .= __('No video from the specified category could be found.', 'rrze-video');
-                $content .= ': "' . $arguments['rand'] . '"';
-            } else {
-                $content .= __('Neither a valid ID nor a valid URL was specified for a video.', 'rrze-video');
-            }
-            $content .= '</div>';
+            $content .= $this->generateErrorContent($id, __('Unknown video source', 'rrze-video'), __('The following address could not be assigned to a known video provider or it does not have a suitable interface for retrieving videos.', 'rrze-video') . ' ' . __('So please call up the video by directly following the link below:', 'rrze-video') . ' <a href="' . $arguments['url'] . '" rel="nofollow">' . $arguments['url'] . '</a>');
         }
+
+        return $content;
+    }
+
+    /**
+     * Handles errors related to the absence of video content.
+     * 
+     * This function generates an error message based on the absence of a valid video ID or URL.
+     *
+     * @param array $arguments Associative array containing video details.
+     * @param mixed $id        The video or container ID.
+     * @return string Error message wrapped in an HTML div with error styling.
+     */
+    private function handleNoVideoError($arguments, $id)
+    {
+        $content = '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
+        $content .= '<strong>';
+        $content .= __('Error getting the video', 'rrze-video');
+        $content .= '</strong><br>';
+        if (empty($arguments['id'])) {
+            $content .= __('The video ID used is invalid or could not be assigned to a video.', 'rrze-video');
+        } elseif ($arguments['rand']) {
+            $content .= __('No video from the specified category could be found.', 'rrze-video');
+            $content .= ': "' . $arguments['rand'] . '"';
+        } else {
+            $content .= __('Neither a valid ID nor a valid URL was specified for a video.', 'rrze-video');
+        }
+        $content .= '</div>';
+
         return $content;
     }
 
@@ -284,7 +363,7 @@ class Player
         }
 
 
-        $res .= '<div class="rrze-video rrze-video-container-' . $id ;
+        $res .= '<div class="rrze-video rrze-video-container-' . $id;
 
         if (!empty($data['class'])) {
             $res .= ' ' . $data['class'];
