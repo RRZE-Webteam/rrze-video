@@ -216,6 +216,7 @@ class Player
 
     public function get_player_html($provider, $data, $id = '')
     {
+        //Helper::debug($data);
         if ($id == '') {
             $id = $this->getRenderID();
         }
@@ -674,7 +675,7 @@ class Player
                     }
                 }
             } else {
-                Helper::debug('RRZE Video: No or invalid transcript file found for key: ' . $key);
+                //Helper::debug('RRZE Video: No or invalid transcript file found for key: ' . $key);
             }
         }
 
