@@ -18,6 +18,8 @@ _tmp/
 
 ### Composer ###
 /vendor/
+/wordpress-tests/
+wordpress-tests/
 
 # Logs
 logs
