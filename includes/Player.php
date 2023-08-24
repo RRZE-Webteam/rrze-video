@@ -293,32 +293,434 @@ class Player
         return $content;
     }
 
-    public function get_player_html($provider, $data, $id = '')
+    /**
+     * Generates the HTML output for a video player based on the provided video data and provider.
+     * 
+     * This function constructs and returns an HTML string which comprises the video player, the title, 
+     * description, and related metadata of the video. It first identifies the provider (e.g., YouTube, 
+     * Vimeo, FAU, etc.) of the video and then delegates the HTML generation to the appropriate helper 
+     * function. In addition to the video content, if specified in the `$data`, this function can render 
+     * a title, a description, and a list of related metadata (like author, source, alternative formats, 
+     * etc.).
+     * 
+     * @param string $provider  The video provider (e.g., "youtube", "vimeo", "fau").
+     * @param array  $data      Associative array containing video details and other settings.
+     * @param string $id        An optional ID to be used for this instance. If empty, a render ID is 
+     *                          generated internally.
+     * 
+     * @return string           Returns the generated HTML string for the video player and its associated 
+     *                          details.
+     */
+    private function get_player_html($provider, $data, $id = '')
     {
-        //Helper::debug($data);
+        $classname = 'plyr-instance plyr-videonum-' . $id;
         if ($id == '') {
             $id = $this->getRenderID();
         }
+        $res = [];
+        $res[] = '<div class="rrze-video rrze-video-container-' . $id;
 
-        $res = '';
-        $providerlist = OEmbed::get_known_provider();
-        if (empty($provider) || empty($providerlist[$provider])) {
-            $res .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
-            $res .= __('No valid video provider was found. As a result, the video cannot be played or could not be recognized.', 'rrze-video');
-            $res .= '</div>';
+        if (!empty($data['class'])) {
+            $res[] = ' ' . $data['class'];
+        }
+        $res[] = '">';
 
-            return $res;
+        $beforetag = '<h2>';
+        $aftertag = '</h2>';
+
+        if (!empty($data['widgetargs'])) {
+            if (!empty($data['widgetargs']['before'])) {
+                $beforetag = $data['widgetargs']['before'];
+            }
+            if (!empty($data['widgetargs']['after'])) {
+                $aftertag = $data['widgetargs']['after'];
+            }
+        } elseif ($data['titletag']) {
+            $beforetag = '<' . $data['titletag'] . '>';
+            $aftertag = '</' . $data['titletag'] . '>';
         }
 
-        if (!empty($data['error'])) {
-            $res .= '<div class="rrze-video rrze-video-container-' . $id . ' alert clearfix clear alert-danger">';
-            $res .= '<strong>';
-            $res .= __('Error getting the video', 'rrze-video');
-            $res .= ':</strong><br>';
-            $res .= $data['error'];
-            $res .= '</div>';
-            return $res;
+        if ($this->evaluateShowValues($data, $id)['showtitle']) {
+            $res[] = $beforetag . $data['video']['title'] . $aftertag;
+        } elseif (!empty($data['widgetargs']['title'])) {
+            $res[] = $beforetag . $data['widgetargs']['title'] . $aftertag;
         }
+
+        $providerList = OEmbed::get_known_provider();
+        if (empty($provider) || empty($providerList[$provider])) {
+            return $this->generateErrorContent($id, __('No valid video provider was found. As a result, the video cannot be played or could not be recognized.', 'rrze-video'), '');
+        }
+
+        switch ($provider)
+        {
+            case 'youtube':
+                $res[] = $this->generate_youtube_html($data, $id);
+                break;
+            case 'vimeo':
+                $res[] = $this->generate_vimeo_html($data, $id);
+                break;
+            case 'fau':
+                $res[] = $this->generate_fau_html($data, $id);
+                break;
+            default:
+                $res[] = $this->generateErrorContent($id, __('Video provider incorrectly defined.', 'rrze-video'), '');
+            
+        }
+
+        if ($this->evaluateShowValues($data, $id)['showdesc'] && !empty($data['video']['description'])) {
+            $res[] = '<p class="desc">' . $data['video']['description'] . '</p>';
+        }
+
+        if ($this->evaluateShowValues($data, $id)['showmeta']) {
+            $meta = [];
+
+            if (!empty($data['video']['author_name'])) {
+                $meta[] = '<dt>' . __('Author', 'rrze-video') . '</dt><dd>';
+
+                if (!empty($data['video']['author_url_0'])) {
+                    $meta[] = '<a href="' . $data['video']['author_url_0'] . '">';
+                }
+
+                $meta .= $data['video']['author_name'];
+                if (!empty($data['video']['author_url_0'])) {
+                    $meta[] = '</a>';
+                }
+                $meta [] =  '</dd>';
+            }
+
+            $url = !empty($data['url']) ? esc_url($data['url']) : '';
+            $altVideofolienUrl = !empty($data['video']['alternative_VideoFolien_size_large']) ? esc_url($data['video']['alternative_VideoFolien_size_large']) : '';
+            $altAudioUrl = !empty($data['video']['alternative_Audio']) ? esc_url($data['video']['alternative_Audio']) : '';
+
+            if ($url) {
+                $meta[] = '<dt>' . __('Source', 'rrze-video') . '</dt><dd><a href="' . $url . '">' . $url . '</a></dd>';
+            }
+
+            if ($altVideofolienUrl && $altVideofolienUrl !== $url) {
+                $meta[] = '<dt>' . __('Video with presentation slides', 'rrze-video') . '</dt><dd><a href="' . $altVideofolienUrl . '">' . $altVideofolienUrl . '</a></dd>';
+            }
+
+            if ($altAudioUrl && $altAudioUrl !== $url) {
+                $meta[] = '<dt>' . __('Audio Format', 'rrze-video') . '</dt><dd><a href="' . $altAudioUrl . '">' . $altAudioUrl . '</a></dd>';
+            }
+
+            if (!empty($data['video']['provider_name'])) {
+                $meta[] = '<dt>' . __('Provider', 'rrze-video') . '</dt><dd>';
+                if (!empty($data['video']['provider_url'])) {
+                    $meta[] = '<a href="' . $data['video']['provider_url'] . '">';
+                }
+                $meta[] = $data['video']['provider_name'];
+
+                if (!empty($data['video']['provider_url'])) {
+                    $meta[] = '</a>';
+                }
+                $meta[] = '</dd>';
+            }
+
+            if (!empty($meta)) {
+                $res[] = '<dl class="meta">' . implode("\n", $meta) . '</dl>';
+            }
+        } elseif ($this->evaluateShowValues($data, $id)['showlink'] && $this->evaluateUrl($data, $id)) {
+            $res[] = '<p class="link">' . __('Source', 'rrze-video') . ': <a href="' . $this->evaluateUrl($data, $id) . '">' . $this->evaluateUrl($data, $id) . '</a>';
+
+            if (!empty($data['video']['provider_videoindex_url'])) {
+                $res[] = '<br>' . __('This video is part of a video collection', 'rrze-video') . ': <a href="' . $data['video']['provider_videoindex_url'] . '">' . $data['video']['provider_videoindex_url'] . '</a>';
+            }
+            $res[] = '</p>';
+        }
+
+        $res[] = '</div>';
+        return implode("\n", $res);
+    }
+
+    /**
+     * Generates the HTML for Vimeo embeds.
+     *
+     * This function will construct the necessary HTML markup to embed a Vimeo video
+     * using structured data and the given video data. It also handles optional video
+     * title information and creates unique class names based on the video ID.
+     *
+     * @param array $data Array containing the video details.
+     *      [
+     *          'video' => [
+     *              'title' => 'The video title',       // Optional: Title of the video.
+     *              'video_id' => '12345678'            // Required: The Vimeo video ID.
+     *          ]
+     *      ]
+     *
+     * @param int|string $id Unique identifier to append to class name.
+     *
+     * @return string The generated HTML markup for the Vimeo embed.
+     */
+    private function generate_vimeo_html($data, $id)
+    {
+        $classname = 'plyr-videonum-' . $id;
+        $res = [];
+        $res[] = '<div class="vimeo-video ' . $classname . '"';
+        $res[] = ' itemscope itemtype="https://schema.org/Movie"';
+        $res[] = '>';
+        $res[] = $this->get_html_structuredmeta($data);
+        $res[] = '<div class="plyr__video-embed">';
+        $res[] = '<iframe';
+        if (!empty($data['video']['title'])) {
+            $res .= ' title="' . esc_html($data['video']['title']) . '"';
+        }
+        $res[] = '  src="https://player.vimeo.com/video/' . $data['video']['video_id'] . '?autoplay=0&loop=0&title=0&byline=0&portrait=0"';
+        $res[] = '  allowfullscreen';
+        $res[] = '  allowtransparency';
+        $res[] = '  allow="autoplay"';
+        $res[] = '></iframe>';
+        $res[] = '</div>';
+        $res[] = '</div>';
+        return implode("\n", $res);
+    }
+
+    /**
+     * Generates the HTML for YouTube embeds.
+     *
+     * This function constructs the necessary HTML markup to embed a YouTube video
+     * using structured data and the provided video data. The function handles optional 
+     * video title information and creates unique class names based on the given video ID.
+     * The generated embed link is privacy-enhanced using the "youtube-nocookie" domain.
+     *
+     * @param array $data Array containing the video details.
+     *      [
+     *          'video' => [
+     *              'title' => 'The video title',       // Optional: Title of the video.
+     *              'v' => 'abcdefg'                    // Required: The YouTube video ID (part after "v=" in YouTube URLs).
+     *          ]
+     *      ]
+     *
+     * @param int|string $id Unique identifier used to generate a distinct class name for the video.
+     *
+     * @return string The generated HTML markup for the YouTube embed.
+     */
+    private function generate_youtube_html($data, $id)
+    {
+        $res = [];
+        $classname = 'plyr-videonum-' . $id;
+        $res[] = '<div class="youtube-video ' . $classname . '"';
+        $res[] = ' itemscope itemtype="https://schema.org/Movie"';
+        $res[] = '>';
+        $res[] = $this->get_html_structuredmeta($data);
+        $res[] = '<div class="plyr__video-embed">';
+        $res[] = '<iframe';
+        if (!empty($data['video']['title'])) {
+            $res[] = ' title="' . esc_html($data['video']['title']) . '"';
+        }
+        $res[] = '  src="https://www.youtube-nocookie.com/embed/' . $data['video']['v'] . '?rel=0&showinfo=0&iv_load_policy=3&modestbranding=1"';
+        $res[] = '  allowfullscreen';
+        $res[] = '  allowtransparency';
+        $res[] = '  allow="autoplay"';
+        $res[] = '></iframe>';
+        $res[] = '</div>';
+        $res[] = '</div>';
+
+        return implode("\n", $res);  
+    }
+
+    /**
+     * Evaluates and returns the appropriate poster image URL for a video.
+     *
+     * This function determines the correct poster image URL based on a prioritized list:
+     * 1. Direct 'poster' attribute in the `$data` array.
+     * 2. Preview image associated with the video.
+     * 3. Thumbnail URL of the video.
+     *
+     * If none of these are available, the function may return `null` (as there's no default return value defined).
+     *
+     * @param array $data Array containing the video details and potential poster images.
+     *      [
+     *          'poster' => 'direct_poster_url',                        // Optional: Direct poster URL.
+     *          'video' => [
+     *              'preview_image' => 'preview_image_url',             // Optional: Preview image of the video.
+     *              'thumbnail_url' => 'video_thumbnail_url'           // Optional: Thumbnail URL of the video.
+     *          ]
+     *      ]
+     *
+     * @param int|string $id Unique identifier for the video. (Currently not used within the function but passed as an argument.)
+     *
+     * @return string|null Returns the appropriate poster image URL or `null` if none is found.
+     */
+    private function evaluatePoster($data, $id)
+    {
+        if (!empty($data['poster'])) {
+                $poster = $data['poster'];
+            } elseif (!empty($data['video']['preview_image'])) {
+                $poster = $data['video']['preview_image'];
+            } elseif (!empty($data['video']['thumbnail_url'])) {
+                $poster = $data['video']['thumbnail_url'];
+            }
+            return $poster;
+    }
+
+    /**
+     * Evaluates and returns the escaped URL from the provided data array.
+     *
+     * This function checks for the presence of a 'url' key in the `$data` array.
+     * If found, it escapes the URL using the `esc_url()` function, ensuring it's safe to use in output.
+     * If the 'url' key is not present or is empty, it returns an empty string.
+     *
+     * @param array $data Array containing potential URLs.
+     *      [
+     *          'url' => 'http://example.com'   // Optional: The URL to be checked and escaped.
+     *      ]
+     *
+     * @param int|string $id Unique identifier for the data. (Currently not used within the function but passed as an argument.)
+     *
+     * @return string Returns the escaped URL if present; otherwise, returns an empty string.
+     */
+    private function evaluateUrl($data, $id)
+    {
+        return !empty($data['url']) ? esc_url($data['url']) : '';
+    }
+
+    /**
+     * Generates HTML for FAU video or audio players based on the provided data.
+     *
+     * This function dynamically creates either an audio or video player's HTML.
+     * It checks the type of media ('audio' or 'video') from the provided `$data` and structures
+     * the HTML accordingly. The function also handles various video properties like poster images,
+     * multiple video sources, and transcripts. If the video or audio is not supported by the browser,
+     * a fallback message is provided.
+     *
+     * @param array $data Contains information required for generating the HTML, which can include:
+     *      - 'video': {
+     *            'type': 'audio'|'video',
+     *            'file': 'URL of the media',
+     *            'width': 'Width of the video',
+     *            'height': 'Height of the video',
+     *            'title': 'Title of the media',
+     *            ... (other video-related keys)
+     *        }
+     *      - 'url': 'Direct URL of the video or audio',
+     *      - 'inLanguage' or 'language': 'Language of the media, e.g., "en-US"',
+     *      ... (other potential keys)
+     *
+     * @param int|string $id Unique identifier for the media data. Used for creating specific class names and HTML attributes.
+     *
+     * @return string Returns the generated HTML for the FAU video or audio player.
+     */
+    private function generate_fau_html($data, $id) 
+    {
+        $res = [];
+        $poster = $this->evaluatePoster($data, $id);
+        $path = parse_url($data['video']['file'], PHP_URL_PATH);
+        $ext  = pathinfo($path, PATHINFO_EXTENSION);
+        $lang = $hreflang = '';
+
+        if (isset($data['video']['type']) && $data['video']['type'] == 'audio' && isset($data['video']['file'])) {
+            $classname = 'plyr-videonum-' . $id;
+            $res[] = '<audio preload="none" class="' . $classname . '" controls crossorigin="anonymous">';
+            $res[] = '<source src="' . $data['video']['file'] . '" type="audio/mp3" />';
+            $res[] = '</audio>';
+        } else {
+            $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Self::get_aspectratio_class($data);
+            $res[] = '<video preload="none" class="' . $classname . '" playsinline controls crossorigin="anonymous"';
+            $res[] = ' data-video-title-id="' . $id . '"';  // Pass the id to the player
+            $res[] = $this->generatePlayerConfig($data, $id);
+
+            if ($poster){
+                $res[] = ' poster="' . $poster . '" data-poster="' . $poster . '"';
+            }
+
+            if (!empty($data['video']['width'])) {
+                $res[] = ' width="' . $data['video']['width'] . '"';
+            }
+
+            if (!empty($data['video']['height'])) {
+                $res[] = ' height="' . $data['video']['height'] . '"';
+            }
+
+            $res[] = ' itemscope itemtype="https://schema.org/Movie"';
+            $res[] = '>';
+
+            $res[] = $this->get_html_structuredmeta($data);
+
+            $res[] = '<source src="' . $data['video']['file'] . '" type="video/' . $ext . '">';
+            if ($ext == 'm4v') {
+                $res []= '<source src="' . $data['video']['file'] . '" type="video/mp4">';
+            }
+
+            /*--------- Add the alternative Video Sources if thex exist ----------*/
+            if (!empty($data['video']['alternative_Video_size_large']) && !empty($data['video']['alternative_Video_size_large_url'])) {
+                $path = parse_url($data['video']['alternative_Video_size_large_url'], PHP_URL_PATH);
+                $ext  = pathinfo($path, PATHINFO_EXTENSION);
+                $res[] = '<source src="' . $data['video']['alternative_Video_size_large_url'] . '" type="video/' . $ext . '" size="' . $data['video']['alternative_Video_size_large_width'] . '">';
+            }
+
+            if (!empty($data['video']['alternative_Video_size_medium']) && !empty($data['video']['alternative_Video_size_medium_url'])) {
+                $path = parse_url($data['video']['alternative_Video_size_medium_url'], PHP_URL_PATH);
+                $ext  = pathinfo($path, PATHINFO_EXTENSION);
+                $res[] = '<source src="' . $data['video']['alternative_Video_size_medium_url'] . '" type="video/' . $ext . '" size="' . $data['video']['alternative_Video_size_medium_width'] . '">';
+            }
+
+            if (!empty($data['video']['transcript'])) {
+                $transcriptHtml = Self::get_fauvideo_transcript_tracks($data);
+                $res[] = $transcriptHtml;
+            }
+
+            $res[] = __('Unfortunately, your browser does not support HTML5 video formats.', 'rrze-video');
+            $res[] = ' ';
+            $url = !empty($data['url']) ? esc_url($data['url']) : '';
+            $file = !empty($data['video']['file']) ? esc_url($data['video']['file']) : '';
+            $title = $data['video']['title'] ?? '';
+            if ($url) {
+                $res[] = sprintf(
+                    /* translators: %s: URL of the video. */
+                    __('Therefore call up the video %s from the FAU video portal.', 'rrze-video'),
+                    '<a href="' . $url . '">' . $title . '</a>'
+                );
+            } elseif ($file) {
+                $res[] = 'Call the video file  directly.';
+                $res[] = sprintf(
+                    /* translators: %s: File name of the video. */
+                    __('Call the video file %s directly.', 'rrze-video'),
+                    '<a href="' . $file . '">' . $title . '</a>'
+                );
+            }
+
+            $res[] = '</video>';
+
+            /*------ Adds the visible title for the overlay ------*/
+            if (!$this->evaluateShowValues($data, $id)['showtitle']) {
+                if (!empty($title)) {
+                    $res[] = '<p class="rrze-video-title rrze-video-hide" id="rrze-video-title-' . $id . '">' . $title . '</p>';
+                }
+            }
+        } 
+        return implode("\n", $res);
+    }
+
+    /**
+     * Evaluates the display preferences for a given media item based on the provided data.
+     *
+     * The function processes the 'show' key in `$data`, which contains a comma-separated list of
+     * values indicating which aspects of the media item should be displayed. The possible values 
+     * are 'title', 'info', 'meta', 'desc', and 'link'.
+     *
+     * - 'title' indicates whether to show the title.
+     * - 'info' indicates whether to show meta, link, and description.
+     * - 'meta' indicates whether to show the metadata.
+     * - 'desc' indicates whether to show the description.
+     * - 'link' indicates whether to show the link.
+     * 
+     * The function returns an associative array with keys 'showtitle', 'showmeta', 'showdesc', and 'showlink'
+     * indicating the user's preferences.
+     *
+     * @param array $data Contains the display preferences and other data related to the media item.
+     *      - 'show': A comma-separated string specifying which elements to display.
+     *
+     * @param int|string $id Unique identifier for the media item. Not directly used in this function but might be used in extended or future implementations.
+     *
+     * @return array Returns an associative array indicating which elements to display:
+     *      - 'showtitle': bool,
+     *      - 'showmeta': bool,
+     *      - 'showdesc': bool,
+     *      - 'showlink': bool
+     */
+    private function evaluateShowValues($data, $id)
+    {
         $showvals = explode(',', $data['show']);
         $showtitle = $showmeta =  $showdesc = $showlink = false;
 
@@ -344,290 +746,76 @@ class Player
                     break;
             }
         }
-
-        if (!empty($data['poster'])) {
-            $poster = $data['poster'];
-        } elseif (!empty($data['video']['preview_image'])) {
-            $poster = $data['video']['preview_image'];
-        } elseif (!empty($data['video']['thumbnail_url'])) {
-            $poster = $data['video']['thumbnail_url'];
-        }
-        $lang = $hreflang = '';
-
-        if (!empty($data['inLanguage'])) {
-            $lang = $data['inLanguage'];
-            $hreflang = explode("-", $lang)[0];
-        } elseif (!empty($data['language'])) {
-            $lang = $data['language'];
-            $hreflang = explode("-", $lang)[0];
-        }
-
-
-        $res .= '<div class="rrze-video rrze-video-container-' . $id;
-
-        if (!empty($data['class'])) {
-            $res .= ' ' . $data['class'];
-        }
-        $res .= '">';
-
-        $beforetag = '<h2>';
-        $aftertag = '</h2>';
-
-        if (!empty($data['widgetargs'])) {
-            if (!empty($data['widgetargs']['before'])) {
-                $beforetag = $data['widgetargs']['before'];
-            }
-            if (!empty($data['widgetargs']['after'])) {
-                $aftertag = $data['widgetargs']['after'];
-            }
-        } elseif ($data['titletag']) {
-            $beforetag = '<' . $data['titletag'] . '>';
-            $aftertag = '</' . $data['titletag'] . '>';
-        }
-
-        if ($showtitle) {
-            $res .= $beforetag . $data['video']['title'] . $aftertag;
-        } elseif (!empty($data['widgetargs']['title'])) {
-            $res .= $beforetag . $data['widgetargs']['title'] . $aftertag;
-        }
-
-
-        $classname = 'plyr-instance plyr-videonum-' . $id;
-
-
-        if ($provider == 'youtube') {
-            $classname = 'plyr-videonum-' . $id;
-            $res .= '<div class="youtube-video ' . $classname . '"';
-            $res .= ' itemscope itemtype="https://schema.org/Movie"';
-            $res .= '>';
-            $res .= $this->get_html_structuredmeta($data);
-
-            /*
-            $res .= '<div class="plyr-instance" data-plyr-provider="youtube" data-plyr-embed-id="' . $data['video']['v'] . '"';
-
-            $res .= ' data-plyr-config=\'{';
-            $res .= ' "preload": "none", ';
-            $res .= ' "youtube": "{ noCookie: true, rel: 0, showinfo: 0, iv_load_policy: 3, modestbranding: 1 }"';
-            if (!empty($data['video']['title'])) {
-                $res .= ', "title": "' . $data['video']['title'] . '"';
-            }
-            if ($poster) {
-                $res .= ', "poster": "' . $poster . '"';
-            }
-            $res .= '}\'';
-
-            $res .= '></div>';
-            */
-
-            //
-            $res .= '<div class="plyr__video-embed">';
-            $res .= '<iframe';
-            if (!empty($data['video']['title'])) {
-                $res .= ' title="' . esc_html($data['video']['title']) . '"';
-            }
-            $res .= '  src="https://www.youtube-nocookie.com/embed/' . $data['video']['v'] . '?rel=0&showinfo=0&iv_load_policy=3&modestbranding=1"';
-            $res .= '  allowfullscreen';
-            $res .= '  allowtransparency';
-            $res .= '  allow="autoplay"';
-            $res .= '></iframe>';
-            $res .= '</div>';
-            //
-            $res .= '</div>';
-        } elseif ($provider == 'vimeo') {
-            $classname = 'plyr-videonum-' . $id;
-            $res .= '<div class="vimeo-video ' . $classname . '"';
-            $res .= ' itemscope itemtype="https://schema.org/Movie"';
-            $res .= '>';
-            $res .= $this->get_html_structuredmeta($data);
-
-            /*
-            $res .= '<div class="plyr-instance" data-plyr-provider="vimeo" data-plyr-embed-id="' . $data['video']['video_id'] . '"';
-            if ($data['video']['title']) {
-                $res .= ' data-plyr-config=\'{ "preload": "none",  "title": "' . $data['video']['title'] . '" }\'';
-            }
-            $res .= '></div>';
-            */
-
-            $res .= '<div class="plyr__video-embed">';
-            $res .= '<iframe';
-            if (!empty($data['video']['title'])) {
-                $res .= ' title="' . esc_html($data['video']['title']) . '"';
-            }
-            $res .= '  src="https://player.vimeo.com/video/' . $data['video']['video_id'] . '?autoplay=0&loop=0&title=0&byline=0&portrait=0"';
-            $res .= '  allowfullscreen';
-            $res .= '  allowtransparency';
-            $res .= '  allow="autoplay"';
-            $res .= '></iframe>';
-            $res .= '</div>';
-
-            $res .= '</div>';
-        } elseif ($provider == 'fau') {
-            if (isset($data['video']['type']) && $data['video']['type'] == 'audio' && isset($data['video']['file'])) {
-                $res .= '<audio preload="none" class="' . $classname . '" controls crossorigin="anonymous">'
-                    . '<source src="' . $data['video']['file'] . '" type="audio/mp3" />'
-                    . '</audio>';
-            } else {
-                $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Self::get_aspectratio_class($data);
-                $res       .= '<video preload="none" class="' . $classname . '" playsinline controls crossorigin="anonymous"';
-                $res .= ' data-video-title-id="' . $id . '"';  // Pass the id to the player
-
-                $plyrconfig = ' data-plyr-config=\'{ ';
-                $plyrconfig .= '"preload": "none", ';
-                $plyrconfig .= '"loadSprite": "false", ';
-                $plyrconfig .= ' "iconUrl": "' . plugin()->getUrl('assets/plyr') . 'plyr.svg", ';
-                $plyrconfig .= ' "blankVideo": "' . plugin()->getUrl('assets/plyr') . 'blank.mp4"';
-
-                if (!empty($data['video']['title'])) {
-                    $plyrconfig .= ', "title": "' . $data['video']['title'] . '"';
-                }
-                $plyrconfig .= ' }\'';
-                $res        .= $plyrconfig;
-
-                if ($poster) {
-                    $res .= ' poster="' . $poster . '" data-poster="' . $poster . '"';
-                }
-
-                if (!empty($data['video']['width'])) {
-                    $res .= ' width="' . $data['video']['width'] . '"';
-                }
-
-                if (!empty($data['video']['height'])) {
-                    $res .= ' height="' . $data['video']['height'] . '"';
-                }
-
-                $res .= ' itemscope itemtype="https://schema.org/Movie"';
-                $res .= '>';
-
-                $res .= $this->get_html_structuredmeta($data);
-
-
-                $path = parse_url($data['video']['file'], PHP_URL_PATH);
-                $ext  = pathinfo($path, PATHINFO_EXTENSION);
-
-                $res .= '<source src="' . $data['video']['file'] . '" type="video/' . $ext . '">';
-                if ($ext == 'm4v') {
-                    $res .= '<source src="' . $data['video']['file'] . '" type="video/mp4">';
-                }
-
-                if (!empty($data['video']['alternative_Video_size_large']) && !empty($data['video']['alternative_Video_size_large_url'])) {
-                    $path = parse_url($data['video']['alternative_Video_size_large_url'], PHP_URL_PATH);
-                    $ext  = pathinfo($path, PATHINFO_EXTENSION);
-                    $res  .= '<source src="' . $data['video']['alternative_Video_size_large_url'] . '" type="video/' . $ext . '" size="' . $data['video']['alternative_Video_size_large_width'] . '">';
-                }
-
-                if (!empty($data['video']['alternative_Video_size_medium']) && !empty($data['video']['alternative_Video_size_medium_url'])) {
-                    $path = parse_url($data['video']['alternative_Video_size_medium_url'], PHP_URL_PATH);
-                    $ext  = pathinfo($path, PATHINFO_EXTENSION);
-                    $res  .= '<source src="' . $data['video']['alternative_Video_size_medium_url'] . '" type="video/' . $ext . '" size="' . $data['video']['alternative_Video_size_medium_width'] . '">';
-                }
-
-                if (!empty($data['video']['transcript'])) {
-                    $transcriptHtml = Self::get_fauvideo_transcript_tracks($data);
-                    $res .= $transcriptHtml;
-                }
-
-                $res   .= __('Unfortunately, your browser does not support HTML5 video formats.', 'rrze-video');
-                $res   .= ' ';
-                $url   = !empty($data['url']) ? esc_url($data['url']) : '';
-                $file  = !empty($data['video']['file']) ? esc_url($data['video']['file']) : '';
-                $title = $data['video']['title'] ?? '';
-                if ($url) {
-                    $res .= sprintf(
-                        /* translators: %s: URL of the video. */
-                        __('Therefore call up the video %s from the FAU video portal.', 'rrze-video'),
-                        '<a href="' . $url . '">' . $title . '</a>'
-                    );
-                } elseif ($file) {
-                    $res .= 'Call the video file  directly.';
-                    $res .= sprintf(
-                        /* translators: %s: File name of the video. */
-                        __('Call the video file %s directly.', 'rrze-video'),
-                        '<a href="' . $file . '">' . $title . '</a>'
-                    );
-                }
-
-                $res .= '</video>';
-
-                if (!$showtitle) {
-                    //Adds the visible title for the overlay
-                    if (!empty($title)) {
-                        $res .= '<p class="rrze-video-title rrze-video-hide" id="rrze-video-title-' . $id . '">' . $title . '</p>';
-                    }
-                }
-            }
-        } else {
-            $res .= '<div class="alert clearfix clear alert-danger">';
-            $res .= __('Video provider incorrectly defined.', 'rrze-video');
-            $res .= '</div>';
-            return $res;
-        }
-
-        if (($showdesc) && !empty($data['video']['description'])) {
-            $res .= '<p class="desc">' . $data['video']['description'] . '</p>';
-        }
-
-        if ($showmeta) {
-            $meta = '';
-
-            if (!empty($data['video']['author_name'])) {
-                $meta .= '<dt>' . __('Author', 'rrze-video') . '</dt><dd>';
-
-                if (!empty($data['video']['author_url_0'])) {
-                    $meta .= '<a href="' . $data['video']['author_url_0'] . '">';
-                }
-
-                $meta .= $data['video']['author_name'];
-                if (!empty($data['video']['author_url_0'])) {
-                    $meta .= '</a>';
-                }
-                $meta .=  '</dd>';
-            }
-
-            $url = !empty($data['url']) ? esc_url($data['url']) : '';
-            $altVideofolienUrl = !empty($data['video']['alternative_VideoFolien_size_large']) ? esc_url($data['video']['alternative_VideoFolien_size_large']) : '';
-            $altAudioUrl = !empty($data['video']['alternative_Audio']) ? esc_url($data['video']['alternative_Audio']) : '';
-
-            if ($url) {
-                $meta .= '<dt>' . __('Source', 'rrze-video') . '</dt><dd><a href="' . $url . '">' . $url . '</a></dd>';
-            }
-
-            if ($altVideofolienUrl && $altVideofolienUrl !== $url) {
-                $meta .= '<dt>' . __('Video with presentation slides', 'rrze-video') . '</dt><dd><a href="' . $altVideofolienUrl . '">' . $altVideofolienUrl . '</a></dd>';
-            }
-
-            if ($altAudioUrl && $altAudioUrl !== $url) {
-                $meta .= '<dt>' . __('Audio Format', 'rrze-video') . '</dt><dd><a href="' . $altAudioUrl . '">' . $altAudioUrl . '</a></dd>';
-            }
-
-            if (!empty($data['video']['provider_name'])) {
-                $meta .= '<dt>' . __('Provider', 'rrze-video') . '</dt><dd>';
-                if (!empty($data['video']['provider_url'])) {
-                    $meta .= '<a href="' . $data['video']['provider_url'] . '">';
-                }
-                $meta .= $data['video']['provider_name'];
-
-                if (!empty($data['video']['provider_url'])) {
-                    $meta .= '</a>';
-                }
-                $meta .= '</dd>';
-            }
-
-            if (!empty($meta)) {
-                $res .= '<dl class="meta">' . $meta . '</dl>';
-            }
-        } elseif ($showlink && $url) {
-            $res .= '<p class="link">' . __('Source', 'rrze-video') . ': <a href="' . $url . '">' . $url . '</a>';
-
-            if (!empty($data['video']['provider_videoindex_url'])) {
-                $res .= '<br>' . __('This video is part of a video collection', 'rrze-video') . ': <a href="' . $data['video']['provider_videoindex_url'] . '">' . $data['video']['provider_videoindex_url'] . '</a>';
-            }
-            $res .= '</p>';
-        }
-
-        $res .= '</div>';
-        return $res;
+        return [
+            'showtitle' => $showtitle, 
+            'showmeta' => $showmeta, 
+            'showdesc' => $showdesc, 
+            'showlink' => $showlink
+        ];
     }
 
+    /**
+     * Generates the configuration for the Plyr video player based on the provided data.
+     *
+     * This function constructs a Plyr configuration string in a JSON-like format.
+     * It sets default values such as 'preload' and 'loadSprite', and also fetches URLs
+     * for the 'iconUrl' and 'blankVideo' from the plugin assets.
+     *
+     * If a video title exists in the `$data`, it will be included in the configuration.
+     *
+     * The function returns a string which can be directly added as a `data-plyr-config` attribute
+     * in an HTML tag for Plyr player instantiation.
+     *
+     * @param array $data Contains information related to the media item, including potential video title.
+     *      - 'video': array Contains video details.
+     *          - 'title': string (optional) The title of the video.
+     *
+     * @param int|string $id Unique identifier for the media item. Not directly used in this function but might be used in extended or future implementations.
+     *
+     * @return string Returns the Plyr configuration string to be used as a data attribute.
+     */
+    private function generatePlayerConfig($data, $id)
+    {
+        $plyrconfig = [];
+        $plyrconfig[] = ' data-plyr-config=\'{ ';
+        $plyrconfig[] = '"preload": "none", ';
+        $plyrconfig[] = '"loadSprite": "false", ';
+        $plyrconfig[] = ' "iconUrl": "' . plugin()->getUrl('assets/plyr') . 'plyr.svg", ';
+        $plyrconfig[] = ' "blankVideo": "' . plugin()->getUrl('assets/plyr') . 'blank.mp4"';
+
+        if (!empty($data['video']['title'])) {
+            $plyrconfig[] = ', "title": "' . $data['video']['title'] . '"';
+        }
+        $plyrconfig[] .= ' }\'';
+        
+        return implode("\n", $plyrconfig);
+    }
+
+    /**
+     * Generates a series of meta tags containing structured data for a video.
+     *
+     * This function constructs a set of HTML meta tags that encapsulate structured data 
+     * about a video, based on the provided `$data`. The structured data is defined using 
+     * the `itemprop` attribute and includes details such as the video's title, poster image, 
+     * creation date, author, and other metadata.
+     *
+     * @param array $data Contains details related to the video. Key details include:
+     *      - 'video': array Contains video metadata.
+     *          - 'title': string (optional) The title of the video.
+     *          - 'preview_image': string (optional) The preview image URL for the video.
+     *          - 'thumbnail_url': string (optional) The thumbnail URL for the video.
+     *          - 'upload_date': string (optional) The date when the video was uploaded.
+     *          - 'author_name': string (optional) The name of the video's author.
+     *          - 'provider_name': string (optional) The name of the video's provider.
+     *          - 'duration': string (optional) The duration of the video.
+     *          - 'version': string (optional) The version of the video.
+     *          - 'description': string (optional) A description of the video.
+     *      - 'poster': string (optional) URL of the video's poster image.
+     *      - 'inLanguage': string (optional) The language of the video content.
+     *      - 'language': string (optional) The language of the video content. Used as fallback if 'inLanguage' is not set.
+     *
+     * @return string Returns a string containing meta tags with structured data for the video.
+     */
     public function get_html_structuredmeta($data)
     {
         if (!empty($data['video']['title'])) {
@@ -682,8 +870,17 @@ class Player
     }
 
     /**
-     * Enqueue scripts and styles.
-     * @param boolean $plyr
+     * Enqueues the necessary styles and scripts for the frontend video player.
+     *
+     * This function is responsible for adding the required CSS and JavaScript resources 
+     * for rendering the video player on the frontend. It uses the WordPress `wp_enqueue_style` 
+     * and `wp_enqueue_script` functions to load the relevant files. 
+     *
+     * @param bool   $plyr   Determines whether the Plyr script should be enqueued. Default is true.
+     * @param array  $args   An optional array of arguments. Currently unused but can be expanded for future functionality.
+     * @param string $id     An optional unique identifier for the render process. If not provided, a default will be fetched using `getRenderID()`.
+     *
+     * @return void
      */
     public function enqueueFrontendStyles($plyr = true, $args = [], $id = '')
     {
@@ -697,9 +894,17 @@ class Player
     }
 
     /**
-     * Iterates through available transcripts from FAUVideo oEmbed response and returns the needed track html response. The function assumes that the default track is German.
-     * @param array $data
-     * @return string
+     * Generates the HTML <track> elements for video transcripts.
+     * 
+     * This function processes the provided data to produce the corresponding 
+     * <track> elements that represent the video's transcript files. These tracks
+     * are usually used for subtitles or captions in HTML5 video players. The 
+     * function supports multiple transcript files for different languages, and 
+     * can produce multiple <track> elements.
+     *
+     * @param array $data Array of video data, which may contain one or more transcript files.
+     *
+     * @return string A concatenated string of the generated <track> elements, or an empty string if no valid transcripts are found.
      * @since 3.4.5
      */
     public function get_fauvideo_transcript_tracks($data)
@@ -754,7 +959,7 @@ class Player
                     }
                 }
             } else {
-                //Helper::debug('RRZE Video: No or invalid transcript file found for key: ' . $key);
+                Helper::debug('RRZE Video: No or invalid transcript file found for key: ' . $key);
             }
         }
 
@@ -762,9 +967,22 @@ class Player
     }
 
     /**
-     * Retrieves the right AspectRatio Class for FAU Video Embeds by checking user input
-     * @param array $arguments 
-     * @return String $class
+     * Retrieves the appropriate aspect ratio class for FAU video embeds.
+     * 
+     * This function determines the correct CSS class to apply based on 
+     * the aspect ratio provided in the arguments. If no aspect ratio or an 
+     * unrecognized aspect ratio is provided, it defaults to 'ar-16-9'.
+     *
+     * Available aspect ratios and their corresponding CSS classes:
+     * - 4/3     -> ar-4-3
+     * - 21/9    -> ar-21-9
+     * - 1/1     -> ar-1-1
+     * - 2.35/1  -> ar-234-1
+     * - 2.40/1  -> ar-240-1
+     * - 9/16    -> ar-9-16
+     * 
+     * @param array $arguments Associative array with the 'aspectratio' key potentially set to a string representing the desired aspect ratio.
+     * @return string Returns the corresponding CSS class string based on the provided aspect ratio.
      * @since 3.5.1
      */
     public function get_aspectratio_class($arguments)

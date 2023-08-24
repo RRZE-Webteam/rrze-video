@@ -2,6 +2,7 @@
 use RRZE\Video\Player;
 use RRZE\Video\Helper;
 use WP_UnitTestCase;
+use PHPUnit\Framework\Assert;
 require_once dirname( dirname( __FILE__ ) ) . '/vendor/autoload.php';
 require_once dirname( dirname( __FILE__ ) ) . '/tests/bootstrap.php';
 
@@ -44,7 +45,7 @@ class TestPlayer extends WP_UnitTestCase {
         Helper::debug($result);
         $expected = '<track kind="captions" src="https://cdn2.fau.tv/symlinks/fdfe6990-3654-4d45-aabf-79c47b0d4bae.vtt" srclang="en" label="English" default>';
 
-        $this->assertEquals($expected, $result);
+        Assert::assertEquals($expected, $result);
     }
 
     /**
@@ -62,7 +63,7 @@ class TestPlayer extends WP_UnitTestCase {
         $result = $this->player->get_fauvideo_transcript_tracks($data);
         $expected = '';
 
-        $this->assertEquals($expected, $result);
+        Assert::assertEquals($expected, $result);
     }
 
        /**
@@ -82,7 +83,7 @@ class TestPlayer extends WP_UnitTestCase {
         $result = $this->player->get_fauvideo_transcript_tracks($data);
         $expected = '<track kind="captions" src="https://cdn2.fau.tv/symlinks/fdfe6990-3654-4d45-aabf-79c47b0d4bae.vtt" srclang="de" label="Deutsch" default>';
 
-        $this->assertEquals($expected, $result);
+        Assert::assertEquals($expected, $result);
     }
 
     /**
@@ -103,7 +104,7 @@ class TestPlayer extends WP_UnitTestCase {
         $expected = '<track kind="captions" src="englisch.vtt" srclang="en" label="English" default>';
         $expected .= '<track kind="captions" src="deutsch.vtt" srclang="de" label="Deutsch">';
 
-        $this->assertEquals($expected, $result);
+        Assert::assertEquals($expected, $result);
     }
 
         /**
@@ -123,7 +124,7 @@ class TestPlayer extends WP_UnitTestCase {
         $result = $this->player->get_fauvideo_transcript_tracks($data);
         $expected = '';
 
-        $this->assertEquals($expected, $result);
+        Assert::assertEquals($expected, $result);
     }
 
 
@@ -144,7 +145,7 @@ class TestPlayer extends WP_UnitTestCase {
         $result = $this->player->get_fauvideo_transcript_tracks($data);
         $expected = '<track kind="captions" src="englisch.vtt" srclang="ut" label="Unknown" default><track kind="captions" src="deutsch.vtt" srclang="de" label="Deutsch">';
 
-        $this->assertEquals($expected, $result);
+        Assert::assertEquals($expected, $result);
     }
 
             /**
@@ -162,7 +163,7 @@ class TestPlayer extends WP_UnitTestCase {
         $result = $this->player->get_fauvideo_transcript_tracks($data);
         $expected = '<track kind="captions" src="englisch.vtt" srclang="en" label="English" default>';
 
-        $this->assertEquals($expected, $result);
+        Assert::assertEquals($expected, $result);
     }
 
             /**
@@ -179,6 +180,7 @@ class TestPlayer extends WP_UnitTestCase {
         $result = $this->player->get_fauvideo_transcript_tracks($data);
         $expected = '';
 
-        $this->assertEquals($expected, $result);
+        Assert::assertEquals($expected, $result);
     }
+    
 }
