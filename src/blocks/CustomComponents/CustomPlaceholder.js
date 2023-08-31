@@ -16,6 +16,21 @@ const CustomPlaceholder = ({ attributes, setAttributes }) => {
     event.preventDefault();
     setAttributes({ url: inputURL });
   };
+
+  const onChangeURL = (event) => {
+    const url = event.target.value;
+
+    const regex = /(www\.youtube\.com\/)shorts\//;
+    const regex2 = /(www\.youtube\.com\/)watch\?v=/;
+  
+    if (regex.test(url)) {
+      setAttributes({ aspectratio: "9/16", provider: "youtube", orientation: "vertical" });
+    } else if (regex2.test(url)) {
+      setAttributes({ aspectratio: "16/9", provider: "youtube", orientation: "landscape" });
+    }
+    
+    setInputURL(url.replace(regex, '$1embed/'));
+  }
   
   return (
     <Placeholder icon={video} label={__("Add your Video URL", "rrze-video")}>
@@ -37,7 +52,7 @@ const CustomPlaceholder = ({ attributes, setAttributes }) => {
             className="rrze-video-input-field"
             type="url"
             value={inputURL}
-            onChange={(event) => setInputURL(event.target.value)}
+            onChange={(event) => onChangeURL(event)}
             placeholder={__("Update the Video URL", "rrze-video")}
             style={{ width: "100%" }}
           />
