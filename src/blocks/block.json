@@ -59,6 +59,14 @@
 		"aspectratio": {
 			"type": "string",
 			"default": "16/9"
+		},
+		"orientation": {
+			"type": "string",
+			"default": "landscape"
+		},
+		"provider": {
+			"type": "string",
+			"default": "fauvideo"
 		}
 	}
 }

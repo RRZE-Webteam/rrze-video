@@ -41,6 +41,32 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
     setAttributes({ aspectratio: newAspectratio });
   };
 
+  const onChangeOrientation = (value) => {
+    if(value === "landscape") {
+      setAttributes({ orientation: value, aspectratio: "16/9" });
+    } else {
+      setAttributes({ orientation: value, aspectratio: "9/16" });
+    }
+  }
+
+  const onChangeURL = (event) => {
+    const url = event.target.value;
+
+    const regex = /(www\.youtube\.com\/)shorts\//;
+    const regex2 = /(www\.youtube\.com\/)watch\?v=/;
+  
+    if (regex.test(url)) {
+      setAttributes({ aspectratio: "9/16", provider: "youtube", orientation: "vertical" });
+    } else if (regex2.test(url)) {
+      setAttributes({ aspectratio: "16/9", provider: "youtube", orientation: "landscape" });
+    } else {
+      setAttributes({ provider: "fauvideo" });
+    }
+    
+    console.log(url.replace(regex, '$1embed/'));
+    setInputURL(url.replace(regex, '$1embed/'));
+  }
+
   return (
     <InspectorControls>
       <PanelBody
@@ -66,7 +92,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
               className="rrze-video-input-field"
               type="url"
               value={inputURL}
-              onChange={(event) => setInputURL(event.target.value)}
+              onChange={(event) => onChangeURL(event)}
               placeholder={__("Update the Video URL", "rrze-video")}
               style={{ width: "100%" }}
             />
@@ -108,6 +134,19 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
             )}
           </Text>
         </Spacer>
+        {attributes.provider === "youtube" && (
+        <ToggleGroupControl
+          label={__("Orientation", "rrze-video")}
+          value={attributes.orientation}
+          onChange={onChangeOrientation}
+          isBlock
+        >
+          <ToggleGroupControlOption value="landscape" label={__("Landscape mode", "rrze-video")} />
+          <ToggleGroupControlOption value="vertical" label={__("Vertical video", "rrze-video")} />
+        </ToggleGroupControl>
+        )}
+
+        {attributes.provider === "fauvideo" && (
         <ToggleGroupControl
           label={__("Aspect ratio", "rrze-video")}
           value={attributes.aspectratio}
@@ -120,6 +159,9 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
           <ToggleGroupControlOption value="2.35/1" label="2.35:1" />
           <ToggleGroupControlOption value="2.40/1" label="2.40:1" />
         </ToggleGroupControl>
+        )}
+        
+
       </PanelBody>
       <PanelBody
         title={__("Video Library", "rrze-video")}

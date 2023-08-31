@@ -293,6 +293,62 @@ class Player
         return $content;
     }
 
+        /**
+     * Evaluates and returns the appropriate poster image URL for a video.
+     *
+     * This function determines the correct poster image URL based on a prioritized list:
+     * 1. Direct 'poster' attribute in the `$data` array.
+     * 2. Preview image associated with the video.
+     * 3. Thumbnail URL of the video.
+     *
+     * If none of these are available, the function may return `null` (as there's no default return value defined).
+     *
+     * @param array $data Array containing the video details and potential poster images.
+     *      [
+     *          'poster' => 'direct_poster_url',                        // Optional: Direct poster URL.
+     *          'video' => [
+     *              'preview_image' => 'preview_image_url',             // Optional: Preview image of the video.
+     *              'thumbnail_url' => 'video_thumbnail_url'           // Optional: Thumbnail URL of the video.
+     *          ]
+     *      ]
+     *
+     * @param int|string $id Unique identifier for the video. (Currently not used within the function but passed as an argument.)
+     *
+     * @return string|null Returns the appropriate poster image URL or `null` if none is found.
+     */
+    private function evaluatePoster($data, $id)
+    {
+        if (!empty($data['poster'])) {
+                $poster = $data['poster'];
+            } elseif (!empty($data['video']['preview_image'])) {
+                $poster = $data['video']['preview_image'];
+            } elseif (!empty($data['video']['thumbnail_url'])) {
+                $poster = $data['video']['thumbnail_url'];
+            }
+            return $poster;
+    }
+
+    /**
+     * Evaluates and returns the escaped URL from the provided data array.
+     *
+     * This function checks for the presence of a 'url' key in the `$data` array.
+     * If found, it escapes the URL using the `esc_url()` function, ensuring it's safe to use in output.
+     * If the 'url' key is not present or is empty, it returns an empty string.
+     *
+     * @param array $data Array containing potential URLs.
+     *      [
+     *          'url' => 'http://example.com'   // Optional: The URL to be checked and escaped.
+     *      ]
+     *
+     * @param int|string $id Unique identifier for the data. (Currently not used within the function but passed as an argument.)
+     *
+     * @return string Returns the escaped URL if present; otherwise, returns an empty string.
+     */
+    private function evaluateUrl($data, $id)
+    {
+        return !empty($data['url']) ? esc_url($data['url']) : '';
+    }
+
     /**
      * Generates the HTML output for a video player based on the provided video data and provider.
      * 
@@ -498,81 +554,41 @@ class Player
     private function generate_youtube_html($data, $id)
     {
         $res = [];
+        
         $classname = 'plyr-videonum-' . $id;
-        $res[] = '<div class="youtube-video ' . $classname . '"';
-        $res[] = ' itemscope itemtype="https://schema.org/Movie"';
-        $res[] = '>';
+        if($data['aspectratio'] !== '9/16'){
+            $res[] = '<div class="youtube-video ' . $classname . '"';
+            $res[] = ' itemscope itemtype="https://schema.org/Movie"';
+            $res[] = '>';
+        }
         $res[] = $this->get_html_structuredmeta($data);
-        $res[] = '<div class="plyr__video-embed">';
+        if($data['aspectratio'] !== '9/16'){
+            $res[] = '<div class="plyr__video-embed">';
+        }
         $res[] = '<iframe';
+        if($data['aspectratio'] === '9/16'){
+            $res[] = 'width="315"';
+            $res[] = 'height="560"';
+        }
         if (!empty($data['video']['title'])) {
             $res[] = ' title="' . esc_html($data['video']['title']) . '"';
         }
+        // $res[] = '  src="https://www.youtube-nocookie.com/embed/' . $data['video']['v'] . '?rel=0&showinfo=0&iv_load_policy=3&modestbranding=1"';
         $res[] = '  src="https://www.youtube-nocookie.com/embed/' . $data['video']['v'] . '?rel=0&showinfo=0&iv_load_policy=3&modestbranding=1"';
+        $res[] = ' frameborder="0"';
         $res[] = '  allowfullscreen';
         $res[] = '  allowtransparency';
         $res[] = '  allow="autoplay"';
         $res[] = '></iframe>';
-        $res[] = '</div>';
-        $res[] = '</div>';
+        if($data['aspectratio'] !== '9/16'){
+            $res[] = '</div>';
+            $res[] = '</div>';
+        }
 
+        // <iframe width="642" height="1141" src="https://www.youtube.com/embed/Rlbc_2QF6ZU" title="Wie Dorfpartys wirklich entstehen" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+        
         return implode("\n", $res);  
-    }
-
-    /**
-     * Evaluates and returns the appropriate poster image URL for a video.
-     *
-     * This function determines the correct poster image URL based on a prioritized list:
-     * 1. Direct 'poster' attribute in the `$data` array.
-     * 2. Preview image associated with the video.
-     * 3. Thumbnail URL of the video.
-     *
-     * If none of these are available, the function may return `null` (as there's no default return value defined).
-     *
-     * @param array $data Array containing the video details and potential poster images.
-     *      [
-     *          'poster' => 'direct_poster_url',                        // Optional: Direct poster URL.
-     *          'video' => [
-     *              'preview_image' => 'preview_image_url',             // Optional: Preview image of the video.
-     *              'thumbnail_url' => 'video_thumbnail_url'           // Optional: Thumbnail URL of the video.
-     *          ]
-     *      ]
-     *
-     * @param int|string $id Unique identifier for the video. (Currently not used within the function but passed as an argument.)
-     *
-     * @return string|null Returns the appropriate poster image URL or `null` if none is found.
-     */
-    private function evaluatePoster($data, $id)
-    {
-        if (!empty($data['poster'])) {
-                $poster = $data['poster'];
-            } elseif (!empty($data['video']['preview_image'])) {
-                $poster = $data['video']['preview_image'];
-            } elseif (!empty($data['video']['thumbnail_url'])) {
-                $poster = $data['video']['thumbnail_url'];
-            }
-            return $poster;
-    }
-
-    /**
-     * Evaluates and returns the escaped URL from the provided data array.
-     *
-     * This function checks for the presence of a 'url' key in the `$data` array.
-     * If found, it escapes the URL using the `esc_url()` function, ensuring it's safe to use in output.
-     * If the 'url' key is not present or is empty, it returns an empty string.
-     *
-     * @param array $data Array containing potential URLs.
-     *      [
-     *          'url' => 'http://example.com'   // Optional: The URL to be checked and escaped.
-     *      ]
-     *
-     * @param int|string $id Unique identifier for the data. (Currently not used within the function but passed as an argument.)
-     *
-     * @return string Returns the escaped URL if present; otherwise, returns an empty string.
-     */
-    private function evaluateUrl($data, $id)
-    {
-        return !empty($data['url']) ? esc_url($data['url']) : '';
     }
 
     /**
