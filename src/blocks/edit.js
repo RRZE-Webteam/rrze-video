@@ -12,7 +12,7 @@ import CustomInspectorControls from "./InspectorControlAreaComponents/CustomInsp
 import CustomPlaceholder from "./CustomComponents/CustomPlaceholder";
 
 //Imports for helper functions
-import { isTextInString } from "./HelperFunctions/utils";
+import { isTextInString, whichProviderIsUsed } from "./HelperFunctions/utils";
 
 //Import the Editor Styles for the blockeditor
 import "./editor.scss"; //Only active in the editor
@@ -63,35 +63,33 @@ export default function Edit(props) {
   }, [aspectratio]);
 
     useEffect(() => {
-      const url = attributes.url;
-  
-      const regex = /(www\.youtube\.com\/)shorts\//;
-      const regex2 = /(www\.youtube\.com\/)watch\?v=/;
-      const regexVimeo = /(www\.vimeo\.com\/)/;
-      const regexFau = /(www\.fau\.de\/)/;
-      const regexBr = /(www\.br\.de\/)/;
-      const regexArd = /(www\.ard\.de\/)/;
-  
-      if (regex.test(url)) {
-        setAttributes({ aspectratio: "9/16", provider: "youtube", orientation: "vertical" });
-      } else if (regex2.test(url)) {
-        setAttributes({ aspectratio: "16/9", provider: "youtube", orientation: "landscape" });
-      } else if (regexVimeo.test(url)) {
-        setAttributes({ provider: "vimeo" });
-      } else if (regexFau.test(url)) {
-        setAttributes({ provider: "fau" });
-      } else if (regexBr.test(url)) {
-        setAttributes({ provider: "br" });
-      } else if (regexArd.test(url)) {
-        setAttributes({ provider: "ard" });
-      } else {
-        setAttributes({ provider: "fauvideo" });
+      const url = inputURL;
+      
+      switch (whichProviderIsUsed(url)) {
+        case "youtube":
+          setAttributes({ provider: "youtube" });
+          break;
+        case "youtubeShorts":
+          setAttributes({ provider: "youtube" });
+          break;
+        case "vimeo":
+          setAttributes({ provider: "vimeo" });
+          break;
+        case "fauvideo":
+          setAttributes({ provider: "fauvideo" });
+          break;
+        case "br":
+          setAttributes({ provider: "br" });
+          break;
+        case "ard":
+          setAttributes({ provider: "ard" });
+          break;
+        default:
+          setAttributes({ provider: "fauvideo" });
+          break;
       }
   
-      setInputURL(url.replace(regex, '$1embed/'));
-      console.log('new url' + url.replace(regex, '$1embed/'));
-  
-    }, [attributes.url, setAttributes]); 
+    }, [inputURL, setAttributes]); 
 
   
 
@@ -99,7 +97,7 @@ export default function Edit(props) {
    * Resets the VideoURL Parameter. Activated by the reset Button.
    */
   const resetUrl = () => {
-    setAttributes({ url: "", rand: "", id: "" });
+    setAttributes({ url: "", rand: "", id: "", provider: "", aspectratio: "16/9", orientation: "landscape" });
     setInputURL("");
   };
 
