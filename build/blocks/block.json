@@ -67,6 +67,10 @@
     "provider": {
       "type": "string",
       "default": "fauvideo"
+    },
+    "textAlign": {
+      "type": "string",
+      "default": ""
     }
   }
 }
