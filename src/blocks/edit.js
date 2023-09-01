@@ -1,7 +1,7 @@
 //Imports for necessary WordPress libraries
 import { __ } from "@wordpress/i18n";
 import { ToolbarGroup, ToolbarItem, ToolbarButton } from "@wordpress/components";
-import { reset } from "@wordpress/icons";
+import { trash } from "@wordpress/icons";
 import { useBlockProps, BlockControls } from "@wordpress/block-editor"; // eslint-disable-line import/no-unresolved
 import { ServerSideRender } from "@wordpress/editor"; // eslint-disable-line import/no-unresolved
 import { useState, useEffect, useRef } from "@wordpress/element";
@@ -30,7 +30,7 @@ export default function Edit(props) {
   const blockProps = useBlockProps();
   const { attributes, setAttributes } = props;
   const { id, url, rand, aspectratio } = attributes;
-  const [setInputURL] = useState(attributes.url);
+  const [inputURL, setInputURL] = useState(attributes.url);
 
   /**
    * This useEffect hook is needed to set the aspect ratio 
@@ -60,7 +60,40 @@ export default function Edit(props) {
     } catch (error) {
       console.log(error);
     }
-  });
+  }, [aspectratio]);
+
+    useEffect(() => {
+      const url = attributes.url;
+  
+      const regex = /(www\.youtube\.com\/)shorts\//;
+      const regex2 = /(www\.youtube\.com\/)watch\?v=/;
+      const regexVimeo = /(www\.vimeo\.com\/)/;
+      const regexFau = /(www\.fau\.de\/)/;
+      const regexBr = /(www\.br\.de\/)/;
+      const regexArd = /(www\.ard\.de\/)/;
+  
+      if (regex.test(url)) {
+        setAttributes({ aspectratio: "9/16", provider: "youtube", orientation: "vertical" });
+      } else if (regex2.test(url)) {
+        setAttributes({ aspectratio: "16/9", provider: "youtube", orientation: "landscape" });
+      } else if (regexVimeo.test(url)) {
+        setAttributes({ provider: "vimeo" });
+      } else if (regexFau.test(url)) {
+        setAttributes({ provider: "fau" });
+      } else if (regexBr.test(url)) {
+        setAttributes({ provider: "br" });
+      } else if (regexArd.test(url)) {
+        setAttributes({ provider: "ard" });
+      } else {
+        setAttributes({ provider: "fauvideo" });
+      }
+  
+      setInputURL(url.replace(regex, '$1embed/'));
+      console.log('new url' + url.replace(regex, '$1embed/'));
+  
+    }, [attributes.url, setAttributes]); 
+
+  
 
   /**
    * Resets the VideoURL Parameter. Activated by the reset Button.
@@ -86,7 +119,7 @@ export default function Edit(props) {
               <ToolbarItem>
                 {() => (
                   <ToolbarButton
-                    icon={reset}
+                    icon={trash}
                     label={__("Reset Video block", "rrze-video")}
                     onClick={resetUrl}
                   />
