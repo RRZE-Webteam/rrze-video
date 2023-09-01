@@ -4,6 +4,7 @@ import {
   Button,
   PanelBody,
   BaseControl,
+  RadioControl,
   __experimentalText as Text,
   __experimentalDivider as Divider,
   __experimentalHeading as Heading,
@@ -28,6 +29,7 @@ import { whichProviderIsUsed } from "../HelperFunctions/utils";
  */
 const CustomInspectorControls = ({ attributes, setAttributes }) => {
   const [inputURL, setInputURL] = useState(attributes.url);
+  const { textAlign } = attributes;
 
   /**
    * Handles the submit event of the form for the video url
@@ -182,10 +184,39 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
                 label={__("Vertical video", "rrze-video")}
               />
             </ToggleGroupControl>
+            {attributes.orientation === "vertical" && (
+            <>
+            <Spacer>
+              <Text>
+                {__(
+                  "Controls the video alignment for vertical Videos."
+                )}
+              </Text>
+            </Spacer>
+            <ToggleGroupControl
+              label={__("Alignment", "rrze-video")}
+              value={textAlign}
+              onChange={(value) => {setAttributes({ textAlign: value })}}
+              isBlock
+            >
+              <ToggleGroupControlOption
+                value=""
+                label={__("Left", "rrze-video")}
+              />
+              <ToggleGroupControlOption
+                value="has-text-align-center"
+                label={__("Center", "rrze-video")}
+              />
+                            <ToggleGroupControlOption
+                value="has-text-align-right"
+                label={__("Right", "rrze-video")}
+              />
+            </ToggleGroupControl>
+            </>
+            )}
           </>
         )}
 
-        {console.log(attributes.provider)}
         {attributes.provider === "fauvideo" && (
           <ToggleGroupControl
             label={__("Aspect ratio", "rrze-video")}
