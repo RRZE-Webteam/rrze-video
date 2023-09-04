@@ -4,7 +4,6 @@ import {
   Button,
   PanelBody,
   BaseControl,
-  RadioControl,
   __experimentalText as Text,
   __experimentalDivider as Divider,
   __experimentalHeading as Heading,

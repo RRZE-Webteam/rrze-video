@@ -379,6 +379,10 @@ class Player
         if (!empty($data['class'])) {
             $res[] = ' ' . $data['class'];
         }
+
+        if (!empty($data['textAlign'])) {
+            $res[] = ' ' . $data['textAlign'];
+        }
         $res[] = '">';
 
         $beforetag = '<h2>';
@@ -584,9 +588,6 @@ class Player
             $res[] = '</div>';
             $res[] = '</div>';
         }
-
-        // <iframe width="642" height="1141" src="https://www.youtube.com/embed/Rlbc_2QF6ZU" title="Wie Dorfpartys wirklich entstehen" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
         
         return implode("\n", $res);  
     }

@@ -140,7 +140,7 @@ export default function Edit(props) {
                 titletag: attributes.titletag,
                 poster: attributes.poster,
                 aspectratio: attributes.aspectratio,
-                class: attributes.textAlign,
+                textAlign: attributes.textAlign,
               }}
             />
           </div>
