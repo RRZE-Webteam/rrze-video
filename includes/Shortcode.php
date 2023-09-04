@@ -86,7 +86,7 @@ class Shortcode
         }
 
         // First we copy arguments, that stay as they was
-        $validpars = 'id, url, class, titletag, poster, rand, aspectratio';
+        $validpars = 'id, url, class, titletag, poster, rand, aspectratio, textAlign';
 
         $oldargs = explode(',', $validpars);
         foreach ($oldargs as $value) {
