@@ -164,7 +164,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
             <Spacer>
               <Text>
                 {__(
-                  "Controls the video orientation. Vertical videos are displayed in portrait mode."
+                  "Controls the video orientation. Vertical videos are displayed in portrait mode.", "rrze-video"
                 )}
               </Text>
             </Spacer>
@@ -188,7 +188,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
             <Spacer>
               <Text>
                 {__(
-                  "Controls the video alignment for vertical Videos."
+                  "Controls the video alignment for vertical Videos.", "rrze-video"
                 )}
               </Text>
             </Spacer>
