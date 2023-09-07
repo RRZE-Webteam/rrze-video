@@ -4,6 +4,8 @@ import { Placeholder, Button, BaseControl } from "@wordpress/components";
 import { video } from "@wordpress/icons";
 import { useState } from "@wordpress/element";
 
+import { whichProviderIsUsed } from "../HelperFunctions/utils";
+
 /**
  * Creates the Placeholder for the default videoblock.
  * @param {*} props
@@ -14,24 +16,53 @@ const CustomPlaceholder = ({ attributes, setAttributes }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setAttributes({ url: inputURL });
+    const url = inputURL;
+
+    const shortsRegex = /(www\.youtube\.com\/)shorts\//;
+    const youtubeRegex = /(www\.youtube\.com\/)watch\?v=/;
+    const embedRegex = /(www\.youtube\.com\/)embed\//;
+
+    let newAttributes = {};
+
+    if (shortsRegex.test(url)) {
+      newAttributes = {
+        aspectratio: "9/16",
+        provider: "youtube",
+        orientation: "vertical",
+        url: url.replace(shortsRegex, "$1embed/"),
+      };
+    } else if (youtubeRegex.test(url)) {
+      newAttributes = {
+        aspectratio: "16/9",
+        provider: "youtube",
+        orientation: "landscape",
+        url: url.replace(youtubeRegex, "$1embed/"),
+      };
+    } else if (embedRegex.test(url)) {
+      newAttributes = {
+        aspectratio: "16/9",
+        provider: "youtube",
+        orientation: "landscape",
+        url: url, // no need to replace the url, since it's already an embed link
+      };
+    } else {
+      let providername = whichProviderIsUsed(url);
+      newAttributes = {
+        aspectratio: "16/9",
+        provider: providername,
+        orientation: "landscape",
+        url: url,
+      };
+    }
+
+    setAttributes(newAttributes);
   };
 
   const onChangeURL = (event) => {
     const url = event.target.value;
+    setInputURL(url);
+  };
 
-    const regex = /(www\.youtube\.com\/)shorts\//;
-    const regex2 = /(www\.youtube\.com\/)watch\?v=/;
-  
-    if (regex.test(url)) {
-      setAttributes({ aspectratio: "9/16", provider: "youtube", orientation: "vertical" });
-    } else if (regex2.test(url)) {
-      setAttributes({ aspectratio: "16/9", provider: "youtube", orientation: "landscape" });
-    }
-    
-    setInputURL(url.replace(regex, '$1embed/'));
-  }
-  
   return (
     <Placeholder icon={video} label={__("Add your Video URL", "rrze-video")}>
       <p>

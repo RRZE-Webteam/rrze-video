@@ -97,7 +97,7 @@ export default function Edit(props) {
    * Resets the VideoURL Parameter. Activated by the reset Button.
    */
   const resetUrl = () => {
-    setAttributes({ url: "", rand: "", id: "", provider: "", aspectratio: "16/9", orientation: "landscape" });
+    setAttributes({ url: "", rand: "", id: "", provider: "fauvideo", aspectratio: "16/9", orientation: "landscape", textAlign: "has-text-align-left", poster: ""  });
     setInputURL("");
   };
 
