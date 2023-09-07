@@ -10,15 +10,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2023-07-03T06:11:20+00:00\n"
-"PO-Revision-Date: 2023-07-03 07:21+0000\n"
+"PO-Revision-Date: 2023-09-07 06:19+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: rrze-video\n"
 "Language: de_DE_formal\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Loco-Version: 2.6.4; wp-6.2.2"
 
-#: build/blocks/index.js:1 src/blocks/CategorySelector.js:128
-#: build/blocks/index.js:261
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CategorySelector.js:126
+#: build/blocks/index.js:332
 msgid ""
 "Add Categories via Dashboard > Video Library > Categories to use this "
 "feature."
@@ -26,33 +27,45 @@ msgstr ""
 "Fügen Sie Kategorien in Ihrer Mediathek über \"Dashboard > Videothek > "
 "Kategorien\" hinzu, um diese Funktion zu nutzen.\n"
 
-#: build/blocks/index.js:1 src/blocks/VideoIDSelector.js:87
-#: build/blocks/index.js:362
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/VideoIDSelector.js:88
+#: build/blocks/index.js:433
 msgid "Add Videos via Dashboard > Video Library to use this feature."
 msgstr ""
 "Fügen Sie individuelle Videos zu Ihrer Videothek unter \"Dashboard > "
 "Videothek > Neu\" hinzu, um diese Funktion zu nutzen."
 
-#: build/blocks/index.js:1 src/blocks/edit.js:356 build/blocks/index.js:977
+#: build/blocks/index.js:1 src/blocks/CustomComponents/CustomPlaceholder.js:36
+#: build/blocks/index.js:1034
 msgid "Add your Video URL"
 msgstr "Video-URL eingeben"
 
-#: build/blocks/index.js:1 src/blocks/edit.js:358 build/blocks/index.js:979
+#: build/blocks/index.js:1 src/blocks/CustomComponents/CustomPlaceholder.js:38
+#: build/blocks/index.js:1036
 msgid "Add your Video URL from FAU Videoportal, YouTube, ARD, ZDF or Vimeo."
 msgstr ""
 "Fügen Sie Ihre Video-URL aus dem FAU Videoportal, YouTube, ARD- oder BR-"
 "Mediathek hinzu."
 
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:196
+#: build/blocks/index.js:900
+msgid "Alignment"
+msgstr "Positionierung"
+
 #: includes/Widget.php:144
 msgid "Alternative chose a video by list"
 msgstr "Alternativ wählen Sie ein Video aus der Liste"
 
-#: settings/shortcode.php:72 build/blocks/index.js:1 src/blocks/edit.js:231
-#: build/blocks/index.js:852
+#: settings/shortcode.php:72 build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:151
+#: build/blocks/index.js:855
 msgid "Aspect Ratio"
 msgstr "Seitenverhältnis"
 
-#: build/blocks/index.js:1 src/blocks/edit.js:237 build/blocks/index.js:858
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:221
+#: build/blocks/index.js:925
 msgid "Aspect ratio"
 msgstr "Seitenverhältnis"
 
@@ -60,11 +73,11 @@ msgstr "Seitenverhältnis"
 msgid "Aspect ratio of the video."
 msgstr "Seitenverhältnis des Videos."
 
-#: includes/Player.php:511
+#: includes/Player.php:464
 msgid "Audio Format"
 msgstr "Audioformat"
 
-#: includes/Player.php:485
+#: includes/Player.php:438
 msgid "Author"
 msgstr "Autor"
 
@@ -72,8 +85,9 @@ msgstr "Autor"
 msgid "Author, copyright, link to source and description if given."
 msgstr "Autor, Copyright, Link zur Quelle und Beschreibung, falls vorhanden."
 
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:61
-#: build/blocks/index.js:437
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/ImageSelector.js:68
+#: build/blocks/index.js:515
 msgid "Background image"
 msgstr "Hintergrundbild"
 
@@ -128,11 +142,13 @@ msgid "Video"
 msgstr "Video"
 
 #. translators: %s: File name of the video.
-#: includes/Player.php:463
+#: includes/Player.php:695
 msgid "Call the video file %s directly."
 msgstr "Rufen Sie das Video %s direkt auf."
 
-#: src/blocks/CategorySelector.js:95
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CategorySelector.js:94
+#: build/blocks/index.js:300
 msgid "Categories"
 msgstr "Kategorien"
 
@@ -148,19 +164,41 @@ msgstr ""
 "Kategorie (slug) aus der Videothek, um ein zufälliges Video daraus "
 "auszugeben."
 
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:207
+#: build/blocks/index.js:911
+msgid "Center"
+msgstr "Zentrieren"
+
 #: includes/Widget.php:167
 msgid "Choose a category"
 msgstr "Wählen Sie eine Kategorie"
+
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:190
+#: build/blocks/index.js:894
+msgid "Controls the video alignment for vertical Videos."
+msgstr "Steuert die Positionierung von Videos im Hochformat."
+
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:166
+#: build/blocks/index.js:870
+msgid ""
+"Controls the video orientation. Vertical videos are displayed in portrait "
+"mode."
+msgstr ""
+"Steuert das Videoformat. Videos im Hochformat werden mit dem Portrait-Modus "
+"ausgegeben."
 
 #: includes/CPT.php:37
 msgid "Create video collection"
 msgstr "Erstellen Sie eine Videosammlung"
 
-#: settings/shortcode.php:44
+#: settings/shortcode.php:44 settings/shortcode.php:79
 msgid "CSS Classes"
 msgstr "CSS Klassen"
 
-#: settings/shortcode.php:45
+#: settings/shortcode.php:45 settings/shortcode.php:80
 msgid "CSS classes that the shortcode should receive."
 msgstr "CSS Klassen, die dem Shortcode übergeben werden sollen."
 
@@ -177,8 +215,9 @@ msgstr "Gibt den Titel über dem Video aus."
 msgid "Displays videos in the sidebar or in the footer."
 msgstr "Gibt Videos in der Sidebar oder im Footer der Website aus."
 
-#: build/blocks/index.js:1 src/blocks/CategorySelector.js:98
-#: build/blocks/index.js:231
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CategorySelector.js:97
+#: build/blocks/index.js:303
 msgid "Don't show random videos."
 msgstr "Zeige keine zufälligen Videos."
 
@@ -186,8 +225,9 @@ msgstr "Zeige keine zufälligen Videos."
 msgid "e.g. https://www.video.uni-erlangen.de/webplayer/id/13953"
 msgstr "z.B. https://www.video.uni-erlangen.de/webplayer/id/13953"
 
-#: build/blocks/index.js:1 src/blocks/edit.js:168 src/blocks/edit.js:381
-#: build/blocks/index.js:789 build/blocks/index.js:1002
+#: build/blocks/index.js:1 src/blocks/CustomComponents/CustomPlaceholder.js:61
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:114
+#: build/blocks/index.js:818 build/blocks/index.js:1059
 msgid "Embed Video from URL"
 msgstr "Video einbinden"
 
@@ -202,19 +242,21 @@ msgstr ""
 msgid "Enter a URL to the video you want:"
 msgstr "Geben Sie eine Video-URL ein:"
 
-#: src/blocks/edit.js:149
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:92
+#: build/blocks/index.js:796
 msgid ""
 "Enter a video url from FAU Videoportal, YouTube, Vimeo, ARD, BR or Twitter."
 msgstr ""
 "Fügen Sie Ihre Video-URL aus dem FAU Videoportal, YouTube, ARD- oder BR-"
 "Mediathek hinzu."
 
-#: includes/Player.php:126 includes/Player.php:133 includes/Player.php:175
-#: includes/Player.php:182 includes/Player.php:203 includes/Player.php:237
+#: includes/Player.php:210 includes/Player.php:212 includes/Player.php:239
+#: includes/Player.php:241 includes/Player.php:281
 msgid "Error getting the video"
 msgstr "Fehler beim Abruf des Videos"
 
-#: includes/Player.php:53
+#: includes/Player.php:62
 msgid ""
 "Error when displaying the video player: Insufficient data was transferred."
 msgstr ""
@@ -230,7 +272,8 @@ msgid "Fields to be displayed, overwriting the above checkboxes."
 msgstr ""
 "Felder, die ausgegeben werden überschreiben die gewählten Kontrollkästen."
 
-#: build/blocks/index.js:1 src/blocks/edit.js:184 build/blocks/index.js:805
+#: build/blocks/index.js:1 src/blocks/CustomComponents/HeadingSelector.js:98
+#: build/blocks/index.js:189
 msgid "Heading level"
 msgstr "Überschriftebene"
 
@@ -254,7 +297,9 @@ msgstr "ID-Nummer"
 msgid "ID number of the video in the video library in the backend."
 msgstr "ID-Nummer des Videos in der Videothek im Backend."
 
-#: build/blocks/index.js:1 src/blocks/edit.js:233 build/blocks/index.js:854
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:154
+#: build/blocks/index.js:858
 msgid ""
 "In rare cases it can be useful to select an aspect ratio to prevent black "
 "borders. Only affects FAU Video embeds."
@@ -263,15 +308,31 @@ msgstr ""
 "auszuwählen, um schwarze Ränder zu vermeiden. Diese Einstellung betrifft nur "
 "Videos aus dem FAU Videoportal."
 
-#: build/blocks/index.js:1 src/blocks/edit.js:216 build/blocks/index.js:837
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:133
+#: build/blocks/index.js:837
 msgid "Individual Thumbnail"
 msgstr "Individuelles Vorschaubild"
 
-#: build/blocks/index.js:1 src/blocks/edit.js:273 build/blocks/index.js:894
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:262
+#: build/blocks/index.js:966
 msgid "Individual Videos"
 msgstr "Individuelle Videos"
 
-#: includes/Player.php:146
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:179
+#: build/blocks/index.js:883
+msgid "Landscape mode"
+msgstr "Querformat"
+
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:203
+#: build/blocks/index.js:907
+msgid "Left"
+msgstr "Links"
+
+#: includes/Player.php:251
 msgid "Link"
 msgstr "Link"
 
@@ -283,12 +344,12 @@ msgstr "Link zur Quelle"
 msgid "Metadata, link to source and description if given."
 msgstr "Metadaten, Link zur Quelle und Beschreibung, falls gegeben."
 
-#: includes/Player.php:211
+#: includes/Player.php:289
 msgid "Neither a valid ID nor a valid URL was specified for a video."
 msgstr ""
 "Weder eine gültige ID, noch eine gültige URL wurden für das Video angegeben."
 
-#: includes/Player.php:228
+#: includes/Player.php:411
 msgid ""
 "No valid video provider was found. As a result, the video cannot be played "
 "or could not be recognized."
@@ -296,12 +357,13 @@ msgstr ""
 "Kein gültiger Videoprovider wurde gefunden. Aus diesem Grund kann das Video "
 "nicht abgespielt oder erkannt werden."
 
-#: includes/Player.php:208
+#: includes/Player.php:286
 msgid "No video from the specified category could be found."
 msgstr "In der gewählten Kategorie wurde kein Video gefunden."
 
-#: build/blocks/index.js:1 src/blocks/VideoIDSelector.js:73
-#: build/blocks/index.js:348
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/VideoIDSelector.js:74
+#: build/blocks/index.js:419
 msgid "No video selected"
 msgstr "Kein Video aus der Videothek ausgeben"
 
@@ -312,6 +374,12 @@ msgid ""
 msgstr ""
 "Oder wählen Sie eine Kategorie aus Ihrer lokalen Videothek, um ein "
 "zufälliges Video daraus anzuzeigen:"
+
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:172
+#: build/blocks/index.js:876
+msgid "Orientation"
+msgstr "Ausrichtung"
 
 #: includes/Widget.php:110
 msgid "Please select a video from your local video library:"
@@ -331,31 +399,43 @@ msgstr "Video"
 msgid "Provide a link to the original source at the video provider."
 msgstr "Gibt einen Link zum Originalvideo des Videoproviders an."
 
-#: includes/Player.php:515
+#: includes/Player.php:468
 msgid "Provider"
 msgstr "Provider"
 
-#: build/blocks/index.js:1 src/blocks/edit.js:259 build/blocks/index.js:880
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:248
+#: build/blocks/index.js:952
 msgid "Random Output"
 msgstr "Zufällige Ausgabe"
 
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:109
-#: build/blocks/index.js:485
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/ImageSelector.js:116
+#: build/blocks/index.js:563
 msgid "Remove Video Thumbnail"
 msgstr "Vorschaubild des Videos entfernen"
 
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:100
-#: build/blocks/index.js:476
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/ImageSelector.js:107
+#: build/blocks/index.js:554
 msgid "Replace Video Thumbnail"
 msgstr "Video Vorschaubild ersetzen"
 
-#: build/blocks/index.js:1 src/blocks/edit.js:219 build/blocks/index.js:840
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:136
+#: build/blocks/index.js:840
 msgid "Replaces the Thumbnail with the image you selected."
 msgstr "Ersetzt das Vorschaubild durch das gewählte Bild."
 
-#: build/blocks/index.js:1 src/blocks/edit.js:329 build/blocks/index.js:950
+#: build/blocks/index.js:1 src/blocks/edit.js:121 build/blocks/index.js:1287
 msgid "Reset Video block"
 msgstr "Videoblock zurücksetzen."
+
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:211
+#: build/blocks/index.js:915
+msgid "Right"
+msgstr "Rechts"
 
 #. Plugin Name of the plugin
 msgid "RRZE Video"
@@ -373,8 +453,9 @@ msgstr "Wählen Sie ein Video aus der Videothek"
 msgid "Selection via URL"
 msgstr "Auswahl über die URL"
 
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:74
-#: build/blocks/index.js:450
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/ImageSelector.js:81
+#: build/blocks/index.js:528
 msgid "Set Video Thumbnail"
 msgstr "Video Vorschaubild festlegen"
 
@@ -382,7 +463,9 @@ msgstr "Video Vorschaubild festlegen"
 msgid "Show complete information"
 msgstr "Alle Informationen ausgeben"
 
-#: build/blocks/index.js:1 src/blocks/edit.js:209 build/blocks/index.js:830
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/ShowSelector.js:60
+#: build/blocks/index.js:696
 msgid "Show Description"
 msgstr "Beschreibung ausgeben"
 
@@ -390,7 +473,9 @@ msgstr "Beschreibung ausgeben"
 msgid "Show Info"
 msgstr "Info ausgeben"
 
-#: build/blocks/index.js:1 src/blocks/edit.js:204 build/blocks/index.js:825
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/ShowSelector.js:55
+#: build/blocks/index.js:691
 msgid "Show Metadata"
 msgstr "Metadaten ausgeben"
 
@@ -402,8 +487,9 @@ msgstr "Metadaten ausgeben"
 msgid "Show metainfo under the video."
 msgstr "Metadaten unter dem Video ausgeben"
 
-#: settings/shortcode.php:51 build/blocks/index.js:1 src/blocks/edit.js:177
-#: build/blocks/index.js:798
+#: settings/shortcode.php:51 build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/ShowSelector.js:39
+#: build/blocks/index.js:675
 msgid "Show Title"
 msgstr "Titel ausgeben"
 
@@ -417,16 +503,18 @@ msgstr ""
 "Videotitel über dem Video ausgeben; Überschreibt den Widget-Titel, falls "
 "dieser gesetzt wurde."
 
-#: build/blocks/index.js:1 src/blocks/edit.js:199 build/blocks/index.js:820
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/ShowSelector.js:50
+#: build/blocks/index.js:686
 msgid "Show Videolink"
 msgstr "Videolink ausgeben"
 
-#: includes/Player.php:165
+#: includes/Player.php:262
 msgid "So please call up the video by directly following the link below:"
 msgstr ""
 "Rufen Sie das Video also bitte direkt über den unten stehenden Link auf:"
 
-#: includes/Player.php:149 includes/Player.php:503 includes/Player.php:531
+#: includes/Player.php:254 includes/Player.php:456 includes/Player.php:484
 msgid "Source"
 msgstr "Quelle"
 
@@ -435,7 +523,7 @@ msgid ""
 "Supported video sources are currently: FAU video portal, YouTube and Vimeo."
 msgstr "Unterstützte Videoprovider: FAU Videoportal, YouTube, Vimeo, ARD, BR."
 
-#: includes/OEmbed.php:156
+#: includes/OEmbed.php:149
 msgid ""
 "The call refers to a collection of courses. This cannot be integrated. So "
 "call up the video directly under the URL:"
@@ -443,7 +531,7 @@ msgstr ""
 "Der Aufruf bezieht sich auf eine Sammlung von Kursen. Diese kann nicht "
 "eingebunden werden. Rufen Sie daher das Video direkt unter der URL auf:"
 
-#: includes/OEmbed.php:153
+#: includes/OEmbed.php:146
 msgid ""
 "The call refers to a video collection. This cannot be integrated. So call up "
 "the video directly under the URL:"
@@ -451,12 +539,12 @@ msgstr ""
 "Der Aufruf bezieht sich auf eine Videosammlung. Diese kann nicht integriert "
 "werden. Rufen Sie daher das Video direkt unter der URL auf:"
 
-#: includes/OEmbed.php:151
+#: includes/OEmbed.php:144
 msgid "The FAU-Video URL does not contain a valid video ID"
 msgstr ""
 "Die FAUVideo-URL enthält keine gültige VideoID. Überprüfen Sie die VideoURL."
 
-#: includes/Player.php:164
+#: includes/Player.php:262
 msgid ""
 "The following address could not be assigned to a known video provider or it "
 "does not have a suitable interface for retrieving videos."
@@ -472,7 +560,7 @@ msgstr "Die URL für die ARD Mediathek ist ungültig oder falsch."
 msgid "The URL for the BR Mediathek is invalid or incorrect."
 msgstr "Die URL für die BR Mediathek ist ungültig oder falsch."
 
-#: includes/Player.php:206
+#: includes/Player.php:284
 msgid "The video ID used is invalid or could not be assigned to a video."
 msgstr ""
 "Die verwendete Video-ID ist ungültig oder konnte keinem Video zugeordnet "
@@ -491,11 +579,11 @@ msgid "There are no videos in your video library yet."
 msgstr "Aktuell sind keine Videos in Ihrer Videothek."
 
 #. translators: %s: URL of the video.
-#: includes/Player.php:456
+#: includes/Player.php:688
 msgid "Therefore call up the video %s from the FAU video portal."
 msgstr "Deshalb rufen Sie Ihr Video %s direkt aus dem FAU Videoportal auf."
 
-#: includes/Player.php:534
+#: includes/Player.php:487
 msgid "This video is part of a video collection"
 msgstr "Dieses Video ist Teil einer Videosammlung"
 
@@ -511,23 +599,25 @@ msgstr "Titel"
 msgid "Titletag"
 msgstr "Titletag"
 
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:31
-#: build/blocks/index.js:407
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/ImageSelector.js:37
+#: build/blocks/index.js:484
 msgid "To edit the background image, you need permission to upload media."
 msgstr ""
 "Um das Vorschaubild zu bearbeiten, benötigen Sie die passende Berechtigung, "
 "um Medien in die WordPress-Mediathek hochzuladen."
 
-#: includes/Player.php:448
+#: includes/Player.php:680
 msgid "Unfortunately, your browser does not support HTML5 video formats."
 msgstr "Leider unterstützt Ihr Browser keine HTML5 Videoformate."
 
-#: includes/Player.php:162
+#: includes/Player.php:76 includes/Player.php:262
 msgid "Unknown video source"
 msgstr "Unbekannte Videoquelle"
 
-#: build/blocks/index.js:1 src/blocks/edit.js:163 src/blocks/edit.js:376
-#: build/blocks/index.js:784 build/blocks/index.js:997
+#: build/blocks/index.js:1 src/blocks/CustomComponents/CustomPlaceholder.js:56
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:109
+#: build/blocks/index.js:813 build/blocks/index.js:1054
 msgid "Update the Video URL"
 msgstr "Geben Sie hier die Video-URL ein."
 
@@ -543,9 +633,17 @@ msgstr "URL (Vorschaubild)"
 msgid "URL (Video)"
 msgstr "URL(Video)"
 
-#: build/blocks/index.js:1 src/blocks/edit.js:146 build/blocks/index.js:766
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:86
+#: build/blocks/index.js:790
 msgid "URL Settings"
 msgstr "URL-Einstellungen"
+
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:183
+#: build/blocks/index.js:887
+msgid "Vertical video"
+msgstr "Hochformat"
 
 #: includes/CPT.php:36
 msgid "Video"
@@ -555,11 +653,13 @@ msgstr "Video"
 msgid "Video data"
 msgstr "Videodaten"
 
-#: includes/Player.php:135 includes/Player.php:184
+#: includes/Player.php:212 includes/Player.php:241
 msgid "Video data could not be obtained."
 msgstr "Videodaten konnten nicht abgerufen werden."
 
-#: build/blocks/index.js:1 src/blocks/edit.js:173 build/blocks/index.js:794
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:119
+#: build/blocks/index.js:823
 msgid "Video Display Settings"
 msgstr "Video-Anzeigeoptionen"
 
@@ -571,7 +671,9 @@ msgstr "Video aus der ARD Mediathek"
 msgid "Video from BR Mediathek"
 msgstr "Video aus der BR Mediathek"
 
-#: build/blocks/index.js:1 src/blocks/edit.js:249 build/blocks/index.js:870
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:235
+#: build/blocks/index.js:939
 msgid "Video Library"
 msgstr "Videothek"
 
@@ -579,7 +681,7 @@ msgstr "Videothek"
 msgid "Video options"
 msgstr "Video-Optionen"
 
-#: includes/Player.php:472
+#: includes/Player.php:426
 msgid "Video provider incorrectly defined."
 msgstr "Der Videoprovider wurde falsch definiert."
 
@@ -587,18 +689,20 @@ msgstr "Der Videoprovider wurde falsch definiert."
 msgid "Video source"
 msgstr "Videoquelle"
 
-#: build/blocks/index.js:1 src/blocks/ImageSelector.js:83
-#: src/blocks/ImageSelector.js:94 build/blocks/index.js:459
-#: build/blocks/index.js:470
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/ImageSelector.js:90
+#: src/blocks/InspectorControlAreaComponents/ImageSelector.js:101
+#: build/blocks/index.js:537 build/blocks/index.js:548
 msgid "Video Thumbnail"
 msgstr "Video-Vorschaubild"
 
-#: build/blocks/index.js:1 src/blocks/edit.js:155 src/blocks/edit.js:366
-#: build/blocks/index.js:776 build/blocks/index.js:987
+#: build/blocks/index.js:1 src/blocks/CustomComponents/CustomPlaceholder.js:46
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:101
+#: build/blocks/index.js:805 build/blocks/index.js:1044
 msgid "Video URL"
 msgstr "Video-URL"
 
-#: includes/Player.php:507
+#: includes/Player.php:460
 msgid "Video with presentation slides"
 msgstr "Video mit Präsentationsfolien"
 
@@ -618,7 +722,9 @@ msgstr ""
 msgid "Widget Title:"
 msgstr "Widget-Titel:"
 
-#: build/blocks/index.js:1 src/blocks/edit.js:251 build/blocks/index.js:872
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:240
+#: build/blocks/index.js:944
 msgid ""
 "You can add videos to your video library by navigating to Dashboard\n"
 "            | Video library | Add new."
@@ -626,11 +732,15 @@ msgstr ""
 "Sie können Videos über \"Dashboard > Videothek > Neu\" zu Ihrer Videothek "
 "hinzufügen."
 
-#: build/blocks/index.js:1 src/blocks/edit.js:275 build/blocks/index.js:896
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:264
+#: build/blocks/index.js:968
 msgid "You can select a Video from within your Video library."
 msgstr "Sie können ein Video aus Ihrer Videothek auswählen."
 
-#: build/blocks/index.js:1 src/blocks/edit.js:261 build/blocks/index.js:882
+#: build/blocks/index.js:1
+#: src/blocks/InspectorControlAreaComponents/CustomInspectorControls.js:250
+#: build/blocks/index.js:954
 msgid ""
 "You can select a Video library category and a random video will be displayed "
 "from this category."

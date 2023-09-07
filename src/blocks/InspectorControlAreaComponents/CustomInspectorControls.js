@@ -36,7 +36,46 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
    */
   const handleToggleSubmit = (event) => {
     event.preventDefault();
-    setAttributes({ url: inputURL });
+    const url = inputURL;
+
+    const shortsRegex = /(www\.youtube\.com\/)shorts\//;
+    const youtubeRegex = /(www\.youtube\.com\/)watch\?v=/;
+    const embedRegex = /(www\.youtube\.com\/)embed\//;
+
+    let newAttributes = {};
+
+    if (shortsRegex.test(url)) {
+      newAttributes = {
+        aspectratio: "9/16",
+        provider: "youtube",
+        orientation: "vertical",
+        url: url.replace(shortsRegex, "$1embed/"),
+      };
+    } else if (youtubeRegex.test(url)) {
+      newAttributes = {
+        aspectratio: "16/9",
+        provider: "youtube",
+        orientation: "landscape",
+        url: url.replace(youtubeRegex, "$1embed/"),
+      };
+    } else if (embedRegex.test(url)) {
+      newAttributes = {
+        aspectratio: "16/9",
+        provider: "youtube",
+        orientation: "landscape",
+        url: url, // no need to replace the url, since it's already an embed link
+      };
+    } else {
+      let providername = whichProviderIsUsed(url);
+      newAttributes = {
+        aspectratio: "16/9",
+        provider: providername,
+        orientation: "landscape",
+        url: url,
+      };
+    }
+
+    setAttributes(newAttributes);
   };
 
   const handleToggleAspectRatio = (newAspectratio) => {
@@ -53,31 +92,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
 
   const onChangeURL = (event) => {
     const url = event.target.value;
-
-    const regex = /(www\.youtube\.com\/)shorts\//;
-    const regex2 = /(www\.youtube\.com\/)watch\?v=/;
-
-    if (regex.test(url)) {
-      setAttributes({
-        aspectratio: "9/16",
-        provider: "youtube",
-        orientation: "vertical",
-      });
-    } else if (regex2.test(url)) {
-      setAttributes({
-        aspectratio: "16/9",
-        provider: "youtube",
-        orientation: "landscape",
-      });
-    } else {
-      let providername = whichProviderIsUsed(url);
-      setAttributes({
-        aspectratio: "16/9",
-        provider: providername,
-        orientation: "landscape",
-      });
-    }
-    setInputURL(url.replace(regex, "$1embed/"));
+    setInputURL(url);
   };
 
   return (
@@ -164,7 +179,8 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
             <Spacer>
               <Text>
                 {__(
-                  "Controls the video orientation. Vertical videos are displayed in portrait mode."
+                  "Controls the video orientation. Vertical videos are displayed in portrait mode.",
+                  "rrze-video"
                 )}
               </Text>
             </Spacer>
@@ -184,34 +200,37 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
               />
             </ToggleGroupControl>
             {attributes.orientation === "vertical" && (
-            <>
-            <Spacer>
-              <Text>
-                {__(
-                  "Controls the video alignment for vertical Videos."
-                )}
-              </Text>
-            </Spacer>
-            <ToggleGroupControl
-              label={__("Alignment", "rrze-video")}
-              value={textAlign}
-              onChange={(value) => {setAttributes({ textAlign: value })}}
-              isBlock
-            >
-              <ToggleGroupControlOption
-                value=""
-                label={__("Left", "rrze-video")}
-              />
-              <ToggleGroupControlOption
-                value="has-text-align-center"
-                label={__("Center", "rrze-video")}
-              />
-                            <ToggleGroupControlOption
-                value="has-text-align-right"
-                label={__("Right", "rrze-video")}
-              />
-            </ToggleGroupControl>
-            </>
+              <>
+                <Spacer>
+                  <Text>
+                    {__(
+                      "Controls the video alignment for vertical Videos.",
+                      "rrze-video"
+                    )}
+                  </Text>
+                </Spacer>
+                <ToggleGroupControl
+                  label={__("Alignment", "rrze-video")}
+                  value={textAlign}
+                  onChange={(value) => {
+                    setAttributes({ textAlign: value });
+                  }}
+                  isBlock
+                >
+                  <ToggleGroupControlOption
+                    value=""
+                    label={__("Left", "rrze-video")}
+                  />
+                  <ToggleGroupControlOption
+                    value="has-text-align-center"
+                    label={__("Center", "rrze-video")}
+                  />
+                  <ToggleGroupControlOption
+                    value="has-text-align-right"
+                    label={__("Right", "rrze-video")}
+                  />
+                </ToggleGroupControl>
+              </>
             )}
           </>
         )}

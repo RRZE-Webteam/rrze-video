@@ -441,11 +441,11 @@ class Player
                     $meta[] = '<a href="' . $data['video']['author_url_0'] . '">';
                 }
 
-                $meta .= $data['video']['author_name'];
+                $meta[] = $data['video']['author_name'];
                 if (!empty($data['video']['author_url_0'])) {
                     $meta[] = '</a>';
                 }
-                $meta [] =  '</dd>';
+                $meta[] =  '</dd>';
             }
 
             $url = !empty($data['url']) ? esc_url($data['url']) : '';
