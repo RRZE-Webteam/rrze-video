@@ -627,7 +627,7 @@ class Player
         $lang = $hreflang = '';
 
         if (isset($data['video']['type']) && $data['video']['type'] == 'audio' && isset($data['video']['file'])) {
-            $classname = 'plyr-videonum-' . $id;
+            $classname = 'plyr-instance plyr-videonum-' . $id;
             $res[] = '<audio preload="none" class="' . $classname . '" controls crossorigin="anonymous">';
             $res[] = '<source src="' . $data['video']['file'] . '" type="audio/mp3" />';
             $res[] = '</audio>';
