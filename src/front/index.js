@@ -25,8 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
       fullscreen: { iosNative: true },
     });
 
-    players.forEach((player) => {
+    players?.forEach((player) => {
       try {
+        console.log(player);
         const parentElementClass =
           player?.elements?.container?.parentElement?.classList[1];
 

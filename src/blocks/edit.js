@@ -1,7 +1,7 @@
 //Imports for necessary WordPress libraries
 import { __ } from "@wordpress/i18n";
 import { ToolbarGroup, ToolbarItem, ToolbarButton } from "@wordpress/components";
-import { reset } from "@wordpress/icons";
+import { trash } from "@wordpress/icons";
 import { useBlockProps, BlockControls } from "@wordpress/block-editor"; // eslint-disable-line import/no-unresolved
 import { ServerSideRender } from "@wordpress/editor"; // eslint-disable-line import/no-unresolved
 import { useState, useEffect, useRef } from "@wordpress/element";
@@ -12,7 +12,7 @@ import CustomInspectorControls from "./InspectorControlAreaComponents/CustomInsp
 import CustomPlaceholder from "./CustomComponents/CustomPlaceholder";
 
 //Imports for helper functions
-import { isTextInString } from "./HelperFunctions/utils";
+import { isTextInString, whichProviderIsUsed } from "./HelperFunctions/utils";
 
 //Import the Editor Styles for the blockeditor
 import "./editor.scss"; //Only active in the editor
@@ -30,7 +30,7 @@ export default function Edit(props) {
   const blockProps = useBlockProps();
   const { attributes, setAttributes } = props;
   const { id, url, rand, aspectratio } = attributes;
-  const [setInputURL] = useState(attributes.url);
+  const [inputURL, setInputURL] = useState(attributes.url);
 
   /**
    * This useEffect hook is needed to set the aspect ratio 
@@ -60,13 +60,44 @@ export default function Edit(props) {
     } catch (error) {
       console.log(error);
     }
-  });
+  }, [aspectratio]);
+
+    useEffect(() => {
+      const url = inputURL;
+      
+      switch (whichProviderIsUsed(url)) {
+        case "youtube":
+          setAttributes({ provider: "youtube" });
+          break;
+        case "youtubeShorts":
+          setAttributes({ provider: "youtube" });
+          break;
+        case "vimeo":
+          setAttributes({ provider: "vimeo" });
+          break;
+        case "fauvideo":
+          setAttributes({ provider: "fauvideo" });
+          break;
+        case "br":
+          setAttributes({ provider: "br" });
+          break;
+        case "ard":
+          setAttributes({ provider: "ard" });
+          break;
+        default:
+          setAttributes({ provider: "fauvideo" });
+          break;
+      }
+  
+    }, [inputURL, setAttributes]); 
+
+  
 
   /**
    * Resets the VideoURL Parameter. Activated by the reset Button.
    */
   const resetUrl = () => {
-    setAttributes({ url: "", rand: "", id: "" });
+    setAttributes({ url: "", rand: "", id: "", provider: "fauvideo", aspectratio: "16/9", orientation: "landscape", textAlign: "has-text-align-left", poster: ""  });
     setInputURL("");
   };
 
@@ -86,7 +117,7 @@ export default function Edit(props) {
               <ToolbarItem>
                 {() => (
                   <ToolbarButton
-                    icon={reset}
+                    icon={trash}
                     label={__("Reset Video block", "rrze-video")}
                     onClick={resetUrl}
                   />
@@ -109,7 +140,7 @@ export default function Edit(props) {
                 titletag: attributes.titletag,
                 poster: attributes.poster,
                 aspectratio: attributes.aspectratio,
-                class: attributes.class,
+                textAlign: attributes.textAlign,
               }}
             />
           </div>

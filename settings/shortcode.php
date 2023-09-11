@@ -73,5 +73,12 @@ $settings = [
             'message' => __('Aspect ratio of the video.', 'rrze-video'),
             'type' => 'aspectratio'
         ],
+        'textAlign' => [
+            'default' => 'has-text-align-left',
+            'field_type' => 'text',
+            'label' => __('CSS Classes', 'rrze-video'),
+            'message' => __('CSS classes that the shortcode should receive.', 'rrze-video'),
+            'type' => 'class'
+        ],
     ],
 ];

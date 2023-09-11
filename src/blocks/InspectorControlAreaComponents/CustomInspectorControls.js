@@ -19,14 +19,16 @@ import CategorySelector from "./CategorySelector";
 import VideoIDSelector from "./VideoIDSelector";
 import ImageSelectorEdit from "./ImageSelector";
 import ShowSelector from "./ShowSelector";
+import { whichProviderIsUsed } from "../HelperFunctions/utils";
 
 /**
  * Controls the sidebar for videoblock in the blockeditor
- * @param {*} params 
+ * @param {*} params
  * @returns JSX element
  */
 const CustomInspectorControls = ({ attributes, setAttributes }) => {
   const [inputURL, setInputURL] = useState(attributes.url);
+  const { textAlign } = attributes;
 
   /**
    * Handles the submit event of the form for the video url
@@ -34,11 +36,63 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
    */
   const handleToggleSubmit = (event) => {
     event.preventDefault();
-    setAttributes({ url: inputURL });
+    const url = inputURL;
+
+    const shortsRegex = /(www\.youtube\.com\/)shorts\//;
+    const youtubeRegex = /(www\.youtube\.com\/)watch\?v=/;
+    const embedRegex = /(www\.youtube\.com\/)embed\//;
+
+    let newAttributes = {};
+
+    if (shortsRegex.test(url)) {
+      newAttributes = {
+        aspectratio: "9/16",
+        provider: "youtube",
+        orientation: "vertical",
+        url: url.replace(shortsRegex, "$1embed/"),
+      };
+    } else if (youtubeRegex.test(url)) {
+      newAttributes = {
+        aspectratio: "16/9",
+        provider: "youtube",
+        orientation: "landscape",
+        url: url.replace(youtubeRegex, "$1embed/"),
+      };
+    } else if (embedRegex.test(url)) {
+      newAttributes = {
+        aspectratio: "16/9",
+        provider: "youtube",
+        orientation: "landscape",
+        url: url, // no need to replace the url, since it's already an embed link
+      };
+    } else {
+      let providername = whichProviderIsUsed(url);
+      newAttributes = {
+        aspectratio: "16/9",
+        provider: providername,
+        orientation: "landscape",
+        url: url,
+      };
+    }
+
+    setAttributes(newAttributes);
   };
 
   const handleToggleAspectRatio = (newAspectratio) => {
     setAttributes({ aspectratio: newAspectratio });
+  };
+
+  const onChangeOrientation = (value) => {
+    if (value === "landscape") {
+      setAttributes({ orientation: value, aspectratio: "16/9" });
+    } else {
+      setAttributes({ orientation: value, aspectratio: "9/16" });
+    }
+  };
+
+  const onChangeURL = (event) => {
+    const url = event.target.value;
+    setInputURL(url);
   };
 
   return (
@@ -66,7 +120,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
               className="rrze-video-input-field"
               type="url"
               value={inputURL}
-              onChange={(event) => setInputURL(event.target.value)}
+              onChange={(event) => onChangeURL(event)}
               placeholder={__("Update the Video URL", "rrze-video")}
               style={{ width: "100%" }}
             />
@@ -81,45 +135,120 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
         icon="admin-appearance"
         initialOpen={true}
       >
-        <ShowSelector attributes={attributes} setAttributes={setAttributes} />
-        <Divider />
-        <Spacer>
-          <Heading level={3}>
-            {__("Individual Thumbnail", "rrze-video")}
-          </Heading>
-          <Text>
-            {__(
-              `Replaces the Thumbnail with the image you selected.`,
-              "rrze-video"
-            )}
-          </Text>
-        </Spacer>
-        <ImageSelectorEdit
-          attributes={attributes}
-          setAttributes={setAttributes}
-        />
-        <Divider />
+        {attributes.provider === "fauvideo" && (
+          <>
+            <ShowSelector
+              attributes={attributes}
+              setAttributes={setAttributes}
+            />
+            <Divider />
+
+            <Spacer>
+              <Heading level={3}>
+                {__("Individual Thumbnail", "rrze-video")}
+              </Heading>
+              <Text>
+                {__(
+                  `Replaces the Thumbnail with the image you selected.`,
+                  "rrze-video"
+                )}
+              </Text>
+            </Spacer>
+            <ImageSelectorEdit
+              attributes={attributes}
+              setAttributes={setAttributes}
+            />
+            <Divider />
+          </>
+        )}
+
         <Spacer>
           <Heading level={3}>{__("Aspect Ratio", "rrze-video")}</Heading>
-          <Text>
-            {__(
-              "In rare cases it can be useful to select an aspect ratio to prevent black borders. Only affects FAU Video embeds.",
-              "rrze-video"
-            )}
-          </Text>
+          {attributes.provider === "fauvideo" && (
+            <Text>
+              {__(
+                "In rare cases it can be useful to select an aspect ratio to prevent black borders. Only affects FAU Video embeds.",
+                "rrze-video"
+              )}
+            </Text>
+          )}
         </Spacer>
-        <ToggleGroupControl
-          label={__("Aspect ratio", "rrze-video")}
-          value={attributes.aspectratio}
-          onChange={handleToggleAspectRatio}
-          isBlock
-        >
-          <ToggleGroupControlOption value="16/9" label="16:9" />
-          <ToggleGroupControlOption value="4/3" label="4:3" />
-          <ToggleGroupControlOption value="1/1" label="1:1" />
-          <ToggleGroupControlOption value="2.35/1" label="2.35:1" />
-          <ToggleGroupControlOption value="2.40/1" label="2.40:1" />
-        </ToggleGroupControl>
+
+        {attributes.provider === "youtube" && (
+          <>
+            <Spacer>
+              <Text>
+                {__(
+                  "Controls the video orientation. Vertical videos are displayed in portrait mode.",
+                  "rrze-video"
+                )}
+              </Text>
+            </Spacer>
+            <ToggleGroupControl
+              label={__("Orientation", "rrze-video")}
+              value={attributes.orientation}
+              onChange={onChangeOrientation}
+              isBlock
+            >
+              <ToggleGroupControlOption
+                value="landscape"
+                label={__("Landscape mode", "rrze-video")}
+              />
+              <ToggleGroupControlOption
+                value="vertical"
+                label={__("Vertical video", "rrze-video")}
+              />
+            </ToggleGroupControl>
+            {attributes.orientation === "vertical" && (
+              <>
+                <Spacer>
+                  <Text>
+                    {__(
+                      "Controls the video alignment for vertical Videos.",
+                      "rrze-video"
+                    )}
+                  </Text>
+                </Spacer>
+                <ToggleGroupControl
+                  label={__("Alignment", "rrze-video")}
+                  value={textAlign}
+                  onChange={(value) => {
+                    setAttributes({ textAlign: value });
+                  }}
+                  isBlock
+                >
+                  <ToggleGroupControlOption
+                    value=""
+                    label={__("Left", "rrze-video")}
+                  />
+                  <ToggleGroupControlOption
+                    value="has-text-align-center"
+                    label={__("Center", "rrze-video")}
+                  />
+                  <ToggleGroupControlOption
+                    value="has-text-align-right"
+                    label={__("Right", "rrze-video")}
+                  />
+                </ToggleGroupControl>
+              </>
+            )}
+          </>
+        )}
+
+        {attributes.provider === "fauvideo" && (
+          <ToggleGroupControl
+            label={__("Aspect ratio", "rrze-video")}
+            value={attributes.aspectratio}
+            onChange={handleToggleAspectRatio}
+            isBlock
+          >
+            <ToggleGroupControlOption value="16/9" label="16:9" />
+            <ToggleGroupControlOption value="4/3" label="4:3" />
+            <ToggleGroupControlOption value="1/1" label="1:1" />
+            <ToggleGroupControlOption value="2.35/1" label="2.35:1" />
+            <ToggleGroupControlOption value="2.40/1" label="2.40:1" />
+          </ToggleGroupControl>
+        )}
       </PanelBody>
       <PanelBody
         title={__("Video Library", "rrze-video")}
