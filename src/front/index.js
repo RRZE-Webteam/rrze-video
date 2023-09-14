@@ -1,81 +1,82 @@
-/**
- * RRZE-Video Plugin: Front Dependencies
- */
 import Plyr from "plyr";
 import "plyr/src/sass/plyr.scss";
 import "./custom.scss";
+
+const debounce = (func, delay = 300) => {
+  let timeoutId;
+  return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
+  };
+};
 
 const isIOSWithWebkit = "webkitEnterFullscreen" in document.createElement("video");
 const VIDEO_CONTAINER_PREFIX = "rrze-video-container-";
 const VIDEO_TITLE_PREFIX_LENGTH = VIDEO_CONTAINER_PREFIX.length;
 
-const handlePlayerPlay = (videoTitle) => {
-  videoTitle.classList.add("rrze-video-hide");
+const SELECTORS = {
+  CONTROLS: [
+    'button[data-plyr="pip"]',
+    'button[data-plyr="captions"]',
+    'button[data-plyr="airplay"]',
+    'input[data-plyr="volume"]',
+  ].join(","),
+  MICRO_CONTROLS: '.plyr__controls__item.plyr__progress__container'
 };
 
-const handlePlayerPause = (videoTitle) => {
-  videoTitle.classList.remove("rrze-video-hide");
-  videoTitle.style.opacity = "1"; // Reset opacity to 1 for fadeIn effect
+const handlePlayerPlay = (videoTitle) => videoTitle.classList.add("rrze-video-hide");
+const handlePlayerPause = (videoTitle) => videoTitle.classList.remove("rrze-video-hide");
+
+const adjustControls = (player) => {
+  const playerWidth = player?.elements?.container?.clientWidth || 1100;
+  const playerContainer = player?.elements?.container;
+
+  const controls = Array.from(playerContainer.querySelectorAll(SELECTORS.CONTROLS));
+  const microControls = Array.from(playerContainer.querySelectorAll(SELECTORS.MICRO_CONTROLS));
+
+  controls.forEach(control => control.classList[playerWidth <= 450 ? "add" : "remove"]("rrze-video-display-none"));
+  microControls.forEach(control => control.classList[playerWidth <= 230 ? "add" : "remove"]("rrze-video-display-none"));
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   try {
-    console.log("Successfully loaded front.js for rrze-video.");
-    const players = Plyr.setup(".plyr-instance", {
-      fullscreen: { iosNative: true },
-    });
+      console.log("Successfully loaded front.js for rrze-video.");
+      const players = Plyr.setup(".plyr-instance", {
+          fullscreen: { iosNative: true },
+      });
 
-    players?.forEach((player) => {
-      try {
-        console.log(player);
-        const parentElementClass =
-          player?.elements?.container?.parentElement?.classList[1];
+      players?.forEach((player) => {
+          adjustControls(player);
 
-        if (
-          parentElementClass &&
-          parentElementClass.startsWith(VIDEO_CONTAINER_PREFIX)
-        ) {
-          const videoTitleId = `rrze-video-title-${parentElementClass.slice(
-            VIDEO_TITLE_PREFIX_LENGTH
-          )}`;
+          const parentElementClass = player?.elements?.container?.parentElement?.classList[1];
+          const videoTitleId = `rrze-video-title-${parentElementClass.slice(VIDEO_TITLE_PREFIX_LENGTH)}`;
           const videoTitle = document.getElementById(videoTitleId);
 
           if (videoTitle) {
-            videoTitle.style.zIndex = "1";
-            videoTitle.classList.remove("rrze-video-hide");
+              videoTitle.style.zIndex = "1";
+              videoTitle.classList.remove("rrze-video-hide");
 
-            player.on("play", () => handlePlayerPlay(videoTitle));
-            player.on("pause", () => handlePlayerPause(videoTitle));
+              player.on("play", () => handlePlayerPlay(videoTitle));
+              player.on("pause", () => handlePlayerPause(videoTitle));
           } else {
-            console.log(
-              `Video Title not found or disabled for video with id: ${videoTitleId}`
-            );
+              console.log(`Video Title not found or disabled for video with id: ${videoTitleId}`);
           }
-        } else {
-          console.log(
-            "No matching parent class inside the Plyr video container. Check the template."
-          );
-        }
 
-        if (isIOSWithWebkit) {
-          const handleFullscreenChange = (e) => {
-            const displayMode =
-              e.type === "webkitbeginfullscreen" ? "block" : "none";
-            document.documentElement.style.setProperty(
-              "--webkit-text-track-display",
-              displayMode
-            );
-          };
+          if (isIOSWithWebkit) {
+              const handleFullscreenChange = (e) => {
+                  const displayMode = e.type === "webkitbeginfullscreen" ? "block" : "none";
+                  document.documentElement.style.setProperty("--webkit-text-track-display", displayMode);
+              };
+              ["webkitbeginfullscreen", "webkitendfullscreen"].forEach(event => {
+                  player.media.addEventListener(event, handleFullscreenChange);
+              });
+          }
+      });
 
-          ["webkitbeginfullscreen", "webkitendfullscreen"].forEach((event) => {
-            player.media.addEventListener(event, handleFullscreenChange);
-          });
-        }
-      } catch (playerError) {
-        console.error(`Error processing player: ${playerError}`);
-      }
-    });
+      window.addEventListener('resize', debounce(() => {
+          players?.forEach(player => adjustControls(player));
+      }, 500));
   } catch (generalError) {
-    console.error("Error in rrze-video/src/front/index.js: ", generalError);
+      console.error("Error in rrze-video/src/front/index.js: ", generalError);
   }
 });
