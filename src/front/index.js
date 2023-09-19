@@ -5,12 +5,13 @@ import "./custom.scss";
 const debounce = (func, delay = 300) => {
   let timeoutId;
   return (...args) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func.apply(this, args), delay);
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
   };
 };
 
-const isIOSWithWebkit = "webkitEnterFullscreen" in document.createElement("video");
+const isIOSWithWebkit =
+  "webkitEnterFullscreen" in document.createElement("video");
 const VIDEO_CONTAINER_PREFIX = "rrze-video-container-";
 const VIDEO_TITLE_PREFIX_LENGTH = VIDEO_CONTAINER_PREFIX.length;
 
@@ -21,62 +22,96 @@ const SELECTORS = {
     'button[data-plyr="airplay"]',
     'input[data-plyr="volume"]',
   ].join(","),
-  MICRO_CONTROLS: '.plyr__controls__item.plyr__progress__container'
+  MICRO_CONTROLS: ".plyr__controls__item.plyr__progress__container",
+  UI_ELEMENTS: "p.rrze-video-title",
 };
 
-const handlePlayerPlay = (videoTitle) => videoTitle.classList.add("rrze-video-hide");
-const handlePlayerPause = (videoTitle) => videoTitle.classList.remove("rrze-video-hide");
+const handlePlayerPlay = (videoTitle) =>
+  videoTitle.classList.add("rrze-video-hide");
+const handlePlayerPause = (videoTitle) =>
+  videoTitle.classList.remove("rrze-video-hide");
 
 const adjustControls = (player) => {
   const playerWidth = player?.elements?.container?.clientWidth || 1100;
   const playerContainer = player?.elements?.container;
+  const videoTitle = playerContainer?.nextElementSibling;
 
-  const controls = Array.from(playerContainer.querySelectorAll(SELECTORS.CONTROLS));
-  const microControls = Array.from(playerContainer.querySelectorAll(SELECTORS.MICRO_CONTROLS));
+  if (videoTitle && videoTitle.matches('p.rrze-video-title')) {
+    videoTitle.classList[playerWidth <= 450 ? "add" : "remove"]("minified");
+    videoTitle.classList[playerWidth <= 450 ? "add" : "remove"]("cropped");
+  }
 
-  controls.forEach(control => control.classList[playerWidth <= 450 ? "add" : "remove"]("rrze-video-display-none"));
-  microControls.forEach(control => control.classList[playerWidth <= 230 ? "add" : "remove"]("rrze-video-display-none"));
+
+  const controls = Array.from(
+    playerContainer.querySelectorAll(SELECTORS.CONTROLS)
+  );
+  const microControls = Array.from(
+    playerContainer.querySelectorAll(SELECTORS.MICRO_CONTROLS)
+  );
+
+  controls.forEach((control) =>
+    control.classList[playerWidth <= 450 ? "add" : "remove"](
+      "rrze-video-display-none"
+    )
+  );
+  microControls.forEach((control) =>
+    control.classList[playerWidth <= 230 ? "add" : "remove"](
+      "rrze-video-display-none"
+    )
+  );
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   try {
-      console.log("Successfully loaded front.js for rrze-video.");
-      const players = Plyr.setup(".plyr-instance", {
-          fullscreen: { iosNative: true },
-      });
+    console.log("Successfully loaded front.js for rrze-video.");
+    const players = Plyr.setup(".plyr-instance", {
+      fullscreen: { iosNative: true },
+    });
 
-      players?.forEach((player) => {
-          adjustControls(player);
+    players?.forEach((player) => {
+      adjustControls(player);
 
-          const parentElementClass = player?.elements?.container?.parentElement?.classList[1];
-          const videoTitleId = `rrze-video-title-${parentElementClass.slice(VIDEO_TITLE_PREFIX_LENGTH)}`;
-          const videoTitle = document.getElementById(videoTitleId);
+      const parentElementClass =
+        player?.elements?.container?.parentElement?.classList[1];
+      const videoTitleId = `rrze-video-title-${parentElementClass.slice(
+        VIDEO_TITLE_PREFIX_LENGTH
+      )}`;
+      const videoTitle = document.getElementById(videoTitleId);
 
-          if (videoTitle) {
-              videoTitle.style.zIndex = "1";
-              videoTitle.classList.remove("rrze-video-hide");
+      if (videoTitle) {
+        videoTitle.style.zIndex = "1";
+        videoTitle.classList.remove("rrze-video-hide");
 
-              player.on("play", () => handlePlayerPlay(videoTitle));
-              player.on("pause", () => handlePlayerPause(videoTitle));
-          } else {
-              console.log(`Video Title not found or disabled for video with id: ${videoTitleId}`);
-          }
+        player.on("play", () => handlePlayerPlay(videoTitle));
+        player.on("pause", () => handlePlayerPause(videoTitle));
+      } else {
+        console.log(
+          `Video Title not found or disabled for video with id: ${videoTitleId}`
+        );
+      }
 
-          if (isIOSWithWebkit) {
-              const handleFullscreenChange = (e) => {
-                  const displayMode = e.type === "webkitbeginfullscreen" ? "block" : "none";
-                  document.documentElement.style.setProperty("--webkit-text-track-display", displayMode);
-              };
-              ["webkitbeginfullscreen", "webkitendfullscreen"].forEach(event => {
-                  player.media.addEventListener(event, handleFullscreenChange);
-              });
-          }
-      });
+      if (isIOSWithWebkit) {
+        const handleFullscreenChange = (e) => {
+          const displayMode =
+            e.type === "webkitbeginfullscreen" ? "block" : "none";
+          document.documentElement.style.setProperty(
+            "--webkit-text-track-display",
+            displayMode
+          );
+        };
+        ["webkitbeginfullscreen", "webkitendfullscreen"].forEach((event) => {
+          player.media.addEventListener(event, handleFullscreenChange);
+        });
+      }
+    });
 
-      window.addEventListener('resize', debounce(() => {
-          players?.forEach(player => adjustControls(player));
-      }, 500));
+    window.addEventListener(
+      "resize",
+      debounce(() => {
+        players?.forEach((player) => adjustControls(player));
+      }, 500)
+    );
   } catch (generalError) {
-      console.error("Error in rrze-video/src/front/index.js: ", generalError);
+    console.error("Error in rrze-video/src/front/index.js: ", generalError);
   }
 });
