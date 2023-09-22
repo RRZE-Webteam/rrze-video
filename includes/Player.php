@@ -557,40 +557,41 @@ class Player
      */
     private function generate_youtube_html($data, $id)
     {
-        $res = [];
-        
+        $res = [];        
+        $aspectRatio = isset($data['aspectratio']) ? $data['aspectratio'] : '16/9';
         $classname = 'plyr-videonum-' . $id;
-        if($data['aspectratio'] !== '9/16'){
+        
+        if ($aspectRatio !== '9/16') {
             $res[] = '<div class="youtube-video ' . $classname . '"';
             $res[] = ' itemscope itemtype="https://schema.org/Movie"';
             $res[] = '>';
         }
         $res[] = $this->get_html_structuredmeta($data);
-        if($data['aspectratio'] !== '9/16'){
+        if ($aspectRatio !== '9/16') {
             $res[] = '<div class="plyr__video-embed">';
         }
         $res[] = '<iframe';
-        if($data['aspectratio'] === '9/16'){
+        if ($aspectRatio === '9/16') {
             $res[] = 'width="315"';
             $res[] = 'height="560"';
         }
         if (!empty($data['video']['title'])) {
             $res[] = ' title="' . esc_html($data['video']['title']) . '"';
         }
-        // $res[] = '  src="https://www.youtube-nocookie.com/embed/' . $data['video']['v'] . '?rel=0&showinfo=0&iv_load_policy=3&modestbranding=1"';
         $res[] = '  src="https://www.youtube-nocookie.com/embed/' . $data['video']['v'] . '?rel=0&showinfo=0&iv_load_policy=3&modestbranding=1"';
         $res[] = ' frameborder="0"';
         $res[] = '  allowfullscreen';
         $res[] = '  allowtransparency';
         $res[] = '  allow="autoplay"';
         $res[] = '></iframe>';
-        if($data['aspectratio'] !== '9/16'){
+        if ($aspectRatio !== '9/16') {
             $res[] = '</div>';
             $res[] = '</div>';
         }
         
         return implode("\n", $res);  
     }
+    
 
     /**
      * Generates HTML for FAU video or audio players based on the provided data.
