@@ -17,6 +17,7 @@ class Main
 
         // Metabox
         new Metabox();
+        new Settings();
 
         // Set the video shortcode.
         Shortcode::instance()->loaded();

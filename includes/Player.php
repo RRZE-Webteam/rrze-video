@@ -72,6 +72,9 @@ class Player
                 $this->enqueueFrontendStyles(true, [], $id);
             } else if (IFrames::is_iframe_provider($arguments['url'])) {
                 $content .= $this->processIFrame($arguments, $id);
+            } else if (true){
+                $content .= $this->processAPIEmbed($arguments, $id);
+                $this->enqueueFrontendStyles(true, [], $id);
             } else {
                 $content .= $this->handleError(__('Unknown video source', 'rrze-video'));
             }
@@ -218,6 +221,18 @@ class Player
         }
     }
 
+    private function processAPIEmbed($arguments, $id)
+    {
+        Helper::debug($arguments, 'arguments');
+        $clipId = $arguments['id'];
+        $streamUrl = API::getStreamingURI($clipId);
+                $arguments['url'] = $streamUrl;
+                
+                $this->enqueueFrontendStyles(true, [], $id);
+
+        return $this->get_player_html('fauApi', $arguments, $id);
+    }
+
     /**
      * Processes an iFrame video source.
      * 
@@ -293,7 +308,7 @@ class Player
         return $content;
     }
 
-        /**
+    /**
      * Evaluates and returns the appropriate poster image URL for a video.
      *
      * This function determines the correct poster image URL based on a prioritized list:
@@ -319,13 +334,13 @@ class Player
     private function evaluatePoster($data, $id)
     {
         if (!empty($data['poster'])) {
-                $poster = $data['poster'];
-            } elseif (!empty($data['video']['preview_image'])) {
-                $poster = $data['video']['preview_image'];
-            } elseif (!empty($data['video']['thumbnail_url'])) {
-                $poster = $data['video']['thumbnail_url'];
-            }
-            return $poster;
+            $poster = $data['poster'];
+        } elseif (!empty($data['video']['preview_image'])) {
+            $poster = $data['video']['preview_image'];
+        } elseif (!empty($data['video']['thumbnail_url'])) {
+            $poster = $data['video']['thumbnail_url'];
+        }
+        return $poster;
     }
 
     /**
@@ -406,13 +421,14 @@ class Player
             $res[] = $beforetag . $data['widgetargs']['title'] . $aftertag;
         }
 
-        $providerList = OEmbed::get_known_provider();
-        if (empty($provider) || empty($providerList[$provider])) {
-            return $this->generateErrorContent($id, __('No valid video provider was found. As a result, the video cannot be played or could not be recognized.', 'rrze-video'), '');
+        if ($provider !== 'fauApi') {
+            $providerList = OEmbed::get_known_provider();
+            if (empty($provider) || empty($providerList[$provider])) {
+                return $this->generateErrorContent($id, __('No valid video provider was found. As a result, the video cannot be played or could not be recognized.', 'rrze-video'), '');
+            }
         }
 
-        switch ($provider)
-        {
+        switch ($provider) {
             case 'youtube':
                 $res[] = $this->generate_youtube_html($data, $id);
                 break;
@@ -422,9 +438,11 @@ class Player
             case 'fau':
                 $res[] = $this->generate_fau_html($data, $id);
                 break;
+            case 'fauApi':
+                $res[] = $this->generate_fauApi_html($data, $id);
+                break;
             default:
                 $res[] = $this->generateErrorContent($id, __('Video provider incorrectly defined.', 'rrze-video'), '');
-            
         }
 
         if ($this->evaluateShowValues($data, $id)['showdesc'] && !empty($data['video']['description'])) {
@@ -557,10 +575,10 @@ class Player
      */
     private function generate_youtube_html($data, $id)
     {
-        $res = [];        
+        $res = [];
         $aspectRatio = isset($data['aspectratio']) ? $data['aspectratio'] : '16/9';
         $classname = 'plyr-videonum-' . $id;
-        
+
         if ($aspectRatio !== '9/16') {
             $res[] = '<div class="youtube-video ' . $classname . '"';
             $res[] = ' itemscope itemtype="https://schema.org/Movie"';
@@ -588,10 +606,9 @@ class Player
             $res[] = '</div>';
             $res[] = '</div>';
         }
-        
-        return implode("\n", $res);  
+
+        return implode("\n", $res);
     }
-    
 
     /**
      * Generates HTML for FAU video or audio players based on the provided data.
@@ -619,7 +636,103 @@ class Player
      *
      * @return string Returns the generated HTML for the FAU video or audio player.
      */
-    private function generate_fau_html($data, $id) 
+    private function generate_fauApi_html($data, $id)
+    {
+        $res = [];
+        // $poster = $this->evaluatePoster($data, $id);
+        $path = $data['url'];
+        $lang = $hreflang = '';
+
+
+        $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Self::get_aspectratio_class($data);
+        $res[] = '<video preload="none" class="' . $classname . '" playsinline controls crossorigin="anonymous"';
+        $res[] = ' data-video-title-id="' . $id . '"';  // Pass the id to the player
+        $res[] = $this->generatePlayerConfig($data, $id);
+
+        // if ($poster) {
+        //     $res[] = ' poster="' . $poster . '" data-poster="' . $poster . '"';
+        // }
+
+        if (!empty($data['video']['width'])) {
+            $res[] = ' width="' . $data['video']['width'] . '"';
+        }
+
+        if (!empty($data['video']['height'])) {
+            $res[] = ' height="' . $data['video']['height'] . '"';
+        }
+
+        $res[] = ' itemscope itemtype="https://schema.org/Movie"';
+        $res[] = '>';
+
+        $res[] = $this->get_html_structuredmeta($data);
+
+        // $res[] = '<source src="' . $data['url'] . '" type="video/mp4>"';
+        $res[] = '<source src="'. $data['url'].'" type="video/mp4" size="576">';
+
+        // if (!empty($data['video']['transcript'])) {
+        //     $transcriptHtml = Self::get_fauvideo_transcript_tracks($data);
+        //     $res[] = $transcriptHtml;
+        // }
+
+        $res[] = __('Unfortunately, your browser does not support HTML5 video formats.', 'rrze-video');
+        $res[] = ' ';
+        $url = !empty($data['url']) ? esc_url($data['url']) : '';
+        $file = !empty($data['video']['file']) ? esc_url($data['video']['file']) : '';
+        $title = $data['video']['title'] ?? '';
+        if ($url) {
+            $res[] = sprintf(
+                /* translators: %s: URL of the video. */
+                __('Therefore call up the video %s from the FAU video portal.', 'rrze-video'),
+                '<a href="' . $url . '">' . $title . '</a>'
+            );
+        } elseif ($file) {
+            $res[] = 'Call the video file  directly.';
+            $res[] = sprintf(
+                /* translators: %s: File name of the video. */
+                __('Call the video file %s directly.', 'rrze-video'),
+                '<a href="' . $file . '">' . $title . '</a>'
+            );
+        }
+
+        $res[] = '</video>';
+
+        /*------ Adds the visible title for the overlay ------*/
+        if (!$this->evaluateShowValues($data, $id)['showtitle']) {
+            if (!empty($title)) {
+                $res[] = '<p class="rrze-video-title rrze-video-hide" id="rrze-video-title-' . $id . '">' . $title . '</p>';
+            }
+        }
+        return implode("\n", $res);
+    }
+
+
+    /**
+     * Generates HTML for FAU video or audio players based on the provided data.
+     *
+     * This function dynamically creates either an audio or video player's HTML.
+     * It checks the type of media ('audio' or 'video') from the provided `$data` and structures
+     * the HTML accordingly. The function also handles various video properties like poster images,
+     * multiple video sources, and transcripts. If the video or audio is not supported by the browser,
+     * a fallback message is provided.
+     *
+     * @param array $data Contains information required for generating the HTML, which can include:
+     *      - 'video': {
+     *            'type': 'audio'|'video',
+     *            'file': 'URL of the media',
+     *            'width': 'Width of the video',
+     *            'height': 'Height of the video',
+     *            'title': 'Title of the media',
+     *            ... (other video-related keys)
+     *        }
+     *      - 'url': 'Direct URL of the video or audio',
+     *      - 'inLanguage' or 'language': 'Language of the media, e.g., "en-US"',
+     *      ... (other potential keys)
+     *
+     * @param int|string $id Unique identifier for the media data. Used for creating specific class names and HTML attributes.
+     *
+     * @return string Returns the generated HTML for the FAU video or audio player.
+     */
+    private function generate_fau_html($data, $id)
     {
         $res = [];
         $poster = $this->evaluatePoster($data, $id);
@@ -638,7 +751,7 @@ class Player
             $res[] = ' data-video-title-id="' . $id . '"';  // Pass the id to the player
             $res[] = $this->generatePlayerConfig($data, $id);
 
-            if ($poster){
+            if ($poster) {
                 $res[] = ' poster="' . $poster . '" data-poster="' . $poster . '"';
             }
 
@@ -657,7 +770,7 @@ class Player
 
             $res[] = '<source src="' . $data['video']['file'] . '" type="video/' . $ext . '">';
             if ($ext == 'm4v') {
-                $res []= '<source src="' . $data['video']['file'] . '" type="video/mp4">';
+                $res[] = '<source src="' . $data['video']['file'] . '" type="video/mp4">';
             }
 
             /*--------- Add the alternative Video Sources if thex exist ----------*/
@@ -706,7 +819,7 @@ class Player
                     $res[] = '<p class="rrze-video-title rrze-video-hide" id="rrze-video-title-' . $id . '">' . $title . '</p>';
                 }
             }
-        } 
+        }
         return implode("\n", $res);
     }
 
@@ -765,9 +878,9 @@ class Player
             }
         }
         return [
-            'showtitle' => $showtitle, 
-            'showmeta' => $showmeta, 
-            'showdesc' => $showdesc, 
+            'showtitle' => $showtitle,
+            'showmeta' => $showmeta,
+            'showdesc' => $showdesc,
             'showlink' => $showlink
         ];
     }
@@ -805,7 +918,7 @@ class Player
             $plyrconfig[] = ', "title": "' . $data['video']['title'] . '"';
         }
         $plyrconfig[] .= ' }\'';
-        
+
         return implode("\n", $plyrconfig);
     }
 
