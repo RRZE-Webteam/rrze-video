@@ -9,8 +9,7 @@ class Settings
     public function __construct()
     {
         add_action('admin_menu', [$this, 'addSettingsPage']);
-        add_action('admin_init', [$this, 'addOption']);
-        add_action('admin_init', [$this, 'registerSettings']);
+        add_action('admin_init', [$this, 'initializeSettings']);
     }
 
     public function addSettingsPage()
@@ -28,36 +27,48 @@ class Settings
     public function renderSettingsPage()
     {
         ?>
-            <div class="wrap">
-                <h1><?php echo get_admin_page_title(); ?></h1>
-                <p class="about-text"><?php _e("Settings options for the RRZE Video plugin.", "rrze-video"); ?></p>
+        <div class="wrap">
+            <h1><?php echo get_admin_page_title(); ?></h1>
+            <p class="about-text"><?php _e("Settings options for the RRZE Video plugin.", "rrze-video"); ?></p>
 
-                <hr />
-                
-                <!-- Form to enter the API token -->
-                <form action="options.php" method="post">
-                    <?php
-                    settings_fields('rrze-video-settings-group');
-                    do_settings_sections('rrze-video');
-                    submit_button();
-                    ?>
-                </form>
-                
-            </div>
+            <hr />
+            
+            <!-- Form to enter the API token -->
+            <form action="options.php" method="post">
+                <?php
+                settings_fields('rrze-video-settings-group');
+                do_settings_sections('rrze-video');
+                submit_button();
+                ?>
+            </form>
+            
+        </div>
         <?php
     }
 
+    public function initializeSettings()
+    {
+        $this->addOption();
+        $this->registerSettings();
+    }
+
+    public function addOption()
+    {
+        if (!get_option('rrze_video_api_key')) {
+            add_option('rrze_video_api_key', '', '', 'yes');
+        }
+    }
 
     public function registerSettings()
     {
         register_setting(
             'rrze-video-settings-group',
             'rrze_video_api_key',
-            array(
+            [
                 'type' => 'string',
                 'sanitize_callback' => [$this, 'sanitizeApiKey'],
-                'default' => NULL,
-            )
+                'default' => null,
+            ]
         );
 
         add_settings_section(
@@ -76,14 +87,6 @@ class Settings
         );
     }
 
-
-    public function addOption()
-    {
-        add_option(
-            'rrze_video_api_key'
-        );
-    }
-
     public function settingsSectionCallback()
     {
         echo 'Enter your API token below:';
@@ -92,32 +95,22 @@ class Settings
     public function apiTokenFieldCallback()
     {
         $token = get_option('rrze_video_api_key');
-        $displayValue = !empty($token) ? str_repeat('*', 45) : ''; 
+        $displayValue = !empty($token) ? str_repeat('*', 48) : ''; 
         echo "<input type='text' name='rrze_video_api_key' value='" . esc_attr($displayValue) . "' />";
-    }
-
-
-    public function updateToken($newToken)
-    {
-        if (empty($newToken)) {
-            return;
-        }
-        $newToken = sanitize_text_field($newToken);
-
-        update_option(
-            'rrze_video_api_key',
-            $newToken
-        );
     }
 
     public function sanitizeApiKey($input)
     {
-        // If input is a masked value, return the existing token
-        if ($input === str_repeat('*', 45)) {
-            return get_option('rrze_video_api_key');
-        }
-        // Otherwise, sanitize and return the new input value
-        return sanitize_text_field($input);
-    }
+        $data_encryption = new FSD_Data_Encryption();
+        $encrypted_api_key = get_option('rrze_video_api_key');
 
+        // If input is a masked value, return the existing token
+        if ($input === str_repeat('*', 48)) {
+            return $encrypted_api_key;
+        }
+
+        // Sanitize and encrypt the new input value
+        $input = sanitize_text_field($input);
+        return $data_encryption->encrypt($input);
+    }
 }

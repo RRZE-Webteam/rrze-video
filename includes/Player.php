@@ -58,15 +58,23 @@ class Player
         $id = $this->getRenderID();
         $content = '';
 
+        // Helper::debug($arguments);
+
         if (empty($arguments)) {
             return $this->handleError(__('Error when displaying the video player: Insufficient data was transferred.', 'rrze-video'));
+        }
+
+        if (!empty($arguments['secureclipid'])) {
+            $content .= $this->processAPIEmbed($arguments, $id);
+            $this->enqueueFrontendStyles(true, [], $id);
+            return $content;
         }
 
         if (empty($arguments['url'])) {
             $this->getUrlByIdOrRandom($arguments);
         }
 
-        if (!empty($arguments['url'])) {
+        if (!empty($arguments['url']) && empty($arguments['secureclipid'])) {
             if ($isoembed = OEmbed::is_oembed_provider($arguments['url'])) {
                 $content .= $this->processOEmbed($isoembed, $arguments, $id);
                 $this->enqueueFrontendStyles(true, [], $id);
@@ -223,14 +231,22 @@ class Player
 
     private function processAPIEmbed($arguments, $id)
     {
-        Helper::debug($arguments, 'arguments');
-        $clipId = $arguments['id'];
+        $token = get_option('rrze_video_api_key');
+        if(empty($token)){
+            return $this->handleError(__('Error getting the video', 'rrze-video') . '<br>' . __('No API is stored inside the Video Plugin settings.', 'rrze-video'));
+        }
+        $clipId = $arguments['secureclipid'];
         $streamUrl = API::getStreamingURI($clipId);
+        if (!empty($streamUrl)){
                 $arguments['url'] = $streamUrl;
                 
                 $this->enqueueFrontendStyles(true, [], $id);
 
         return $this->get_player_html('fauApi', $arguments, $id);
+        }
+        else {
+            return $this->handleError(__('Error getting the video', 'rrze-video') . '<br>' . __('Video data could not be obtained.', 'rrze-video'));
+        }
     }
 
     /**

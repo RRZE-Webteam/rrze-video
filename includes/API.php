@@ -15,7 +15,9 @@ class API
             return $transient_value;
         }
 
-        $bearerToken = get_option('rrze_video_api_key');
+        $data_encryption = new FSD_Data_Encryption();
+        $encrypted_api_key = get_option('rrze_video_api_key');
+        $bearerToken = $data_encryption->decrypt($encrypted_api_key);
         $response = wp_safe_remote_get(
             'https://api.video.uni-erlangen.de/api/v1/clips/'. $clipId,
             [
@@ -35,6 +37,7 @@ class API
         $data = json_decode($body, true);
 
         if (json_last_error() === JSON_ERROR_NONE && $data !== null && isset($data['data']['files']['video'])) {
+            Helper::debug('API response: ' . $body);    
             $video_url = $data['data']['files']['video'];
             set_transient($transient_name, $video_url, 21600);
             return $video_url;
