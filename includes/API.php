@@ -35,12 +35,19 @@ class API
 
         $body = wp_remote_retrieve_body($response);
         $data = json_decode($body, true);
-
         if (json_last_error() === JSON_ERROR_NONE && $data !== null && isset($data['data']['files']['video'])) {
-            Helper::debug('API response: ' . $body);    
-            $video_url = $data['data']['files']['video'];
-            set_transient($transient_name, $video_url, 21600);
-            return $video_url;
+            // Helper::debug('API response: ' . $body);
+            $video_data = [
+                'url' => $data['data']['files']['video'],
+                'vtt' => $data['data']['files']['vtt'],
+                'audio' => $data['data']['files']['audio'],
+                'title' => $data['data']['title'],
+                'description' => $data['data']['description'],
+                'language' => $data['data']['language'],
+            ];
+
+            set_transient($transient_name, $video_data, 21600);
+            return $video_data;
         }
 
         return;

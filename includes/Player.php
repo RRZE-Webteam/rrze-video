@@ -80,9 +80,6 @@ class Player
                 $this->enqueueFrontendStyles(true, [], $id);
             } else if (IFrames::is_iframe_provider($arguments['url'])) {
                 $content .= $this->processIFrame($arguments, $id);
-            } else if (true){
-                $content .= $this->processAPIEmbed($arguments, $id);
-                $this->enqueueFrontendStyles(true, [], $id);
             } else {
                 $content .= $this->handleError(__('Unknown video source', 'rrze-video'));
             }
@@ -232,19 +229,31 @@ class Player
     private function processAPIEmbed($arguments, $id)
     {
         $token = get_option('rrze_video_api_key');
-        if(empty($token)){
+        if (empty($token)) {
             return $this->handleError(__('Error getting the video', 'rrze-video') . '<br>' . __('No API is stored inside the Video Plugin settings.', 'rrze-video'));
         }
         $clipId = $arguments['secureclipid'];
-        $streamUrl = API::getStreamingURI($clipId);
-        if (!empty($streamUrl)){
-                $arguments['url'] = $streamUrl;
-                
-                $this->enqueueFrontendStyles(true, [], $id);
+        $videoData = API::getStreamingURI($clipId);
+        $vtt = $videoData['vtt'];
+        $language = $videoData['language'];
+        $title = $videoData['title'];
+        $desc = $videoData['description'];
 
-        return $this->get_player_html('fauApi', $arguments, $id);
+        $streamUrl = '';
+        if (isset($videoData['url'])) {
+            $streamUrl = $videoData['url'];
         }
-        else {
+        if (!empty($streamUrl)) {
+            $arguments['url'] = $streamUrl;
+            $arguments['vtt'] = $vtt;
+            $arguments['language'] = $language;
+            $arguments['video']['title'] = $title;
+            $arguments['video']['description'] = $desc;
+
+            $this->enqueueFrontendStyles(true, [], $id);
+
+            return $this->get_player_html('fauApi', $arguments, $id);
+        } else {
             return $this->handleError(__('Error getting the video', 'rrze-video') . '<br>' . __('Video data could not be obtained.', 'rrze-video'));
         }
     }
@@ -683,12 +692,11 @@ class Player
         $res[] = $this->get_html_structuredmeta($data);
 
         // $res[] = '<source src="' . $data['url'] . '" type="video/mp4>"';
-        $res[] = '<source src="'. $data['url'].'" type="video/mp4" size="576">';
+        $res[] = '<source src="' . $data['url'] . '" type="video/mp4" size="576">';
 
-        // if (!empty($data['video']['transcript'])) {
-        //     $transcriptHtml = Self::get_fauvideo_transcript_tracks($data);
-        //     $res[] = $transcriptHtml;
-        // }
+        if (!empty($data['vtt'])) {
+            $res[] = '<track kind="captions" src="' . $data['vtt'] . '" srclang="' . $data['language'] . '" label="'. __("Untertitel") .'" default>';
+        }
 
         $res[] = __('Unfortunately, your browser does not support HTML5 video formats.', 'rrze-video');
         $res[] = ' ';
@@ -1106,7 +1114,7 @@ class Player
                     }
                 }
             } else {
-                Helper::debug('RRZE Video: No or invalid transcript file found for key: ' . $key);
+                // Helper::debug('RRZE Video: No or invalid transcript file found for key: ' . $key);
             }
         }
 
