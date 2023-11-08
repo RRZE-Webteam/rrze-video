@@ -726,6 +726,7 @@ class Player
                 $res[] = '<p class="rrze-video-title rrze-video-hide" id="rrze-video-title-' . $id . '">' . $title . '</p>';
             }
         }
+        $res[] = '<p>'.__('Dieses Video wurde bereitgestellt durch <a href="https://www.fau.tv" rel="nofollow">das Videoportal der FAU</a>.').'</p>';
         return implode("\n", $res);
     }
 
