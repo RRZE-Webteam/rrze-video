@@ -575,7 +575,6 @@ class Player
         $res[] = '></iframe>';
         $res[] = '</div>';
         $res[] = '</div>';
-        Helper::debug('generate_vimeo_html completed');
         return implode("\n", $res);
     }
 
