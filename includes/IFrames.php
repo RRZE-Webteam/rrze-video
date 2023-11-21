@@ -42,7 +42,7 @@ class IFrames
         } else {
             $data =  array(
                 'error'   => __('The video provider is unknown. It is therefore not possible to embed the video.', 'rrze-video'),
-                'video'   => false,
+                'video'   => [],
             );
             return $data;
         }
@@ -89,11 +89,13 @@ class IFrames
         $known = self::get_known_iframe_provider();
         $data =  [
             'error' => false,
-            'video' => false,
+            'video' => [],
         ];
 
         if (preg_match('/\/[A-Za-z0-9]+\/?$/', $url)) {
             $embedurl = preg_replace('/\/([a-z0-9\-\/]+)\/([a-z0-9\-:\.]+)\/?$/', '/embed/$2', $url);
+
+            // Helper::debug($data);
 
             $data['video']['html'] = '<iframe class="remoteembed ard" allowfullscreen src="' . $embedurl . '" frameBorder="0" scrolling="no" title="'.__('Video from ARD Mediathek','rrze-video').'"></iframe>';
             $data['video']['orig_url'] = $url;
@@ -112,7 +114,7 @@ class IFrames
         $known = self::get_known_iframe_provider();
         $data =  [
             'error' => false,
-            'video' => false,
+            'video' => [],
         ];
 
         if (preg_match('/\/mediathek\/video\/[a-z0-9\-:\.]+$/', $url)) {
