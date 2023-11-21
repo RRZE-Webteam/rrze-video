@@ -566,7 +566,7 @@ class Player
         $res[] = '<div class="plyr__video-embed">';
         $res[] = '<iframe';
         if (!empty($data['video']['title'])) {
-            $res .= ' title="' . esc_html($data['video']['title']) . '"';
+            $res[] = ' title="' . esc_html($data['video']['title']) . '"';
         }
         $res[] = '  src="https://player.vimeo.com/video/' . $data['video']['video_id'] . '?autoplay=0&loop=0&title=0&byline=0&portrait=0"';
         $res[] = '  allowfullscreen';
@@ -575,6 +575,7 @@ class Player
         $res[] = '></iframe>';
         $res[] = '</div>';
         $res[] = '</div>';
+        Helper::debug('generate_vimeo_html completed');
         return implode("\n", $res);
     }
 
