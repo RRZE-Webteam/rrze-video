@@ -17,7 +17,7 @@ class OEmbed
                     'www.video.uni-erlangen.de',
                     'www.video.fau.de',
                     'fau.tv',
-                    'www.fau.tv'
+                    'www.fau.tv',
                 ],
                 'home'    => 'https://www.fau.tv',
                 'api-endpoint'  => 'https://www.fau.tv/services/oembed'

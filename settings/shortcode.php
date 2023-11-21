@@ -13,6 +13,13 @@ $settings = [
             'field_type' => 'number',
             'type' => 'key'
         ],
+        'secureclipid' => [
+            'default' => 0,
+            'label' => __('Clip ID Number', 'rrze-video'),
+            'message' => __('Clip ID number of the video Clip', 'rrze-video'),
+            'field_type' => 'number',
+            'type' => 'key'
+        ],
         'url' => [
             'default' => '',
             'field_type' => 'text', // Art des Feldes im Gutenberg Editor

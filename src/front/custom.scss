@@ -157,10 +157,11 @@
 		margin-right: 0px;
 		padding: 0.2em 0.4em;
 
-		color: var(--color-primary-ci-hell-kontrast, #fff);
+		// color: var(--color-primary-ci-hell-kontrast, #fff);
+		color: #fff;
 		font-size: min(calc(0.75rem + 0.225vw), 0.9rem);
 		line-height: 1.55;
-		//background-color: var(--color-primary-ci-hell, #04316a);
+		// background-color: var(--color-primary-ci-hell, #04316a);
 		text-shadow: 0 0 5px #000;
 		animation: fadeIn 1s;
 
