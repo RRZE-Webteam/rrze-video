@@ -817,24 +817,10 @@ class Player
             }
 
             $res[] = __('Unfortunately, your browser does not support HTML5 video formats.', 'rrze-video');
-            $res[] = ' ';
-            $url = !empty($data['url']) ? esc_url($data['url']) : '';
-            $file = !empty($data['video']['file']) ? esc_url($data['video']['file']) : '';
+            // $res[] = ' ';
+            // $url = !empty($data['url']) ? esc_url($data['url']) : '';
+            // $file = !empty($data['video']['file']) ? esc_url($data['video']['file']) : '';
             $title = $data['video']['title'] ?? '';
-            if ($url) {
-                $res[] = sprintf(
-                    /* translators: %s: URL of the video. */
-                    __('Therefore call up the video %s from the FAU video portal.', 'rrze-video'),
-                    '<a href="' . $url . '">' . $title . '</a>'
-                );
-            } elseif ($file) {
-                $res[] = 'Call the video file  directly.';
-                $res[] = sprintf(
-                    /* translators: %s: File name of the video. */
-                    __('Call the video file %s directly.', 'rrze-video'),
-                    '<a href="' . $file . '">' . $title . '</a>'
-                );
-            }
 
             $res[] = '</video>';
 
@@ -1106,9 +1092,9 @@ class Player
 
                 if (empty($outputTemp)) {
                     //Set the first track always as default
-                    $outputTemp .= '<track kind="captions" src="' . $url . '" srclang="' . $lang . '" label="' . $labelEvaluate . '" default>';
+                    $outputTemp .= '<track kind="captions" src="' . $url . '" srclang="' . $lang . '" label="' . $labelEvaluate . '" default />';
                 } else {
-                    $trackTemp = '<track kind="captions" src="' . $url . '" srclang="' . $lang . '" label="' . $labelEvaluate . '">';
+                    $trackTemp = '<track kind="captions" src="' . $url . '" srclang="' . $lang . '" label="' . $labelEvaluate . '"/>';
 
                     if (strpos($outputTemp, $url) === false) {
                         $outputTemp .= $trackTemp;
