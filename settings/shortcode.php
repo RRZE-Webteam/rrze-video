@@ -20,6 +20,20 @@ $settings = [
             'field_type' => 'number',
             'type' => 'key'
         ],
+        'start' => [
+            'default' => 0,
+            'label' => __('Starting time of the Clip', 'rrze-video'),
+            'message' => __('Starts the player at the selected time', 'rrze-video'),
+            'field_type' => 'number',
+            'type' => 'integer'
+        ],
+        'loop' => [
+            'default' => false,
+            'label' => __('Loops the video', 'rrze-video'),
+            'message' => __('Loops the video', 'rrze-video'),
+            'field_type' => 'bool',
+            'type' => 'bool'
+        ],
         'url' => [
             'default' => '',
             'field_type' => 'text', // Art des Feldes im Gutenberg Editor
