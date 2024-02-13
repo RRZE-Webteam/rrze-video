@@ -925,6 +925,8 @@ class Player
             'loop' => !empty($data['loop']) ? $data['loop'] : false,
             'id' => $id,
             'start' => isset($data['start']) ? $data['start'] : 0,
+            'clipend' => isset($data['clipend']) ? $data['clipend'] : 0,
+            'clipstart' => isset($data['clipstart']) ? $data['clipstart'] : 0,
             'preload' => 'none',
             'loadSprite' => false,
             'iconUrl' => plugin()->getUrl('assets/plyr') . 'plyr.svg',
@@ -935,8 +937,6 @@ class Player
         if (!empty($data['loop'])){
             $plyrconfig[] = 'data-loop=' . $data['loop']; //pass the id    
         }
-        $plyrconfig[] = 'data-id=' . $id;
-        $plyrconfig[] = 'data-start=' . $data['start'];
         $plyrconfig[] = ' data-plyr-config=\'{ ';
         $plyrconfig[] = '"preload": "none", ';
         $plyrconfig[] = '"loadSprite": "false", ';

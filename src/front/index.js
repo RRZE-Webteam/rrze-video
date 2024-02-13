@@ -62,8 +62,6 @@ const adjustControls = (player) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   try {
-    //let counter = 0;
-
     console.log("Successfully loaded front.js for rrze-video.");
 
     const players = Plyr.setup(".plyr-instance", {
@@ -81,23 +79,36 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const playerConfig = vidConfig[index];
-      const playerID = parseInt(playerConfig['id'] || "0");
-      if (playerConfig['loop'] && playerID === (index + 1)) {
+      const playerID = parseInt(playerConfig["id"] || "0");
+      if (playerConfig["loop"] && playerID === index + 1) {
         player.loop = true;
       }
 
-      const parentElementClass = player?.elements?.container?.parentElement?.classList[1];
-      const videoTitleId = `rrze-video-title-${parentElementClass.slice(VIDEO_TITLE_PREFIX_LENGTH)}`;
+      const parentElementClass =
+        player?.elements?.container?.parentElement?.classList[1];
+      const videoTitleId = `rrze-video-title-${parentElementClass.slice(
+        VIDEO_TITLE_PREFIX_LENGTH
+      )}`;
       const videoTitle = document.getElementById(videoTitleId);
 
       let skipped = false; // Initialize skipped flag for each player
       player.on("canplay", function () {
-        if (!skipped) {
-          const startTime = parseFloat(playerConfig['start'] || "0");
+        const startTime = parseFloat(playerConfig["start"] || "0");
+        if (!skipped && startTime > 0) {
           player.currentTime = startTime;
           skipped = true;
         }
       });
+
+      if (playerConfig["loop"]) {
+        player.on("timeupdate", function () {
+          let maximumTime = player.duration - parseFloat(playerConfig["clipend"]);
+         if (player.currentTime >= maximumTime) {
+            player.currentTime = parseFloat(playerConfig["clipstart"]);
+          }
+        });
+      }
+
       if (videoTitle) {
         videoTitle.style.zIndex = "1";
         videoTitle.classList.remove("rrze-video-hide");
