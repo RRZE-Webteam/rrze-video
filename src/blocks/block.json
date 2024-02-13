@@ -71,6 +71,25 @@
 		"textAlign": {
 			"type": "string",
 			"default": ""
+		},
+		"secureclipid": {
+			"type": "number"
+		},
+		"loop": {
+			"type": "boolean",
+			"default": false
+		},
+		"start": {
+			"type": "number",
+			"default": 0
+		},
+		"clipstart": {
+			"type": "number",
+			"default": 8
+		},
+		"clipend": {
+			"type": "number",
+			"default": 9
 		}
 	}
 }
