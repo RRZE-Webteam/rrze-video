@@ -64,6 +64,12 @@ document.addEventListener("DOMContentLoaded", () => {
   try {
     console.log("Successfully loaded front.js for rrze-video.");
 
+    const playerElements = document.querySelectorAll(".plyr-instance");
+    if (playerElements.length === 0) {
+      console.log("No plyr instances found.");
+      return;
+    }
+
     const players = Plyr.setup(".plyr-instance", {
       fullscreen: { iosNative: true },
     });
