@@ -77,11 +77,11 @@ document.addEventListener("DOMContentLoaded", () => {
         vidConfig[index] = JSON.parse(window[propertyName].plyrconfigJS); // Store config by index
       }
 
-      const playerConfig = vidConfig[index];
-      const playerID = parseInt(playerConfig["id"] || 0);
-      if (playerConfig["loop"] && playerID === index + 1) {
+      const playerConfig = vidConfig[index] || {}; 
+      const playerID = parseInt(playerConfig.id || 0);
+      if (playerConfig.loop && playerID === index + 1) {
         player.loop = true;
-      }
+    }
 
       const parentElementClass =
         player?.elements?.container?.parentElement?.classList[1];
