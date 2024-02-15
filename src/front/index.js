@@ -68,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
       fullscreen: { iosNative: true },
     });
 
-    console.log(players);
     let vidConfig = [];
     players.forEach((player, index) => {
       adjustControls(player);
@@ -79,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const playerConfig = vidConfig[index];
-      const playerID = parseInt(playerConfig["id"] || "0");
+      const playerID = parseInt(playerConfig["id"] || 0);
       if (playerConfig["loop"] && playerID === index + 1) {
         player.loop = true;
       }

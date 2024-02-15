@@ -323,68 +323,97 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
           value={attributes.secureclipid}
           onChange={(secureclipid) => setSecureId(secureclipid)}
         />
-        <Button isPrimary onClick={() => setAttributes({ secureclipid: secureId })}>{__('Embed secure video', 'rrze-video')}</Button>
-        </PanelBody>
-      <PanelBody
-        title={__("Player controls", "rrze-video")}
-        initialOpen={false}
-      >
-        <Spacer>
-          <Heading level={3}>{__("Loop mode", "rrze-video")}</Heading>
-          <Text>
-            {__(
-              `Activates the loop feature. The video will be played in a loop.`,
-              "rrze-video"
-            )}
-          </Text>
-        </Spacer>
-        <ToggleControl
-          checked={attributes.loop}
-          onChange={(loop) => setAttributes({ loop: loop })}
-          label={__("Activate looping", "rrze-video")}
-        />
-        { attributes.loop && (
+        <Button
+          isPrimary
+          disabled={attributes.secureclipid === secureId}
+          onClick={() => setAttributes({ secureclipid: secureId })}
+        >
+          {__("Embed secure video", "rrze-video")}
+        </Button>
+      </PanelBody>
+      {attributes.provider === "fauvideo" && (
+        <PanelBody
+          title={__("Player controls", "rrze-video")}
+          initialOpen={false}
+        >
           <Spacer>
+            <Heading level={3}>{__("Loop mode", "rrze-video")}</Heading>
             <Text>
               {__(
-                `The loop mode is activated. The video will be played in a loop. If your video contains branding, the default settings should be sufficient. Else you can control the position in the clip where the loop should get triggered (clipend) and the position where the looped video should start (clipstart) with the following settings:`,
+                `Activates the loop feature. The video will be played in a loop.`,
                 "rrze-video"
               )}
             </Text>
-                <NumberControl
-                  label={__("Start of the looping section", "rrze-video")}
-                  value={tempClipStart}
-                  onChange={(clipstart) => setTempClipStart(clipstart)}
-                />
-                <NumberControl
-                  label={__("End of the looping section", "rrze-video")}
-                  value={tempClipEnd}
-                  onChange={(clipend) => setTempClipEnd(clipend)}
-                />
-                
-                <Button isPrimary onClick={() => setAttributes({
-                  clipstart: tempClipStart,
-                  clipend: tempClipEnd
-                })}>{__('Update loop settings', 'rrze-video')}
-              </Button>
-          </Spacer>  
-        )}
-        <Heading level={3}>{__("Start position on first play", "rrze-video")}</Heading>
-        <Spacer>
-        <Text>
-            {__(
-              `The first time the video plays, start it at the following position in seconds:`,
-              "rrze-video"
-            )}
-          </Text>
-          <NumberControl
-            label={__("Start of the video", "rrze-video")}
-            value={tempStart}
-            onChange={(start) => setTempStart(start)}
+          </Spacer>
+          <ToggleControl
+            checked={attributes.loop}
+            onChange={(loop) => setAttributes({ loop: loop })}
+            label={__("Activate looping", "rrze-video")}
           />
-          <Button isPrimary onClick={() => setAttributes({ start: tempStart })}>{__('Update start position', 'rrze-video')}</Button>
-        </Spacer>
-      </PanelBody>
+          {attributes.loop && (
+            <Spacer>
+              <Text>
+                {__(
+                  `The loop mode is activated. The video will be played in a loop. If your video contains branding, the default settings should be sufficient. Else you can control the position in the clip where the loop should get triggered (clipend) and the position where the looped video should start (clipstart) with the following settings:`,
+                  "rrze-video"
+                )}
+              </Text>
+              <NumberControl
+                label={__("Start of the looping section", "rrze-video")}
+                value={tempClipStart}
+                onChange={(clipstart) => setTempClipStart(clipstart)}
+                min={0}
+              />
+              <NumberControl
+                label={__("End of the looping section", "rrze-video")}
+                value={tempClipEnd}
+                onChange={(clipend) => setTempClipEnd(clipend)}
+                min={0}
+              />
+
+              <Button
+                isPrimary
+                disabled={
+                  tempClipStart === attributes.clipstart &&
+                  tempClipEnd === attributes.clipend
+                }
+                onClick={() =>
+                  setAttributes({
+                    clipstart: tempClipStart,
+                    clipend: tempClipEnd,
+                  })
+                }
+              >
+                {__("Update loop settings", "rrze-video")}
+              </Button>
+            </Spacer>
+          )}
+          <Heading level={3}>
+            {__("Start position on first play", "rrze-video")}
+          </Heading>
+          <Spacer>
+            <Text>
+              {__(
+                `The first time the video plays, start it at the following position in seconds:`,
+                "rrze-video"
+              )}
+            </Text>
+            <NumberControl
+              label={__("Start of the video", "rrze-video")}
+              value={tempStart}
+              onChange={(start) => setTempStart(start)}
+              min={0}
+            />
+            <Button
+              isPrimary
+              disabled={tempStart === attributes.start}
+              onClick={() => setAttributes({ start: tempStart })}
+            >
+              {__("Update start position", "rrze-video")}
+            </Button>
+          </Spacer>
+        </PanelBody>
+      )}
     </InspectorControls>
   );
 };
