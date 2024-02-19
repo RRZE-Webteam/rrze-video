@@ -20,6 +20,34 @@ $settings = [
             'field_type' => 'number',
             'type' => 'key'
         ],
+        'start' => [
+            'default' => 0,
+            'label' => __('Starting time of the Clip', 'rrze-video'),
+            'message' => __('Starts the player at the selected time', 'rrze-video'),
+            'field_type' => 'number',
+            'type' => 'integer'
+        ],
+        'clipend' => [
+            'default' => 9,
+            'label' => __('Clips the of the video for looping video content', 'rrze-video'),
+            'message' => __('Clips the end of the video. Number in seconds', 'rrze-video'),
+            'field_type' => 'number',
+            'type' => 'integer'
+        ],
+        'clipstart' => [
+            'default' => 8,
+            'label' => __('Clips the start of the video for looping video content', 'rrze-video'),
+            'message' => __('Clips the beginning of the video. Number in seconds', 'rrze-video'),
+            'field_type' => 'number',
+            'type' => 'integer'
+        ],
+        'loop' => [
+            'default' => false,
+            'label' => __('Loops the video', 'rrze-video'),
+            'message' => __('Loops the video', 'rrze-video'),
+            'field_type' => 'bool',
+            'type' => 'bool'
+        ],
         'url' => [
             'default' => '',
             'field_type' => 'text', // Art des Feldes im Gutenberg Editor

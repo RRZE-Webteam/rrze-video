@@ -29,7 +29,7 @@ export default function Edit(props) {
   const containerRef = useRef();
   const blockProps = useBlockProps();
   const { attributes, setAttributes } = props;
-  const { id, url, rand, aspectratio } = attributes;
+  const { id, url, rand, aspectratio, secureclipid } = attributes;
   const [inputURL, setInputURL] = useState(attributes.url);
 
   /**
@@ -107,7 +107,7 @@ export default function Edit(props) {
   return (
     <div {...blockProps}>
       <CustomInspectorControls attributes={attributes} setAttributes={setAttributes} />
-      {id || url || rand ? (
+      {id || url || rand || secureclipid ? (
         <>
           <BlockControls>
             <ToolbarGroup>
@@ -126,7 +126,7 @@ export default function Edit(props) {
             </ToolbarGroup>
           </BlockControls>
           <div
-            className={`rrze-video-container-${uniqueId}`}
+            className={`rrze-video-container-${uniqueId}${secureclipid ? ' securedVideo' : ''}`}
             ref={containerRef}
           >
           {/* Renders dynamic Shortcode from includes/Gutenberg.php */}
@@ -141,6 +141,11 @@ export default function Edit(props) {
                 poster: attributes.poster,
                 aspectratio: attributes.aspectratio,
                 textAlign: attributes.textAlign,
+                secureclipid: attributes.secureclipid,
+                loop: attributes.loop,
+                start: attributes.start,
+                clipstart: attributes.clipstart,
+                clipend: attributes.clipend,
               }}
             />
           </div>

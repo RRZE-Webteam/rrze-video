@@ -36,11 +36,10 @@ const adjustControls = (player) => {
   const playerContainer = player?.elements?.container;
   const videoTitle = playerContainer?.nextElementSibling;
 
-  if (videoTitle && videoTitle.matches('p.rrze-video-title')) {
+  if (videoTitle && videoTitle.matches("p.rrze-video-title")) {
     videoTitle.classList[playerWidth <= 450 ? "add" : "remove"]("minified");
     videoTitle.classList[playerWidth <= 450 ? "add" : "remove"]("cropped");
   }
-
 
   const controls = Array.from(
     playerContainer.querySelectorAll(SELECTORS.CONTROLS)
@@ -64,12 +63,31 @@ const adjustControls = (player) => {
 document.addEventListener("DOMContentLoaded", () => {
   try {
     console.log("Successfully loaded front.js for rrze-video.");
+
+    const playerElements = document.querySelectorAll(".plyr-instance");
+    if (playerElements.length === 0) {
+      console.log("No plyr instances found.");
+      return;
+    }
+
     const players = Plyr.setup(".plyr-instance", {
       fullscreen: { iosNative: true },
     });
 
-    players?.forEach((player) => {
+    let vidConfig = [];
+    players.forEach((player, index) => {
       adjustControls(player);
+      // Directly use index to manage unique properties
+      let propertyName = `rrzeVideoPluginData${index + 1}`; // Assuming your PHP data starts with 1
+      if (window[propertyName] && window[propertyName].plyrconfigJS) {
+        vidConfig[index] = JSON.parse(window[propertyName].plyrconfigJS); // Store config by index
+      }
+
+      const playerConfig = vidConfig[index] || {}; 
+      const playerID = parseInt(playerConfig.id || 0);
+      if (playerConfig.loop && playerID === index + 1) {
+        player.loop = true;
+    }
 
       const parentElementClass =
         player?.elements?.container?.parentElement?.classList[1];
@@ -77,6 +95,24 @@ document.addEventListener("DOMContentLoaded", () => {
         VIDEO_TITLE_PREFIX_LENGTH
       )}`;
       const videoTitle = document.getElementById(videoTitleId);
+
+      let skipped = false; // Initialize skipped flag for each player
+      player.on("canplay", function () {
+        const startTime = parseFloat(playerConfig["start"] || "0");
+        if (!skipped && startTime > 0) {
+          player.currentTime = startTime;
+          skipped = true;
+        }
+      });
+
+      if (playerConfig["loop"]) {
+        player.on("timeupdate", function () {
+          let maximumTime = player.duration - parseFloat(playerConfig["clipend"]);
+         if (player.currentTime >= maximumTime) {
+            player.currentTime = parseFloat(playerConfig["clipstart"]);
+          }
+        });
+      }
 
       if (videoTitle) {
         videoTitle.style.zIndex = "1";

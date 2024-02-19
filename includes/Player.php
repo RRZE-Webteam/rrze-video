@@ -16,7 +16,7 @@ class Player
      */
     private static $instance = null;
 
-    private $counter = 1;
+    private $counter = 0;
     private $id = '';
 
     /**
@@ -780,6 +780,8 @@ class Player
                 $res[] = ' poster="' . $poster . '" data-poster="' . $poster . '"';
             }
 
+            $res[] = 'data-poster="100"';
+
             if (!empty($data['video']['width'])) {
                 $res[] = ' width="' . $data['video']['width'] . '"';
             }
@@ -919,6 +921,22 @@ class Player
     private function generatePlayerConfig($data, $id)
     {
         $plyrconfig = [];
+        $plyrconfigJS = [
+            'loop' => !empty($data['loop']) ? $data['loop'] : false,
+            'id' => $id,
+            'start' => isset($data['start']) ? $data['start'] : 0,
+            'clipend' => isset($data['clipend']) ? $data['clipend'] : 0,
+            'clipstart' => isset($data['clipstart']) ? $data['clipstart'] : 0,
+            'preload' => 'none',
+            'loadSprite' => false,
+            'iconUrl' => plugin()->getUrl('assets/plyr') . 'plyr.svg',
+            'blankVideo' => plugin()->getUrl('assets/plyr') . 'blank.mp4',
+            'title' => !empty($data['video']['title']) ? $data['video']['title'] : '',
+        ];
+        
+        if (!empty($data['loop'])){
+            $plyrconfig[] = 'data-loop=' . $data['loop']; //pass the id    
+        }
         $plyrconfig[] = ' data-plyr-config=\'{ ';
         $plyrconfig[] = '"preload": "none", ';
         $plyrconfig[] = '"loadSprite": "false", ';
@@ -930,7 +948,25 @@ class Player
         }
         $plyrconfig[] .= ' }\'';
 
+        $this->sendToJS('plyrconfigJS', json_encode($plyrconfigJS), $id);
         return implode("\n", $plyrconfig);
+    }
+
+    private function sendToJS($packageName, $data, $id)
+    {
+        $rrze_videoplugin_transfer_nonce = wp_create_nonce("rrze_videoplugin_transfer");
+        $ajax_url = admin_url('admin-ajax.php');
+    
+        // Prepare the data you want to sen d to your JavaScript.
+        $scriptData = array(
+            'nonce' => $rrze_videoplugin_transfer_nonce,
+            'ajaxurl' => $ajax_url,
+            $packageName => $data, // Example data; replace with your actual data.
+            // Include any additional data you need to send to JS here.
+        );
+    
+        // Localize the script with the data.
+        wp_localize_script('rrze-video-plyr', 'rrzeVideoPluginData'.$id, $scriptData);
     }
 
     /**
