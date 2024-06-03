@@ -128,8 +128,6 @@
 		width: fit-content;
 	}
 
-
-
 	@keyframes fadeIn {
 		from {
 			opacity: 0;
@@ -150,7 +148,7 @@
 		}
 	}
 
-	p.rrze-video-title {
+	#content p.rrze-video-title, p.rrze-video-title {
 		position: absolute;
 		top: 0px;
 		left: 0px;
