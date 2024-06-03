@@ -175,6 +175,8 @@
 		@media (prefers-reduced-motion: reduce) {
 			animation: none;
 		}
+
+		max-width: 100%;
 	}
 
 	p.minified {
