@@ -19,6 +19,7 @@
 	display: var(--webkit-text-track-display);
 }
 
+
 .rrze-video {
 	position: relative;
 
@@ -148,7 +149,7 @@
 		}
 	}
 
-	#content p.rrze-video-title, p.rrze-video-title {
+	p.rrze-video-title {
 		position: absolute;
 		top: 0px;
 		left: 0px;
@@ -173,8 +174,6 @@
 		@media (prefers-reduced-motion: reduce) {
 			animation: none;
 		}
-
-		max-width: 100%;
 	}
 
 	p.minified {
@@ -232,4 +231,8 @@
 	.rrze-video-display-none {
 		display: none !important;
 	}
+}
+
+#content .rrze-video p.rrze-video-title{
+	max-width: 100%;
 }
