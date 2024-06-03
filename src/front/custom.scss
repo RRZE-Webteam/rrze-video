@@ -19,6 +19,7 @@
 	display: var(--webkit-text-track-display);
 }
 
+
 .rrze-video {
 	position: relative;
 
@@ -128,8 +129,6 @@
 		width: fit-content;
 	}
 
-
-
 	@keyframes fadeIn {
 		from {
 			opacity: 0;
@@ -232,4 +231,8 @@
 	.rrze-video-display-none {
 		display: none !important;
 	}
+}
+
+#content .rrze-video p.rrze-video-title{
+	max-width: 100%;
 }
