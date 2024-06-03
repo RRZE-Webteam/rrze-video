@@ -250,6 +250,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
             isBlock
           >
             <ToggleGroupControlOption value="16/9" label="16:9" />
+            <ToggleGroupControlOption value="9/16" label="9:16" />
             <ToggleGroupControlOption value="4/3" label="4:3" />
             <ToggleGroupControlOption value="1/1" label="1:1" />
             <ToggleGroupControlOption value="2.35/1" label="2.35:1" />
