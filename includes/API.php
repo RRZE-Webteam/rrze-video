@@ -10,7 +10,6 @@ class API
     {
         $transient_name = 'rrze_streaming_uri_'. $clipId;
         $transient_value = get_transient($transient_name);
-
         if ($transient_value !== false) {
             return $transient_value;
         }
@@ -18,6 +17,7 @@ class API
         $data_encryption = new FSD_Data_Encryption();
         $encrypted_api_key = get_option('rrze_video_api_key');
         $bearerToken = $data_encryption->decrypt($encrypted_api_key);
+        //TODO: check if sslverify can be removed / true
         $response = wp_safe_remote_get(
             'https://api.video.uni-erlangen.de/api/v1/clips/'. $clipId,
             [
