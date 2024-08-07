@@ -36,7 +36,7 @@ class API
         $body = wp_remote_retrieve_body($response);
         $data = json_decode($body, true);
         if (json_last_error() === JSON_ERROR_NONE && $data !== null && isset($data['data']['files']['video'])) {
-            // Helper::debug('API response: ' . $body);
+            Helper::debug('API response: ' . $body);
             $video_data = [
                 'url' => $data['data']['files']['video'],
                 'vtt' => $data['data']['files']['vtt'],
