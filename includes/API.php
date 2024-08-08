@@ -14,6 +14,8 @@ class API
             return $transient_value;
         }
 
+        Helper::debug('Host Remote Address FAUTV: ');
+        Helper::debug(array_key_exists('REMOTE_ADDR', $_SERVER) ? $_SERVER['REMOTE_ADDR'] : '');
         $data_encryption = new FSD_Data_Encryption();
         $encrypted_api_key = get_option('rrze_video_api_key');
         $bearerToken = $data_encryption->decrypt($encrypted_api_key);
