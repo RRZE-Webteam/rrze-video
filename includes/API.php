@@ -8,25 +8,30 @@ class API
 {
     public static function getStreamingURI($clipId)
     {
-        $transient_name = 'rrze_streaming_uri_'. $clipId;
+        $transient_name = 'rrze_streaming_uri_' . $clipId;
         $transient_value = get_transient($transient_name);
+
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $ip_long = ip2long($ip);
+        Helper::debug($ip_long);
+
         if ($transient_value !== false) {
             return $transient_value;
         }
 
-        Helper::debug('Host Remote Address FAUTV: ');
-        Helper::debug(array_key_exists('REMOTE_ADDR', $_SERVER) ? $_SERVER['REMOTE_ADDR'] : '');
         $data_encryption = new FSD_Data_Encryption();
         $encrypted_api_key = get_option('rrze_video_api_key');
         $bearerToken = $data_encryption->decrypt($encrypted_api_key);
-        //TODO: check if sslverify can be removed / true
+
+        $request_url = 'https://api.video.uni-erlangen.de/api/v1/clips/' . $clipId . '/?for=' . $ip_long;
+
         $response = wp_safe_remote_get(
-            'https://api.video.uni-erlangen.de/api/v1/clips/'. $clipId,
+            $request_url,
             [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $bearerToken,
                 ],
-                'sslverify' => false, 
+                'sslverify' => false,
             ]
         );
 
@@ -37,8 +42,10 @@ class API
 
         $body = wp_remote_retrieve_body($response);
         $data = json_decode($body, true);
+
         if (json_last_error() === JSON_ERROR_NONE && $data !== null && isset($data['data']['files']['video'])) {
             Helper::debug('API response: ' . $body);
+
             $video_data = [
                 'url' => $data['data']['files']['video'],
                 'vtt' => $data['data']['files']['vtt'],
@@ -52,10 +59,7 @@ class API
             return $video_data;
         }
 
-        return;
-
         error_log('Unexpected response format: ' . $body);
-
         return null;
     }
 }
