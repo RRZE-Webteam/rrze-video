@@ -29,8 +29,7 @@ class API
             [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $bearerToken,
-                ],
-                'sslverify' => false,
+                ]
             ]
         );
 
