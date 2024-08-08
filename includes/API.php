@@ -13,7 +13,6 @@ class API
 
         $ip = $_SERVER['REMOTE_ADDR'];
         $ip_long = ip2long($ip);
-        Helper::debug($ip_long);
 
         if ($transient_value !== false) {
             return $transient_value;
