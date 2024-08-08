@@ -22,15 +22,14 @@ class API
         $encrypted_api_key = get_option('rrze_video_api_key');
         $bearerToken = $data_encryption->decrypt($encrypted_api_key);
 
-        $request_url = 'https://api.video.uni-erlangen.de/api/v1/clips/' . $clipId . '/?for=' . $ip_long;
+        $request_url = 'https://www.api.video.uni-erlangen.de/api/v1/clips/' . $clipId . '/?for=' . $ip_long;
 
         $response = wp_safe_remote_get(
             $request_url,
             [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $bearerToken,
-                ],
-                'sslverify' => false,
+                ]
             ]
         );
 
