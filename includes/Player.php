@@ -663,71 +663,90 @@ class Player
      */
     private function generate_fauApi_html($data, $id)
     {
+        $poster = $this->evaluatePoster($data, $id);
+
         $res = [];
-        // $poster = $this->evaluatePoster($data, $id);
-        $path = $data['url'];
-        $lang = $hreflang = '';
+        // $res[] = '<div class="rrze-video rrze-video-container-' . $id . '">';
+        $res[] = '<media-player id="' . $id . '" src="' . $data['url'] . '" title="' . $data['video']['title'] . '" crossorigin playsinline>';
+        $res[] = '<media-provider>';
+        $res[] = '<media-poster  class="vds-poster" src="' . $poster . '" alt="Girl walks into campfire with gnomes surrounding her friend ready for their next meal!">';
+        $res[] = '</media-poster>';
+        if (!empty($data['vtt'])) {
+            $res[] = '<track kind="captions" src="' . $data['vtt'] . '" srclang="' . $data['language'] . '" label="' . __("Untertitel") . '" default>';
+        }
+        $res[] = '</media-provider>';
+        $res[] = '<media-audio-layout>';
+        $res[] = '</media-audio-layout>';
+        $res[] = '<media-video-layout thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt" >';
+        $res[] = '</media-video-layout>';
+        $res[] = '</media-player>';
+        // $res[] = '</div>';
+        return implode("\n", $res);
+        // $res = [];
+        // // $poster = $this->evaluatePoster($data, $id);
+        // $path = $data['url'];
+        // $lang = $hreflang = '';
 
 
-        $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Self::get_aspectratio_class($data);
-        $res[] = '<video preload="none" class="' . $classname . '" playsinline controls crossorigin="anonymous"';
-        $res[] = ' data-video-title-id="' . $id . '"';  // Pass the id to the player
-        $res[] = $this->generatePlayerConfig($data, $id);
+        // $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Self::get_aspectratio_class($data);
+        // $res[] = '<video preload="none" class="' . $classname . '" playsinline controls crossorigin="anonymous"';
+        // $res[] = ' data-video-title-id="' . $id . '"';  // Pass the id to the player
+        // $res[] = $this->generatePlayerConfig($data, $id);
 
-        // if ($poster) {
-        //     $res[] = ' poster="' . $poster . '" data-poster="' . $poster . '"';
+        // // if ($poster) {
+        // //     $res[] = ' poster="' . $poster . '" data-poster="' . $poster . '"';
+        // // }
+
+        // if (!empty($data['video']['width'])) {
+        //     $res[] = ' width="' . $data['video']['width'] . '"';
         // }
 
-        if (!empty($data['video']['width'])) {
-            $res[] = ' width="' . $data['video']['width'] . '"';
-        }
+        // if (!empty($data['video']['height'])) {
+        //     $res[] = ' height="' . $data['video']['height'] . '"';
+        // }
 
-        if (!empty($data['video']['height'])) {
-            $res[] = ' height="' . $data['video']['height'] . '"';
-        }
+        // $res[] = ' itemscope itemtype="https://schema.org/Movie"';
+        // $res[] = '>';
 
-        $res[] = ' itemscope itemtype="https://schema.org/Movie"';
-        $res[] = '>';
+        // $res[] = $this->get_html_structuredmeta($data);
 
-        $res[] = $this->get_html_structuredmeta($data);
+        // // $res[] = '<source src="' . $data['url'] . '" type="video/mp4>"';
+        // $res[] = '<source src="' . $data['url'] . '" type="video/mp4" size="576">';
 
-        // $res[] = '<source src="' . $data['url'] . '" type="video/mp4>"';
-        $res[] = '<source src="' . $data['url'] . '" type="video/mp4" size="576">';
+        // if (!empty($data['vtt'])) {
+        //     $res[] = '<track kind="captions" src="' . $data['vtt'] . '" srclang="' . $data['language'] . '" label="'. __("Untertitel") .'" default>';
+        // }
 
-        if (!empty($data['vtt'])) {
-            $res[] = '<track kind="captions" src="' . $data['vtt'] . '" srclang="' . $data['language'] . '" label="'. __("Untertitel") .'" default>';
-        }
+        // $res[] = __('Unfortunately, your browser does not support HTML5 video formats.', 'rrze-video');
+        // $res[] = ' ';
+        // $url = !empty($data['url']) ? esc_url($data['url']) : '';
+        // $file = !empty($data['video']['file']) ? esc_url($data['video']['file']) : '';
+        // $title = $data['video']['title'] ?? '';
+        // if ($url) {
+        //     $res[] = sprintf(
+        //         /* translators: %s: URL of the video. */
+        //         __('Therefore call up the video %s from the FAU video portal.', 'rrze-video'),
+        //         '<a href="' . $url . '">' . $title . '</a>'
+        //     );
+        // } elseif ($file) {
+        //     $res[] = 'Call the video file  directly.';
+        //     $res[] = sprintf(
+        //         /* translators: %s: File name of the video. */
+        //         __('Call the video file %s directly.', 'rrze-video'),
+        //         '<a href="' . $file . '">' . $title . '</a>'
+        //     );
+        // }
 
-        $res[] = __('Unfortunately, your browser does not support HTML5 video formats.', 'rrze-video');
-        $res[] = ' ';
-        $url = !empty($data['url']) ? esc_url($data['url']) : '';
-        $file = !empty($data['video']['file']) ? esc_url($data['video']['file']) : '';
-        $title = $data['video']['title'] ?? '';
-        if ($url) {
-            $res[] = sprintf(
-                /* translators: %s: URL of the video. */
-                __('Therefore call up the video %s from the FAU video portal.', 'rrze-video'),
-                '<a href="' . $url . '">' . $title . '</a>'
-            );
-        } elseif ($file) {
-            $res[] = 'Call the video file  directly.';
-            $res[] = sprintf(
-                /* translators: %s: File name of the video. */
-                __('Call the video file %s directly.', 'rrze-video'),
-                '<a href="' . $file . '">' . $title . '</a>'
-            );
-        }
+        // $res[] = '</video>';
 
-        $res[] = '</video>';
-
-        /*------ Adds the visible title for the overlay ------*/
-        if (!$this->evaluateShowValues($data, $id)['showtitle']) {
-            if (!empty($title)) {
-                $res[] = '<p class="rrze-video-title rrze-video-hide" id="rrze-video-title-' . $id . '">' . $title . '</p>';
-            }
-        }
-        $res[] = '<p>'.__('Dieses Video wurde bereitgestellt durch <a href="https://www.fau.tv" rel="nofollow">das Videoportal der FAU</a>.').'</p>';
-        return implode("\n", $res);
+        // /*------ Adds the visible title for the overlay ------*/
+        // if (!$this->evaluateShowValues($data, $id)['showtitle']) {
+        //     if (!empty($title)) {
+        //         $res[] = '<p class="rrze-video-title rrze-video-hide" id="rrze-video-title-' . $id . '">' . $title . '</p>';
+        //     }
+        // }
+        // $res[] = '<p>'.__('Dieses Video wurde bereitgestellt durch <a href="https://www.fau.tv" rel="nofollow">das Videoportal der FAU</a>.').'</p>';
+        // return implode("\n", $res);
     }
 
 
@@ -759,82 +778,105 @@ class Player
      */
     private function generate_fau_html($data, $id)
     {
-        $res = [];
         $poster = $this->evaluatePoster($data, $id);
-        $path = parse_url($data['video']['file'], PHP_URL_PATH);
-        $ext  = pathinfo($path, PATHINFO_EXTENSION);
-        $lang = $hreflang = '';
 
-        if (isset($data['video']['type']) && $data['video']['type'] == 'audio' && isset($data['video']['file'])) {
-            $classname = 'plyr-instance plyr-videonum-' . $id;
-            $res[] = '<audio preload="none" class="' . $classname . '" controls crossorigin="anonymous">';
-            $res[] = '<source src="' . $data['video']['file'] . '" type="audio/mp3" />';
-            $res[] = '</audio>';
-        } else {
-            $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Self::get_aspectratio_class($data);
-            $res[] = '<video preload="none" class="' . $classname . '" playsinline controls crossorigin="anonymous"';
-            $res[] = ' data-video-title-id="' . $id . '"';  // Pass the id to the player
-            $res[] = $this->generatePlayerConfig($data, $id);
-
-            if ($poster) {
-                $res[] = ' poster="' . $poster . '" data-poster="' . $poster . '"';
-            }
-
-            $res[] = 'data-poster="100"';
-
-            if (!empty($data['video']['width'])) {
-                $res[] = ' width="' . $data['video']['width'] . '"';
-            }
-
-            if (!empty($data['video']['height'])) {
-                $res[] = ' height="' . $data['video']['height'] . '"';
-            }
-
-            $res[] = ' itemscope itemtype="https://schema.org/Movie"';
-            $res[] = '>';
-
-            $res[] = $this->get_html_structuredmeta($data);
-
-            $res[] = '<source src="' . $data['video']['file'] . '" type="video/' . $ext . '">';
-            if ($ext == 'm4v') {
-                $res[] = '<source src="' . $data['video']['file'] . '" type="video/mp4">';
-            }
-
-            /*--------- Add the alternative Video Sources if thex exist ----------*/
-            if (!empty($data['video']['alternative_Video_size_large']) && !empty($data['video']['alternative_Video_size_large_url'])) {
-                $path = parse_url($data['video']['alternative_Video_size_large_url'], PHP_URL_PATH);
-                $ext  = pathinfo($path, PATHINFO_EXTENSION);
-                $res[] = '<source src="' . $data['video']['alternative_Video_size_large_url'] . '" type="video/' . $ext . '" size="' . $data['video']['alternative_Video_size_large_width'] . '">';
-            }
-
-            if (!empty($data['video']['alternative_Video_size_medium']) && !empty($data['video']['alternative_Video_size_medium_url'])) {
-                $path = parse_url($data['video']['alternative_Video_size_medium_url'], PHP_URL_PATH);
-                $ext  = pathinfo($path, PATHINFO_EXTENSION);
-                $res[] = '<source src="' . $data['video']['alternative_Video_size_medium_url'] . '" type="video/' . $ext . '" size="' . $data['video']['alternative_Video_size_medium_width'] . '">';
-            }
-
-            if (!empty($data['video']['transcript'])) {
-                $transcriptHtml = Self::get_fauvideo_transcript_tracks($data);
-                $res[] = $transcriptHtml;
-            }
-
-            $res[] = __('Unfortunately, your browser does not support HTML5 video formats.', 'rrze-video');
-            // $res[] = ' ';
-            // $url = !empty($data['url']) ? esc_url($data['url']) : '';
-            // $file = !empty($data['video']['file']) ? esc_url($data['video']['file']) : '';
-            $title = $data['video']['title'] ?? '';
-
-            $res[] = '</video>';
-
-            /*------ Adds the visible title for the overlay ------*/
-            if (!$this->evaluateShowValues($data, $id)['showtitle']) {
-                if (!empty($title)) {
-                    $res[] = '<p class="rrze-video-title rrze-video-hide" id="rrze-video-title-' . $id . '">' . $title . '</p>';
-                }
-            }
+        $res = [];
+        // $res[] = '<div class="rrze-video rrze-video-container-' . $id . '">';
+        $res[] = '<media-player id="' . $id . '" src="' . $data['video']['file'] . '" title="' . $data['video']['title'] . '" crossorigin playsinline>';
+        $res[] = '<media-provider>';
+        if (!empty($data['video']['transcript'])) {
+            $transcriptHtml = Self::get_fauvideo_transcript_tracks($data);
+            $res[] = $transcriptHtml;
         }
+        $res[] = '<media-poster  class="vds-poster" src="' . $poster . '" alt="Girl walks into campfire with gnomes surrounding her friend ready for their next meal!">';
+        $res[] = '</media-poster>';
+        $res[] = '</media-provider>';
+        $res[] = '<media-audio-layout>';
+        $res[] = '</media-audio-layout>';
+        $res[] = '<media-video-layout thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt" >';
+        $res[] = '</media-video-layout>';
+        $res[] = '</media-player>';
+        // $res[] = '</div>';
         return implode("\n", $res);
     }
+    // private function generate_fau_html($data, $id)
+    // {
+    //     $res = [];
+    //     $poster = $this->evaluatePoster($data, $id);
+    //     $path = parse_url($data['video']['file'], PHP_URL_PATH);
+    //     $ext  = pathinfo($path, PATHINFO_EXTENSION);
+    //     $lang = $hreflang = '';
+
+    //     if (isset($data['video']['type']) && $data['video']['type'] == 'audio' && isset($data['video']['file'])) {
+    //         $classname = 'plyr-instance plyr-videonum-' . $id;
+    //         $res[] = '<audio preload="none" class="' . $classname . '" controls crossorigin="anonymous">';
+    //         $res[] = '<source src="' . $data['video']['file'] . '" type="audio/mp3" />';
+    //         $res[] = '</audio>';
+    //     } else {
+    //         $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Self::get_aspectratio_class($data);
+    //         $res[] = '<video preload="none" class="' . $classname . '" playsinline controls crossorigin="anonymous"';
+    //         $res[] = ' data-video-title-id="' . $id . '"';  // Pass the id to the player
+    //         $res[] = $this->generatePlayerConfig($data, $id);
+
+    //         if ($poster) {
+    //             $res[] = ' poster="' . $poster . '" data-poster="' . $poster . '"';
+    //         }
+
+    //         $res[] = 'data-poster="100"';
+
+    //         if (!empty($data['video']['width'])) {
+    //             $res[] = ' width="' . $data['video']['width'] . '"';
+    //         }
+
+    //         if (!empty($data['video']['height'])) {
+    //             $res[] = ' height="' . $data['video']['height'] . '"';
+    //         }
+
+    //         $res[] = ' itemscope itemtype="https://schema.org/Movie"';
+    //         $res[] = '>';
+
+    //         $res[] = $this->get_html_structuredmeta($data);
+
+    //         $res[] = '<source src="' . $data['video']['file'] . '" type="video/' . $ext . '">';
+    //         if ($ext == 'm4v') {
+    //             $res[] = '<source src="' . $data['video']['file'] . '" type="video/mp4">';
+    //         }
+
+    //         /*--------- Add the alternative Video Sources if thex exist ----------*/
+    //         if (!empty($data['video']['alternative_Video_size_large']) && !empty($data['video']['alternative_Video_size_large_url'])) {
+    //             $path = parse_url($data['video']['alternative_Video_size_large_url'], PHP_URL_PATH);
+    //             $ext  = pathinfo($path, PATHINFO_EXTENSION);
+    //             $res[] = '<source src="' . $data['video']['alternative_Video_size_large_url'] . '" type="video/' . $ext . '" size="' . $data['video']['alternative_Video_size_large_width'] . '">';
+    //         }
+
+    //         if (!empty($data['video']['alternative_Video_size_medium']) && !empty($data['video']['alternative_Video_size_medium_url'])) {
+    //             $path = parse_url($data['video']['alternative_Video_size_medium_url'], PHP_URL_PATH);
+    //             $ext  = pathinfo($path, PATHINFO_EXTENSION);
+    //             $res[] = '<source src="' . $data['video']['alternative_Video_size_medium_url'] . '" type="video/' . $ext . '" size="' . $data['video']['alternative_Video_size_medium_width'] . '">';
+    //         }
+
+    //         if (!empty($data['video']['transcript'])) {
+    //             $transcriptHtml = Self::get_fauvideo_transcript_tracks($data);
+    //             $res[] = $transcriptHtml;
+    //         }
+
+    //         $res[] = __('Unfortunately, your browser does not support HTML5 video formats.', 'rrze-video');
+    //         // $res[] = ' ';
+    //         // $url = !empty($data['url']) ? esc_url($data['url']) : '';
+    //         // $file = !empty($data['video']['file']) ? esc_url($data['video']['file']) : '';
+    //         $title = $data['video']['title'] ?? '';
+
+    //         $res[] = '</video>';
+
+    //         /*------ Adds the visible title for the overlay ------*/
+    //         if (!$this->evaluateShowValues($data, $id)['showtitle']) {
+    //             if (!empty($title)) {
+    //                 $res[] = '<p class="rrze-video-title rrze-video-hide" id="rrze-video-title-' . $id . '">' . $title . '</p>';
+    //             }
+    //         }
+    //     }
+    //     return implode("\n", $res);
+    // }
 
     /**
      * Evaluates the display preferences for a given media item based on the provided data.
@@ -933,8 +975,8 @@ class Player
             'blankVideo' => plugin()->getUrl('assets/plyr') . 'blank.mp4',
             'title' => !empty($data['video']['title']) ? $data['video']['title'] : '',
         ];
-        
-        if (!empty($data['loop'])){
+
+        if (!empty($data['loop'])) {
             $plyrconfig[] = 'data-loop=' . $data['loop']; //pass the id    
         }
         $plyrconfig[] = ' data-plyr-config=\'{ ';
@@ -956,7 +998,7 @@ class Player
     {
         $rrze_videoplugin_transfer_nonce = wp_create_nonce("rrze_videoplugin_transfer");
         $ajax_url = admin_url('admin-ajax.php');
-    
+
         // Prepare the data you want to sen d to your JavaScript.
         $scriptData = array(
             'nonce' => $rrze_videoplugin_transfer_nonce,
@@ -964,9 +1006,9 @@ class Player
             $packageName => $data, // Example data; replace with your actual data.
             // Include any additional data you need to send to JS here.
         );
-    
+
         // Localize the script with the data.
-        wp_localize_script('rrze-video-plyr', 'rrzeVideoPluginData'.$id, $scriptData);
+        wp_localize_script('rrze-video-plyr', 'rrzeVideoPluginData' . $id, $scriptData);
     }
 
     /**
@@ -1087,6 +1129,7 @@ class Player
      */
     public function get_fauvideo_transcript_tracks($data)
     {
+        Helper::debug($data);
         $transcriptKeys = ['transcript', 'transcript_en', 'transcript_de'];
         $outputTemp = '';
         $langKeys = [
@@ -1128,9 +1171,9 @@ class Player
 
                 if (empty($outputTemp)) {
                     //Set the first track always as default
-                    $outputTemp .= '<track kind="captions" src="' . $url . '" srclang="' . $lang . '" label="' . $labelEvaluate . '" default />';
+                    $outputTemp .='<track src="'.$url.'" kind="subtitles" label="'.$labelEvaluate.'" srclang="'.$lang.'" default data-type="vtt" />';
                 } else {
-                    $trackTemp = '<track kind="captions" src="' . $url . '" srclang="' . $lang . '" label="' . $labelEvaluate . '"/>';
+                    $trackTemp = '<track src="'.$url.'" kind="subtitles" label="'.$labelEvaluate.'" srclang="'.$lang.'" data-type="vtt" />';
 
                     if (strpos($outputTemp, $url) === false) {
                         $outputTemp .= $trackTemp;
