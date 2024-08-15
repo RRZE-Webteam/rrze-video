@@ -18,6 +18,10 @@
   /* 👉 https://vidstack.io/docs/player/components/layouts/default#css-variables for more. */
 }
 
+iframe.vds-youtube[data-no-controls] {
+  height: 100%;
+}
+
 // .player[data-view-type='audio'] .vds-poster {
 //   display: none;
 // }

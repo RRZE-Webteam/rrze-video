@@ -26,7 +26,12 @@ import apiFetch from "@wordpress/api-fetch";
 // Imports for helper functions
 // @ts-ignore
 import { isTextInString, whichProviderIsUsed } from "./HelperFunctions/utils";
-import { MediaPlayer, MediaProvider } from "@vidstack/react";
+import {
+  MediaPlayer,
+  MediaProvider,
+  isYouTubeProvider,
+  type MediaProviderAdapter,
+} from "@vidstack/react";
 import {
   PlyrLayout,
   plyrLayoutIcons,
@@ -69,10 +74,17 @@ const fauDomains = [
 
 // FAU oEmbed API endpoint
 const fauApiEndpoint = "https://www.fau.tv/services/oembed";
+const youtubeOEmbedEndpoint = "https://www.youtube.com/oembed";
 
 function isFauVideoUrl(url: string): boolean {
   const urlDomain = new URL(url).hostname;
   return fauDomains.includes(urlDomain);
+}
+
+function isYouTubeUrl(url: string): boolean {
+  const youtubeDomains = ["youtube.com", "www.youtube.com", "youtu.be"];
+  const urlDomain = new URL(url).hostname;
+  return youtubeDomains.includes(urlDomain);
 }
 
 // Define the props type for the Edit component
@@ -104,15 +116,24 @@ export default function Edit(props: EditProps): JSX.Element {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const blockProps = useBlockProps();
   const { attributes, setAttributes } = props;
-  const { id, url, rand, aspectratio, secureclipid, title, mediaurl } = attributes;
+  const { id, url, rand, aspectratio, secureclipid, title, mediaurl } =
+    attributes;
   const [inputURL, setInputURL] = useState<string>(attributes.url);
   const [oEmbedData, setOEmbedData] = useState(null);
 
   useEffect(() => {
     if (url && isFauVideoUrl(url)) {
       fetchFauOEmbedData(url);
+    } else if (url && isYouTubeUrl(url)) {
+      setAttributes({ mediaurl: url, url: url });
     }
   }, [url]);
+
+  function onProviderChange(provider: MediaProviderAdapter | null) {
+    if (isYouTubeProvider(provider)) {
+      provider.cookies = true;
+    }
+  }
 
   const fetchFauOEmbedData = (videoUrl: string) => {
     const apiUrl = `${fauApiEndpoint}?url=${encodeURIComponent(
@@ -269,12 +290,11 @@ export default function Edit(props: EditProps): JSX.Element {
             )}
             <MediaPlayer
               title={attributes.title}
-              src={{
-                src: mediaurl,
-                type: "video/mp4",
-              }}
+              src={
+                mediaurl}
               aspectRatio={attributes.aspectratio}
               poster={attributes.poster}
+              onProviderChange={onProviderChange}
             >
               <MediaProvider />
               <PlyrLayout
