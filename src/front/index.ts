@@ -13,34 +13,21 @@ console.log('I am a player', player);
 
 player.addEventListener('provider-change', (event) => {
   const provider = event.detail;
-  // We can configure provider's here.
   if (isHLSProvider(provider)) {
-    provider.config = {
-        
-    };
+    // Directly assign the imported HLS library
+    provider.library = HLS;
   }
 });
 
 // We can listen for the `can-play` event to be notified when the player is ready.
-player.addEventListener('can-play', () => {
-  // ...
-});
+// player.addEventListener('can-play', () => {
+//   // ...
+// });
 
 // ***********************************************************************************************
 // Text Track Management
 // ***********************************************************************************************
 
-/**
- * You can add these tracks using HTML as well.
- *
- * @example
- * ```html
- * <media-provider>
- *   <track label="..." src="..." kind="..." srclang="..." default />
- *   <track label="..." src="..." kind="..." srclang="..." />
- * </media-provider>
- * ```
- */
 // const tracks: TextTrackInit[] = [
 //   // Subtitles
 //   {

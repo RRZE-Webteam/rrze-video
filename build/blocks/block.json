@@ -20,10 +20,16 @@
     "html": false
   },
   "textdomain": "rrze-video",
-  "editorScript": "file:./index.js",
+  "editorScript": [
+    "file:./index.js"
+  ],
   "editorStyle": "file:./index.css",
   "style": "file:./style-index.css",
   "attributes": {
+    "title": {
+      "type": "string",
+      "default": ""
+    },
     "id": {
       "type": "string",
       "default": ""

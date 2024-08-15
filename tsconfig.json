@@ -1,23 +1,24 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "noEmit": true,
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
     "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "ESNext",
-    "useDefineForClassFields": true,
-    "verbatimModuleSyntax": true
-  }
+    "allowSyntheticDefaultImports": true,
+    "target": "es2015",
+    "downlevelIteration": true
+  },
+  "include": [
+    "./src/**/*",
+    "types/declarations.d.ts",
+    "types/block-editor.d.ts",
+    "types/server-side-render.d.ts",
+    "tests/**/*.spec.ts",
+    "playwright.config.ts",
+    "global-setup.ts",
+    "types/nodeJs.d.ts"
+  ]
 }

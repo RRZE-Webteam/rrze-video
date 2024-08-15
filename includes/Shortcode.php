@@ -66,6 +66,8 @@ class Shortcode
         $args = $this->translateParameters($args);
         $args = $this->sanitizeArgs($args, 'rrzevideo');
 
+        // //enqueue rrze-video-plyr
+        // wp_enqueue_script('rrze-video-plyr');
 
         return apply_filters(
             'rrze_video_player_content',

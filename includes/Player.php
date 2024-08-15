@@ -664,12 +664,13 @@ class Player
     private function generate_fauApi_html($data, $id)
     {
         $poster = $this->evaluatePoster($data, $id);
-
+        $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Self::get_aspectratio_class($data);
         $res = [];
-        // $res[] = '<div class="rrze-video rrze-video-container-' . $id . '">';
-        $res[] = '<media-player id="' . $id . '" src="' . $data['url'] . '" title="' . $data['video']['title'] . '" crossorigin playsinline>';
+        $res[] = '<div class="rrze-video rrze-video-container-' . $id . '" class="' . $classname . '">';
+
+        $res[] = '<media-player load="visible" poster-load="visible" id="' . $id . '" src="' . $data['url'] . '" title="' . $data['video']['title'] . '" crossorigin playsinline>';
         $res[] = '<media-provider>';
-        $res[] = '<media-poster  class="vds-poster" src="' . $poster . '" alt="Girl walks into campfire with gnomes surrounding her friend ready for their next meal!">';
+        $res[] = '<media-poster  class="vds-poster" src="' . $poster . '" alt="' . $data['video']['title'] . '">';
         $res[] = '</media-poster>';
         if (!empty($data['vtt'])) {
             $res[] = '<track kind="captions" src="' . $data['vtt'] . '" srclang="' . $data['language'] . '" label="' . __("Untertitel") . '" default>';
@@ -677,10 +678,10 @@ class Player
         $res[] = '</media-provider>';
         $res[] = '<media-audio-layout>';
         $res[] = '</media-audio-layout>';
-        $res[] = '<media-video-layout thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt" >';
+        $res[] = '<media-video-layout>';
         $res[] = '</media-video-layout>';
         $res[] = '</media-player>';
-        // $res[] = '</div>';
+        $res[] = '</div>';
         return implode("\n", $res);
         // $res = [];
         // // $poster = $this->evaluatePoster($data, $id);
@@ -782,7 +783,7 @@ class Player
 
         $res = [];
         // $res[] = '<div class="rrze-video rrze-video-container-' . $id . '">';
-        $res[] = '<media-player id="' . $id . '" src="' . $data['video']['file'] . '" title="' . $data['video']['title'] . '" crossorigin playsinline>';
+        $res[] = '<media-player load="visible" poster-load="visible" id="' . $id . '" src="' . $data['video']['file'] . '" title="' . $data['video']['title'] . '" crossorigin playsinline>';
         $res[] = '<media-provider>';
         if (!empty($data['video']['transcript'])) {
             $transcriptHtml = Self::get_fauvideo_transcript_tracks($data);
@@ -793,12 +794,13 @@ class Player
         $res[] = '</media-provider>';
         $res[] = '<media-audio-layout>';
         $res[] = '</media-audio-layout>';
-        $res[] = '<media-video-layout thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt" >';
+        $res[] = '<media-video-layout>';
         $res[] = '</media-video-layout>';
         $res[] = '</media-player>';
         // $res[] = '</div>';
         return implode("\n", $res);
     }
+
     // private function generate_fau_html($data, $id)
     // {
     //     $res = [];
@@ -1171,9 +1173,9 @@ class Player
 
                 if (empty($outputTemp)) {
                     //Set the first track always as default
-                    $outputTemp .='<track src="'.$url.'" kind="subtitles" label="'.$labelEvaluate.'" srclang="'.$lang.'" default data-type="vtt" />';
+                    $outputTemp .= '<track src="' . $url . '" kind="subtitles" label="' . $labelEvaluate . '" srclang="' . $lang . '" default data-type="vtt" />';
                 } else {
-                    $trackTemp = '<track src="'.$url.'" kind="subtitles" label="'.$labelEvaluate.'" srclang="'.$lang.'" data-type="vtt" />';
+                    $trackTemp = '<track src="' . $url . '" kind="subtitles" label="' . $labelEvaluate . '" srclang="' . $lang . '" data-type="vtt" />';
 
                     if (strpos($outputTemp, $url) === false) {
                         $outputTemp .= $trackTemp;
