@@ -1,7 +1,7 @@
 import Plyr from "plyr";
-import Hls from "hls.js";
 import "plyr/src/sass/plyr.scss";
 import "./custom.scss";
+import Hls from "hls.js";
 
 const debounce = (func, delay = 300) => {
   let timeoutId;
@@ -71,23 +71,25 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const players = [];
+    const players = Plyr.setup(".plyr-instance", {
+      fullscreen: { iosNative: true },
+    });
 
-    playerElements.forEach((video, index) => {
-      const source = video.querySelector("source").src;
+    let vidConfig = [];
+    players.forEach((player, index) => {
+      const video = player.media;
+      const sourceElement = video.querySelector("source");
+      const sourceType = sourceElement.getAttribute("type");
 
-      let defaultOptions = {
-        fullscreen: { iosNative: true },
-      };
-
-      if (Hls.isSupported()) {
+      if (Hls.isSupported() && sourceType === "application/x-mpegURL") {
         const hls = new Hls();
-        hls.loadSource(source);
+        hls.loadSource(sourceElement.src);
+        hls.attachMedia(video);
 
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          const availableQualities = hls.levels.map(l => l.height);
+          const availableQualities = hls.levels.map((l) => l.height);
 
-          defaultOptions.quality = {
+          player.options.quality = {
             default: availableQualities[0],
             options: availableQualities,
             forced: true,
@@ -99,31 +101,19 @@ document.addEventListener("DOMContentLoaded", () => {
               });
             },
           };
-
-          const player = new Plyr(video, defaultOptions);
-          players.push(player);
-          initializePlayer(player, index);
         });
 
-        hls.attachMedia(video);
         window.hls = hls;
-      } else {
-        const player = new Plyr(video, defaultOptions);
-        players.push(player);
-        initializePlayer(player, index);
       }
-    });
 
-    const initializePlayer = (player, index) => {
       adjustControls(player);
-
+      
       let propertyName = `rrzeVideoPluginData${index + 1}`;
-      let playerConfig = {};
-
       if (window[propertyName] && window[propertyName].plyrconfigJS) {
-        playerConfig = JSON.parse(window[propertyName].plyrconfigJS);
+        vidConfig[index] = JSON.parse(window[propertyName].plyrconfigJS);
       }
 
+      const playerConfig = vidConfig[index] || {};
       const playerID = parseInt(playerConfig.id || 0);
       if (playerConfig.loop && playerID === index + 1) {
         player.loop = true;
@@ -179,12 +169,12 @@ document.addEventListener("DOMContentLoaded", () => {
           player.media.addEventListener(event, handleFullscreenChange);
         });
       }
-    };
+    });
 
     window.addEventListener(
       "resize",
       debounce(() => {
-        players.forEach((player) => adjustControls(player));
+        players?.forEach((player) => adjustControls(player));
       }, 500)
     );
   } catch (generalError) {
