@@ -1,4 +1,5 @@
 import Plyr from "plyr";
+import Hls from "hls.js";
 import "plyr/src/sass/plyr.scss";
 import "./custom.scss";
 
@@ -70,24 +71,63 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const players = Plyr.setup(".plyr-instance", {
-      fullscreen: { iosNative: true },
+    const players = [];
+
+    playerElements.forEach((video, index) => {
+      const source = video.querySelector("source").src;
+
+      let defaultOptions = {
+        fullscreen: { iosNative: true },
+      };
+
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(source);
+
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          const availableQualities = hls.levels.map(l => l.height);
+
+          defaultOptions.quality = {
+            default: availableQualities[0],
+            options: availableQualities,
+            forced: true,
+            onChange: (newQuality) => {
+              hls.levels.forEach((level, levelIndex) => {
+                if (level.height === newQuality) {
+                  hls.currentLevel = levelIndex;
+                }
+              });
+            },
+          };
+
+          const player = new Plyr(video, defaultOptions);
+          players.push(player);
+          initializePlayer(player, index);
+        });
+
+        hls.attachMedia(video);
+        window.hls = hls;
+      } else {
+        const player = new Plyr(video, defaultOptions);
+        players.push(player);
+        initializePlayer(player, index);
+      }
     });
 
-    let vidConfig = [];
-    players.forEach((player, index) => {
+    const initializePlayer = (player, index) => {
       adjustControls(player);
-      // Directly use index to manage unique properties
-      let propertyName = `rrzeVideoPluginData${index + 1}`; // Assuming your PHP data starts with 1
+
+      let propertyName = `rrzeVideoPluginData${index + 1}`;
+      let playerConfig = {};
+
       if (window[propertyName] && window[propertyName].plyrconfigJS) {
-        vidConfig[index] = JSON.parse(window[propertyName].plyrconfigJS); // Store config by index
+        playerConfig = JSON.parse(window[propertyName].plyrconfigJS);
       }
 
-      const playerConfig = vidConfig[index] || {}; 
       const playerID = parseInt(playerConfig.id || 0);
       if (playerConfig.loop && playerID === index + 1) {
         player.loop = true;
-    }
+      }
 
       const parentElementClass =
         player?.elements?.container?.parentElement?.classList[1];
@@ -96,20 +136,20 @@ document.addEventListener("DOMContentLoaded", () => {
       )}`;
       const videoTitle = document.getElementById(videoTitleId);
 
-      let skipped = false; // Initialize skipped flag for each player
+      let skipped = false;
       player.on("canplay", function () {
-        const startTime = parseFloat(playerConfig["start"] || "0");
+        const startTime = parseFloat(playerConfig.start || "0");
         if (!skipped && startTime > 0) {
           player.currentTime = startTime;
           skipped = true;
         }
       });
 
-      if (playerConfig["loop"]) {
+      if (playerConfig.loop) {
         player.on("timeupdate", function () {
-          let maximumTime = player.duration - parseFloat(playerConfig["clipend"]);
-         if (player.currentTime >= maximumTime) {
-            player.currentTime = parseFloat(playerConfig["clipstart"]);
+          let maximumTime = player.duration - parseFloat(playerConfig.clipend);
+          if (player.currentTime >= maximumTime) {
+            player.currentTime = parseFloat(playerConfig.clipstart);
           }
         });
       }
@@ -139,12 +179,12 @@ document.addEventListener("DOMContentLoaded", () => {
           player.media.addEventListener(event, handleFullscreenChange);
         });
       }
-    });
+    };
 
     window.addEventListener(
       "resize",
       debounce(() => {
-        players?.forEach((player) => adjustControls(player));
+        players.forEach((player) => adjustControls(player));
       }, 500)
     );
   } catch (generalError) {
