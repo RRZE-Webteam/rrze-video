@@ -288,20 +288,38 @@ export default function Edit(props: EditProps): JSX.Element {
                 title={attributes.title}
               />
             )}
-            <MediaPlayer
-              title={attributes.title}
-              src={
-                mediaurl}
-              aspectRatio={attributes.aspectratio}
-              poster={attributes.poster}
-              onProviderChange={onProviderChange}
-            >
-              <MediaProvider />
-              <PlyrLayout
-                thumbnails={attributes.poster}
-                icons={plyrLayoutIcons}
+            {url && isFauVideoUrl(url) ? (
+              <MediaPlayer
+                title={attributes.title}
+                src={mediaurl}
+                aspectRatio={attributes.aspectratio}
+                poster={attributes.poster}
+                onProviderChange={onProviderChange}
+              >
+                <MediaProvider />
+                <PlyrLayout
+                  thumbnails={attributes.poster}
+                  icons={plyrLayoutIcons}
+                />
+              </MediaPlayer>
+            ) : (
+              <ServerSideRender
+                block="rrze/rrze-video"
+                attributes={{
+                  url: attributes.url,
+                  show: attributes.show,
+                  rand: attributes.rand,
+                  id: attributes.id,
+                  titletag: attributes.titletag,
+                  textAlign: attributes.textAlign,
+                  secureclipid: attributes.secureclipid,
+                  loop: attributes.loop,
+                  start: attributes.start,
+                  clipstart: attributes.clipstart,
+                  clipend: attributes.clipend,
+                }}
               />
-            </MediaPlayer>
+            )}
             {isTextInString("link", attributes.show) && (
               <p className="rrze-video-link">
                 <a href={attributes.url} target="_blank" rel="noreferrer">
