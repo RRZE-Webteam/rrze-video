@@ -10,8 +10,17 @@ class API
     {
         $transient_name = 'rrze_streaming_uri_' . $clipId;
         $transient_value = get_transient($transient_name);
+        $environment = wp_get_environment_type();
 
-        $ip = $_SERVER['REMOTE_ADDR'];
+        // Determine the IP address to use
+        if ($environment === 'local' || $environment === 'development') {
+            // Use client IP in development
+            $ip = self::getClientIP();
+        } else {
+            // Use server IP in production
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
         $ip_long = ip2long($ip);
 
         if ($transient_value !== false) {
@@ -42,8 +51,6 @@ class API
         $data = json_decode($body, true);
 
         if (json_last_error() === JSON_ERROR_NONE && $data !== null && isset($data['data']['files']['video'])) {
-            Helper::debug('API response: ' . $body);
-
             $video_data = [
                 'url' => $data['data']['files']['video'],
                 'vtt' => $data['data']['files']['vtt'],
@@ -59,5 +66,33 @@ class API
 
         error_log('Unexpected response format: ' . $body);
         return null;
+    }
+
+    /**
+     * Get the client IP address.
+     *
+     * @return string|null Client IP address or null if not available.
+     */
+    private static function getClientIP()
+    {
+        $ip = null;
+
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED'];
+        } elseif (isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
+        } elseif (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_FORWARDED_FOR'];
+        } elseif (isset($_SERVER['HTTP_FORWARDED'])) {
+            $ip = $_SERVER['HTTP_FORWARDED'];
+        } elseif (isset($_SERVER['REMOTE_ADDR'])) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
+        return $ip;
     }
 }

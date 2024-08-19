@@ -1,5 +1,5 @@
 // Import styles.
-import './styles.css';
+import './styles.scss';
 // Register elements.
 import 'vidstack/player';
 import 'vidstack/player/layouts';

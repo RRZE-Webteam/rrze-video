@@ -8,7 +8,7 @@ import {
 import { trash } from "@wordpress/icons";
 import { useBlockProps, BlockControls } from "@wordpress/block-editor";
 // @ts-ignore
-import { ServerSideRender } from "@wordpress/server-side-render";
+import ServerSideRender from "@wordpress/server-side-render";
 import { useState, useEffect, useRef } from "@wordpress/element";
 
 import { isHLSProvider, type TextTrackInit } from "vidstack";
@@ -327,22 +327,6 @@ export default function Edit(props: EditProps): JSX.Element {
                 </a>
               </p>
             )}
-            {/* <ServerSideRender
-              block="rrze/rrze-video"
-              attributes={{
-                url: attributes.url,
-                show: attributes.show,
-                rand: attributes.rand,
-                id: attributes.id,
-                titletag: attributes.titletag,
-                textAlign: attributes.textAlign,
-                secureclipid: attributes.secureclipid,
-                loop: attributes.loop,
-                start: attributes.start,
-                clipstart: attributes.clipstart,
-                clipend: attributes.clipend,
-              }}
-            /> */}
           </div>
         </>
       ) : (
