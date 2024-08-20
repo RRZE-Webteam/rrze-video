@@ -138,11 +138,13 @@ public static function generate_fau_html($data, $id)
         Helper::debug($data);
         $poster = Utils::evaluatePoster($data, $id);
         $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Utils::get_aspectratio_class($data);
+        $mime_type = 'application/vnd.apple.mpegurl';
         $res = [];
-        $res[] = '<div class="rrze-video rrze-video-container-' . $id . '" class="' . $classname . '">';
 
-        $res[] = '<media-player load="visible" poster-load="visible" id="' . $id . '" src="' . $data['url'] . '" title="' . $data['video']['title'] . '" crossorigin playsinline>';
+        $res[] = '<div class="rrze-video rrze-video-container-' . $id . ' '. $classname . '">';
+        $res[] = '<media-player load="visible" poster-load="visible" id="' . $id . '" title="' . $data['video']['title'] . '" crossorigin playsinline>';
         $res[] = '<media-provider>';
+        $res[] = '<source itemprop="contentUrl" src="' . $data['url'] . '" type="' . $mime_type . '">';
         $res[] = '<media-poster  class="vds-poster" src="' . $poster . '" alt="' . $data['video']['title'] . '">';
         $res[] = '</media-poster>';
         if (!empty($data['vtt'])) {

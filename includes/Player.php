@@ -114,7 +114,7 @@ class Player
     {
         $token = get_option('rrze_video_api_key');
         if (empty($token)) {
-            return Error::handleError(__('Error getting the video', 'rrze-video') . '<br>' . __('No API is stored inside the Video Plugin settings.', 'rrze-video'));
+            return Error::handleError(__('Error getting the video', 'rrze-video') . '<br>' . __('No API Key is stored inside the Video Plugin settings.', 'rrze-video'));
         }
         $clipId = $arguments['secureclipid'];
         $videoData = API::getStreamingURI($clipId);
@@ -122,6 +122,7 @@ class Player
         $language = $videoData['language'];
         $title = $videoData['title'];
         $desc = $videoData['description'];
+        $poster = $videoData['poster'];
 
         $streamUrl = '';
         if (isset($videoData['url'])) {
@@ -133,9 +134,9 @@ class Player
             $arguments['language'] = $language;
             $arguments['video']['title'] = $title;
             $arguments['video']['description'] = $desc;
+            $arguments['poster'] = $poster;
 
             $this->enqueueFrontendStyles(true, [], $id);
-
             return $this->get_player_html('fauApi', $arguments, $id);
         } else {
             return Error::handleError(__('Error getting the video', 'rrze-video') . '<br>' . __('Video data could not be obtained.', 'rrze-video'));

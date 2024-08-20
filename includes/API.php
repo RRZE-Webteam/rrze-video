@@ -58,6 +58,7 @@ class API
                 'title' => $data['data']['title'],
                 'description' => $data['data']['description'],
                 'language' => $data['data']['language'],
+                'poster' => $data['data']['files']['posterImage'],
             ];
 
             set_transient($transient_name, $video_data, 21600);
