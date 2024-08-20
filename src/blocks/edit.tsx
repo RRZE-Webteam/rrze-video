@@ -44,7 +44,6 @@ import "./player.scss"; // Only active in the editor
 // Define the attributes type
 interface BlockAttributes {
   id: string;
-  title: string;
   url: string;
   rand: string;
   aspectratio: string;
@@ -116,10 +115,11 @@ export default function Edit(props: EditProps): JSX.Element {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const blockProps = useBlockProps();
   const { attributes, setAttributes } = props;
-  const { id, url, rand, aspectratio, secureclipid, title, mediaurl } =
+  const { id, url, rand, aspectratio, secureclipid, mediaurl } =
     attributes;
   const [inputURL, setInputURL] = useState<string>(attributes.url);
   const [oEmbedData, setOEmbedData] = useState(null);
+  const [title, setTitle] = useState<string>("");
 
   useEffect(() => {
     if (url && isFauVideoUrl(url)) {
@@ -160,44 +160,30 @@ export default function Edit(props: EditProps): JSX.Element {
   };
 
   const updateAttributesFromOEmbedData = (data: any) => {
+    //calculate the Aspect ratio based on width and height
+ 
+    const gcd = (a: number, b: number): number  => {
+      return b === 0 ? a : gcd(b, a % b);
+    }
+    
+    let aspectRatio = "16/9";
+    if (data.width && data.height) {
+      const gcdValue = gcd(data.width, data.height);
+      let aspectRatio = `${data.width / gcdValue}/${data.height / gcdValue}`;
+    }
+    setTitle(data.title);
+
     setAttributes({
-      title: data.title,
-      poster: data.preview_image,
-      aspectratio: `${data.width}/${data.height}`,
+      aspectratio: aspectRatio,
       mediaurl: data.file,
       textAlign: "has-text-align-left",
       orientation: data.width > data.height ? "landscape" : "portrait",
     });
+
+    if (attributes.poster === "") {
+      setAttributes({ poster: data.preview_image });
+    }
   };
-
-  // /**
-  //  * This useEffect hook is needed to set the aspect ratio
-  //  * of the video immediately within the Blockeditor view.
-  //  * If the Video-Object inside the virtual dom is changed,
-  //  * the aspect ratio is set again.
-  //  */
-  // useEffect(() => {
-  //   try {
-  //     const observer = new MutationObserver(() => {
-  //       const video = containerRef.current?.querySelector("video");
-  //       if (video) {
-  //         video.style.aspectRatio = aspectratio;
-  //         video.style.backgroundColor = "#000000";
-  //       }
-  //     });
-
-  //     if (containerRef.current) {
-  //       observer.observe(containerRef.current, {
-  //         childList: true,
-  //         subtree: true,
-  //       });
-  //     }
-
-  //     return () => observer.disconnect();
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }, [aspectratio]);
 
   useEffect(() => {
     const url = inputURL;
@@ -285,12 +271,12 @@ export default function Edit(props: EditProps): JSX.Element {
             {isTextInString("Title", attributes.show) && (
               <DynamicHeading
                 tag={attributes.titletag || "h2"}
-                title={attributes.title}
+                title={title}
               />
             )}
             {url && isFauVideoUrl(url) ? (
               <MediaPlayer
-                title={attributes.title}
+                title={title}
                 src={mediaurl}
                 aspectRatio={attributes.aspectratio}
                 poster={attributes.poster}

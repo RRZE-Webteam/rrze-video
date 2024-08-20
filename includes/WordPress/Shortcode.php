@@ -1,7 +1,9 @@
 <?php
+
 namespace RRZE\Video\WordPress;
 
 defined('ABSPATH') || exit;
+
 use RRZE\Video\Config\ShortcodeSettings;
 use RRZE\Video\Player\Player;
 use RRZE\Video\Utils\Helper;
@@ -37,10 +39,18 @@ class Shortcode
 
     public function shortcodeVideo($atts)
     {
+        Helper::debug('The following attributes are passed to the shortcode:');
+        Helper::debug($atts);
         $defaults = $this->getShortcodeDefaults('rrzevideo');
         $args = shortcode_atts($defaults, $atts);
+        Helper::debug('The following arguments are combined inside the shortcode:');
+        Helper::debug($args);
         $args = $this->translateParameters($args);
+        Helper::debug('The following arguments are translated inside the shortcode:');
+        Helper::debug($args);
         $args = $this->sanitizeArgs($args, 'rrzevideo');
+        Helper::debug('The following arguments are sanitized inside the shortcode:');
+        Helper::debug($args);
 
         return apply_filters(
             'rrze_video_player_content',
@@ -112,13 +122,37 @@ class Shortcode
      */
     public function sanitizeArgs(array $args, string $field = ''): array
     {
-        if (empty($args) || empty($field) || empty($this->settings[$field])) {
+        // Debugging to determine where it might fail
+        if (empty($args)) {
+            Helper::debug('sanitizeArgs: args array is empty.');
             return [];
         }
+
+        if (empty($field)) {
+            Helper::debug('sanitizeArgs: field is empty.');
+            return [];
+        }
+
+        if (!isset($this->settings[$field])) {
+            Helper::debug('sanitizeArgs: no settings found for the field: ' . $field);
+            return [];
+        }
+
+        if (empty($this->settings[$field])) {
+            Helper::debug('sanitizeArgs: settings for field are empty.');
+            return [];
+        }
+
         $settings = $this->settings[$field];
 
         foreach ($args as $name => $value) {
-            $type = $settings[$name]['type'] ?? '';
+            // Ensure that the type is defined for the setting
+            if (!isset($settings[$name]['type'])) {
+                continue;
+            }
+
+            $type = $settings[$name]['type'];
+
             switch ($type) {
                 case 'textarea':
                     $value = sanitize_textarea_field($value);
@@ -134,7 +168,7 @@ class Shortcode
                     if (!preg_match("/^(\d*\.?\d+)\/(\d*\.?\d+)$/", $value)) {
                         Helper::debug('The following invalid aspect ratio was entered inside a video shortcode: ' . $value . '. Using the default value 16/9 instead.', 'i');
                         $value = '16/9';
-                    } 
+                    }
                     break;
                 case 'slug':
                     $value = sanitize_title($value);
@@ -181,11 +215,12 @@ class Shortcode
                     }
                     break;
                 default:
-                    // nix aendern
+                    // nix aendern (do nothing)
                     break;
             }
             $args[$name] = $value;
         }
+
         return $args;
     }
 }

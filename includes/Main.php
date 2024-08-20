@@ -36,7 +36,7 @@ class Main
      */
     public function registerWidget()
     {
-        register_widget(__NAMESPACE__ . '\Widget');
+        register_widget(__NAMESPACE__ . '\WordPress\Widget');
     }
 
     /**

@@ -5,7 +5,7 @@ namespace RRZE\Video\Player;
 defined('ABSPATH') || exit;
 
 use RRZE\Video\Player\IFrames;
-use RRZE\Video\Helper;
+use RRZE\Video\Utils\Helper;
 use RRZE\Video\Utils;
 use RRZE\Video\Providers;
 
@@ -56,6 +56,8 @@ class Player
         $content = '';
 
         if (empty($arguments)) {
+            Helper::debug('Error when displaying the video player: Insufficient data was transferred.');
+            Helper::debug($arguments);
             return Utils\Error::handleError(__('Error when displaying the video player: Insufficient data was transferred.', 'rrze-video'));
         }
 
