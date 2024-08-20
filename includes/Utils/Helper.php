@@ -1,6 +1,6 @@
 <?php
 
-namespace RRZE\Video;
+namespace RRZE\Video\Utils;
 
 defined('ABSPATH') || exit;
 

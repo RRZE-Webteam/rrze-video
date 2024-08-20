@@ -1,23 +1,16 @@
 <?php
-
-namespace RRZE\Video;
+namespace RRZE\Video\WordPress;
 
 defined('ABSPATH') || exit;
+use RRZE\Video\Config\ShortcodeSettings;
+use RRZE\Video\Player\Player;
+use RRZE\Video\Utils\Helper;
 
-/**
- * Class Shortcode
- * @package RRZE\Video
- */
 class Shortcode
 {
     private static $instance = null;
-
     private $settings = [];
 
-    /**
-     * Singleton
-     * @return object
-     */
     public static function instance()
     {
         if (self::$instance === null) {
@@ -28,8 +21,7 @@ class Shortcode
 
     private function __construct()
     {
-        include_once(plugin()->getPath() . "settings/shortcode.php");
-        $this->settings = $settings ?? [];
+        $this->settings = ShortcodeSettings::getSettings('rrzevideo');
     }
 
     public function loaded()
@@ -38,36 +30,17 @@ class Shortcode
         add_shortcode('fauvideo', [$this, 'shortcodeVideo']);
     }
 
-    /**
-     * Gibt die Default-Werte eines gegebenen Feldes aus den Shortcodesettings zurück
-     * @return array [description]
-     */
     public function getShortcodeDefaults($field = '')
     {
-        $res = [];
-        if (empty($field) || empty($this->settings[$field])) {
-            return $res;
-        }
-        foreach ($this->settings[$field] as $name => $value) {
-            $res[$name] = $value['default'];
-        }
-        return $res;
+        return ShortcodeSettings::getDefaults($field);
     }
 
-    /**
-     * Sanitize shortcode atts & display shortcode output. Also adds the aspect-ratio as inline-style
-     * @param array $atts
-     * @return array
-     */
     public function shortcodeVideo($atts)
     {
         $defaults = $this->getShortcodeDefaults('rrzevideo');
         $args = shortcode_atts($defaults, $atts);
         $args = $this->translateParameters($args);
         $args = $this->sanitizeArgs($args, 'rrzevideo');
-
-        // //enqueue rrze-video-plyr
-        // wp_enqueue_script('rrze-video-plyr');
 
         return apply_filters(
             'rrze_video_player_content',

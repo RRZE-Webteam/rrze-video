@@ -1,10 +1,8 @@
 <?php
 
-namespace RRZE\Video;
+namespace RRZE\Video\WordPress;
 
 defined('ABSPATH') || exit;
-
-use RRZE\Video\Capabilities;
 
 /**
  * Class CPT - Custom Post Type

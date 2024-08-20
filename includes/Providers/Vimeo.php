@@ -3,7 +3,7 @@
 namespace RRZE\Video\Providers;
 
 defined('ABSPATH') || exit;
-use RRZE\Video\StructuredMeta;
+use RRZE\Video\Player\StructuredMeta;
 /**
  * Functions to handle and generate required YouTube video embeds and html
  */

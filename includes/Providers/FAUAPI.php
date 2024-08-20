@@ -1,10 +1,11 @@
 <?php
 
-namespace RRZE\Video;
+namespace RRZE\Video\Providers;
 
 defined('ABSPATH') || exit;
+use RRZE\Video\Utils\FSD_Data_Encryption;
 
-class API
+class FAUAPI
 {
     public static function getStreamingURI($clipId)
     {

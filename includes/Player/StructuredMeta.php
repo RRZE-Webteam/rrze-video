@@ -1,13 +1,17 @@
 <?php
 
-namespace RRZE\Video;
+namespace RRZE\Video\Player;
 
 defined('ABSPATH') || exit;
+
+use RRZE\Video\Utils;
+
 /**
  * Class to generate required structured meta data for video embeds
  */
-class StructuredMeta {
-/**
+class StructuredMeta
+{
+    /**
      * Generates a series of meta tags containing structured data for a video.
      *
      * This function constructs a set of HTML meta tags that encapsulate structured data 
@@ -77,7 +81,7 @@ class StructuredMeta {
 
         // Duration (ISO 8601)
         if (!empty($data['video']['duration'])) {
-            $duration = Utils::format_duration_iso8601($data['video']['duration']);
+            $duration = Utils\Utils::format_duration_iso8601($data['video']['duration']);
             $meta[] = '<meta itemprop="duration" content="' . htmlspecialchars($duration, ENT_QUOTES, 'UTF-8') . '">';
         }
 

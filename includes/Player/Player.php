@@ -1,12 +1,13 @@
 <?php
 
-namespace RRZE\Video;
+namespace RRZE\Video\Player;
 
 defined('ABSPATH') || exit;
 
-use RRZE\Video\OEmbed;
-use RRZE\Video\IFrames;
+use RRZE\Video\Player\IFrames;
 use RRZE\Video\Helper;
+use RRZE\Video\Utils;
+use RRZE\Video\Providers;
 
 class Player
 {
@@ -55,7 +56,7 @@ class Player
         $content = '';
 
         if (empty($arguments)) {
-            return Error::handleError(__('Error when displaying the video player: Insufficient data was transferred.', 'rrze-video'));
+            return Utils\Error::handleError(__('Error when displaying the video player: Insufficient data was transferred.', 'rrze-video'));
         }
 
         if (!empty($arguments['secureclipid'])) {
@@ -65,7 +66,7 @@ class Player
         }
 
         if (empty($arguments['url'])) {
-            Utils::getUrlByIdOrRandom($arguments);
+            Utils\Utils::getUrlByIdOrRandom($arguments);
         }
 
         if (!empty($arguments['url']) && empty($arguments['secureclipid'])) {
@@ -75,10 +76,10 @@ class Player
             } else if (IFrames::is_iframe_provider($arguments['url'])) {
                 $content .= $this->processIFrame($arguments, $id);
             } else {
-                $content .= Error::handleError(__('Unknown video source', 'rrze-video'));
+                $content .= Utils\Error::handleError(__('Unknown video source', 'rrze-video'));
             }
         } else {
-            $content .= Error::handleNoVideoError($arguments, $id);
+            $content .= Utils\Error::handleNoVideoError($arguments, $id);
         }
 
         return $content;
@@ -99,9 +100,9 @@ class Player
     {
         $oembeddata = OEmbed::get_oembed_data($isoembed, $arguments['url']);
         if (!empty($oembeddata['error'])) {
-            return Error::handleError(__('Error getting the video', 'rrze-video') . '<br>' . $oembeddata['error']);
+            return Utils\Error::handleError(__('Error getting the video', 'rrze-video') . '<br>' . $oembeddata['error']);
         } elseif (empty($oembeddata['video'])) {
-            return Error::handleError(__('Error getting the video', 'rrze-video') . '<br>' . __('Video data could not be obtained.', 'rrze-video'));
+            return Utils\Error::handleError(__('Error getting the video', 'rrze-video') . '<br>' . __('Video data could not be obtained.', 'rrze-video'));
         } else {
             $arguments['video'] = $oembeddata['video'];
             $arguments['oembed_api_url'] = $oembeddata['oembed_api_url'] ?? '';
@@ -114,10 +115,10 @@ class Player
     {
         $token = get_option('rrze_video_api_key');
         if (empty($token)) {
-            return Error::handleError(__('Error getting the video', 'rrze-video') . '<br>' . __('No API Key is stored inside the Video Plugin settings.', 'rrze-video'));
+            return Utils\Error::handleError(__('Error getting the video', 'rrze-video') . '<br>' . __('No API Key is stored inside the Video Plugin settings.', 'rrze-video'));
         }
         $clipId = $arguments['secureclipid'];
-        $videoData = API::getStreamingURI($clipId);
+        $videoData = Providers\FAUAPI::getStreamingURI($clipId);
         $vtt = $videoData['vtt'];
         $language = $videoData['language'];
         $title = $videoData['title'];
@@ -139,7 +140,7 @@ class Player
             $this->enqueueFrontendStyles(true, [], $id);
             return $this->get_player_html('fauApi', $arguments, $id);
         } else {
-            return Error::handleError(__('Error getting the video', 'rrze-video') . '<br>' . __('Video data could not be obtained.', 'rrze-video'));
+            return Utils\Error::handleError(__('Error getting the video', 'rrze-video') . '<br>' . __('Video data could not be obtained.', 'rrze-video'));
         }
     }
 
@@ -161,9 +162,9 @@ class Player
             $framedata = IFrames::get_iframe($arguments['url']);
 
             if (!empty($framedata['error'])) {
-                $content .= Error::generateErrorContent($id, __('Error getting the video', 'rrze-video'), $framedata['error']);
+                $content .= Utils\Error::generateErrorContent($id, __('Error getting the video', 'rrze-video'), $framedata['error']);
             } elseif (empty($framedata['video'])) {
-                $content .= Error::generateErrorContent($id, __('Error getting the video', 'rrze-video'), __('Video data could not be obtained.', 'rrze-video'));
+                $content .= Utils\Error::generateErrorContent($id, __('Error getting the video', 'rrze-video'), __('Video data could not be obtained.', 'rrze-video'));
             } else {
                 $arguments['video'] = $framedata['video'];
 
@@ -184,7 +185,7 @@ class Player
                 $this->enqueueFrontendStyles(false, $aspectratioArgs, $id);
             }
         } else {
-            $content .= Error::generateErrorContent($id, __('Unknown video source', 'rrze-video'), __('The following address could not be assigned to a known video provider or it does not have a suitable interface for retrieving videos.', 'rrze-video') . ' ' . __('So please call up the video by directly following the link below:', 'rrze-video') . ' <a href="' . $arguments['url'] . '" rel="nofollow">' . $arguments['url'] . '</a>');
+            $content .= Utils\Error::generateErrorContent($id, __('Unknown video source', 'rrze-video'), __('The following address could not be assigned to a known video provider or it does not have a suitable interface for retrieving videos.', 'rrze-video') . ' ' . __('So please call up the video by directly following the link below:', 'rrze-video') . ' <a href="' . $arguments['url'] . '" rel="nofollow">' . $arguments['url'] . '</a>');
         }
 
         return $content;
@@ -241,7 +242,7 @@ class Player
             $aftertag = '</' . $data['titletag'] . '>';
         }
 
-        if (Utils::evaluateShowValues($data, $id)['showtitle']) {
+        if (Utils\Utils::evaluateShowValues($data, $id)['showtitle']) {
             $res[] = $beforetag . $data['video']['title'] . $aftertag;
         } elseif (!empty($data['widgetargs']['title'])) {
             $res[] = $beforetag . $data['widgetargs']['title'] . $aftertag;
@@ -250,7 +251,7 @@ class Player
         if ($provider !== 'fauApi') {
             $providerList = OEmbed::get_known_provider();
             if (empty($provider) || empty($providerList[$provider])) {
-                return Error::generateErrorContent($id, __('No valid video provider was found. As a result, the video cannot be played or could not be recognized.', 'rrze-video'), '');
+                return Utils\Error::generateErrorContent($id, __('No valid video provider was found. As a result, the video cannot be played or could not be recognized.', 'rrze-video'), '');
             }
         }
 
@@ -268,14 +269,14 @@ class Player
                 $res[] = Providers\FAUTV::generate_fauApi_html($data, $id);
                 break;
             default:
-                $res[] = Error::generateErrorContent($id, __('Video provider incorrectly defined.', 'rrze-video'), '');
+                $res[] = Utils\Error::generateErrorContent($id, __('Video provider incorrectly defined.', 'rrze-video'), '');
         }
 
-        if (Utils::evaluateShowValues($data, $id)['showdesc'] && !empty($data['video']['description'])) {
+        if (Utils\Utils::evaluateShowValues($data, $id)['showdesc'] && !empty($data['video']['description'])) {
             $res[] = '<p class="desc">' . $data['video']['description'] . '</p>';
         }
 
-        if (Utils::evaluateShowValues($data, $id)['showmeta']) {
+        if (Utils\Utils::evaluateShowValues($data, $id)['showmeta']) {
             $meta = [];
 
             if (!empty($data['video']['author_name'])) {
@@ -324,8 +325,8 @@ class Player
             if (!empty($meta)) {
                 $res[] = '<dl class="meta">' . implode("\n", $meta) . '</dl>';
             }
-        } elseif (Utils::evaluateShowValues($data, $id)['showlink'] && Utils::evaluateUrl($data, $id)) {
-            $res[] = '<p class="link">' . __('Source', 'rrze-video') . ': <a href="' . Utils::evaluateUrl($data, $id) . '">' . Utils::evaluateUrl($data, $id) . '</a>';
+        } elseif (Utils\Utils::evaluateShowValues($data, $id)['showlink'] && Utils\Utils::evaluateUrl($data, $id)) {
+            $res[] = '<p class="link">' . __('Source', 'rrze-video') . ': <a href="' . Utils\Utils::evaluateUrl($data, $id) . '">' . Utils\Utils::evaluateUrl($data, $id) . '</a>';
 
             if (!empty($data['video']['provider_videoindex_url'])) {
                 $res[] = '<br>' . __('This video is part of a video collection', 'rrze-video') . ': <a href="' . $data['video']['provider_videoindex_url'] . '">' . $data['video']['provider_videoindex_url'] . '</a>';

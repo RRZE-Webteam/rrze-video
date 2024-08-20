@@ -3,7 +3,7 @@
 namespace RRZE\Video\Providers;
 
 defined('ABSPATH') || exit;
-use RRZE\Video\StructuredMeta;
+use RRZE\Video\Player\StructuredMeta;
 use RRZE\Video\Helper;
 use RRZE\Video\Utils;
 /**
@@ -57,7 +57,7 @@ class FAUTV
  */
 public static function generate_fau_html($data, $id)
     {
-        $poster = Utils::evaluatePoster($data, $id);
+        $poster = Utils\Utils::evaluatePoster($data, $id);
         $loop = $data['loop'] == 1 ? 'true' : 'false';
         $clipstart = $data['clipstart'] !== 0 ? 'clip-start-time="' . $data['clipstart'] . '"' : '';
         $clipend = $data['clipend'] !== 0 ? 'clip-end-time="' . $data['clipend'] . '"' : '';
@@ -68,7 +68,7 @@ public static function generate_fau_html($data, $id)
         $res[] = StructuredMeta::get_html_structuredmeta($data);
         $res[] = '</div>';
     
-        $res[] = '<media-player load="visible" loop="' . $loop . '" poster-load="visible" id="' . $id . '" crossorigin playsinline class="' . Utils::get_aspectratio_class($data) . '">';
+        $res[] = '<media-player load="visible" loop="' . $loop . '" poster-load="visible" id="' . $id . '" crossorigin playsinline class="' . Utils\Utils::get_aspectratio_class($data) . '">';
     
         $res[] = '<media-provider>';
     
@@ -86,7 +86,7 @@ public static function generate_fau_html($data, $id)
     
         // Transcript and other video elements
         if (!empty($data['video']['transcript'])) {
-            $transcriptHtml = Utils::get_fauvideo_transcript_tracks($data);
+            $transcriptHtml = Utils\Utils::get_fauvideo_transcript_tracks($data);
             $res[] = $transcriptHtml;
         }
     
@@ -135,9 +135,9 @@ public static function generate_fau_html($data, $id)
      */
     public static function generate_fauApi_html($data, $id)
     {
-        Helper::debug($data);
-        $poster = Utils::evaluatePoster($data, $id);
-        $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Utils::get_aspectratio_class($data);
+        Utils\Helper::debug($data);
+        $poster = Utils\Utils::evaluatePoster($data, $id);
+        $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Utils\Utils::get_aspectratio_class($data);
         $mime_type = 'application/vnd.apple.mpegurl';
         $res = [];
 

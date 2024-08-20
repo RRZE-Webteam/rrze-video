@@ -1,10 +1,10 @@
 <?php
 
-namespace RRZE\Video;
+namespace RRZE\Video\WordPress;
 
 defined('ABSPATH') || exit;
 
-use RRZE\Video\Player;
+use RRZE\Video\Player\Player;
 
 /**
  * Class Widget

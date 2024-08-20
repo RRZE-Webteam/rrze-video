@@ -1,6 +1,7 @@
 <?php
 
-namespace RRZE\Video;
+namespace RRZE\Video\WordPress;
+use RRZE\Video\Utils;
 
 defined('ABSPATH') || exit;
 
@@ -101,7 +102,7 @@ class Settings
 
     public function sanitizeApiKey($input)
     {
-        $data_encryption = new FSD_Data_Encryption();
+        $data_encryption = new Utils\FSD_Data_Encryption();
         $encrypted_api_key = get_option('rrze_video_api_key');
 
         // If input is a masked value, return the existing token
