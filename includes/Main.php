@@ -2,6 +2,7 @@
 
 namespace RRZE\Video;
 
+
 defined('ABSPATH') || exit;
 
 /**
@@ -13,11 +14,11 @@ class Main
     public function __construct()
     {
         // Set the video custom post type.
-        new CPT();
+        new WordPress\CPT();
 
         // Metabox
-        new Metabox();
-        new Settings();
+        new WordPress\Metabox();
+        new WordPress\Settings();
 
         // Set the video shortcode.
         Shortcode::instance()->loaded();
@@ -35,7 +36,7 @@ class Main
      */
     public function registerWidget()
     {
-        register_widget(__NAMESPACE__ . '\Widget');
+        register_widget(__NAMESPACE__ . '\WordPress\Widget');
     }
 
     /**

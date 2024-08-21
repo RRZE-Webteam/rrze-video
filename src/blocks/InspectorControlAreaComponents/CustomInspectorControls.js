@@ -351,66 +351,39 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
             onChange={(loop) => setAttributes({ loop: loop })}
             label={__("Activate looping", "rrze-video")}
           />
-          {attributes.loop && (
-            <Spacer>
-              <Text>
-                {__(
-                  `The loop mode is activated. The video will be played in a loop. If your video contains branding, the default settings should be sufficient. Else you can control the position in the clip where the loop should get triggered (clipend) and the position where the looped video should start (clipstart) with the following settings:`,
-                  "rrze-video"
-                )}
-              </Text>
-              <NumberControl
-                label={__("Start of the looping section", "rrze-video")}
-                value={tempClipStart}
-                onChange={(clipstart) => setTempClipStart(clipstart)}
-                min={0}
-              />
-              <NumberControl
-                label={__("End of the looping section", "rrze-video")}
-                value={tempClipEnd}
-                onChange={(clipend) => setTempClipEnd(clipend)}
-                min={0}
-              />
-
-              <Button
-                isPrimary
-                disabled={
-                  tempClipStart === attributes.clipstart &&
-                  tempClipEnd === attributes.clipend
-                }
-                onClick={() =>
-                  setAttributes({
-                    clipstart: tempClipStart,
-                    clipend: tempClipEnd,
-                  })
-                }
-              >
-                {__("Update loop settings", "rrze-video")}
-              </Button>
-            </Spacer>
-          )}
-          <Heading level={3}>
-            {__("Start position on first play", "rrze-video")}
-          </Heading>
           <Spacer>
             <Text>
               {__(
-                `The first time the video plays, start it at the following position in seconds:`,
+                `Crops the video to a specific section. The video will start and end at the specified times. The duration of the video will update accordingly.`,
                 "rrze-video"
               )}
             </Text>
             <NumberControl
-              label={__("Start of the video", "rrze-video")}
-              value={tempStart}
-              onChange={(start) => setTempStart(start)}
+              label={__("Start of the looping section", "rrze-video")}
+              value={tempClipStart}
+              onChange={(clipstart) => setTempClipStart(clipstart)}
+              min={0}
+            />
+            <NumberControl
+              label={__("End of the looping section", "rrze-video")}
+              value={tempClipEnd}
+              onChange={(clipend) => setTempClipEnd(clipend)}
               min={0}
             />
             <Button
               isPrimary
-              disabled={tempStart === attributes.start}
-              onClick={() => setAttributes({ start: tempStart })}
+              disabled={
+                tempClipStart === attributes.clipstart &&
+                tempClipEnd === attributes.clipend
+              }
+              onClick={() =>
+                setAttributes({
+                  clipstart: tempClipStart,
+                  clipend: tempClipEnd,
+                })
+              }
             >
-              {__("Update start position", "rrze-video")}
+              {__("Update loop settings", "rrze-video")}
             </Button>
           </Spacer>
         </PanelBody>

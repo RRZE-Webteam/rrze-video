@@ -28,7 +28,7 @@ class Shortcode
 
     private function __construct()
     {
-        include_once(plugin()->getPath() . "settings/shortcode.php");
+        include_once(plugin()->getPath() . "includes/Config/shortcodeSettings.php");
         $this->settings = $settings ?? [];
     }
 
@@ -69,7 +69,7 @@ class Shortcode
 
         return apply_filters(
             'rrze_video_player_content',
-            Player::instance()->get_player($args),
+            Player\Player::instance()->get_player($args),
             $args
         );
     }
@@ -157,7 +157,7 @@ class Shortcode
 
                     // Check if the value matches the regex
                     if (!preg_match("/^(\d*\.?\d+)\/(\d*\.?\d+)$/", $value)) {
-                        Helper::debug('The following invalid aspect ratio was entered inside a video shortcode: ' . $value . '. Using the default value 16/9 instead.', 'i');
+                        Utils\Helper::debug('The following invalid aspect ratio was entered inside a video shortcode: ' . $value . '. Using the default value 16/9 instead.', 'i');
                         $value = '16/9';
                     } 
                     break;

@@ -30,8 +30,6 @@ class TestPlayer extends WP_UnitTestCase {
      * @test
      */
     public function test_get_fauvideo_transcript_tracks_with_only_en_transcript() {
-        Helper::debug($this->player);
-
         $data = [
             'video' => [
                 'transcript' => 'https://cdn2.fau.tv/symlinks/fdfe6990-3654-4d45-aabf-79c47b0d4bae.vtt',
@@ -42,7 +40,6 @@ class TestPlayer extends WP_UnitTestCase {
         ];
 
         $result = $this->player->get_fauvideo_transcript_tracks($data);
-        Helper::debug($result);
         $expected = '<track kind="captions" src="https://cdn2.fau.tv/symlinks/fdfe6990-3654-4d45-aabf-79c47b0d4bae.vtt" srclang="en" label="English" default>';
 
         Assert::assertEquals($expected, $result);
