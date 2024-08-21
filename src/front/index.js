@@ -1,6 +1,7 @@
 import Plyr from "plyr";
 import "plyr/src/sass/plyr.scss";
 import "./custom.scss";
+import Hls from "hls.js";
 
 const debounce = (func, delay = 300) => {
   let timeoutId;
@@ -76,18 +77,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let vidConfig = [];
     players.forEach((player, index) => {
-      adjustControls(player);
-      // Directly use index to manage unique properties
-      let propertyName = `rrzeVideoPluginData${index + 1}`; // Assuming your PHP data starts with 1
-      if (window[propertyName] && window[propertyName].plyrconfigJS) {
-        vidConfig[index] = JSON.parse(window[propertyName].plyrconfigJS); // Store config by index
+      const video = player.media;
+      const sourceElement = video.querySelector("source");
+      const sourceType = sourceElement.getAttribute("type");
+
+      if (Hls.isSupported() && sourceType === "application/x-mpegURL") {
+        const hls = new Hls();
+        hls.loadSource(sourceElement.src);
+        hls.attachMedia(video);
+
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          const availableQualities = hls.levels.map((l) => l.height);
+
+          player.options.quality = {
+            default: availableQualities[0],
+            options: availableQualities,
+            forced: true,
+            onChange: (newQuality) => {
+              hls.levels.forEach((level, levelIndex) => {
+                if (level.height === newQuality) {
+                  hls.currentLevel = levelIndex;
+                }
+              });
+            },
+          };
+        });
+
+        window.hls = hls;
       }
 
-      const playerConfig = vidConfig[index] || {}; 
+      adjustControls(player);
+      
+      let propertyName = `rrzeVideoPluginData${index + 1}`;
+      if (window[propertyName] && window[propertyName].plyrconfigJS) {
+        vidConfig[index] = JSON.parse(window[propertyName].plyrconfigJS);
+      }
+
+      const playerConfig = vidConfig[index] || {};
       const playerID = parseInt(playerConfig.id || 0);
       if (playerConfig.loop && playerID === index + 1) {
         player.loop = true;
-    }
+      }
 
       const parentElementClass =
         player?.elements?.container?.parentElement?.classList[1];
@@ -96,20 +126,20 @@ document.addEventListener("DOMContentLoaded", () => {
       )}`;
       const videoTitle = document.getElementById(videoTitleId);
 
-      let skipped = false; // Initialize skipped flag for each player
+      let skipped = false;
       player.on("canplay", function () {
-        const startTime = parseFloat(playerConfig["start"] || "0");
+        const startTime = parseFloat(playerConfig.start || "0");
         if (!skipped && startTime > 0) {
           player.currentTime = startTime;
           skipped = true;
         }
       });
 
-      if (playerConfig["loop"]) {
+      if (playerConfig.loop) {
         player.on("timeupdate", function () {
-          let maximumTime = player.duration - parseFloat(playerConfig["clipend"]);
-         if (player.currentTime >= maximumTime) {
-            player.currentTime = parseFloat(playerConfig["clipstart"]);
+          let maximumTime = player.duration - parseFloat(playerConfig.clipend);
+          if (player.currentTime >= maximumTime) {
+            player.currentTime = parseFloat(playerConfig.clipstart);
           }
         });
       }
