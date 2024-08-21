@@ -15,6 +15,8 @@ Text Domain:    rrze-video
 namespace RRZE\Video;
 
 defined('ABSPATH') || exit;
+use RRZE\Video\Utils\Plugin;
+use RRZE\Video\WordPress\Gutenberg;
 
 const RRZE_PHP_VERSION = '7.4';
 const RRZE_WP_VERSION  = '6.0';
@@ -102,7 +104,7 @@ function activation()
             )
         );
     } else {
-        Roles::addRoleCaps();
+        WordPress\Roles::addRoleCaps();
         flush_rewrite_rules();
     }
 }
@@ -113,7 +115,7 @@ function activation()
  */
 function deactivation()
 {
-    Roles::removeRoleCaps();
+    WordPress\Roles::removeRoleCaps();
     flush_rewrite_rules();
 }
 

@@ -1,101 +1,47 @@
-    const autoprefixer = require("autoprefixer");
-    const MiniCSSExtractPlugin = require("mini-css-extract-plugin");
-    const CSSMinimizerPlugin = require("css-minimizer-webpack-plugin");
-    const TerserPlugin = require("terser-webpack-plugin");
+const path = require("path");
+const admin = path.join(__dirname, "src", "admin");
+const front = path.join(__dirname, "src", "front");
+const blocks = path.join(__dirname, "src", "blocks");
 
-    const path = require("path");
-    const admin = path.join(__dirname, "src", "admin");
-    const front = path.join(__dirname, "src", "front");
-    const blocks = path.join(__dirname, "src", "blocks");
+const defaultConfig = require("@wordpress/scripts/config/webpack.config");
 
-    const defaultConfig = require( '@wordpress/scripts/config/webpack.config.js' );
+// Import the helper to find and generate the entry points in the src directory
+const { getWebpackEntryPoints } = require("@wordpress/scripts/utils/config");
 
-    module.exports = (env, argv) => {
-        function isDevelopment() {
-            return argv.mode === "development";
-        }
-        var config = {
-            ...defaultConfig,
-            ...{
-            entry: {
-                blocks: blocks,
-                admin: admin,
-                front: front,
-            },
-            output: {
-                path: path.resolve(__dirname, "build"),
-                filename: ({ chunk: { name } }) => {
-                    if (name === 'blocks') {
-                        return 'blocks/index.js';  // Adjusted here
-                    } else if (name === 'admin') {
-                        return '[name].js';
-                    } else if (name === 'front') {
-                        return '[name].js';
-                    }
-                    return '[name].js';
-                },
-                clean: true,
-            },
-            optimization: {
-                minimizer: [
-                    new CSSMinimizerPlugin(),
-                    new TerserPlugin({ terserOptions: { sourceMap: true } }),
-                ],
-                ...defaultConfig.optimization,
-            },
-            plugins: [
-                ...defaultConfig.plugins,
-                new MiniCSSExtractPlugin({
-                    chunkFilename: "[id].css",
-                    filename: (chunkData) => {
-                        let name = chunkData.chunk.name;
-                        if (name === 'blocks' || name === './style-blocks') {
-                            return 'blocks/[name].css';  // Adjusted here
-                        } else if (name === 'admin') {
-                            return '[name].css';
-                        } else if (name === 'front') {
-                            return '[name].css';
-                        }
-                        return '[name].css';
-                    },
-                }),
-            ],
-            devtool: isDevelopment() ? "cheap-module-source-map" : "source-map",
-            module: {
-                rules: [
-                    {
-                        test: /\.js$/,
-                        exclude: /node_modules/,
-                        use: [
-                            {
-                                loader: "babel-loader",
-                                options: {
-                                    presets: ["@babel/preset-env"],
-                                },
-                            },
-                        ],
-                    },
-                    {
-                        test: /\.(sa|sc|c)ss$/,
-                        use: [
-                            MiniCSSExtractPlugin.loader,
-                            "css-loader",
-                            {
-                                loader: "postcss-loader",
-                                options: {
-                                    postcssOptions: {
-                                        plugins: [autoprefixer()],
-                                    },
-                                },
-                            },
-                            "sass-loader",
-                        ],
-                    },
+// Check if it's a production build
+const isProduction = process.env.NODE_ENV === "production";
 
-                ],
-                ...defaultConfig.module,
-            },
-        }
-    };
-        return config;
-    };
+let optimization = defaultConfig.optimization;
+
+if (isProduction) {
+  optimization = {
+    ...defaultConfig.optimization,
+  };
+}
+
+// Set the devtool based on the build environment
+const devtool = isProduction ? false : "source-map";
+
+module.exports = {
+  ...defaultConfig,
+  entry: {
+    ...getWebpackEntryPoints("script")(),
+    blocks: blocks,
+    admin: admin,
+    front: front,
+  },
+  devtool: devtool,
+  module: {
+    ...defaultConfig.module,
+  },
+  // Erweitern Sie die Dateierweiterungen, die Webpack verarbeiten wird
+  resolve: {
+    ...defaultConfig.resolve,
+    extensions: [".tsx", ".ts", ".js", ".json"]
+  },
+  optimization: optimization,
+  performance: {
+    ...defaultConfig.performance,
+    hints: false,
+  },
+};

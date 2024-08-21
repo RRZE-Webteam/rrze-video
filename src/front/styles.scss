@@ -1,0 +1,72 @@
+@import 'vidstack/player/styles/default/theme.css';
+@import 'vidstack/player/styles/default/layouts/audio.css';
+@import 'vidstack/player/styles/default/layouts/video.css';
+
+/*************************************************************************************************
+ * Player
+ *************************************************************************************************/
+
+media-player {
+    --brand-color: #f5f5f5;
+    --focus-color: #4e9cf6;
+
+    --audio-brand: var(--brand-color);
+    --audio-focus-ring-color: var(--focus-color);
+    --audio-border-radius: 2px;
+
+    --video-brand: var(--brand-color);
+    --video-focus-ring-color: var(--focus-color);
+    --video-border-radius: 2px;
+
+    /* 👉 https://vidstack.io/docs/player/components/layouts/default#css-variables for more. */
+}
+
+media-player[data-view-type='audio'] media-poster {
+    display: none;
+}
+
+media-player[data-view-type='video'] {
+    aspect-ratio: 16 /9;
+}
+
+media-player{
+
+&.ar-16-9 {
+    aspect-ratio: 16/9;
+}
+
+&.ar-9-16 {
+    aspect-ratio: 9/16;
+}
+
+&.ar-4-3 {
+    aspect-ratio: 4/3;
+}
+
+&.ar-1-1 {
+    aspect-ratio: 1/1;
+}
+
+&.ar-235-1 {
+    aspect-ratio: 2.35/1;
+}
+
+&.ar-240-1 {
+    aspect-ratio: 2.40/1;
+}
+}
+
+
+/*************************************************************************************************
+ * Document
+ *************************************************************************************************/
+
+.src-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 40px;
+    margin-inline: auto;
+    max-width: 300px;
+}
+

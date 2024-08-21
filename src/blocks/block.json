@@ -1,95 +1,95 @@
 {
-	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3,
-	"name": "rrze/rrze-video",
-	"version": "1.0.1",
-	"title": "Video",
-	"keywords": [
-		"video",
-		"fauvideo",
-		"fautv",
-		"youtube",
-		"vimeo",
-		"embed",
-		"rrze video",
-		"rrze"
-	],
-	"category": "embed",
-	"description": "Embeds videos from FAUVideo, YouTube & Co.",
-	"supports": {
-		"html": false
-	},
-	"textdomain": "rrze-video",
-	"editorScript": "file:./index.js",
-	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css",
-	"attributes": {
-		"id": {
-			"type": "string",
-			"default": ""
-		},
-		"url": {
-			"type": "string",
-			"default": ""
-		},
-		"class": {
-			"type": "string",
-			"default": ""
-		},
-		"titletag": {
-			"type": "string",
-			"default": "h2"
-		},
-		"poster": {
-			"type": "string",
-			"default": ""
-		},
-		"rand": {
-			"type": "string",
-			"default": ""
-		},
-		"show": {
-			"type": "string",
-			"default": ""
-		},
-		"bgImageId": {
-            "type": "number",
-			"default": 0
-        },
-		"aspectratio": {
-			"type": "string",
-			"default": "16/9"
-		},
-		"orientation": {
-			"type": "string",
-			"default": "landscape"
-		},
-		"provider": {
-			"type": "string",
-			"default": "fauvideo"
-		},
-		"textAlign": {
-			"type": "string",
-			"default": ""
-		},
-		"secureclipid": {
-			"type": "number"
-		},
-		"loop": {
-			"type": "boolean",
-			"default": false
-		},
-		"start": {
-			"type": "number",
-			"default": 0
-		},
-		"clipstart": {
-			"type": "number",
-			"default": 8
-		},
-		"clipend": {
-			"type": "number",
-			"default": 9
-		}
-	}
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "rrze/rrze-video",
+  "version": "1.0.1",
+  "title": "Video",
+  "keywords": [
+    "video",
+    "fauvideo",
+    "fautv",
+    "youtube",
+    "vimeo",
+    "embed",
+    "rrze video",
+    "rrze"
+  ],
+  "category": "embed",
+  "description": "Embeds videos from FAUVideo, YouTube & Co.",
+  "supports": {
+    "html": false
+  },
+  "textdomain": "rrze-video",
+  "editorScript": ["file:./index.js"],
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "attributes": {
+    "id": {
+      "type": "string",
+      "default": ""
+    },
+    "url": {
+      "type": "string",
+      "default": ""
+    },
+    "class": {
+      "type": "string",
+      "default": ""
+    },
+    "titletag": {
+      "type": "string",
+      "default": "h2"
+    },
+    "poster": {
+      "type": "string",
+      "default": ""
+    },
+    "rand": {
+      "type": "string",
+      "default": ""
+    },
+    "show": {
+      "type": "string",
+      "default": ""
+    },
+    "bgImageId": {
+      "type": "number",
+      "default": 0
+    },
+    "aspectratio": {
+      "type": "string",
+      "default": "16/9"
+    },
+    "orientation": {
+      "type": "string",
+      "default": "landscape"
+    },
+    "provider": {
+      "type": "string",
+      "default": "fauvideo"
+    },
+    "textAlign": {
+      "type": "string",
+      "default": ""
+    },
+    "secureclipid": {
+      "type": "number"
+    },
+    "loop": {
+      "type": "boolean",
+      "default": false
+    },
+    "start": {
+      "type": "number",
+      "default": 0
+    },
+    "clipstart": {
+      "type": "number",
+      "default": 0
+    },
+    "clipend": {
+      "type": "number",
+      "default": 0
+    }
+  }
 }
