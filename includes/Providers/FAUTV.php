@@ -63,12 +63,12 @@ public static function generate_fau_html($data, $id)
         $clipend = $data['clipend'] !== 0 ? 'clip-end-time="' . $data['clipend'] . '"' : '';
     
         $res = [];
-        $res[] = '<div itemscope itemtype="http://schema.org/VideoObject" ' . $clipstart . $clipend . ' class="rrze-video rrze-video-container-' . $id . '">';
+        $res[] = '<div itemscope itemtype="http://schema.org/VideoObject" class="rrze-video rrze-video-container-' . $id . '">';
         $res[] = '<div class="video-meta">';
         $res[] = StructuredMeta::get_html_structuredmeta($data);
         $res[] = '</div>';
     
-        $res[] = '<media-player load="visible" loop="' . $loop . '" poster-load="visible" id="' . $id . '" crossorigin playsinline class="' . Utils\Utils::get_aspectratio_class($data) . '">';
+        $res[] = '<media-player ' . $clipstart . $clipend . ' load="visible" loop="' . $loop . '" poster-load="visible" id="' . $id . '" crossorigin playsinline class="' . Utils\Utils::get_aspectratio_class($data) . '">';
     
         $res[] = '<media-provider>';
     
