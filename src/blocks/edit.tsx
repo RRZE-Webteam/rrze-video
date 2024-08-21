@@ -73,7 +73,6 @@ const fauDomains = [
 
 // FAU oEmbed API endpoint
 const fauApiEndpoint = "https://www.fau.tv/services/oembed";
-const youtubeOEmbedEndpoint = "https://www.youtube.com/oembed";
 
 function isFauVideoUrl(url: string): boolean {
   const urlDomain = new URL(url).hostname;
@@ -115,11 +114,14 @@ export default function Edit(props: EditProps): JSX.Element {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const blockProps = useBlockProps();
   const { attributes, setAttributes } = props;
-  const { id, url, rand, aspectratio, secureclipid, mediaurl } =
-    attributes;
+  const { id, url, rand, aspectratio, secureclipid, mediaurl } = attributes;
   const [inputURL, setInputURL] = useState<string>(attributes.url);
   const [oEmbedData, setOEmbedData] = useState(null);
   const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [providerURL, setProviderURL] = useState<string>("");
+  const [providerAudioURL, setProviderAudioURL] = useState<string>("");
+  const [author, setAuthor] = useState<string>("");
 
   useEffect(() => {
     if (url && isFauVideoUrl(url)) {
@@ -161,17 +163,21 @@ export default function Edit(props: EditProps): JSX.Element {
 
   const updateAttributesFromOEmbedData = (data: any) => {
     //calculate the Aspect ratio based on width and height
- 
-    const gcd = (a: number, b: number): number  => {
+
+    const gcd = (a: number, b: number): number => {
       return b === 0 ? a : gcd(b, a % b);
-    }
-    
+    };
+
     let aspectRatio = "16/9";
     if (data.width && data.height) {
       const gcdValue = gcd(data.width, data.height);
       let aspectRatio = `${data.width / gcdValue}/${data.height / gcdValue}`;
     }
     setTitle(data.title);
+    setDescription(data.description);
+    setAuthor(data.author_name);
+    setProviderURL(data.provider_videoindex_url);
+    setProviderAudioURL(data.alternative_Audio);
 
     setAttributes({
       aspectratio: aspectRatio,
@@ -217,6 +223,9 @@ export default function Edit(props: EditProps): JSX.Element {
    * Resets the VideoURL Parameter. Activated by the reset Button.
    */
   const resetUrl = () => {
+    console.log("Resetting URL and attributes...");
+  
+    // Clear all attributes explicitly
     setAttributes({
       url: "",
       rand: "",
@@ -226,9 +235,36 @@ export default function Edit(props: EditProps): JSX.Element {
       orientation: "landscape",
       textAlign: "has-text-align-left",
       poster: "",
+      secureclipid: "",
+      start: 0,
+      clipstart: 0,
+      clipend: 0,
+      mediaurl: "",
+      show: "",
+      titletag: "",
+      // Add any other attributes that need to be reset here
     });
+  
+    // Clear state values
     setInputURL("");
+    setTitle("");
+    setDescription("");
+    setProviderURL("");
+    setProviderAudioURL("");
+    setOEmbedData(null);
+    setAuthor("");
+  
+    console.log("Attributes after reset:", attributes);
+    console.log("State values after reset:", {
+      inputURL,
+      title,
+      description,
+      providerURL,
+      providerAudioURL,
+      oEmbedData,
+    });
   };
+  
 
   console.log(attributes);
 
@@ -269,11 +305,12 @@ export default function Edit(props: EditProps): JSX.Element {
             ref={containerRef}
           >
             {isTextInString("Title", attributes.show) && (
-              <DynamicHeading
-                tag={attributes.titletag || "h2"}
-                title={title}
-              />
+              <DynamicHeading tag={attributes.titletag || "h2"} title={title} />
             )}
+            {attributes.secureclipid ? (
+              <p>{__("Eine Vorschau zugriffsgeschützter Videos im Editor ist nicht möglich.", "rrze-video")}</p>
+            ): (
+              <>
             {url && isFauVideoUrl(url) ? (
               <MediaPlayer
                 title={title}
@@ -281,6 +318,9 @@ export default function Edit(props: EditProps): JSX.Element {
                 aspectRatio={attributes.aspectratio}
                 poster={attributes.poster}
                 onProviderChange={onProviderChange}
+                clipEndTime={attributes.clipend}
+                clipStartTime={attributes.clipstart}
+                loop={attributes.loop}
               >
                 <MediaProvider />
                 <PlyrLayout
@@ -306,12 +346,42 @@ export default function Edit(props: EditProps): JSX.Element {
                 }}
               />
             )}
+            </>
+            )}
             {isTextInString("link", attributes.show) && (
               <p className="rrze-video-link">
                 <a href={attributes.url} target="_blank" rel="noreferrer">
                   {attributes.url}
                 </a>
               </p>
+            )}
+            {isTextInString("desc", attributes.show) && (
+              <p className="rrze-video-desc">{description}</p>
+            )}
+            {isTextInString("meta", attributes.show) && (
+              <dl className="meta">
+                <dt>{__("Autor", "rrze-video")}</dt>
+                <dd>{author}</dd>
+
+                <dt>{__("Quelle", "rrze-video")}</dt>
+                <dd>
+                  <a href={providerURL}>
+                    {providerURL?.replace("https://", "")}
+                  </a>
+                </dd>
+
+                <dt>{__("Audioformat", "rrze-video")}</dt>
+                <dd>
+                  <a href={providerAudioURL}>
+                    {providerAudioURL?.replace("https://", "")}
+                  </a>
+                </dd>
+
+                <dt>{__("Provider", "rrze-video")}</dt>
+                <dd>
+                  {__("Videoportal der FAU (Friedrich-Alexander-Universität Erlangen-Nürnberg)", "rrze-video")}
+                </dd>
+              </dl>
             )}
           </div>
         </>

@@ -87,11 +87,11 @@
     },
     "clipstart": {
       "type": "number",
-      "default": 8
+      "default": 0
     },
     "clipend": {
       "type": "number",
-      "default": 9
+      "default": 0
     }
   }
 }
