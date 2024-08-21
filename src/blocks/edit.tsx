@@ -153,7 +153,6 @@ export default function Edit(props: EditProps): JSX.Element {
       .then((data) => {
         setOEmbedData(data);
         updateAttributesFromOEmbedData(data);
-        console.log("FAU oEmbed data:", data);
       })
       .catch((error) => {
         console.error("Failed to fetch FAU oEmbed data:", error);
@@ -223,8 +222,6 @@ export default function Edit(props: EditProps): JSX.Element {
    * Resets the VideoURL Parameter. Activated by the reset Button.
    */
   const resetUrl = () => {
-    console.log("Resetting URL and attributes...");
-  
     // Clear all attributes explicitly
     setAttributes({
       url: "",
@@ -253,20 +250,7 @@ export default function Edit(props: EditProps): JSX.Element {
     setProviderAudioURL("");
     setOEmbedData(null);
     setAuthor("");
-  
-    console.log("Attributes after reset:", attributes);
-    console.log("State values after reset:", {
-      inputURL,
-      title,
-      description,
-      providerURL,
-      providerAudioURL,
-      oEmbedData,
-    });
   };
-  
-
-  console.log(attributes);
 
   /**
    * Renders the Videoblock

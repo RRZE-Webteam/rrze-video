@@ -4,7 +4,6 @@ namespace RRZE\Video\Providers;
 
 defined('ABSPATH') || exit;
 use RRZE\Video\Player\StructuredMeta;
-use RRZE\Video\Helper;
 use RRZE\Video\Utils;
 /**
  * Functions to handle and generate required FAU TV video embeds and html
@@ -135,7 +134,6 @@ public static function generate_fau_html($data, $id)
      */
     public static function generate_fauApi_html($data, $id)
     {
-        Utils\Helper::debug($data);
         $poster = Utils\Utils::evaluatePoster($data, $id);
         $classname = 'plyr-instance plyr-videonum-' . $id . ' ' . Utils\Utils::get_aspectratio_class($data);
         $mime_type = 'application/vnd.apple.mpegurl';
