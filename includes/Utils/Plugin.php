@@ -6,48 +6,17 @@ defined('ABSPATH') || exit;
 
 class Plugin
 {
-    /**
-     * The full path and filename of the plugin.
-     * @var string
-     */
     protected $pluginFile;
-
-    /**
-     * The basename of the plugin.
-     * @var string
-     */
     protected $basename;
-
-    /**
-     * The filesystem directory path (with trailing slash) for the plugin.
-     * @var string
-     */
     protected $directory;
-
-    /**
-     * The URL directory path (with trailing slash) for the plugin.
-     * @var string
-     */
     protected $url;
-
-    /**
-     * The version of the plugin.
-     * @var string
-     */
     protected $version;
 
-    /**
-     * __construct method
-     * @param string $pluginFile The full path and filename of the plugin.
-     */
     public function __construct(string $pluginFile)
     {
         $this->pluginFile = $pluginFile;
     }
 
-    /**
-     * loaded method
-     */
     public function loaded()
     {
         $this->setBasename()
@@ -56,106 +25,57 @@ class Plugin
             ->setVersion();
     }
 
-    /**
-     * getFile method
-     * Get the full path and filename of the plugin.
-     * @return string The full path and filename.
-     */
     public function getFile(): string
     {
         return $this->pluginFile;
     }
 
-    /**
-     * getBasename method
-     * Get the basename of the plugin.
-     * @return string The basename.
-     */
     public function getBasename(): string
     {
         return $this->basename;
     }
 
-    /**
-     * setBasename method
-     * Set the basename of the plugin.
-     * @return object This Plugin object.
-     */
     public function setBasename(): object
     {
         $this->basename = plugin_basename($this->pluginFile);
         return $this;
     }
 
-    /**
-     * getDirectory method
-     * Get the filesystem directory path (with trailing slash) for the plugin.
-     * @return string The filesystem directory path.
-     */
     public function getDirectory(): string
     {
         return $this->directory;
     }
 
-    /**
-     * setDirectory method
-     * Set the filesystem directory path (with trailing slash) for the plugin.
-     * @return object This Plugin object.
-     */
     public function setDirectory(): object
     {
-        $this->directory = rtrim(plugin_dir_path($this->pluginFile), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $directory = plugin_dir_path($this->pluginFile);
+        $this->directory = $directory !== null ? rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR : '';
         return $this;
     }
 
-    /**
-     * getPath method
-     * Get the filesystem directory path (with trailing slash) for the plugin.
-     * @param string $path The path name.
-     * @return string The filesystem directory path.
-     */
     public function getPath(string $path = ''): string
     {
-        return $this->directory . ltrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $path = $path ?? '';
+        return $this->directory . ltrim($path, DIRECTORY_SEPARATOR);
     }
 
-    /**
-     * getUrl method
-     * Get the URL directory path (with trailing slash) for the plugin.
-     * @param string $path The path name.
-     * @return string The URL directory path.
-     */
     public function getUrl(string $path = ''): string
     {
-        return $this->url . ltrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        return $this->url . ltrim($path ?? '', DIRECTORY_SEPARATOR);
     }
 
-    /**
-     * setUrl method
-     * Set the URL directory path (with trailing slash) for the plugin.
-     * @return object This Plugin object.
-     */
     public function setUrl(): object
     {
-        $this->url = rtrim(plugin_dir_url($this->pluginFile), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $url = plugin_dir_url($this->pluginFile);
+        $this->url = $url !== null ? rtrim($url, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR : '';
         return $this;
     }
 
-    /**
-     * getSlug method
-     * Get the slug of the plugin.
-     * @return string The slug.
-     */
     public function getSlug(): string
     {
         return sanitize_title(dirname($this->basename));
     }
 
-    /**
-     * getVersion method
-     * Get the version of the plugin.
-     * @return string The version.
-     */
     public function getVersion(): string
     {
         if (defined('WP_DEBUG') && WP_DEBUG) {
@@ -164,25 +84,16 @@ class Plugin
         return $this->version;
     }
 
-    /**
-     * getVersion method
-     * Set the version of the plugin.
-     * @return object This Plugin object.
-     */
     public function setVersion(): object
     {
         $headers = ['Version' => 'Version'];
         $fileData = get_file_data($this->pluginFile, $headers, 'plugin');
         if (isset($fileData['Version'])) {
             $this->version = $fileData['Version'];
-        };
+        }
         return $this;
     }
 
-    /**
-     * __call method
-     * Method overloading.
-     */
     public function __call(string $name, array $arguments)
     {
         if (!method_exists($this, $name)) {

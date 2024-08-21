@@ -61,7 +61,6 @@
         "@vidstack/player": "^1.6.5",
         "@vidstack/react": "^1.12.9",
         "hls.js": "^1.5.14",
-        "plyr": "^3.7.8",
         "vidstack": "^1.12.5"
     }
 }

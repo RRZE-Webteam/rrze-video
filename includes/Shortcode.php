@@ -1,18 +1,23 @@
 <?php
 
-namespace RRZE\Video\WordPress;
+namespace RRZE\Video;
 
 defined('ABSPATH') || exit;
 
-use RRZE\Video\Config\ShortcodeSettings;
-use RRZE\Video\Player\Player;
-use RRZE\Video\Utils\Helper;
-
+/**
+ * Class Shortcode
+ * @package RRZE\Video
+ */
 class Shortcode
 {
     private static $instance = null;
+
     private $settings = [];
 
+    /**
+     * Singleton
+     * @return object
+     */
     public static function instance()
     {
         if (self::$instance === null) {
@@ -23,7 +28,8 @@ class Shortcode
 
     private function __construct()
     {
-        $this->settings = ShortcodeSettings::getSettings('rrzevideo');
+        include_once(plugin()->getPath() . "includes/Config/shortcodeSettings.php");
+        $this->settings = $settings ?? [];
     }
 
     public function loaded()
@@ -32,29 +38,38 @@ class Shortcode
         add_shortcode('fauvideo', [$this, 'shortcodeVideo']);
     }
 
+    /**
+     * Gibt die Default-Werte eines gegebenen Feldes aus den Shortcodesettings zurück
+     * @return array [description]
+     */
     public function getShortcodeDefaults($field = '')
     {
-        return ShortcodeSettings::getDefaults($field);
+        $res = [];
+        if (empty($field) || empty($this->settings[$field])) {
+            return $res;
+        }
+        foreach ($this->settings[$field] as $name => $value) {
+            $res[$name] = $value['default'];
+        }
+        return $res;
     }
 
+    /**
+     * Sanitize shortcode atts & display shortcode output. Also adds the aspect-ratio as inline-style
+     * @param array $atts
+     * @return array
+     */
     public function shortcodeVideo($atts)
     {
-        Helper::debug('The following attributes are passed to the shortcode:');
-        Helper::debug($atts);
         $defaults = $this->getShortcodeDefaults('rrzevideo');
         $args = shortcode_atts($defaults, $atts);
-        Helper::debug('The following arguments are combined inside the shortcode:');
-        Helper::debug($args);
         $args = $this->translateParameters($args);
-        Helper::debug('The following arguments are translated inside the shortcode:');
-        Helper::debug($args);
         $args = $this->sanitizeArgs($args, 'rrzevideo');
-        Helper::debug('The following arguments are sanitized inside the shortcode:');
-        Helper::debug($args);
+
 
         return apply_filters(
             'rrze_video_player_content',
-            Player::instance()->get_player($args),
+            Player\Player::instance()->get_player($args),
             $args
         );
     }
@@ -122,37 +137,13 @@ class Shortcode
      */
     public function sanitizeArgs(array $args, string $field = ''): array
     {
-        // Debugging to determine where it might fail
-        if (empty($args)) {
-            Helper::debug('sanitizeArgs: args array is empty.');
+        if (empty($args) || empty($field) || empty($this->settings[$field])) {
             return [];
         }
-
-        if (empty($field)) {
-            Helper::debug('sanitizeArgs: field is empty.');
-            return [];
-        }
-
-        if (!isset($this->settings[$field])) {
-            Helper::debug('sanitizeArgs: no settings found for the field: ' . $field);
-            return [];
-        }
-
-        if (empty($this->settings[$field])) {
-            Helper::debug('sanitizeArgs: settings for field are empty.');
-            return [];
-        }
-
         $settings = $this->settings[$field];
 
         foreach ($args as $name => $value) {
-            // Ensure that the type is defined for the setting
-            if (!isset($settings[$name]['type'])) {
-                continue;
-            }
-
-            $type = $settings[$name]['type'];
-
+            $type = $settings[$name]['type'] ?? '';
             switch ($type) {
                 case 'textarea':
                     $value = sanitize_textarea_field($value);
@@ -166,9 +157,9 @@ class Shortcode
 
                     // Check if the value matches the regex
                     if (!preg_match("/^(\d*\.?\d+)\/(\d*\.?\d+)$/", $value)) {
-                        Helper::debug('The following invalid aspect ratio was entered inside a video shortcode: ' . $value . '. Using the default value 16/9 instead.', 'i');
+                        Utils\Helper::debug('The following invalid aspect ratio was entered inside a video shortcode: ' . $value . '. Using the default value 16/9 instead.', 'i');
                         $value = '16/9';
-                    }
+                    } 
                     break;
                 case 'slug':
                     $value = sanitize_title($value);
@@ -215,12 +206,11 @@ class Shortcode
                     }
                     break;
                 default:
-                    // nix aendern (do nothing)
+                    // nix aendern
                     break;
             }
             $args[$name] = $value;
         }
-
         return $args;
     }
 }

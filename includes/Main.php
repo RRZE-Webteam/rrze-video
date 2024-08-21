@@ -21,7 +21,7 @@ class Main
         new WordPress\Settings();
 
         // Set the video shortcode.
-        WordPress\Shortcode::instance()->loaded();
+        Shortcode::instance()->loaded();
 
         // Set the video widget.
         add_action('widgets_init', [$this, 'registerWidget']);

@@ -4,6 +4,7 @@ namespace RRZE\Video\WordPress;
 
 defined('ABSPATH') || exit;
 use RRZE\Video\Utils\Helper;
+use RRZE\Video\Shortcode;
 
 /**
  * Class Shortcode
