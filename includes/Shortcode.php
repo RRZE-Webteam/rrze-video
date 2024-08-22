@@ -52,14 +52,14 @@ class Shortcode
                     'type' => 'integer'
                 ],
                 'clipend' => [
-                    'default' => 9,
+                    'default' => 0,
                     'label' => __('Clips the of the video for looping video content', 'rrze-video'),
                     'message' => __('Clips the end of the video. Number in seconds', 'rrze-video'),
                     'field_type' => 'number',
                     'type' => 'integer'
                 ],
                 'clipstart' => [
-                    'default' => 8,
+                    'default' => 0,
                     'label' => __('Clips the start of the video for looping video content', 'rrze-video'),
                     'message' => __('Clips the beginning of the video. Number in seconds', 'rrze-video'),
                     'field_type' => 'number',
