@@ -5,8 +5,69 @@
 /*************************************************************************************************
  * Player
  *************************************************************************************************/
+:root {
+    --webkit-text-track-display: none;
+    // --default-color: #000;
+    // --default-bg: var(--color-zentral-basis, #04316a);
+}
 
-media-player {
+.rrze-video {
+    [data-media-player][data-layout='video']:not([data-fullscreen]) {
+        border-radius: 0;
+    }
+
+    .vds-video-layout[data-sm] .vds-controls .vds-play-button {
+        background-color: var(--color-zentral-basis, #04316a);
+        border-radius: 0;
+    }
+
+    media-audio-layout.light.vds-audio-layout {
+        background: none;
+        border-top: 1px solid var(--color-zentral-basis, #04316a);
+        border-bottom: 1px solid var(--color-zentral-basis, #04316a);
+
+        .vds-button {
+            color: var(--color-zentral-basis, #04316a);
+        }
+
+        .vds-button.vds-play-button {
+            color: #fff;
+        }
+
+        border-radius: 0;
+
+        :where(.vds-time-slider .vds-slider-progress) {
+            background-color: var(--color-zentral-ci-hell2, #ced9e7);
+        }
+
+        :where(.vds-slider .vds-slider-track-fill) {
+            background-color: var(--color-zentral-basis, #04316a);
+        }
+
+        media-play-button {
+            &.vds-play-button {
+                background: var(--color-zentral-basis, #04316a);
+                border-radius: 0;
+            }
+
+
+            .vds-play-button {
+                border-radius: 0;
+            }
+
+            .vds-icon .vds-play-icon {
+                border-radius: 0;
+            }
+        }
+
+        // svg.vds-icon.vds-play-icon path {
+
+        // }
+    }
+}
+
+
+.vds- media-player {
     --brand-color: #f5f5f5;
     --focus-color: #4e9cf6;
 
@@ -29,31 +90,31 @@ media-player[data-view-type='video'] {
     aspect-ratio: 16 /9;
 }
 
-media-player{
+media-player {
 
-&.ar-16-9 {
-    aspect-ratio: 16/9;
-}
+    &.ar-16-9 {
+        aspect-ratio: 16/9;
+    }
 
-&.ar-9-16 {
-    aspect-ratio: 9/16;
-}
+    &.ar-9-16 {
+        aspect-ratio: 9/16;
+    }
 
-&.ar-4-3 {
-    aspect-ratio: 4/3;
-}
+    &.ar-4-3 {
+        aspect-ratio: 4/3;
+    }
 
-&.ar-1-1 {
-    aspect-ratio: 1/1;
-}
+    &.ar-1-1 {
+        aspect-ratio: 1/1;
+    }
 
-&.ar-235-1 {
-    aspect-ratio: 2.35/1;
-}
+    &.ar-235-1 {
+        aspect-ratio: 2.35/1;
+    }
 
-&.ar-240-1 {
-    aspect-ratio: 2.40/1;
-}
+    &.ar-240-1 {
+        aspect-ratio: 2.40/1;
+    }
 }
 
 
@@ -69,4 +130,3 @@ media-player{
     margin-inline: auto;
     max-width: 300px;
 }
-

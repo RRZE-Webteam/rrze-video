@@ -58,9 +58,8 @@
     },
     "dependencies": {
         "@types/wordpress__editor": "^13.6.8",
-        "@vidstack/player": "^1.6.5",
         "@vidstack/react": "^1.12.9",
-        "hls.js": "^1.5.14",
-        "vidstack": "^1.12.5"
+        "hls.js": "^1.5.15",
+        "vidstack": "^1.12.9"
     }
 }
