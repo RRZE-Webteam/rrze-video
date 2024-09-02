@@ -6,11 +6,20 @@ import 'vidstack/player/styles/default/layouts/video.css';
 
 // Run code when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', async () => {
+  // Declare HLS variable in the broader scope
+  let HLS: typeof import('hls.js').default;
+  let vidstack;
+
   // Dynamically import the player modules and HLS.js
-  const [{ default: HLS }, vidstack] = await Promise.all([
-    import('hls.js'),
-    import('vidstack/player'),
-  ]);
+  try {
+    [{ default: HLS }, vidstack] = await Promise.all([
+      import('hls.js'),
+      import('vidstack/player'),
+    ]);
+  } catch (error) {
+    console.error('Error loading player libraries:', error);
+    return;
+  }  
 
   // Register additional elements and layouts dynamically if needed
   await Promise.all([
