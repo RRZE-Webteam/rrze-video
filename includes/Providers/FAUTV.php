@@ -67,7 +67,7 @@ class FAUTV
 
         if (isset($data['video']['type']) && $data['video']['type'] == 'audio' && isset($data['video']['file'])) {
             $classname = 'plyr-instance plyr-videonum-' . $id;
-            $res[] = '<media-player src="' . $data['video']['file'] . '" load="visible" view-type="audio">';
+            $res[] = '<media-player title="' . $data['video']['title'] . '" src="' . $data['video']['file'] . '" load="visible" poster-load="eager" view-type="audio">';
             $res[] = '<media-audio-layout>';
             $res[] = '<media-provider>';
             $res[] = '</media-provider>';
@@ -81,7 +81,7 @@ class FAUTV
             $res[] = StructuredMeta::get_html_structuredmeta($data);
             $res[] = '</div>';
 
-            $res[] = '<media-player ' . $clipstart . $clipend . ' load="visible" loop="' . $loop . '" poster-load="eager" id="' . $id . '" crossorigin playsinline class="' . Utils\Utils::get_aspectratio_class($data) . '">';
+            $res[] = '<media-player  title="' . $data['video']['title'] . '" ' . $clipstart . $clipend . ' load="visible" poster-load="eager" loop="' . $loop . '" poster-load="eager" id="' . $id . '" crossorigin playsinline class="' . Utils\Utils::get_aspectratio_class($data) . '">';
 
             $res[] = '<media-provider>';
 
