@@ -299,7 +299,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
           setAttributes={setAttributes}
         />
       </PanelBody>
-      <PanelBody
+      {/* <PanelBody
         title={__("SSO secured video embed", "rrze-video")}
         initialOpen={false}
       >
@@ -331,7 +331,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
         >
           {__("Embed secure video", "rrze-video")}
         </Button>
-      </PanelBody>
+      </PanelBody> */}
       {attributes.provider === "fauvideo" && (
         <PanelBody
           title={__("Player controls", "rrze-video")}
