@@ -25,9 +25,9 @@ class FAUAPI
 
         $ip_long = ip2long($ip);
 
-        // if ($transient_value !== false) {
-        //     return $transient_value;
-        // }
+        if ($transient_value !== false) {
+            return $transient_value;
+        }
 
         $data_encryption = new FSD_Data_Encryption();
         $encrypted_api_key = get_option('rrze_video_api_key');
