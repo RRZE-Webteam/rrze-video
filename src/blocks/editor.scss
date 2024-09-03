@@ -56,155 +56,155 @@
 	width: 100%;
 }
 
-.rrze-video {
+// .rrze-video {
 
-	.youtube-video,
-	.vimeo-video,
-	video {
-		object-fit: contain;
-		max-width: 100%;
-		height: auto;
+	// .youtube-video,
+	// .vimeo-video,
+	// video {
+	// 	object-fit: contain;
+	// 	max-width: 100%;
+	// 	height: auto;
 
-	}
+	// }
 
-	p.link {
-		margin-top: 0.5em;
-	}
+	// p.link {
+	// 	margin-top: 0.5em;
+	// }
 
-	p.desc {
-		margin-top: 1em;
-	}
+	// p.desc {
+	// 	margin-top: 1em;
+	// }
 
-	p:empty {
-		display: none;
-	}
+	// p:empty {
+	// 	display: none;
+	// }
 
-	dl.meta {
-		display: flex;
-		flex-flow: row wrap;
-		margin-top: 0.5em;
+	// dl.meta {
+	// 	display: flex;
+	// 	flex-flow: row wrap;
+	// 	margin-top: 0.5em;
 
-		dt {
-			flex-basis: 20%;
-		}
+	// 	dt {
+	// 		flex-basis: 20%;
+	// 	}
 
-		dd {
-			flex-basis: 70%;
-			flex-grow: 1;
-			margin: 0;
-			padding: 2px 4px;
-		}
-	}
+	// 	dd {
+	// 		flex-basis: 70%;
+	// 		flex-grow: 1;
+	// 		margin: 0;
+	// 		padding: 2px 4px;
+	// 	}
+	// }
 
-	.iframecontainer {
-		position: relative;
-		padding-bottom: 52%;
-		// 	56,25 Prozent steht für 16:9, 74,25 Prozent für 4:3 und 50 Prozent entspricht 16:10.
-		padding-top: 30px;
-		height: 0;
-		overflow: hidden;
+	// .iframecontainer {
+	// 	position: relative;
+	// 	padding-bottom: 52%;
+	// 	// 	56,25 Prozent steht für 16:9, 74,25 Prozent für 4:3 und 50 Prozent entspricht 16:10.
+	// 	padding-top: 30px;
+	// 	height: 0;
+	// 	overflow: hidden;
 
-		iframe {
-			border: none;
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-		}
-	}
+	// 	iframe {
+	// 		border: none;
+	// 		position: absolute;
+	// 		top: 0;
+	// 		left: 0;
+	// 		width: 100%;
+	// 		height: 100%;
+	// 	}
+	// }
 
-	.iframecontainer.br {
-		padding-bottom: 51.5%;
-	}
+	// .iframecontainer.br {
+	// 	padding-bottom: 51.5%;
+	// }
 
-	.iframecontainer.ard {
-		padding-bottom: 62%;
-	}
+	// .iframecontainer.ard {
+	// 	padding-bottom: 62%;
+	// }
 
-	.plyr__control--overlaid {
-		background: transparent;
-	}
+	// .plyr__control--overlaid {
+	// 	background: transparent;
+	// }
 
-	.plyr__control {
-		background: transparent;
-	}
+	// .plyr__control {
+	// 	background: transparent;
+	// }
 
-	.plyr--audio {
-		border: 1px solid var(--color-ContentBorders, #dfe6ec);
-		box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
-	}
+	// .plyr--audio {
+	// 	border: 1px solid var(--color-ContentBorders, #dfe6ec);
+	// 	box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+	// }
 
-	.plyr__video-embed {
-		aspect-ratio: 16/9;
-	}
+	// .plyr__video-embed {
+	// 	aspect-ratio: 16/9;
+	// }
 
 
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-		}
+	// @keyframes fadeIn {
+	// 	from {
+	// 		opacity: 0;
+	// 	}
 
-		to {
-			opacity: 1;
-		}
-	}
+	// 	to {
+	// 		opacity: 1;
+	// 	}
+	// }
 
-	@keyframes fadeOut {
-		from {
-			opacity: 1;
-		}
+	// @keyframes fadeOut {
+	// 	from {
+	// 		opacity: 1;
+	// 	}
 
-		to {
-			opacity: 0;
-		}
-	}
+	// 	to {
+	// 		opacity: 0;
+	// 	}
+	// }
 
-	.rrze-video-title {
-		position: absolute;
-		top: 20px;
-		left: 20px;
-		margin-right: 20px;
-		color: var(--color-primary-ci-hell-kontrast, #fff);
-		font-size: calc(0.9em + 0.225vw);
-		line-height: calc(1.5 * calc(0.9em + 0.225vw));
-		background-color: var(--color-primary-ci-hell, #04316a);
-		padding: 1rem;
-		animation: fadeIn 1s;
-		font-family: 'Roboto', 'sans-serif';
+	// .rrze-video-title {
+	// 	position: absolute;
+	// 	top: 20px;
+	// 	left: 20px;
+	// 	margin-right: 20px;
+	// 	color: var(--color-primary-ci-hell-kontrast, #fff);
+	// 	font-size: calc(0.9em + 0.225vw);
+	// 	line-height: calc(1.5 * calc(0.9em + 0.225vw));
+	// 	background-color: var(--color-primary-ci-hell, #04316a);
+	// 	padding: 1rem;
+	// 	animation: fadeIn 1s;
+	// 	font-family: 'Roboto', 'sans-serif';
 
-		@media screen and (max-width: 1100px) {
-			top: 0px;
-			left: 0px;
-			margin-right: 0px;
-		}
+	// 	@media screen and (max-width: 1100px) {
+	// 		top: 0px;
+	// 		left: 0px;
+	// 		margin-right: 0px;
+	// 	}
 
-		@media (prefers-reduced-motion: reduce) {
-			animation: none;
-		}
-	}
+	// 	@media (prefers-reduced-motion: reduce) {
+	// 		animation: none;
+	// 	}
+	// }
 
-	.plyr__control--overlaid {
-		background-color: var(--color-primary-ci-hell, #04316a);
-		color: var(--color-primary-ci-hell-kontrast, #fff);
-		border-radius: 0;
-		padding: 1rem;
-		opacity: 1;
-		animation: fadeIn 0.5s;
+	// .plyr__control--overlaid {
+	// 	background-color: var(--color-primary-ci-hell, #04316a);
+	// 	color: var(--color-primary-ci-hell-kontrast, #fff);
+	// 	border-radius: 0;
+	// 	padding: 1rem;
+	// 	opacity: 1;
+	// 	animation: fadeIn 0.5s;
 
-		@media (prefers-reduced-motion: reduce) {
-			animation: none;
-		}
-	}
+	// 	@media (prefers-reduced-motion: reduce) {
+	// 		animation: none;
+	// 	}
+	// }
 
-	.rrze-video-hide {
-		animation: fadeOut 0.5s forwards;
+	// .rrze-video-hide {
+	// 	animation: fadeOut 0.5s forwards;
 
-		@media (prefers-reduced-motion: reduce) {
-			animation: none;
-		}
-	}
-}
+	// 	@media (prefers-reduced-motion: reduce) {
+	// 		animation: none;
+	// 	}
+// 	// }
+// }
 
 .rrze-video-editor-input {
 	width: 100%;

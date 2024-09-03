@@ -20,7 +20,9 @@
     "html": false
   },
   "textdomain": "rrze-video",
-  "editorScript": "file:./index.js",
+  "editorScript": [
+    "file:./index.js"
+  ],
   "editorStyle": "file:./index.css",
   "style": "file:./style-index.css",
   "attributes": {
@@ -85,11 +87,11 @@
     },
     "clipstart": {
       "type": "number",
-      "default": 8
+      "default": 0
     },
     "clipend": {
       "type": "number",
-      "default": 9
+      "default": 0
     }
   }
 }
