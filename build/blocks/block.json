@@ -2,7 +2,7 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
   "name": "rrze/rrze-video",
-  "version": "1.0.1",
+  "version": "5.0.0",
   "title": "Video",
   "keywords": [
     "video",
