@@ -5,6 +5,8 @@ namespace RRZE\Video\Player;
 defined('ABSPATH') || exit;
 defined('META_EXPIRATION') || define('META_EXPIRATION', 60 * 60 * 4);
 
+use RRZE\Video\Utils\Helper;
+
 class OEmbed
 {
     public static function get_known_provider()
@@ -250,6 +252,7 @@ class OEmbed
                 }
             }
         }
+        
         return $data;
     }
 }

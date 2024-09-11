@@ -1,210 +1,135 @@
-/**
- * The following styles get applied inside the editor only.
- *
- * Replace them with your own styles or remove the file completely.
- */
+@import 'vidstack/player/styles/default/theme.css';
+@import 'vidstack/player/styles/default/layouts/audio.css';
+@import 'vidstack/player/styles/default/layouts/video.css';
 
-// .wp-block-rrze-rrze-video {
-// 	// position: relative;
-// 	width: 100%;
-// 	// padding-bottom:175%;
-// 	border: 1px solid lavender;
-// 	padding: 0;
-// 	aspect-ratio: 16/9;
-// 	background: #04316a;
-// 	margin-bottom: 0;
-
-// 	.plyr-instance {
-
-// 		aspect-ratio: 16/9;
-// 		height: auto;
-// 	}
-
-// 	.rrze-video-input-field{
-// 		padding-bottom: 0.5rem;
-// 		padding-top: 0.5rem;
-// 		margin-bottom: 1rem;
-// 	}
-
-// }
-
-// div.rrze-video.alert.clearfix.clear.alert-danger{
-// 	color: #fff;
-// 	padding: 1rem;
-
-// 	a {
-// 		color: #fff;
-// 	}
-// }
-
-// .wp-block-rrze-rrze-video>* {
-// 	position: relative;
-// 	padding: 0;
-// 	margin: 0;
-// }
-
-/* 
- * RRZE-Video Plugin: Plyr Custom Style
- */
-.plyr__video-embed iframe,
-.plyr__video-wrapper--fixed-ratio video {
-	border: 0;
-	height: 100%;
-	left: 0;
-	position: inherit;
-	top: 0;
-	width: 100%;
+/*************************************************************************************************
+ * Player
+ *************************************************************************************************/
+:root {
+    --webkit-text-track-display: none;
+    // --default-color: #000;
+    // --default-bg: var(--color-zentral-basis, #04316a);
 }
 
-// .rrze-video {
+.wp-block-rrze-rrze-video {
+    [data-media-player][data-layout='video']:not([data-fullscreen]) {
+        border-radius: 0;
+    }
 
-	// .youtube-video,
-	// .vimeo-video,
-	// video {
-	// 	object-fit: contain;
-	// 	max-width: 100%;
-	// 	height: auto;
+    .vds-video-layout[data-sm] .vds-controls .vds-play-button {
+        background-color: var(--color-zentral-basis, #04316a);
+        border-radius: 0;
+    }
 
-	// }
+    media-audio-layout.light.vds-audio-layout {
+        background: none;
+        border-top: 1px solid var(--color-zentral-basis, #04316a);
+        border-bottom: 1px solid var(--color-zentral-basis, #04316a);
 
-	// p.link {
-	// 	margin-top: 0.5em;
-	// }
+        .vds-button {
+            color: var(--color-zentral-basis, #04316a);
+        }
 
-	// p.desc {
-	// 	margin-top: 1em;
-	// }
+        .vds-button.vds-play-button {
+            color: #fff;
+        }
 
-	// p:empty {
-	// 	display: none;
-	// }
+        border-radius: 0;
 
-	// dl.meta {
-	// 	display: flex;
-	// 	flex-flow: row wrap;
-	// 	margin-top: 0.5em;
+        :where(.vds-time-slider .vds-slider-progress) {
+            background-color: var(--color-zentral-ci-hell2, #ced9e7);
+        }
 
-	// 	dt {
-	// 		flex-basis: 20%;
-	// 	}
+        :where(.vds-slider .vds-slider-track-fill) {
+            background-color: var(--color-zentral-basis, #04316a);
+        }
 
-	// 	dd {
-	// 		flex-basis: 70%;
-	// 		flex-grow: 1;
-	// 		margin: 0;
-	// 		padding: 2px 4px;
-	// 	}
-	// }
-
-	// .iframecontainer {
-	// 	position: relative;
-	// 	padding-bottom: 52%;
-	// 	// 	56,25 Prozent steht für 16:9, 74,25 Prozent für 4:3 und 50 Prozent entspricht 16:10.
-	// 	padding-top: 30px;
-	// 	height: 0;
-	// 	overflow: hidden;
-
-	// 	iframe {
-	// 		border: none;
-	// 		position: absolute;
-	// 		top: 0;
-	// 		left: 0;
-	// 		width: 100%;
-	// 		height: 100%;
-	// 	}
-	// }
-
-	// .iframecontainer.br {
-	// 	padding-bottom: 51.5%;
-	// }
-
-	// .iframecontainer.ard {
-	// 	padding-bottom: 62%;
-	// }
-
-	// .plyr__control--overlaid {
-	// 	background: transparent;
-	// }
-
-	// .plyr__control {
-	// 	background: transparent;
-	// }
-
-	// .plyr--audio {
-	// 	border: 1px solid var(--color-ContentBorders, #dfe6ec);
-	// 	box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
-	// }
-
-	// .plyr__video-embed {
-	// 	aspect-ratio: 16/9;
-	// }
+        media-play-button {
+            &.vds-play-button {
+                background: var(--color-zentral-basis, #04316a);
+                border-radius: 0;
+            }
 
 
-	// @keyframes fadeIn {
-	// 	from {
-	// 		opacity: 0;
-	// 	}
+            .vds-play-button {
+                border-radius: 0;
+            }
 
-	// 	to {
-	// 		opacity: 1;
-	// 	}
-	// }
+            .vds-icon .vds-play-icon {
+                border-radius: 0;
+            }
+        }
 
-	// @keyframes fadeOut {
-	// 	from {
-	// 		opacity: 1;
-	// 	}
+        // svg.vds-icon.vds-play-icon path {
 
-	// 	to {
-	// 		opacity: 0;
-	// 	}
-	// }
+        // }
+    }
+}
 
-	// .rrze-video-title {
-	// 	position: absolute;
-	// 	top: 20px;
-	// 	left: 20px;
-	// 	margin-right: 20px;
-	// 	color: var(--color-primary-ci-hell-kontrast, #fff);
-	// 	font-size: calc(0.9em + 0.225vw);
-	// 	line-height: calc(1.5 * calc(0.9em + 0.225vw));
-	// 	background-color: var(--color-primary-ci-hell, #04316a);
-	// 	padding: 1rem;
-	// 	animation: fadeIn 1s;
-	// 	font-family: 'Roboto', 'sans-serif';
 
-	// 	@media screen and (max-width: 1100px) {
-	// 		top: 0px;
-	// 		left: 0px;
-	// 		margin-right: 0px;
-	// 	}
+.vds- media-player {
+    --brand-color: #f5f5f5;
+    --focus-color: #4e9cf6;
 
-	// 	@media (prefers-reduced-motion: reduce) {
-	// 		animation: none;
-	// 	}
-	// }
+    --audio-brand: var(--brand-color);
+    --audio-focus-ring-color: var(--focus-color);
+    --audio-border-radius: 2px;
 
-	// .plyr__control--overlaid {
-	// 	background-color: var(--color-primary-ci-hell, #04316a);
-	// 	color: var(--color-primary-ci-hell-kontrast, #fff);
-	// 	border-radius: 0;
-	// 	padding: 1rem;
-	// 	opacity: 1;
-	// 	animation: fadeIn 0.5s;
+    --video-brand: var(--brand-color);
+    --video-focus-ring-color: var(--focus-color);
+    --video-border-radius: 2px;
 
-	// 	@media (prefers-reduced-motion: reduce) {
-	// 		animation: none;
-	// 	}
-	// }
+    /* 👉 https://vidstack.io/docs/player/components/layouts/default#css-variables for more. */
+}
 
-	// .rrze-video-hide {
-	// 	animation: fadeOut 0.5s forwards;
+media-player[data-view-type='audio'] media-poster {
+    display: none;
+}
 
-	// 	@media (prefers-reduced-motion: reduce) {
-	// 		animation: none;
-	// 	}
-// 	// }
-// }
+media-player[data-view-type='video'] {
+    aspect-ratio: 16 /9;
+}
+
+media-player {
+
+    &.ar-16-9 {
+        aspect-ratio: 16/9;
+    }
+
+    &.ar-9-16 {
+        aspect-ratio: 9/16;
+    }
+
+    &.ar-4-3 {
+        aspect-ratio: 4/3;
+    }
+
+    &.ar-1-1 {
+        aspect-ratio: 1/1;
+    }
+
+    &.ar-235-1 {
+        aspect-ratio: 2.35/1;
+    }
+
+    &.ar-240-1 {
+        aspect-ratio: 2.40/1;
+    }
+}
+
+
+/*************************************************************************************************
+ * Document
+ *************************************************************************************************/
+
+.src-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 40px;
+    margin-inline: auto;
+    max-width: 300px;
+}
 
 .rrze-video-editor-input {
 	width: 100%;

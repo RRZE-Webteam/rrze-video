@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Select all media-player elements on the page.
   const players = document.querySelectorAll('media-player');
-  console.log(players);
 
   const content: VTTContent = {
     cues: [
@@ -28,8 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
       { startTime: 50, endTime: 100, text: 'Kapitel 2' },
     ],
   };
-  
-
 
   if (!players.length) {
     console.error('No media player elements found!');
