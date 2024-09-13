@@ -26,7 +26,7 @@ import apiFetch from "@wordpress/api-fetch";
 // Imports for helper functions
 // @ts-ignore
 import { isTextInString, whichProviderIsUsed } from "./HelperFunctions/utils";
-import { Video, ApiResponse, OEmbedData } from "./HelperFunctions/types"; 
+import { Video, ApiResponse, OEmbedData } from "./HelperFunctions/types";
 import { sendUrlToApi } from "./HelperFunctions/apiService";
 
 import { RRZEVidstackPlayer } from "./CustomComponents/Vidstack";
@@ -105,13 +105,14 @@ export default function Edit(props: EditProps): JSX.Element {
   const [providerURL, setProviderURL] = useState<string>("");
   const [providerAudioURL, setProviderAudioURL] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
+  const [providerName, setProviderName] = useState<string>("");
 
   const handleSendUrlToApi = async (url?: string, id?: number) => {
     try {
       const response = await sendUrlToApi(url, id);
       setResponseMessage(response.message || "Erfolgreich verarbeitet!");
       setOEmbedData(response);
-      
+
       updateAttributesFromOEmbedData({
         oembed_api_error: response.oembed_api_error || "",
         oembed_api_url: response.oembed_api_url || "",
@@ -145,30 +146,37 @@ export default function Edit(props: EditProps): JSX.Element {
       return;
     }
 
-    const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
-    let aspectRatio = "16/9";
+    // if (data.video.provider_name contains FAU
+    if (data.video.provider_name && data.video.provider_name.includes("FAU")) {
+      setProviderName('FAU');
+      const gcd = (a: number, b: number): number =>
+        b === 0 ? a : gcd(b, a % b);
+      let aspectRatio = "16/9";
 
-    if (data.video.width && data.video.height) {
-      const gcdValue = gcd(data.video.width, data.video.height);
-      aspectRatio = `${data.video.width / gcdValue}/${
-        data.video.height / gcdValue
-      }`;
+      if (data.video.width && data.video.height) {
+        const gcdValue = gcd(data.video.width, data.video.height);
+        aspectRatio = `${data.video.width / gcdValue}/${
+          data.video.height / gcdValue
+        }`;
+      }
+
+      setTitle(data.video.title || "");
+      setDescription(data.video.description || "");
+      setAuthor(data.video.author_name || "");
+      setProviderURL(data.video.provider_videoindex_url || "");
+      setProviderAudioURL(data.video.alternative_Audio || "");
+
+      setAttributes({
+        aspectratio: aspectRatio,
+        mediaurl: data.video.file || "",
+        textAlign: "has-text-align-left",
+        orientation:
+          data.video.width > data.video.height ? "landscape" : "portrait",
+        poster: attributes.poster || data.video.preview_image || "",
+      });
+    } else {
+      setProviderName(data.video.provider_name || "");
     }
-
-    setTitle(data.video.title || "");
-    setDescription(data.video.description || "");
-    setAuthor(data.video.author_name || "");
-    setProviderURL(data.video.provider_videoindex_url || "");
-    setProviderAudioURL(data.video.alternative_Audio || "");
-
-    setAttributes({
-      aspectratio: aspectRatio,
-      mediaurl: data.video.file || "",
-      textAlign: "has-text-align-left",
-      orientation:
-        data.video.width > data.video.height ? "landscape" : "portrait",
-      poster: attributes.poster || data.video.preview_image || "",
-    });
   };
 
   useEffect(() => {
@@ -272,7 +280,7 @@ export default function Edit(props: EditProps): JSX.Element {
               </p>
             ) : (
               <>
-                {id || (url && isFauVideoUrl(url)) ? (
+                {(providerName === "FAU") ? (
                   <RRZEVidstackPlayer
                     title={title}
                     mediaurl={mediaurl}
@@ -289,7 +297,7 @@ export default function Edit(props: EditProps): JSX.Element {
                       url: attributes.url,
                       show: attributes.show,
                       rand: attributes.rand,
-                      id: attributes.id || "",
+                      id: attributes.id,
                       titletag: attributes.titletag,
                       textAlign: attributes.textAlign,
                       secureclipid: attributes.secureclipid,
