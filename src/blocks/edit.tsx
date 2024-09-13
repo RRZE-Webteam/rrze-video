@@ -32,7 +32,10 @@ import {
   isYouTubeProvider,
   type MediaProviderAdapter,
 } from "@vidstack/react";
-import { defaultLayoutIcons, DefaultVideoLayout } from '@vidstack/react/player/layouts/default';
+import {
+  defaultLayoutIcons,
+  DefaultVideoLayout,
+} from "@vidstack/react/player/layouts/default";
 // import {
 //   PlyrLayout,
 //   plyrLayoutIcons,
@@ -41,7 +44,7 @@ import { defaultLayoutIcons, DefaultVideoLayout } from '@vidstack/react/player/l
 // Import the Editor Styles for the block editor
 import "./editor.scss"; // Only active in the editor
 import "./player.scss"; // Only active in the editor
-interface video{
+interface video {
   alternative_Audio: string;
   alternative_Video_size_large: string;
   alternative_Video_size_large_height: number;
@@ -84,6 +87,13 @@ interface ApiResponse {
   error?: string;
 }
 
+interface ApiResponseId {
+  id: number;
+  url?: string;
+  poster?: string;
+  message?: string;
+}
+
 interface oEmbedData {
   oembed_api_error: string;
   oembed_api_url: string;
@@ -119,9 +129,6 @@ const fauDomains = [
   "fau.tv",
   "www.fau.tv",
 ];
-
-// FAU oEmbed API endpoint
-const fauApiEndpoint = "https://www.fau.tv/services/oembed";
 
 function isFauVideoUrl(url: string): boolean {
   const urlDomain = new URL(url).hostname;
@@ -172,6 +179,12 @@ export default function Edit(props: EditProps): JSX.Element {
     }
   }, [url]);
 
+  useEffect(() => {
+    if (id && !url) {
+      idToUrlViaApi(parseInt(id));
+    }
+  }, [id])
+
   function onProviderChange(provider: MediaProviderAdapter | null) {
     if (isYouTubeProvider(provider)) {
       provider.cookies = true;
@@ -190,7 +203,9 @@ export default function Edit(props: EditProps): JSX.Element {
 
     if (data.video.width && data.video.height) {
       const gcdValue = gcd(data.video.width, data.video.height);
-      aspectRatio = `${data.video.width / gcdValue}/${data.video.height / gcdValue}`;
+      aspectRatio = `${data.video.width / gcdValue}/${
+        data.video.height / gcdValue
+      }`;
     }
 
     setTitle(data.video.title || "");
@@ -203,7 +218,8 @@ export default function Edit(props: EditProps): JSX.Element {
       aspectratio: aspectRatio,
       mediaurl: data.video.file || "",
       textAlign: "has-text-align-left",
-      orientation: data.video.width > data.video.height ? "landscape" : "portrait",
+      orientation:
+        data.video.width > data.video.height ? "landscape" : "portrait",
       poster: attributes.poster || data.video.preview_image || "",
     });
   };
@@ -262,10 +278,9 @@ export default function Edit(props: EditProps): JSX.Element {
     setAuthor("");
   };
 
-  
   const sendUrlToApi = (url: string) => {
     apiFetch<ApiResponse>({
-      path: "/custom/v1/process-url",
+      path: "/rrze-video/v1/process-url",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -279,8 +294,8 @@ export default function Edit(props: EditProps): JSX.Element {
         setResponseMessage(response.message || "Erfolgreich verarbeitet!");
         setOEmbedData(response);
         updateAttributesFromOEmbedData({
-          oembed_api_error: response.oembed_api_error || '',
-          oembed_api_url: response.oembed_api_url || '',
+          oembed_api_error: response.oembed_api_error || "",
+          oembed_api_url: response.oembed_api_url || "",
           video: response.video!,
         });
       })
@@ -291,6 +306,44 @@ export default function Edit(props: EditProps): JSX.Element {
         );
       });
   };
+
+  const idToUrlViaApi = (id: number) => {
+     apiFetch<ApiResponse>({
+      path: "/rrze-video/v1/get-url-by-id",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id
+      }),
+    })
+      .then((response) => {
+        // Handle the response with TypeScript type checking
+        setResponseMessage(response.message || "Erfolgreich verarbeitet!");
+        setOEmbedData(response);
+        console.log(response);
+        setAttributes({
+          url: response.video!.file,
+          mediaurl: response.video!.file,
+
+        })
+        setInputURL(response.video!.file);
+        updateAttributesFromOEmbedData({
+          oembed_api_error: response.oembed_api_error || "",
+          oembed_api_url: response.oembed_api_url || "",
+          video: response.video!,
+        });
+      })
+      .catch((error: unknown) => {
+        console.error("Fehler bei der API-Anfrage:", error);
+        setResponseMessage(
+          "Fehler: Sie müssen angemeldet sein, um diese Funktion zu nutzen."
+        );
+      });
+  };
+
+  console.log("attributes", attributes);
 
   return (
     <div {...blockProps}>
@@ -337,7 +390,7 @@ export default function Edit(props: EditProps): JSX.Element {
               </p>
             ) : (
               <>
-                {url && isFauVideoUrl(url) ? (
+                {!id && url && isFauVideoUrl(url) ? (
                   <MediaPlayer
                     title={title}
                     src={mediaurl}
@@ -349,11 +402,10 @@ export default function Edit(props: EditProps): JSX.Element {
                     loop={attributes.loop}
                   >
                     <MediaProvider />
-                    <DefaultVideoLayout thumbnails={attributes.poster} icons={defaultLayoutIcons} />
-                    {/* <PlyrLayout
+                    <DefaultVideoLayout
                       thumbnails={attributes.poster}
-                      icons={plyrLayoutIcons}
-                    /> */}
+                      icons={defaultLayoutIcons}
+                    />
                   </MediaPlayer>
                 ) : (
                   <ServerSideRender
@@ -362,7 +414,7 @@ export default function Edit(props: EditProps): JSX.Element {
                       url: attributes.url,
                       show: attributes.show,
                       rand: attributes.rand,
-                      id: attributes.id,
+                      id: attributes.id || '',
                       titletag: attributes.titletag,
                       textAlign: attributes.textAlign,
                       secureclipid: attributes.secureclipid,
@@ -391,7 +443,9 @@ export default function Edit(props: EditProps): JSX.Element {
                 <dd>{author}</dd>
                 <dt>{__("Quelle", "rrze-video")}</dt>
                 <dd>
-                  <a href={providerURL}>{providerURL?.replace("https://", "")}</a>
+                  <a href={providerURL}>
+                    {providerURL?.replace("https://", "")}
+                  </a>
                 </dd>
                 <dt>{__("Audioformat", "rrze-video")}</dt>
                 <dd>
