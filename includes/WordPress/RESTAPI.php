@@ -20,9 +20,9 @@ class RESTAPI
                 'permission_callback' => 'is_user_logged_in',
             ));
 
-            register_rest_route('rrze-video/v1', '/get-url-by-id', array(
+            register_rest_route('rrze-video/v1', '/process-id', array(
                 'methods' => 'POST',
-                'callback' => [$this, 'get_url_by_id_callback'],
+                'callback' => [$this, 'process_id_callback'],
                 'permission_callback' => 'is_user_logged_in',
             ));
         });
@@ -49,7 +49,8 @@ class RESTAPI
                 $arguments['video'] = $oembeddata['video'];
                 $arguments['oembed_api_url'] = $oembeddata['oembed_api_url'] ?? '';
                 $arguments['oembed_api_error'] = $oembeddata['error'] ?? '';
-
+                Helper::debug('Process URL');
+                Helper::debug($arguments);
                 return rest_ensure_response($arguments);
             }
         }
@@ -66,53 +67,51 @@ class RESTAPI
         return rest_ensure_response($response);
     }
 
-    public function get_url_by_id_callback($request)
-    {
-        // Retrieve the ID or random key from the request parameters
-        $id = $request->get_param('id');
-        $rand = $request->get_param('rand');
+    public function process_id_callback($request)
+{
+    $id = $request->get_param('id');
+    
+    $arguments = ['id' => $id];
+    Utils\Utils::getUrlByIdOrRandom($arguments);
+    Helper::debug($arguments);
+    $url = $arguments['url'] ?? null;
 
-        // Validate the ID
-        if (empty($id) || !is_numeric($id)) {
-            return new WP_Error('invalid_id', 'Die übermittelte ID ist ungültig.', array('status' => 400));
-        }
+    if (!$url) {
+        return new WP_Error('invalid_id', 'Die übermittelte ID ist ungültig.', array('status' => 400));
+    }
 
-        // Prepare the arguments array with ID or random key
-        $arguments = [
-            'id' => (int) $id,
-            'rand' => $rand,
-        ];
+    if ($isoembed = OEmbed::is_oembed_provider($url)) {
+        $oembeddata = OEmbed::get_oembed_data($isoembed, $url);
 
-        // Use the utility function to get URL by ID or randomly
-        Utils\Utils::getUrlByIdOrRandom($arguments);
+        if (!empty($oembeddata['error'])) {
+            return rest_ensure_response([
+                'error' => $oembeddata['error'],
+                'message' => 'An error occurred while processing the oEmbed data.',
+            ]);
+        } elseif (empty($oembeddata['video'])) {
+            return rest_ensure_response([
+                'error' => 'no_video_data',
+                'message' => 'No video data was found.',
+            ]);
+        } else {
+            $response = [
+                'video' => $oembeddata['video'],
+                'oembed_api_url' => $oembeddata['oembed_api_url'] ?? '',
+                'oembed_api_error' => $oembeddata['error'] ?? '',
+            ];
 
-        // Check if URL was retrieved successfully
-        if (empty($arguments['url'])) {
-            return new WP_Error('url_not_found', 'Keine URL wurde für die angegebene ID gefunden.', array('status' => 404));
-        }
-
-        $url = $arguments['url'];
-
-        if ($isoembed = OEmbed::is_oembed_provider($url)) {
-            $oembeddata = OEmbed::get_oembed_data($isoembed, $url);
-
-            if (!empty($oembeddata['error'])) {
-                return rest_ensure_response([
-                    'error' => $oembeddata['error'],
-                    'message' => 'An error occurred while processing the oEmbed data.',
-                ]);
-            } elseif (empty($oembeddata['video'])) {
-                return rest_ensure_response([
-                    'error' => 'no_video_data',
-                    'message' => 'No video data was found.',
-                ]);
-            } else {
-                $arguments['video'] = $oembeddata['video'];
-                $arguments['oembed_api_url'] = $oembeddata['oembed_api_url'] ?? '';
-                $arguments['oembed_api_error'] = $oembeddata['error'] ?? '';
-
-                return rest_ensure_response($arguments);
-            }
+            Helper::debug('Process ID');
+            Helper::debug($response);
+            return rest_ensure_response($response);
         }
     }
+
+    $response = [
+        'message' => 'Die ID wurde erfolgreich verarbeitet.',
+        'processed_url' => $url,
+    ];
+
+    return rest_ensure_response($response);
+}
+
 }

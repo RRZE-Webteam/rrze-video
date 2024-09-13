@@ -331,7 +331,20 @@ class Utils
     /**
      * Determines the URL for the video based on an ID or fetches a random video URL.
      * 
-     * @param array $arguments Associative array containing 'id' or 'rand' key for fetching.
+     * This function evaluates the provided arguments to either fetch a specific video's URL by its ID 
+     * or retrieve a random video URL based on the specified genre. 
+     * 
+     * If an 'id' is provided and valid, it will call `getUrlById()` to fetch the video URL 
+     * and poster image associated with that ID.
+     * 
+     * If the 'id' is not provided or invalid, but a 'rand' key is present, it will call 
+     * `getUrlRandomly()` to fetch a random video from the specified genre.
+     * 
+     * @param array $arguments Associative array that includes keys to determine which URL to fetch:
+     *      - 'id' (int|string): The post ID of the video. If provided and valid, the function fetches the URL of the video associated with this ID.
+     *      - 'rand' (string): The slug of the genre to fetch a random video. If 'id' is not set or invalid, and this key is provided, a random video from the specified genre is fetched.
+     * 
+     * @return void The function modifies the $arguments array directly to include the fetched URL and poster image, if found.
      */
     public static function getUrlByIdOrRandom(&$arguments)
     {

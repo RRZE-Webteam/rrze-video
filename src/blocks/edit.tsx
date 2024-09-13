@@ -26,83 +26,18 @@ import apiFetch from "@wordpress/api-fetch";
 // Imports for helper functions
 // @ts-ignore
 import { isTextInString, whichProviderIsUsed } from "./HelperFunctions/utils";
-import {
-  MediaPlayer,
-  MediaProvider,
-  isYouTubeProvider,
-  type MediaProviderAdapter,
-} from "@vidstack/react";
-import {
-  defaultLayoutIcons,
-  DefaultVideoLayout,
-} from "@vidstack/react/player/layouts/default";
-// import {
-//   PlyrLayout,
-//   plyrLayoutIcons,
-// } from "@vidstack/react/player/layouts/plyr";
+import { Video, ApiResponse, OEmbedData } from "./HelperFunctions/types"; 
+import { sendUrlToApi } from "./HelperFunctions/apiService";
+
+import { RRZEVidstackPlayer } from "./CustomComponents/Vidstack";
 
 // Import the Editor Styles for the block editor
 import "./editor.scss"; // Only active in the editor
 import "./player.scss"; // Only active in the editor
-interface video {
-  alternative_Audio: string;
-  alternative_Video_size_large: string;
-  alternative_Video_size_large_height: number;
-  alternative_Video_size_large_url: string;
-  alternative_Video_size_large_width: number;
-  alternative_Video_size_small: string;
-  alternative_Video_size_small_height: string;
-  alternative_Video_size_small_url: string;
-  alternative_Video_size_small_width: string;
-  author_name: string;
-  author_url_0: string;
-  description: string;
-  duration: string;
-  file: string;
-  height: number;
-  html: string;
-  inLanguage: string;
-  preview_image: string;
-  provider_name: string;
-  provider_url: string;
-  provider_videoindex_url: string;
-  thumbnail_height: number;
-  thumbnail_url: string;
-  thumbnail_width: number;
-  title: string;
-  transcript: string;
-  transcript_de: string;
-  transcript_en: string;
-  type: string;
-  upload_date: string;
-  version: string;
-  width: number;
-}
-
-interface ApiResponse {
-  video?: video;
-  oembed_api_url?: string;
-  oembed_api_error?: string;
-  message?: string;
-  error?: string;
-}
-
-interface ApiResponseId {
-  id: number;
-  url?: string;
-  poster?: string;
-  message?: string;
-}
-
-interface oEmbedData {
-  oembed_api_error: string;
-  oembed_api_url: string;
-  video: video;
-}
 
 // Define the attributes type
 interface BlockAttributes {
-  id: string;
+  id: number;
   url: string;
   rand: string;
   aspectratio: string;
@@ -171,28 +106,40 @@ export default function Edit(props: EditProps): JSX.Element {
   const [providerAudioURL, setProviderAudioURL] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
 
+  const handleSendUrlToApi = async (url?: string, id?: number) => {
+    try {
+      const response = await sendUrlToApi(url, id);
+      setResponseMessage(response.message || "Erfolgreich verarbeitet!");
+      setOEmbedData(response);
+      
+      updateAttributesFromOEmbedData({
+        oembed_api_error: response.oembed_api_error || "",
+        oembed_api_url: response.oembed_api_url || "",
+        video: response.video!,
+      });
+    } catch (error) {
+      console.error("Fehler bei der API-Anfrage:", error);
+      setResponseMessage(
+        "Fehler: Sie müssen angemeldet sein, um diese Funktion zu nutzen."
+      );
+    }
+  };
+
   useEffect(() => {
     if (url && isFauVideoUrl(url)) {
-      sendUrlToApi(url);
+      handleSendUrlToApi(url);
     } else if (url && isYouTubeUrl(url)) {
       setAttributes({ mediaurl: url, url: url });
     }
   }, [url]);
 
   useEffect(() => {
-    if (id && !url) {
-      idToUrlViaApi(parseInt(id));
+    if (!url) {
+      handleSendUrlToApi(undefined, id);
     }
-  }, [id])
+  }, [id]);
 
-  function onProviderChange(provider: MediaProviderAdapter | null) {
-    if (isYouTubeProvider(provider)) {
-      provider.cookies = true;
-    }
-  }
-
-  const updateAttributesFromOEmbedData = (data: oEmbedData) => {
-    console.log(data);
+  const updateAttributesFromOEmbedData = (data: OEmbedData) => {
     if (!data || typeof data !== "object") {
       console.error("Invalid oEmbed data structure:", data);
       return;
@@ -254,7 +201,7 @@ export default function Edit(props: EditProps): JSX.Element {
     setAttributes({
       url: "",
       rand: "",
-      id: "",
+      id: null,
       provider: "fauvideo",
       aspectratio: "16/9",
       orientation: "landscape",
@@ -276,71 +223,6 @@ export default function Edit(props: EditProps): JSX.Element {
     setProviderAudioURL("");
     setOEmbedData(null);
     setAuthor("");
-  };
-
-  const sendUrlToApi = (url: string) => {
-    apiFetch<ApiResponse>({
-      path: "/rrze-video/v1/process-url",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        url: url,
-      }),
-    })
-      .then((response) => {
-        // Handle the response with TypeScript type checking
-        setResponseMessage(response.message || "Erfolgreich verarbeitet!");
-        setOEmbedData(response);
-        updateAttributesFromOEmbedData({
-          oembed_api_error: response.oembed_api_error || "",
-          oembed_api_url: response.oembed_api_url || "",
-          video: response.video!,
-        });
-      })
-      .catch((error: unknown) => {
-        console.error("Fehler bei der API-Anfrage:", error);
-        setResponseMessage(
-          "Fehler: Sie müssen angemeldet sein, um diese Funktion zu nutzen."
-        );
-      });
-  };
-
-  const idToUrlViaApi = (id: number) => {
-     apiFetch<ApiResponse>({
-      path: "/rrze-video/v1/get-url-by-id",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: id
-      }),
-    })
-      .then((response) => {
-        // Handle the response with TypeScript type checking
-        setResponseMessage(response.message || "Erfolgreich verarbeitet!");
-        setOEmbedData(response);
-        console.log(response);
-        setAttributes({
-          url: response.video!.file,
-          mediaurl: response.video!.file,
-
-        })
-        setInputURL(response.video!.file);
-        updateAttributesFromOEmbedData({
-          oembed_api_error: response.oembed_api_error || "",
-          oembed_api_url: response.oembed_api_url || "",
-          video: response.video!,
-        });
-      })
-      .catch((error: unknown) => {
-        console.error("Fehler bei der API-Anfrage:", error);
-        setResponseMessage(
-          "Fehler: Sie müssen angemeldet sein, um diese Funktion zu nutzen."
-        );
-      });
   };
 
   console.log("attributes", attributes);
@@ -390,23 +272,16 @@ export default function Edit(props: EditProps): JSX.Element {
               </p>
             ) : (
               <>
-                {!id && url && isFauVideoUrl(url) ? (
-                  <MediaPlayer
+                {id || (url && isFauVideoUrl(url)) ? (
+                  <RRZEVidstackPlayer
                     title={title}
-                    src={mediaurl}
-                    aspectRatio={attributes.aspectratio}
+                    mediaurl={mediaurl}
+                    aspectratio={aspectratio}
                     poster={attributes.poster}
-                    onProviderChange={onProviderChange}
-                    clipEndTime={attributes.clipend}
-                    clipStartTime={attributes.clipstart}
+                    clipend={attributes.clipend}
+                    clipstart={attributes.clipstart}
                     loop={attributes.loop}
-                  >
-                    <MediaProvider />
-                    <DefaultVideoLayout
-                      thumbnails={attributes.poster}
-                      icons={defaultLayoutIcons}
-                    />
-                  </MediaPlayer>
+                  />
                 ) : (
                   <ServerSideRender
                     block="rrze/rrze-video"
@@ -414,7 +289,7 @@ export default function Edit(props: EditProps): JSX.Element {
                       url: attributes.url,
                       show: attributes.show,
                       rand: attributes.rand,
-                      id: attributes.id || '',
+                      id: attributes.id || "",
                       titletag: attributes.titletag,
                       textAlign: attributes.textAlign,
                       secureclipid: attributes.secureclipid,
