@@ -37,7 +37,7 @@ import "./player.scss"; // Only active in the editor
 
 // Define the attributes type
 interface BlockAttributes {
-  id: number;
+  id: string | number;
   url: string;
   rand: string;
   aspectratio: string;
@@ -128,15 +128,22 @@ export default function Edit(props: EditProps): JSX.Element {
 
   useEffect(() => {
     if (url && isFauVideoUrl(url)) {
+      console.log("URL is FAU Video URL");
       handleSendUrlToApi(url);
     } else if (url && isYouTubeUrl(url)) {
+      console.log("URL is YouTube URL");
       setAttributes({ mediaurl: url, url: url });
     }
   }, [url]);
 
   useEffect(() => {
-    if (!url) {
-      handleSendUrlToApi(undefined, id);
+    if (!url && id) {
+      console.log("ID is set");
+      let tempId;
+      if (id && typeof id === "string") {
+        tempId = parseInt(id);
+      }
+      handleSendUrlToApi(undefined, tempId);
     }
   }, [id]);
 
@@ -148,7 +155,7 @@ export default function Edit(props: EditProps): JSX.Element {
 
     // if (data.video.provider_name contains FAU
     if (data.video.provider_name && data.video.provider_name.includes("FAU")) {
-      setProviderName('FAU');
+      setProviderName("FAU");
       const gcd = (a: number, b: number): number =>
         b === 0 ? a : gcd(b, a % b);
       let aspectRatio = "16/9";
@@ -207,23 +214,25 @@ export default function Edit(props: EditProps): JSX.Element {
 
   const resetUrl = () => {
     setAttributes({
+      id: "",
       url: "",
-      rand: "",
-      id: null,
-      provider: "fauvideo",
-      aspectratio: "16/9",
-      orientation: "landscape",
-      textAlign: "has-text-align-left",
+      titletag: "h2",
       poster: "",
-      secureclipid: "",
+      rand: "",
+      show: "",
+      aspectratio: "",
+      orientation: "",
+      provider: "",
+      textAlign: "",
+      secureclipid: undefined,
+      loop: false,
       start: 0,
       clipstart: 0,
       clipend: 0,
       mediaurl: "",
-      show: "",
-      titletag: "",
     });
-
+  
+    // Reset internal state variables
     setInputURL("");
     setTitle("");
     setDescription("");
@@ -231,7 +240,7 @@ export default function Edit(props: EditProps): JSX.Element {
     setProviderAudioURL("");
     setOEmbedData(null);
     setAuthor("");
-  };
+  };  
 
   console.log("attributes", attributes);
 
@@ -280,7 +289,7 @@ export default function Edit(props: EditProps): JSX.Element {
               </p>
             ) : (
               <>
-                {(providerName === "FAU") ? (
+                {url && isFauVideoUrl(url) || providerName === "FAU" ? (
                   <RRZEVidstackPlayer
                     title={title}
                     mediaurl={mediaurl}
@@ -297,7 +306,7 @@ export default function Edit(props: EditProps): JSX.Element {
                       url: attributes.url,
                       show: attributes.show,
                       rand: attributes.rand,
-                      id: attributes.id,
+                      id: attributes.id || "",
                       titletag: attributes.titletag,
                       textAlign: attributes.textAlign,
                       secureclipid: attributes.secureclipid,

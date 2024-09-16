@@ -7,8 +7,6 @@ export const sendUrlToApi = async (url: string, id: number): Promise<ApiResponse
     id = parseInt(id);
   }
 
-  console.log("URL:", url);
-  console.log("ID:", id);
   if (!id && !url) {
     console.log("No URL or ID provided");
     return;

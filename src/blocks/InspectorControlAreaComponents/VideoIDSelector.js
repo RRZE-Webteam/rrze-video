@@ -20,6 +20,7 @@ const VideoIDSelector = (props) => {
 
   const handleOnChangeVideoCat = (videoID) => {
     setAttributes({
+      url: "",
       id: videoID,
     });
   };
