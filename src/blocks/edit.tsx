@@ -107,9 +107,9 @@ export default function Edit(props: EditProps): JSX.Element {
   const [author, setAuthor] = useState<string>("");
   const [providerName, setProviderName] = useState<string>("");
 
-  const handleSendUrlToApi = async (url?: string, id?: number) => {
+  const handleSendUrlToApi = async (url?: string, id?: number, rand?: string) => {
     try {
-      const response = await sendUrlToApi(url, id);
+      const response = await sendUrlToApi(url, id, rand);
       setResponseMessage(response.message || "Erfolgreich verarbeitet!");
       setOEmbedData(response);
 
@@ -128,24 +128,24 @@ export default function Edit(props: EditProps): JSX.Element {
 
   useEffect(() => {
     if (url && isFauVideoUrl(url)) {
-      console.log("URL is FAU Video URL");
       handleSendUrlToApi(url);
     } else if (url && isYouTubeUrl(url)) {
-      console.log("URL is YouTube URL");
       setAttributes({ mediaurl: url, url: url });
     }
   }, [url]);
 
   useEffect(() => {
     if (!url && id) {
-      console.log("ID is set");
       let tempId;
       if (id && typeof id === "string") {
         tempId = parseInt(id);
       }
       handleSendUrlToApi(undefined, tempId);
     }
-  }, [id]);
+    if (!url && rand) {
+      handleSendUrlToApi(undefined, undefined, rand);
+    }
+  }, [id, rand]);
 
   const updateAttributesFromOEmbedData = (data: OEmbedData) => {
     if (!data || typeof data !== "object") {
@@ -220,9 +220,7 @@ export default function Edit(props: EditProps): JSX.Element {
       poster: "",
       rand: "",
       show: "",
-      aspectratio: "",
-      orientation: "",
-      provider: "",
+      provider: "fauvideo",
       textAlign: "",
       secureclipid: undefined,
       loop: false,
@@ -240,9 +238,7 @@ export default function Edit(props: EditProps): JSX.Element {
     setProviderAudioURL("");
     setOEmbedData(null);
     setAuthor("");
-  };  
-
-  console.log("attributes", attributes);
+  };
 
   return (
     <div {...blockProps}>
