@@ -49,8 +49,6 @@ class RESTAPI
                 $arguments['video'] = $oembeddata['video'];
                 $arguments['oembed_api_url'] = $oembeddata['oembed_api_url'] ?? '';
                 $arguments['oembed_api_error'] = $oembeddata['error'] ?? '';
-                Helper::debug('Process URL');
-                Helper::debug($arguments);
                 return rest_ensure_response($arguments);
             }
         }
@@ -69,8 +67,6 @@ class RESTAPI
 
     public function process_id_callback($request)
     {
-        Helper::debug($request);
-
         $id = $request->get_param('rand') ?: $request->get_param('id');
 
         // Set `rand` only if `rand` was provided.
@@ -82,14 +78,11 @@ class RESTAPI
         if ($request->get_param('id')) {
             $arguments['id'] = $id;
         }
-        
+
         Utils\Utils::getUrlByIdOrRandom($arguments);
-        Helper::debug(Utils\Utils::getUrlByIdOrRandom($arguments));
         $url = $arguments['url'] ?? null;
 
         // Check if URL is valid
-        Helper::debug("check url");
-        Helper::debug($url);
         if (!$url) {
             return new WP_Error('invalid_id', 'Die übermittelte ID ist ungültig.', ['status' => 400]);
         }
@@ -116,8 +109,6 @@ class RESTAPI
                     'oembed_api_error' => $oembeddata['error'] ?? '',
                 ];
 
-                Helper::debug('Process ID');
-                Helper::debug($response);
                 return rest_ensure_response($response);
             }
         }

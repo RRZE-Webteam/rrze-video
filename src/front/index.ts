@@ -1,6 +1,6 @@
 // Import styles.
 import './styles.scss';
-import { MediaProviderAdapter, type VTTContent } from 'vidstack';
+import { MediaProviderAdapter} from 'vidstack';
 import 'vidstack/player/styles/default/theme.css';
 import 'vidstack/player/styles/default/layouts/video.css';
 
@@ -20,13 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Select all media-player elements on the page.
   const players = document.querySelectorAll('media-player');
-
-  const content: VTTContent = {
-    cues: [
-      { startTime: 0, endTime: 50, text: 'Kapitel 1' },
-      { startTime: 50, endTime: 100, text: 'Kapitel 2' },
-    ],
-  };
 
   if (!players.length) {
     console.error('No media player elements found!');
@@ -81,14 +74,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
-
-  // Option 1. Provide JSON directly.
-  player.textTracks.add({
-    type: 'json',
-    kind: 'chapters',
-    language: 'en-US',
-    default: true,
-    content,
-  });
   });
 });
