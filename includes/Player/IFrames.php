@@ -95,8 +95,6 @@ class IFrames
         if (preg_match('/\/[A-Za-z0-9]+\/?$/', $url)) {
             $embedurl = preg_replace('/\/([a-z0-9\-\/]+)\/([a-z0-9\-:\.]+)\/?$/', '/embed/$2', $url);
 
-            // Helper::debug($data);
-
             $data['video']['html'] = '<iframe class="remoteembed ard" allowfullscreen src="' . $embedurl . '" frameBorder="0" scrolling="no" title="'.__('Video from ARD Mediathek','rrze-video').'"></iframe>';
             $data['video']['orig_url'] = $url;
             $data['video']['embed_url'] = $embedurl;

@@ -19,6 +19,7 @@ class Main
         // Metabox
         new WordPress\Metabox();
         new WordPress\Settings();
+        new WordPress\RESTAPI();
 
         // Set the video shortcode.
         Shortcode::instance()->loaded();

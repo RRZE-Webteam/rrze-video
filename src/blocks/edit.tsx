@@ -26,16 +26,10 @@ import apiFetch from "@wordpress/api-fetch";
 // Imports for helper functions
 // @ts-ignore
 import { isTextInString, whichProviderIsUsed } from "./HelperFunctions/utils";
-import {
-  MediaPlayer,
-  MediaProvider,
-  isYouTubeProvider,
-  type MediaProviderAdapter,
-} from "@vidstack/react";
-import {
-  PlyrLayout,
-  plyrLayoutIcons,
-} from "@vidstack/react/player/layouts/plyr";
+import { Video, ApiResponse, OEmbedData } from "./HelperFunctions/types";
+import { sendUrlToApi } from "./HelperFunctions/apiService";
+
+import { RRZEVidstackPlayer } from "./CustomComponents/Vidstack";
 
 // Import the Editor Styles for the block editor
 import "./editor.scss"; // Only active in the editor
@@ -43,7 +37,7 @@ import "./player.scss"; // Only active in the editor
 
 // Define the attributes type
 interface BlockAttributes {
-  id: string;
+  id: string | number;
   url: string;
   rand: string;
   aspectratio: string;
@@ -71,9 +65,6 @@ const fauDomains = [
   "www.fau.tv",
 ];
 
-// FAU oEmbed API endpoint
-const fauApiEndpoint = "https://www.fau.tv/services/oembed";
-
 function isFauVideoUrl(url: string): boolean {
   const urlDomain = new URL(url).hostname;
   return fauDomains.includes(urlDomain);
@@ -85,7 +76,6 @@ function isYouTubeUrl(url: string): boolean {
   return youtubeDomains.includes(urlDomain);
 }
 
-// Define the props type for the Edit component
 interface EditProps {
   attributes: BlockAttributes;
   setAttributes: (attributes: Partial<BlockAttributes>) => void;
@@ -97,96 +87,102 @@ interface DynamicHeadingProps {
 }
 
 const DynamicHeading: React.FC<DynamicHeadingProps> = ({ tag, title }) => {
-  const Tag = tag as keyof JSX.IntrinsicElements; // Dynamically determine the tag
+  const Tag = tag as keyof JSX.IntrinsicElements;
   return <Tag>{title}</Tag>;
 };
 
-/**
- * The Edit component for the block editor
- *
- * @param props - The props for the component
- * @returns JSX.Element
- */
 export default function Edit(props: EditProps): JSX.Element {
   const uniqueId = Math.random().toString(36).substring(2, 15);
-
-  // Create a ref to the container div
   const containerRef = useRef<HTMLDivElement | null>(null);
   const blockProps = useBlockProps();
   const { attributes, setAttributes } = props;
   const { id, url, rand, aspectratio, secureclipid, mediaurl } = attributes;
   const [inputURL, setInputURL] = useState<string>(attributes.url);
+  const [responseMessage, setResponseMessage] = useState("");
   const [oEmbedData, setOEmbedData] = useState(null);
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [providerURL, setProviderURL] = useState<string>("");
   const [providerAudioURL, setProviderAudioURL] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
+  const [providerName, setProviderName] = useState<string>("");
+
+  const handleSendUrlToApi = async (url?: string, id?: number, rand?: string) => {
+    try {
+      const response = await sendUrlToApi(url, id, rand);
+      setResponseMessage(response.message || "Erfolgreich verarbeitet!");
+      setOEmbedData(response);
+
+      updateAttributesFromOEmbedData({
+        oembed_api_error: response.oembed_api_error || "",
+        oembed_api_url: response.oembed_api_url || "",
+        video: response.video!,
+      });
+    } catch (error) {
+      console.error("Fehler bei der API-Anfrage:", error);
+      setResponseMessage(
+        "Fehler: Sie müssen angemeldet sein, um diese Funktion zu nutzen."
+      );
+    }
+  };
 
   useEffect(() => {
     if (url && isFauVideoUrl(url)) {
-      fetchFauOEmbedData(url);
+      handleSendUrlToApi(url);
     } else if (url && isYouTubeUrl(url)) {
       setAttributes({ mediaurl: url, url: url });
     }
   }, [url]);
 
-  function onProviderChange(provider: MediaProviderAdapter | null) {
-    if (isYouTubeProvider(provider)) {
-      provider.cookies = true;
+  useEffect(() => {
+    if (!url && id) {
+      let tempId;
+      if (id && typeof id === "string") {
+        tempId = parseInt(id);
+      }
+      handleSendUrlToApi(undefined, tempId);
     }
-  }
+    if (!url && rand) {
+      handleSendUrlToApi(undefined, undefined, rand);
+    }
+  }, [id, rand]);
 
-  const fetchFauOEmbedData = (videoUrl: string) => {
-    const apiUrl = `${fauApiEndpoint}?url=${encodeURIComponent(
-      videoUrl
-    )}&format=json`;
+  const updateAttributesFromOEmbedData = (data: OEmbedData) => {
+    if (!data || typeof data !== "object") {
+      console.error("Invalid oEmbed data structure:", data);
+      return;
+    }
 
-    // Using the browser's native fetch API instead of WordPress's apiFetch
-    fetch(apiUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setOEmbedData(data);
-        updateAttributesFromOEmbedData(data);
-      })
-      .catch((error) => {
-        console.error("Failed to fetch FAU oEmbed data:", error);
-        setOEmbedData(null);
+    // if (data.video.provider_name contains FAU
+    if (data.video.provider_name && data.video.provider_name.includes("FAU")) {
+      setProviderName("FAU");
+      const gcd = (a: number, b: number): number =>
+        b === 0 ? a : gcd(b, a % b);
+      let aspectRatio = "16/9";
+
+      if (data.video.width && data.video.height) {
+        const gcdValue = gcd(data.video.width, data.video.height);
+        aspectRatio = `${data.video.width / gcdValue}/${
+          data.video.height / gcdValue
+        }`;
+      }
+
+      setTitle(data.video.title || "");
+      setDescription(data.video.description || "");
+      setAuthor(data.video.author_name || "");
+      setProviderURL(data.video.provider_videoindex_url || "");
+      setProviderAudioURL(data.video.alternative_Audio || "");
+
+      setAttributes({
+        aspectratio: aspectRatio,
+        mediaurl: data.video.file || "",
+        textAlign: "has-text-align-left",
+        orientation:
+          data.video.width > data.video.height ? "landscape" : "portrait",
+        poster: attributes.poster || data.video.preview_image || "",
       });
-  };
-
-  const updateAttributesFromOEmbedData = (data: any) => {
-    //calculate the Aspect ratio based on width and height
-
-    const gcd = (a: number, b: number): number => {
-      return b === 0 ? a : gcd(b, a % b);
-    };
-
-    let aspectRatio = "16/9";
-    if (data.width && data.height) {
-      const gcdValue = gcd(data.width, data.height);
-      let aspectRatio = `${data.width / gcdValue}/${data.height / gcdValue}`;
-    }
-    setTitle(data.title);
-    setDescription(data.description);
-    setAuthor(data.author_name);
-    setProviderURL(data.provider_videoindex_url);
-    setProviderAudioURL(data.alternative_Audio);
-
-    setAttributes({
-      aspectratio: aspectRatio,
-      mediaurl: data.file,
-      textAlign: "has-text-align-left",
-      orientation: data.width > data.height ? "landscape" : "portrait",
-    });
-
-    if (attributes.poster === "") {
-      setAttributes({ poster: data.preview_image });
+    } else {
+      setProviderName(data.video.provider_name || "");
     }
   };
 
@@ -195,8 +191,6 @@ export default function Edit(props: EditProps): JSX.Element {
 
     switch (whichProviderIsUsed(url)) {
       case "youtube":
-        setAttributes({ provider: "youtube" });
-        break;
       case "youtubeShorts":
         setAttributes({ provider: "youtube" });
         break;
@@ -218,31 +212,25 @@ export default function Edit(props: EditProps): JSX.Element {
     }
   }, [inputURL, setAttributes]);
 
-  /**
-   * Resets the VideoURL Parameter. Activated by the reset Button.
-   */
   const resetUrl = () => {
-    // Clear all attributes explicitly
     setAttributes({
-      url: "",
-      rand: "",
       id: "",
-      provider: "fauvideo",
-      aspectratio: "16/9",
-      orientation: "landscape",
-      textAlign: "has-text-align-left",
+      url: "",
+      titletag: "h2",
       poster: "",
-      secureclipid: "",
+      rand: "",
+      show: "",
+      provider: "fauvideo",
+      textAlign: "",
+      secureclipid: undefined,
+      loop: false,
       start: 0,
       clipstart: 0,
       clipend: 0,
       mediaurl: "",
-      show: "",
-      titletag: "",
-      // Add any other attributes that need to be reset here
     });
   
-    // Clear state values
+    // Reset internal state variables
     setInputURL("");
     setTitle("");
     setDescription("");
@@ -252,9 +240,6 @@ export default function Edit(props: EditProps): JSX.Element {
     setAuthor("");
   };
 
-  /**
-   * Renders the Videoblock
-   */
   return (
     <div {...blockProps}>
       <CustomInspectorControls
@@ -292,45 +277,43 @@ export default function Edit(props: EditProps): JSX.Element {
               <DynamicHeading tag={attributes.titletag || "h2"} title={title} />
             )}
             {attributes.secureclipid ? (
-              <p>{__("Eine Vorschau zugriffsgeschützter Videos im Editor ist nicht möglich.", "rrze-video")}</p>
-            ): (
-              <>
-            {url && isFauVideoUrl(url) ? (
-              <MediaPlayer
-                title={title}
-                src={mediaurl}
-                aspectRatio={attributes.aspectratio}
-                poster={attributes.poster}
-                onProviderChange={onProviderChange}
-                clipEndTime={attributes.clipend}
-                clipStartTime={attributes.clipstart}
-                loop={attributes.loop}
-              >
-                <MediaProvider />
-                <PlyrLayout
-                  thumbnails={attributes.poster}
-                  icons={plyrLayoutIcons}
-                />
-              </MediaPlayer>
+              <p>
+                {__(
+                  "Eine Vorschau zugriffsgeschützter Videos im Editor ist nicht möglich.",
+                  "rrze-video"
+                )}
+              </p>
             ) : (
-              <ServerSideRender
-                block="rrze/rrze-video"
-                attributes={{
-                  url: attributes.url,
-                  show: attributes.show,
-                  rand: attributes.rand,
-                  id: attributes.id,
-                  titletag: attributes.titletag,
-                  textAlign: attributes.textAlign,
-                  secureclipid: attributes.secureclipid,
-                  loop: attributes.loop,
-                  start: attributes.start,
-                  clipstart: attributes.clipstart,
-                  clipend: attributes.clipend,
-                }}
-              />
-            )}
-            </>
+              <>
+                {url && isFauVideoUrl(url) || providerName === "FAU" ? (
+                  <RRZEVidstackPlayer
+                    title={title}
+                    mediaurl={mediaurl}
+                    aspectratio={aspectratio}
+                    poster={attributes.poster}
+                    clipend={attributes.clipend}
+                    clipstart={attributes.clipstart}
+                    loop={attributes.loop}
+                  />
+                ) : (
+                  <ServerSideRender
+                    block="rrze/rrze-video"
+                    attributes={{
+                      url: attributes.url,
+                      show: attributes.show,
+                      rand: attributes.rand,
+                      id: attributes.id || "",
+                      titletag: attributes.titletag,
+                      textAlign: attributes.textAlign,
+                      secureclipid: attributes.secureclipid,
+                      loop: attributes.loop,
+                      start: attributes.start,
+                      clipstart: attributes.clipstart,
+                      clipend: attributes.clipend,
+                    }}
+                  />
+                )}
+              </>
             )}
             {isTextInString("link", attributes.show) && (
               <p className="rrze-video-link">
@@ -346,24 +329,24 @@ export default function Edit(props: EditProps): JSX.Element {
               <dl className="meta">
                 <dt>{__("Autor", "rrze-video")}</dt>
                 <dd>{author}</dd>
-
                 <dt>{__("Quelle", "rrze-video")}</dt>
                 <dd>
                   <a href={providerURL}>
                     {providerURL?.replace("https://", "")}
                   </a>
                 </dd>
-
                 <dt>{__("Audioformat", "rrze-video")}</dt>
                 <dd>
                   <a href={providerAudioURL}>
                     {providerAudioURL?.replace("https://", "")}
                   </a>
                 </dd>
-
                 <dt>{__("Provider", "rrze-video")}</dt>
                 <dd>
-                  {__("Videoportal der FAU (Friedrich-Alexander-Universität Erlangen-Nürnberg)", "rrze-video")}
+                  {__(
+                    "Videoportal der FAU (Friedrich-Alexander-Universität Erlangen-Nürnberg)",
+                    "rrze-video"
+                  )}
                 </dd>
               </dl>
             )}
