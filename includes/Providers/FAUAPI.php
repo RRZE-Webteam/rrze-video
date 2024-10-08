@@ -10,8 +10,8 @@ class FAUAPI
 {
     public static function getStreamingURI($clipId)
     {
-        $transient_name = 'rrze_streaming_uri_' . $clipId;
-        $transient_value = get_transient($transient_name);
+        // $transient_name = 'rrze_streaming_uri_' . $clipId;
+        // $transient_value = get_transient($transient_name);
         $environment = wp_get_environment_type();
 
         // Determine the IP address to use
@@ -25,9 +25,9 @@ class FAUAPI
 
         $ip_long = ip2long($ip);
 
-        if ($transient_value !== false) {
-            return $transient_value;
-        }
+        // if ($transient_value !== false) {
+        //     return $transient_value;
+        // }
 
         $data_encryption = new FSD_Data_Encryption();
         $encrypted_api_key = get_option('rrze_video_api_key');
@@ -63,7 +63,7 @@ class FAUAPI
                 'poster' => $data['data']['files']['posterImage'],
             ];
 
-            set_transient($transient_name, $video_data, 21600);
+            // set_transient($transient_name, $video_data, 21600);
             return $video_data;
         }
 
