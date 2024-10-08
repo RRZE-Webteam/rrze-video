@@ -20,7 +20,7 @@ class FAUAPI
             $ip = self::getClientIP();
         } else {
             // Use server IP in production
-            $ip = $_SERVER['REMOTE_ADDR'];
+            $ip = self::getServerIP();
         }
 
         $ip_long = ip2long($ip);
@@ -54,13 +54,13 @@ class FAUAPI
 
         if (json_last_error() === JSON_ERROR_NONE && $data !== null && isset($data['data']['files']['video'])) {
             $video_data = [
-                'url' => $data['data']['files']['video'],
-                'vtt' => $data['data']['files']['vtt'],
-                'audio' => $data['data']['files']['audio'],
-                'title' => $data['data']['title'],
+                'url'         => $data['data']['files']['video'],
+                'vtt'         => $data['data']['files']['vtt'],
+                'audio'       => $data['data']['files']['audio'],
+                'title'       => $data['data']['title'],
                 'description' => $data['data']['description'],
-                'language' => $data['data']['language'],
-                'poster' => $data['data']['files']['posterImage'],
+                'language'    => $data['data']['language'],
+                'poster'      => $data['data']['files']['posterImage'],
             ];
 
             // set_transient($transient_name, $video_data, 21600);
@@ -97,5 +97,31 @@ class FAUAPI
         }
 
         return $ip;
+    }
+
+    /**
+     * Get the server IP address.
+     *
+     * @return string|null Server IP address or null if not available.
+     */
+    private static function getServerIP()
+    {
+        // Attempt to get the server IP address
+        if (isset($_SERVER['SERVER_ADDR'])) {
+            return $_SERVER['SERVER_ADDR'];
+        }
+
+        // Fallback to getting the hostname IP
+        $hostname = gethostname();
+        $ip = gethostbyname($hostname);
+
+        // Validate the IP address
+        if (filter_var($ip, FILTER_VALIDATE_IP)) {
+            return $ip;
+        }
+
+        // As a last resort, return a predefined IP or handle the error accordingly
+        // Replace 'YOUR_SERVER_IP' with your server's actual IP address
+        return 'YOUR_SERVER_IP';
     }
 }
