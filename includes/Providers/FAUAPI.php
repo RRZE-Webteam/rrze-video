@@ -5,13 +5,12 @@ namespace RRZE\Video\Providers;
 defined('ABSPATH') || exit;
 
 use RRZE\Video\Utils\FSD_Data_Encryption;
+use RRZE\Video\Utils\Helper;
 
 class FAUAPI
 {
     public static function getStreamingURI($clipId)
     {
-        // $transient_name = 'rrze_streaming_uri_' . $clipId;
-        // $transient_value = get_transient($transient_name);
         $environment = wp_get_environment_type();
 
         // Determine the IP address to use
@@ -20,14 +19,10 @@ class FAUAPI
             $ip = self::getClientIP();
         } else {
             // Use server IP in production
-            $ip = self::getServerIP();
+            $ip = $_SERVER['REMOTE_ADDR'];
         }
 
         $ip_long = ip2long($ip);
-
-        // if ($transient_value !== false) {
-        //     return $transient_value;
-        // }
 
         $data_encryption = new FSD_Data_Encryption();
         $encrypted_api_key = get_option('rrze_video_api_key');
@@ -35,6 +30,7 @@ class FAUAPI
 
         $request_url = 'https://www.api.video.uni-erlangen.de/api/v1/clips/' . $clipId . '/?for=' . $ip_long;
 
+        // Increase the timeout and add error handling
         $response = wp_safe_remote_get(
             $request_url,
             [
@@ -45,7 +41,17 @@ class FAUAPI
         );
 
         if (is_wp_error($response)) {
-            error_log($response->get_error_message());
+            // Log the error with more details
+            error_log('HTTP Request Error: ' . $response->get_error_message());
+
+            // Return an error message or code if needed
+            return null;
+        }
+
+        // Check the HTTP response code
+        $response_code = wp_remote_retrieve_response_code($response);
+        if ($response_code != 200) {
+            error_log('HTTP Request failed. Response code: ' . $response_code . ' - ' . wp_remote_retrieve_body($response));
             return null;
         }
 
@@ -54,16 +60,16 @@ class FAUAPI
 
         if (json_last_error() === JSON_ERROR_NONE && $data !== null && isset($data['data']['files']['video'])) {
             $video_data = [
-                'url'         => $data['data']['files']['video'],
-                'vtt'         => $data['data']['files']['vtt'],
-                'audio'       => $data['data']['files']['audio'],
-                'title'       => $data['data']['title'],
+                'url' => $data['data']['files']['video'],
+                'vtt' => $data['data']['files']['vtt'],
+                'audio' => $data['data']['files']['audio'],
+                'title' => $data['data']['title'],
                 'description' => $data['data']['description'],
-                'language'    => $data['data']['language'],
-                'poster'      => $data['data']['files']['posterImage'],
+                'language' => $data['data']['language'],
+                'poster' => $data['data']['files']['posterImage'],
             ];
 
-            // set_transient($transient_name, $video_data, 21600);
+            // Helper::debug($video_data);
             return $video_data;
         }
 
@@ -97,31 +103,5 @@ class FAUAPI
         }
 
         return $ip;
-    }
-
-    /**
-     * Get the server IP address.
-     *
-     * @return string|null Server IP address or null if not available.
-     */
-    private static function getServerIP()
-    {
-        // Attempt to get the server IP address
-        if (isset($_SERVER['SERVER_ADDR'])) {
-            return $_SERVER['SERVER_ADDR'];
-        }
-
-        // Fallback to getting the hostname IP
-        $hostname = gethostname();
-        $ip = gethostbyname($hostname);
-
-        // Validate the IP address
-        if (filter_var($ip, FILTER_VALIDATE_IP)) {
-            return $ip;
-        }
-
-        // As a last resort, return a predefined IP or handle the error accordingly
-        // Replace 'YOUR_SERVER_IP' with your server's actual IP address
-        return 'YOUR_SERVER_IP';
     }
 }
