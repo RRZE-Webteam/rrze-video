@@ -5,13 +5,12 @@ namespace RRZE\Video\Providers;
 defined('ABSPATH') || exit;
 
 use RRZE\Video\Utils\FSD_Data_Encryption;
+use RRZE\Video\Utils\Helper;
 
 class FAUAPI
 {
     public static function getStreamingURI($clipId)
     {
-        $transient_name = 'rrze_streaming_uri_' . $clipId;
-        $transient_value = get_transient($transient_name);
         $environment = wp_get_environment_type();
 
         // Determine the IP address to use
@@ -24,10 +23,6 @@ class FAUAPI
         }
 
         $ip_long = ip2long($ip);
-
-        if ($transient_value !== false) {
-            return $transient_value;
-        }
 
         $data_encryption = new FSD_Data_Encryption();
         $encrypted_api_key = get_option('rrze_video_api_key');
@@ -45,7 +40,14 @@ class FAUAPI
         );
 
         if (is_wp_error($response)) {
-            error_log($response->get_error_message());
+            error_log('HTTP Request Error: ' . $response->get_error_message());
+
+            return null;
+        }
+
+        $response_code = wp_remote_retrieve_response_code($response);
+        if ($response_code != 200) {
+            error_log('HTTP Request failed. Response code: ' . $response_code . ' - ' . wp_remote_retrieve_body($response));
             return null;
         }
 
@@ -63,7 +65,7 @@ class FAUAPI
                 'poster' => $data['data']['files']['posterImage'],
             ];
 
-            set_transient($transient_name, $video_data, 21600);
+            // Helper::debug($video_data);
             return $video_data;
         }
 
