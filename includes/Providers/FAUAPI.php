@@ -30,7 +30,6 @@ class FAUAPI
 
         $request_url = 'https://www.api.video.uni-erlangen.de/api/v1/clips/' . $clipId . '/?for=' . $ip_long;
 
-        // Increase the timeout and add error handling
         $response = wp_safe_remote_get(
             $request_url,
             [
@@ -41,14 +40,11 @@ class FAUAPI
         );
 
         if (is_wp_error($response)) {
-            // Log the error with more details
             error_log('HTTP Request Error: ' . $response->get_error_message());
 
-            // Return an error message or code if needed
             return null;
         }
 
-        // Check the HTTP response code
         $response_code = wp_remote_retrieve_response_code($response);
         if ($response_code != 200) {
             error_log('HTTP Request failed. Response code: ' . $response_code . ' - ' . wp_remote_retrieve_body($response));
