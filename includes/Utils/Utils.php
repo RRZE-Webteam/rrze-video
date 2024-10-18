@@ -253,7 +253,7 @@ class Utils
      */
     public static function evaluateUrl($data, $id)
     {
-        return !empty($data['url']) ? esc_url($data['url']) : '';
+        return isset($data['url']) && is_string($data['url']) ? esc_url($data['url']) : '';
     }
 
     /**

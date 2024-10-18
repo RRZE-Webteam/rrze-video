@@ -312,9 +312,9 @@ class Player
                 $meta[] =  '</dd>';
             }
 
-            $url = !empty($data['url']) ? esc_url($data['url']) : '';
-            $altVideofolienUrl = !empty($data['video']['alternative_VideoFolien_size_large']) ? esc_url($data['video']['alternative_VideoFolien_size_large']) : '';
-            $altAudioUrl = !empty($data['video']['alternative_Audio']) ? esc_url($data['video']['alternative_Audio']) : '';
+            $url = isset( $data['url'] ) ? esc_url( $data['url'] ) : '';
+            $altVideofolienUrl = isset( $data['video']['alternative_VideoFolien_size_large'] ) && is_string( $data['video']['alternative_VideoFolien_size_large'] ) ? esc_url( $data['video']['alternative_VideoFolien_size_large'] ) : '';
+            $altAudioUrl = isset( $data['video']['alternative_Audio'] ) && is_string( $data['video']['alternative_Audio'] ) ? esc_url( $data['video']['alternative_Audio'] ) : '';
 
             if ($url) {
                 $meta[] = '<dt>' . __('Source', 'rrze-video') . '</dt><dd><a href="' . $url . '">' . $url . '</a></dd>';

@@ -50,12 +50,12 @@ class IFrames
 
     public static function is_iframe_provider($url)
     {
-        if (!isset($url)) {
+        if ( empty( $url ) || ! is_string( $url ) ) {
             return '';
         }
-
+        
         $known = self::get_known_iframe_provider();
-        $url = esc_url_raw($url);
+        $url = esc_url_raw( $url );        
         $searchdom = parse_url($url, PHP_URL_HOST);
         $res = '';
 
