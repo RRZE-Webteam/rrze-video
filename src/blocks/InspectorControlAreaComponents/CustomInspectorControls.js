@@ -14,8 +14,8 @@ import {
   __experimentalToggleGroupControl as ToggleGroupControl,
   __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from "@wordpress/components";
-import { useState } from "@wordpress/element";
 import { InspectorControls } from "@wordpress/block-editor"; // eslint-disable-line import/no-unresolved
+import { useState, useEffect } from "@wordpress/element";
 
 //Imports for custom components
 import CategorySelector from "./CategorySelector";
@@ -84,6 +84,10 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
 
     setAttributes(newAttributes);
   };
+
+  useEffect(() => {
+    setInputURL(attributes.url);
+  }, [attributes.url]);
 
   const handleToggleAspectRatio = (newAspectratio) => {
     setAttributes({ aspectratio: newAspectratio });
@@ -299,39 +303,6 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
           setAttributes={setAttributes}
         />
       </PanelBody>
-      {/* <PanelBody
-        title={__("SSO secured video embed", "rrze-video")}
-        initialOpen={false}
-      >
-        <Text>
-          {__(
-            `This feature only works with a FAU Videoportal API key. You can add a FAU Videoportal API key in the settings of this plugin.`,
-            "rrze-video"
-          )}
-        </Text>
-        <Divider />
-        <Spacer>
-          <Heading level={3}>{__("Secure video embed", "rrze-video")}</Heading>
-          <Text>
-            {__(
-              `Enter the ID of your SSO-secured video here. You need a working FAU Video API key for this feature.`,
-              "rrze-video"
-            )}
-          </Text>
-        </Spacer>
-        <InputControl
-          label={__("Secure Video ID", "rrze-video")}
-          value={attributes.secureclipid}
-          onChange={(secureclipid) => setSecureId(secureclipid)}
-        />
-        <Button
-          isPrimary
-          disabled={attributes.secureclipid === secureId}
-          onClick={() => setAttributes({ secureclipid: secureId })}
-        >
-          {__("Embed secure video", "rrze-video")}
-        </Button>
-      </PanelBody> */}
       {attributes.provider === "fauvideo" && (
         <PanelBody
           title={__("Player controls", "rrze-video")}
