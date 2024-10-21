@@ -240,6 +240,8 @@ export default function Edit(props: EditProps): JSX.Element {
     setAuthor("");
   };
 
+  console.log(attributes);
+
   return (
     <div {...blockProps}>
       <CustomInspectorControls

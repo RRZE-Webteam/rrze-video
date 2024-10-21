@@ -8,6 +8,7 @@ import {
   defaultLayoutIcons,
   DefaultVideoLayout,
 } from "@vidstack/react/player/layouts/default";
+import { Poster, type PosterProps } from "@vidstack/react";
 
 interface CustomVidStackProps {
   title: string;
@@ -39,12 +40,12 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = ({
       title={title}
       src={mediaurl}
       aspectRatio={aspectratio}
-      poster={poster}
       onProviderChange={handleProviderChange}
       clipEndTime={clipend}
       clipStartTime={clipstart}
       loop={loop}
     >
+      <Poster src={poster} alt="" />
       <MediaProvider />
       <DefaultVideoLayout thumbnails={poster} icons={defaultLayoutIcons} />
     </MediaPlayer>
