@@ -90,6 +90,10 @@
     "clipend": {
       "type": "number",
       "default": 0
+    },
+    "chapterMarkers": {
+      "type": "string",
+      "default": "[]"
     }
   }
 }
