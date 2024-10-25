@@ -17,22 +17,32 @@ class Gutenberg
      */
     public static function rrze_video_render_block($attributes)
     {
-        // Prepare and render the shortcode result
+        // Generate a unique ID for the video block instance.
+        $video_id = uniqid('rrze-video-');
+        $attributes['videoId'] = $video_id;
+    
+        // Render the shortcode output.
         $result = Shortcode::instance()->shortcodeVideo($attributes);
-
-        // Pass chapter markers data only if available in attributes
+    
+        // Pass chapter markers data specific to this video instance if available.
         if (!empty($attributes['chapterMarkers'])) {
             $chapter_markers = json_decode($attributes['chapterMarkers'], true);
-
+    
             // Register the localized script for frontend
             wp_enqueue_script('rrze-video-front-js');
-            wp_localize_script('rrze-video-front-js', 'rrzeVideoData', [
-                'chapterMarkers' => $chapter_markers,
-            ]);
+    
+            // Localize script with chapter markers data, keyed by video ID.
+            $localized_data = wp_scripts()->get_data('rrze-video-front-js', 'data') ?: '{}';
+            $video_data = json_decode(trim(str_replace('var rrzeVideoData =', '', $localized_data), ';'), true) ?: [];
+            $video_data[$video_id] = ['chapterMarkers' => $chapter_markers];
+    
+            wp_localize_script('rrze-video-front-js', 'rrzeVideoData', $video_data);
         }
-
-        return $result;
+    
+        // Add the unique ID as an HTML data attribute to identify the player.
+        return sprintf('<div class="rrze-video-container" data-video-id="%s">%s</div>', esc_attr($video_id), $result);
     }
+    
 
     /**
      * Register block assets and render callback
