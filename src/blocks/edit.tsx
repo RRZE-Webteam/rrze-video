@@ -5,11 +5,13 @@ import {
   ToolbarItem,
   ToolbarButton,
 } from "@wordpress/components";
-import { trash } from "@wordpress/icons";
+import { trash, plus, reset } from "@wordpress/icons";
 import { useBlockProps, BlockControls } from "@wordpress/block-editor";
 // @ts-ignore
 import ServerSideRender from "@wordpress/server-side-render";
 import { useState, useEffect, useRef } from "@wordpress/element";
+import ChapterMarkerCreator from "./CustomComponents/ChapterMarkerCreator";
+import { type ChapterMarker } from "./CustomComponents/ChapterMarkerCreator";
 
 import { isHLSProvider, type TextTrackInit } from "vidstack";
 
@@ -43,7 +45,7 @@ interface BlockAttributes {
   aspectratio: string;
   secureclipid: string;
   show?: string;
-  titletag?: string;
+  titletag: string;
   poster?: string;
   textAlign?: string;
   loop?: boolean;
@@ -53,6 +55,7 @@ interface BlockAttributes {
   provider?: string;
   orientation?: string;
   mediaurl: string;
+  chapterMarkers?: string;
 }
 
 // Known FAU domains
@@ -106,8 +109,21 @@ export default function Edit(props: EditProps): JSX.Element {
   const [providerAudioURL, setProviderAudioURL] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
   const [providerName, setProviderName] = useState<string>("");
+  const [isChapterMarkerModalOpen, setIsChapterMarkerModalOpen] =
+    useState(false);
+  const [currentTime, setCurrentTime] = useState<number>(0);
 
-  const handleSendUrlToApi = async (url?: string, id?: number, rand?: string) => {
+  // Define markers at the top level of the component
+  const markers: ChapterMarker[] = attributes.chapterMarkers
+  ? JSON.parse(attributes.chapterMarkers as string)
+  : [];
+
+
+  const handleSendUrlToApi = async (
+    url?: string,
+    id?: number,
+    rand?: string
+  ) => {
     try {
       const response = await sendUrlToApi(url, id, rand);
       setResponseMessage(response.message || "Erfolgreich verarbeitet!");
@@ -186,6 +202,15 @@ export default function Edit(props: EditProps): JSX.Element {
     }
   };
 
+  const deleteCurrentMarker = () => {
+    const newMarkers = markers.filter(
+      (marker: ChapterMarker) =>
+        currentTime < marker.startTime || currentTime > marker.endTime
+    );
+
+    setAttributes({ chapterMarkers: JSON.stringify(newMarkers) });
+  };
+
   useEffect(() => {
     const url = inputURL;
 
@@ -229,7 +254,7 @@ export default function Edit(props: EditProps): JSX.Element {
       clipend: 0,
       mediaurl: "",
     });
-  
+
     // Reset internal state variables
     setInputURL("");
     setTitle("");
@@ -239,8 +264,6 @@ export default function Edit(props: EditProps): JSX.Element {
     setOEmbedData(null);
     setAuthor("");
   };
-
-  console.log(attributes);
 
   return (
     <div {...blockProps}>
@@ -260,15 +283,49 @@ export default function Edit(props: EditProps): JSX.Element {
               )}
               <ToolbarItem>
                 {() => (
-                  <ToolbarButton
-                    icon={trash}
-                    label={__("Reset Video block", "rrze-video")}
-                    onClick={resetUrl}
-                  />
+                  <>
+                    <ToolbarButton
+                      icon={trash}
+                      label={__("Reset Video block", "rrze-video")}
+                      onClick={resetUrl}
+                    />
+                    <ToolbarButton
+                      icon={plus}
+                      label={__("Add Chapter Markers", "rrze-video")}
+                      onClick={() => setIsChapterMarkerModalOpen(true)}
+                      disabled={
+                        currentTime === 0
+                      }
+                    />
+                    <ToolbarButton
+                      icon={reset}
+                      label={__("Delete Current Marker", "rrze-video")}
+                      onClick={deleteCurrentMarker}
+                      disabled={
+                        !markers.some(
+                          (marker: ChapterMarker) =>
+                            currentTime >= marker.startTime &&
+                            currentTime <= marker.endTime
+                        )
+                      }
+                    />
+                  </>
                 )}
               </ToolbarItem>
             </ToolbarGroup>
           </BlockControls>
+          {isChapterMarkerModalOpen && (
+            <ChapterMarkerCreator
+              attributes={attributes}
+              setAttributes={setAttributes}
+              onClose={() => setIsChapterMarkerModalOpen(false)}
+              times={{
+                currentTime: currentTime,
+                clipStartTime: attributes.clipstart || 0,
+                clipEndTime: attributes.clipend || 0,
+              }}
+            />
+          )}
           <div
             className={`rrze-video-container-${uniqueId}${
               secureclipid ? " securedVideo" : ""
@@ -287,7 +344,7 @@ export default function Edit(props: EditProps): JSX.Element {
               </p>
             ) : (
               <>
-                {url && isFauVideoUrl(url) || providerName === "FAU" ? (
+                {(url && isFauVideoUrl(url)) || providerName === "FAU" ? (
                   <RRZEVidstackPlayer
                     title={title}
                     mediaurl={mediaurl}
@@ -296,6 +353,8 @@ export default function Edit(props: EditProps): JSX.Element {
                     clipend={attributes.clipend}
                     clipstart={attributes.clipstart}
                     loop={attributes.loop}
+                    onTimeUpdate={({ currentTime }) => setCurrentTime(currentTime)}
+                    markers={markers}
                   />
                 ) : (
                   <ServerSideRender
