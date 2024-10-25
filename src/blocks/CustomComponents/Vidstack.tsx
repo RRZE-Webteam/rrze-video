@@ -5,7 +5,7 @@ import {
   useMediaState,
   Track,
   type MediaProviderAdapter,
-  type VTTContent
+  type VTTContent,
 } from "@vidstack/react";
 import {
   defaultLayoutIcons,
@@ -47,10 +47,10 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = ({
   useEffect(() => {
     setCues(markers);
   }, [markers]);
-  
+
   const content: VTTContent = {
-  cues: cues,
-};
+    cues: cues,
+  };
 
   const handleProviderChange = (provider: MediaProviderAdapter | null) => {
     if (isYouTubeProvider(provider)) {
@@ -59,20 +59,21 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = ({
   };
 
   const MediaStateObserver: React.FC = () => {
+    const paused = useMediaState("paused");
     const currentTime = useMediaState("currentTime");
     const clipStartTime = useMediaState("clipStartTime");
     const clipEndTime = useMediaState("clipEndTime");
-
+  
     useEffect(() => {
-      if (onTimeUpdate) {
+      if (paused && onTimeUpdate) {
         onTimeUpdate({
           currentTime: currentTime,
           clipStartTime: clipStartTime,
           clipEndTime: clipEndTime,
         });
       }
-    }, [currentTime, clipStartTime, clipEndTime]);
-
+    }, [paused, currentTime, clipStartTime, clipEndTime]);
+  
     return null;
   };
 
@@ -90,7 +91,13 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = ({
       <MediaProvider />
       <DefaultVideoLayout thumbnails={poster} icons={defaultLayoutIcons} />
       {markers && markers.length > 0 && (
-        <Track content={content} default={true} kind="chapters" lang="de-DE" type="json" />
+        <Track
+          content={content}
+          default={true}
+          kind="chapters"
+          lang="de-DE"
+          type="json"
+        />
       )}
       <MediaStateObserver />
     </MediaPlayer>
