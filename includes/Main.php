@@ -52,7 +52,7 @@ class Main
             plugin()->getVersion()
         );
         wp_register_script(
-            'rrze-video-plyr',
+            'rrze-video-front-js',
             plugins_url('build/front.js', plugin()->getBasename()),
             ['jquery-core'],
             plugin()->getVersion(),

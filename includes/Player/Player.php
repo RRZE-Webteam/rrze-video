@@ -377,7 +377,7 @@ class Player
         }
         wp_enqueue_style('rrze-video-plyr');
         if ($plyr) {
-            wp_enqueue_script('rrze-video-plyr');
+            wp_enqueue_script('rrze-video-front-js');
         }
     }
 }

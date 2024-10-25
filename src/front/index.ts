@@ -1,6 +1,6 @@
 // Import styles.
 import './styles.scss';
-import { MediaProviderAdapter} from 'vidstack';
+import { MediaProviderAdapter, VTTContent } from 'vidstack';
 import 'vidstack/player/styles/default/theme.css';
 import 'vidstack/player/styles/default/layouts/video.css';
 
@@ -25,6 +25,24 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('No media player elements found!');
     return;
   }
+
+  // Retrieve the chapter markers data from the localized rrzeVideoData object.
+  const chapterMarkers = (window as any).rrzeVideoData?.chapterMarkers;
+
+  // Ensure chapterMarkers are available.
+  if (!chapterMarkers) {
+    console.error('Chapter markers data not available');
+    return;
+  }
+
+  // Format chapter markers into the VTTContent structure.
+  const content: VTTContent = {
+    cues: chapterMarkers.map((marker: any) => ({
+      startTime: marker.startTime,
+      endTime: marker.endTime,
+      text: marker.text,
+    })),
+  };
 
   // Extend the MediaProviderAdapter type to include the HLS-specific `library` property.
   interface HLSProviderAdapter extends MediaProviderAdapter {
@@ -73,6 +91,15 @@ document.addEventListener('DOMContentLoaded', () => {
           console.error('No video element found in media player.');
         }
       }
+    });
+
+    // Add JSON chapter markers to each media player using the Track API.
+    player.textTracks.add({
+      type: 'json',
+      kind: 'chapters',
+      language: 'en-US',
+      default: true,
+      content,
     });
   });
 });
