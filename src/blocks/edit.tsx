@@ -4,6 +4,7 @@ import {
   ToolbarGroup,
   ToolbarItem,
   ToolbarButton,
+  __experimentalConfirmDialog as ConfirmDialog,
 } from "@wordpress/components";
 import { trash, plus, reset, edit } from "@wordpress/icons";
 import { useBlockProps, BlockControls } from "@wordpress/block-editor";
@@ -114,11 +115,25 @@ export default function Edit(props: EditProps): JSX.Element {
   const [playerCurrentTime, setPlayerCurrentTime] = useState<number>(0);
   const [playerClipStart, setPlayerClipStart] = useState<number>(0);
   const [playerClipEnd, setPlayerClipEnd] = useState<number>(0);
+  const [playerDuration, setPlayerDuration] = useState<number>(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const [confirmVal, setConfirmVal] = useState("");
 
   // Define markers at the top level of the component
   const markers: ChapterMarker[] = attributes.chapterMarkers
     ? JSON.parse(attributes.chapterMarkers as string)
     : [];
+
+  const handleConfirm = () => {
+    setConfirmVal("Confirmed");
+    setIsOpen(false);
+    resetUrl();
+  };
+
+  const handleCancel = () => {
+    setConfirmVal("Cancelled");
+    setIsOpen(false);
+  };
 
   const handleSendUrlToApi = async (
     url?: string,
@@ -206,7 +221,8 @@ export default function Edit(props: EditProps): JSX.Element {
   const deleteCurrentMarker = () => {
     const newMarkers = markers.filter(
       (marker: ChapterMarker) =>
-        playerCurrentTime < marker.startTime || playerCurrentTime > marker.endTime
+        playerCurrentTime < marker.startTime ||
+        playerCurrentTime > marker.endTime
     );
 
     setAttributes({ chapterMarkers: JSON.stringify(newMarkers) });
@@ -254,6 +270,7 @@ export default function Edit(props: EditProps): JSX.Element {
       clipstart: 0,
       clipend: 0,
       mediaurl: "",
+      chapterMarkers: "",
     });
 
     // Reset internal state variables
@@ -274,6 +291,16 @@ export default function Edit(props: EditProps): JSX.Element {
       />
       {id || url || rand || secureclipid ? (
         <>
+          <ConfirmDialog
+            isOpen={isOpen}
+            onCancel={handleCancel}
+            onConfirm={handleConfirm}
+          >
+            {__(
+              "Are you sure you want to reset the video block to factory settings?",
+              "rrze-video"
+            )}
+          </ConfirmDialog>
           <BlockControls>
             <ToolbarGroup>
               {isTextInString("Title", attributes.show) && (
@@ -284,12 +311,18 @@ export default function Edit(props: EditProps): JSX.Element {
               )}
               <ToolbarItem>
                 {() => (
+                  <ToolbarButton
+                    icon={trash}
+                    label={__("Reset Video block", "rrze-video")}
+                    onClick={() => setIsOpen(true)}
+                  />
+                )}
+              </ToolbarItem>
+              </ToolbarGroup>
+              <ToolbarGroup>
+              <ToolbarItem>
+                {() => (
                   <>
-                    <ToolbarButton
-                      icon={trash}
-                      label={__("Reset Video block", "rrze-video")}
-                      onClick={resetUrl}
-                    />
                     <ToolbarButton
                       icon={plus}
                       label={__("Add Chapter Markers", "rrze-video")}
@@ -327,6 +360,7 @@ export default function Edit(props: EditProps): JSX.Element {
                 playerCurrentTime: playerCurrentTime,
                 playerClipStart: playerClipStart,
                 playerClipEnd: playerClipEnd,
+                playerDuration: playerDuration,
               }}
             />
           )}
@@ -357,10 +391,16 @@ export default function Edit(props: EditProps): JSX.Element {
                     clipend={attributes.clipend}
                     clipstart={attributes.clipstart}
                     loop={attributes.loop}
-                    onTimeUpdate={({ currentPlayerTime, playerClipStart, playerClipEnd }) => {
+                    onTimeUpdate={({
+                      currentPlayerTime,
+                      playerClipStart,
+                      playerClipEnd,
+                      playerDuration,
+                    }) => {
                       setPlayerCurrentTime(currentPlayerTime);
                       setPlayerClipStart(playerClipStart);
                       setPlayerClipEnd(playerClipEnd);
+                      setPlayerDuration(playerDuration);
                     }}
                     markers={markers}
                   />

@@ -1,13 +1,9 @@
 import { __ } from "@wordpress/i18n";
-import {
-  Modal,
-  Button,
-  TextControl,
-} from "@wordpress/components";
+import { Modal, Button, TextControl } from "@wordpress/components";
 import { useState, useEffect } from "react";
-import { trash } from "@wordpress/icons";
+import { trash, justifyRight, justifyCenter, arrowDown } from "@wordpress/icons";
 import { BlockAttributes } from "@wordpress/blocks";
-import { v4 as uuidv4 } from 'uuid'; // Import uuid
+import { v4 as uuidv4 } from "uuid";
 
 // Utility function to generate unique IDs
 const generateUniqueId = () => uuidv4();
@@ -22,7 +18,12 @@ export interface ChapterMarker {
 interface ChapterMarkerCreatorProps {
   attributes: BlockAttributes;
   setAttributes: (attributes: Partial<BlockAttributes>) => void;
-  times: { playerCurrentTime: number; playerClipStart: number; playerClipEnd: number };
+  times: {
+    playerCurrentTime: number;
+    playerClipStart: number;
+    playerClipEnd: number;
+    playerDuration: number;
+  };
   onClose: () => void;
 }
 
@@ -51,12 +52,12 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
     Math.round(times.playerCurrentTime)
   );
   const [newMarkerEndTime, setNewMarkerEndTime] = useState<number>(
-    Math.round(times.playerCurrentTime) + 10 // Default duration
+    Math.round(times.playerCurrentTime) + 10
   );
 
   useEffect(() => {
     console.log(times);
-  }, [times]);
+  }, [times.playerClipEnd, times.playerClipStart, times.playerCurrentTime]);
 
   useEffect(() => {
     setAttributes({ chapterMarkers: JSON.stringify(markers) });
@@ -76,10 +77,7 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
     } else {
       // If no overlapping marker, default to clip end time or startTime + 10
       setNewMarkerEndTime(
-        Math.min(
-          newMarkerStartTime + 10,
-          times.playerClipEnd
-        )
+        Math.min(newMarkerStartTime + 10, times.playerClipEnd)
       );
     }
   }, [newMarkerStartTime]);
@@ -192,6 +190,7 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
           />
           <Button
             variant="secondary"
+            icon={justifyCenter}
             onClick={() =>
               setNewMarkerStartTime(Math.round(times.playerCurrentTime))
             }
@@ -209,6 +208,7 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
           />
           <Button
             variant="secondary"
+            icon={justifyCenter}
             onClick={() =>
               setNewMarkerEndTime(Math.round(times.playerCurrentTime))
             }
@@ -216,6 +216,14 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
           >
             {__("Set to Current Time", "rrze-video")}
           </Button>
+          <Button
+            icon={justifyRight}
+            variant="secondary"
+            label={__("Set to End of Video", "rrze-video")}
+            onClick={() =>
+              setNewMarkerEndTime(Math.round(times.playerDuration))
+            }
+          />
         </div>
         <Button
           icon="plus"
@@ -253,6 +261,8 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
                 />
                 <Button
                   variant="secondary"
+                  icon={justifyCenter}
+                  label={__("Set to Current Time", "rrze-video")}
                   onClick={() =>
                     updateMarker(marker.id, {
                       ...marker,
@@ -260,9 +270,7 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
                     })
                   }
                   style={{ marginLeft: "10px", marginTop: "22px" }}
-                >
-                  {__("Set to Current Time", "rrze-video")}
-                </Button>
+                />
               </div>
               <div style={{ display: "flex", alignItems: "end" }}>
                 <TextControl
@@ -278,6 +286,8 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
                 />
                 <Button
                   variant="secondary"
+                  icon={justifyCenter}
+                  label={__("Set to Current Time", "rrze-video")}
                   onClick={() =>
                     updateMarker(marker.id, {
                       ...marker,
@@ -285,9 +295,18 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
                     })
                   }
                   style={{ marginLeft: "10px", marginTop: "22px" }}
-                >
-                  {__("Set to Current Time", "rrze-video")}
-                </Button>
+                />
+                <Button
+                icon={justifyRight}
+                variant="secondary"
+                label={__("Set to End of Video", "rrze-video")}
+                onClick={() =>
+                  updateMarker(marker.id, {
+                    ...marker,
+                    endTime: Math.round(times.playerDuration),
+                  })
+                }
+              />
               </div>
               <Button
                 icon={trash}
@@ -299,7 +318,7 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
           ))}
         </div>
       )}
-      <Button onClick={onClose} style={{ marginTop: "20px" }}>
+      <Button onClick={onClose} style={{ marginTop: "20px" }} variant="primary" >
         {__("Close", "rrze-video")}
       </Button>
     </Modal>

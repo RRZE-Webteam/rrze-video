@@ -27,6 +27,7 @@ interface CustomVidStackProps {
     currentPlayerTime: number;
     playerClipStart: number;
     playerClipEnd: number;
+    playerDuration: number;
   }) => void;
   markers: ChapterMarker[];
 }
@@ -63,6 +64,7 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = ({
     const currentTime = useMediaState("currentTime");
     const clipStartTime = useMediaState("clipStartTime");
     const clipEndTime = useMediaState("clipEndTime");
+    const clipDuration = useMediaState("duration");
   
     useEffect(() => {
       if (paused && onTimeUpdate) {
@@ -70,6 +72,7 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = ({
           currentPlayerTime: currentTime,
           playerClipStart: clipStartTime,
           playerClipEnd: clipEndTime,
+          playerDuration: clipDuration,
         });
       }
     }, [paused, currentTime, clipStartTime, clipEndTime]);
