@@ -3,13 +3,17 @@ import {
   Modal,
   Button,
   TextControl,
-  CheckboxControl,
 } from "@wordpress/components";
 import { useState, useEffect } from "react";
 import { trash } from "@wordpress/icons";
 import { BlockAttributes } from "@wordpress/blocks";
+import { v4 as uuidv4 } from 'uuid'; // Import uuid
+
+// Utility function to generate unique IDs
+const generateUniqueId = () => uuidv4();
 
 export interface ChapterMarker {
+  id: string;
   startTime: number;
   endTime: number;
   text: string;
@@ -18,7 +22,7 @@ export interface ChapterMarker {
 interface ChapterMarkerCreatorProps {
   attributes: BlockAttributes;
   setAttributes: (attributes: Partial<BlockAttributes>) => void;
-  times: { currentTime: number; clipStartTime: number; clipEndTime: number };
+  times: { playerCurrentTime: number; playerClipStart: number; playerClipEnd: number };
   onClose: () => void;
 }
 
@@ -33,55 +37,136 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
     const storedMarkers = attributes.chapterMarkers
       ? JSON.parse(attributes.chapterMarkers as string)
       : [];
-    return storedMarkers;
+    return storedMarkers.map((marker: ChapterMarker) => {
+      if (!marker.id) {
+        return { ...marker, id: generateUniqueId() };
+      } else {
+        return marker;
+      }
+    });
   });
 
   const [newMarkerLabel, setNewMarkerLabel] = useState<string>("");
-  const [useClipStartForStartTime, setUseClipStartForStartTime] =
-    useState<boolean>(true);
+  const [newMarkerStartTime, setNewMarkerStartTime] = useState<number>(
+    Math.round(times.playerCurrentTime)
+  );
+  const [newMarkerEndTime, setNewMarkerEndTime] = useState<number>(
+    Math.round(times.playerCurrentTime) + 10 // Default duration
+  );
 
-  // Update attributes.chapterMarkers whenever markers change
+  useEffect(() => {
+    console.log(times);
+  }, [times]);
+
   useEffect(() => {
     setAttributes({ chapterMarkers: JSON.stringify(markers) });
   }, [markers]);
 
-  const addMarker = () => {
-    let startTime: number;
-    let endTime: number;
+  useEffect(() => {
+    // Find overlapping markers
+    const overlappingMarkers = markers.filter(
+      (marker) =>
+        marker.startTime <= newMarkerStartTime &&
+        marker.endTime > newMarkerStartTime
+    );
 
-    const currentTime = Math.round(times.currentTime);
-
-    if (useClipStartForStartTime) {
-      if (markers.length > 0) {
-        startTime = markers[markers.length - 1].endTime + 1;
-      } else {
-        startTime = Math.round(times.clipStartTime);
-      }
-      endTime = currentTime;
+    if (overlappingMarkers.length > 0) {
+      // If overlapping marker found, set endTime to its endTime
+      setNewMarkerEndTime(overlappingMarkers[0].endTime);
     } else {
-      startTime = currentTime;
-      endTime = Math.round(times.clipEndTime);
+      // If no overlapping marker, default to clip end time or startTime + 10
+      setNewMarkerEndTime(
+        Math.min(
+          newMarkerStartTime + 10,
+          times.playerClipEnd
+        )
+      );
     }
+  }, [newMarkerStartTime]);
 
+  const addMarker = () => {
     const newMarker: ChapterMarker = {
-      startTime: startTime,
-      endTime: endTime,
+      id: generateUniqueId(),
+      startTime: newMarkerStartTime,
+      endTime: newMarkerEndTime,
       text: newMarkerLabel,
     };
 
-    // Update markers
-    setMarkers([...markers, newMarker]);
+    sortMarker(newMarker);
     setNewMarkerLabel("");
+    setNewMarkerStartTime(Math.round(times.playerCurrentTime));
+    setNewMarkerEndTime(Math.round(times.playerCurrentTime) + 10);
   };
 
-  const updateMarker = (index: number, updatedMarker: ChapterMarker) => {
-    const newMarkers = [...markers];
-    newMarkers[index] = updatedMarker;
+  const sortMarker = (newMarker: ChapterMarker) => {
+    let newMarkers: ChapterMarker[] = [];
+
+    markers.forEach((marker) => {
+      // No overlap
+      if (
+        marker.endTime <= newMarker.startTime ||
+        marker.startTime >= newMarker.endTime
+      ) {
+        newMarkers.push(marker);
+      }
+      // Existing marker completely within new marker
+      else if (
+        marker.startTime >= newMarker.startTime &&
+        marker.endTime <= newMarker.endTime
+      ) {
+        // Do not add the existing marker; it's completely overlapped
+      }
+      // Existing marker overlaps at the start
+      else if (
+        marker.startTime < newMarker.startTime &&
+        marker.endTime > newMarker.startTime &&
+        marker.endTime <= newMarker.endTime
+      ) {
+        // Adjust existing marker to end at newMarker.startTime
+        newMarkers.push({ ...marker, endTime: newMarker.startTime });
+      }
+      // Existing marker overlaps at the end
+      else if (
+        marker.startTime >= newMarker.startTime &&
+        marker.startTime < newMarker.endTime &&
+        marker.endTime > newMarker.endTime
+      ) {
+        // Adjust existing marker to start at newMarker.endTime
+        newMarkers.push({ ...marker, startTime: newMarker.endTime });
+      }
+      // Existing marker completely encompasses new marker
+      else if (
+        marker.startTime < newMarker.startTime &&
+        marker.endTime > newMarker.endTime
+      ) {
+        // Split the existing marker into two parts
+        newMarkers.push({ ...marker, endTime: newMarker.startTime });
+        newMarkers.push({
+          ...marker,
+          startTime: newMarker.endTime,
+          id: generateUniqueId(),
+        });
+      }
+    });
+
+    // Insert the new marker
+    newMarkers.push(newMarker);
+
+    // Sort the markers by startTime
+    newMarkers.sort((a, b) => a.startTime - b.startTime);
+
     setMarkers(newMarkers);
   };
 
-  const removeMarker = (index: number) => {
-    const newMarkers = markers.filter((_, i) => i !== index);
+  const updateMarker = (id: string, updatedMarker: ChapterMarker) => {
+    const newMarkers = markers.map((marker) =>
+      marker.id === id ? updatedMarker : marker
+    );
+    setMarkers(newMarkers);
+  };
+
+  const removeMarker = (id: string) => {
+    const newMarkers = markers.filter((marker) => marker.id !== id);
     setMarkers(newMarkers);
   };
 
@@ -92,58 +177,86 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
       className="chapter-marker-modal"
       size="large"
     >
-      <TextControl
-        label={__("Marker Label", "rrze-video")}
-        value={newMarkerLabel}
-        onChange={(value) => setNewMarkerLabel(value)}
-      />
-      {/* <CheckboxControl
-        label={__(
-          "Use Clip Start Time or Previous Marker End Time as Start Time",
-          "rrze-video"
-        )}
-        checked={useClipStartForStartTime}
-        onChange={(checked) => setUseClipStartForStartTime(checked)}
-      /> */}
-      <Button
-        icon="plus"
-        onClick={addMarker}
-        isPrimary
-        style={{ marginTop: "10px" }}
-      >
-        {__("Add Marker", "rrze-video")}
-      </Button>
+      <div style={{ marginTop: "20px" }}>
+        <TextControl
+          label={__("Marker Label", "rrze-video")}
+          value={newMarkerLabel}
+          onChange={(value) => setNewMarkerLabel(value)}
+        />
+        <div style={{ display: "flex", alignItems: "end" }}>
+          <TextControl
+            label={__("Start Time (seconds)", "rrze-video")}
+            type="number"
+            value={newMarkerStartTime.toString()}
+            onChange={(value) => setNewMarkerStartTime(parseFloat(value))}
+          />
+          <Button
+            variant="secondary"
+            onClick={() =>
+              setNewMarkerStartTime(Math.round(times.playerCurrentTime))
+            }
+            style={{ marginLeft: "10px", marginTop: "22px" }}
+          >
+            {__("Set to Current Time", "rrze-video")}
+          </Button>
+        </div>
+        <div style={{ display: "flex", alignItems: "end" }}>
+          <TextControl
+            label={__("End Time (seconds)", "rrze-video")}
+            type="number"
+            value={newMarkerEndTime.toString()}
+            onChange={(value) => setNewMarkerEndTime(parseFloat(value))}
+          />
+          <Button
+            variant="secondary"
+            onClick={() =>
+              setNewMarkerEndTime(Math.round(times.playerCurrentTime))
+            }
+            style={{ marginLeft: "10px", marginTop: "22px" }}
+          >
+            {__("Set to Current Time", "rrze-video")}
+          </Button>
+        </div>
+        <Button
+          icon="plus"
+          onClick={addMarker}
+          variant="secondary"
+          style={{ marginTop: "10px" }}
+        >
+          {__("Add Marker", "rrze-video")}
+        </Button>
+      </div>
       {/* Display list of markers */}
       {markers.length > 0 && (
         <div style={{ marginTop: "20px" }}>
           <h3>{__("Markers", "rrze-video")}</h3>
-          {markers.map((marker, index) => (
-            <div key={index} className="marker-item">
+          {markers.map((marker) => (
+            <div key={marker.id} className="marker-item">
               <TextControl
                 label={__("Marker Label", "rrze-video")}
                 value={marker.text}
                 onChange={(value) =>
-                  updateMarker(index, { ...marker, text: value })
+                  updateMarker(marker.id, { ...marker, text: value })
                 }
               />
-               <div style={{ display: "flex", alignItems: "end" }}>
+              <div style={{ display: "flex", alignItems: "end" }}>
                 <TextControl
                   label={__("Start Time (seconds)", "rrze-video")}
                   type="number"
                   value={marker.startTime.toString()}
                   onChange={(value) =>
-                    updateMarker(index, {
+                    updateMarker(marker.id, {
                       ...marker,
                       startTime: parseFloat(value),
                     })
                   }
                 />
                 <Button
-                  isSecondary
+                  variant="secondary"
                   onClick={() =>
-                    updateMarker(index, {
+                    updateMarker(marker.id, {
                       ...marker,
-                      startTime: Math.round(times.currentTime),
+                      startTime: Math.round(times.playerCurrentTime),
                     })
                   }
                   style={{ marginLeft: "10px", marginTop: "22px" }}
@@ -157,18 +270,18 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
                   type="number"
                   value={marker.endTime.toString()}
                   onChange={(value) =>
-                    updateMarker(index, {
+                    updateMarker(marker.id, {
                       ...marker,
                       endTime: parseFloat(value),
                     })
                   }
                 />
                 <Button
-                  isSecondary
+                  variant="secondary"
                   onClick={() =>
-                    updateMarker(index, {
+                    updateMarker(marker.id, {
                       ...marker,
-                      endTime: Math.round(times.currentTime),
+                      endTime: Math.round(times.playerCurrentTime),
                     })
                   }
                   style={{ marginLeft: "10px", marginTop: "22px" }}
@@ -179,7 +292,7 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
               <Button
                 icon={trash}
                 label={__("Delete Marker", "rrze-video")}
-                onClick={() => removeMarker(index)}
+                onClick={() => removeMarker(marker.id)}
                 isDestructive
               />
             </div>

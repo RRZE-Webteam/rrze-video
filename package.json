@@ -25,6 +25,7 @@
     "devDependencies": {
         "@babel/core": "^7.14",
         "@babel/preset-env": "^7.14",
+        "@types/uuid": "^10.0.0",
         "@types/wordpress__block-editor": "^11.5.14",
         "@types/wordpress__blocks": "^12.5.14",
         "@wordpress/api-fetch": "^6.33.0",

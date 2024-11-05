@@ -5,7 +5,7 @@ import {
   ToolbarItem,
   ToolbarButton,
 } from "@wordpress/components";
-import { trash, plus, reset } from "@wordpress/icons";
+import { trash, plus, reset, edit } from "@wordpress/icons";
 import { useBlockProps, BlockControls } from "@wordpress/block-editor";
 // @ts-ignore
 import ServerSideRender from "@wordpress/server-side-render";
@@ -111,9 +111,9 @@ export default function Edit(props: EditProps): JSX.Element {
   const [providerName, setProviderName] = useState<string>("");
   const [isChapterMarkerModalOpen, setIsChapterMarkerModalOpen] =
     useState(false);
-  const [currentTime, setCurrentTime] = useState<number>(0);
-  const [clipStartTime, setClipStartTime] = useState<number>(0);
-  const [clipEndTime, setClipEndTime] = useState<number>(0);
+  const [playerCurrentTime, setPlayerCurrentTime] = useState<number>(0);
+  const [playerClipStart, setPlayerClipStart] = useState<number>(0);
+  const [playerClipEnd, setPlayerClipEnd] = useState<number>(0);
 
   // Define markers at the top level of the component
   const markers: ChapterMarker[] = attributes.chapterMarkers
@@ -206,7 +206,7 @@ export default function Edit(props: EditProps): JSX.Element {
   const deleteCurrentMarker = () => {
     const newMarkers = markers.filter(
       (marker: ChapterMarker) =>
-        currentTime < marker.startTime || currentTime > marker.endTime
+        playerCurrentTime < marker.startTime || playerCurrentTime > marker.endTime
     );
 
     setAttributes({ chapterMarkers: JSON.stringify(newMarkers) });
@@ -294,7 +294,7 @@ export default function Edit(props: EditProps): JSX.Element {
                       icon={plus}
                       label={__("Add Chapter Markers", "rrze-video")}
                       onClick={() => setIsChapterMarkerModalOpen(true)}
-                      disabled={currentTime === 0}
+                      disabled={playerCurrentTime === 0}
                     />
                     <ToolbarButton
                       icon={reset}
@@ -303,10 +303,15 @@ export default function Edit(props: EditProps): JSX.Element {
                       disabled={
                         !markers.some(
                           (marker: ChapterMarker) =>
-                            currentTime >= marker.startTime &&
-                            currentTime <= marker.endTime
+                            playerCurrentTime >= marker.startTime &&
+                            playerCurrentTime <= marker.endTime
                         )
                       }
+                    />
+                    <ToolbarButton
+                      icon={edit}
+                      label={__("Edit Markers", "rrze-video")}
+                      onClick={() => setIsChapterMarkerModalOpen(true)}
                     />
                   </>
                 )}
@@ -319,9 +324,9 @@ export default function Edit(props: EditProps): JSX.Element {
               setAttributes={setAttributes}
               onClose={() => setIsChapterMarkerModalOpen(false)}
               times={{
-                currentTime: currentTime,
-                clipStartTime: clipStartTime,
-                clipEndTime: clipEndTime,
+                playerCurrentTime: playerCurrentTime,
+                playerClipStart: playerClipStart,
+                playerClipEnd: playerClipEnd,
               }}
             />
           )}
@@ -352,10 +357,10 @@ export default function Edit(props: EditProps): JSX.Element {
                     clipend={attributes.clipend}
                     clipstart={attributes.clipstart}
                     loop={attributes.loop}
-                    onTimeUpdate={({ currentTime, clipStartTime, clipEndTime }) => {
-                      setCurrentTime(currentTime);
-                      setClipStartTime(clipStartTime);
-                      setClipEndTime(clipEndTime);
+                    onTimeUpdate={({ currentPlayerTime, playerClipStart, playerClipEnd }) => {
+                      setPlayerCurrentTime(currentPlayerTime);
+                      setPlayerClipStart(playerClipStart);
+                      setPlayerClipEnd(playerClipEnd);
                     }}
                     markers={markers}
                   />
