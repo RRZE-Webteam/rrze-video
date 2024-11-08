@@ -56,10 +56,6 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
   );
 
   useEffect(() => {
-    console.log(times);
-  }, [times.playerClipEnd, times.playerClipStart, times.playerCurrentTime]);
-
-  useEffect(() => {
     setAttributes({ chapterMarkers: JSON.stringify(markers) });
   }, [markers]);
 

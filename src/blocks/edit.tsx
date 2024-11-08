@@ -10,7 +10,7 @@ import { trash, plus, reset, edit } from "@wordpress/icons";
 import { useBlockProps, BlockControls } from "@wordpress/block-editor";
 // @ts-ignore
 import ServerSideRender from "@wordpress/server-side-render";
-import { useState, useEffect, useRef } from "@wordpress/element";
+import { useState, useEffect, useRef, useMemo, useCallback } from "@wordpress/element";
 import ChapterMarkerCreator from "./CustomComponents/ChapterMarkerCreator";
 import { type ChapterMarker } from "./CustomComponents/ChapterMarkerCreator";
 
@@ -35,8 +35,8 @@ import { sendUrlToApi } from "./HelperFunctions/apiService";
 import { RRZEVidstackPlayer } from "./CustomComponents/Vidstack";
 
 // Import the Editor Styles for the block editor
-import "./editor.scss"; // Only active in the editor
-import "./player.scss"; // Only active in the editor
+import "./editor.scss";
+import "./player.scss";
 
 // Define the attributes type
 interface BlockAttributes {
@@ -120,9 +120,11 @@ export default function Edit(props: EditProps): JSX.Element {
   const [confirmVal, setConfirmVal] = useState("");
 
   // Define markers at the top level of the component
-  const markers: ChapterMarker[] = attributes.chapterMarkers
-    ? JSON.parse(attributes.chapterMarkers as string)
-    : [];
+  const markers: ChapterMarker[] = useMemo(() => {
+    return attributes.chapterMarkers
+      ? JSON.parse(attributes.chapterMarkers as string)
+      : [];
+  }, [attributes.chapterMarkers]);
 
   const handleConfirm = () => {
     setConfirmVal("Confirmed");
@@ -283,6 +285,25 @@ export default function Edit(props: EditProps): JSX.Element {
     setAuthor("");
   };
 
+  const onTimeUpdate = useCallback(
+    ({
+      currentPlayerTime,
+      playerClipStart,
+      playerClipEnd,
+      playerDuration,
+    }: {
+      currentPlayerTime: number;
+      playerClipStart: number;
+      playerClipEnd: number;
+      playerDuration: number;
+    }) => {
+      setPlayerCurrentTime(currentPlayerTime);
+      setPlayerClipStart(playerClipStart);
+      setPlayerClipEnd(playerClipEnd);
+      setPlayerDuration(playerDuration);
+    },
+    []);
+
   return (
     <div {...blockProps}>
       <CustomInspectorControls
@@ -391,17 +412,7 @@ export default function Edit(props: EditProps): JSX.Element {
                     clipend={attributes.clipend}
                     clipstart={attributes.clipstart}
                     loop={attributes.loop}
-                    onTimeUpdate={({
-                      currentPlayerTime,
-                      playerClipStart,
-                      playerClipEnd,
-                      playerDuration,
-                    }) => {
-                      setPlayerCurrentTime(currentPlayerTime);
-                      setPlayerClipStart(playerClipStart);
-                      setPlayerClipEnd(playerClipEnd);
-                      setPlayerDuration(playerDuration);
-                    }}
+                    onTimeUpdate={onTimeUpdate}
                     markers={markers}
                   />
                 ) : (
