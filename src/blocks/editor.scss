@@ -20,7 +20,31 @@
         align-items: end;
     }
 
-    button{
+    table.markers-table{
+        width: 100%;
+        text-align: left;
+    }
+
+    .markers-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .markers-table tr:nth-child(odd) {
+        background-color: #f1f1f1;
+        padding: 0.5rem;
+    }
+
+    .markers-table th {
+        background-color: #fff;
+        padding: 0.5rem;
+    }
+
+    .markers-table td {
+        padding-left: 0.5rem;
+    }
+
+
+    button {
         margin-bottom: 8px;
     }
 }

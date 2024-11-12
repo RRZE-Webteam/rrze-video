@@ -340,6 +340,7 @@ export default function Edit(props: EditProps): JSX.Element {
                 )}
               </ToolbarItem>
               </ToolbarGroup>
+              {(url && isFauVideoUrl(url)) || providerName === "FAU" ? (
               <ToolbarGroup>
               <ToolbarItem>
                 {() => (
@@ -348,7 +349,6 @@ export default function Edit(props: EditProps): JSX.Element {
                       icon={plus}
                       label={__("Add Chapter Markers", "rrze-video")}
                       onClick={() => setIsChapterMarkerModalOpen(true)}
-                      disabled={playerCurrentTime === 0}
                     />
                     <ToolbarButton
                       icon={reset}
@@ -371,6 +371,7 @@ export default function Edit(props: EditProps): JSX.Element {
                 )}
               </ToolbarItem>
             </ToolbarGroup>
+            ) : null}
           </BlockControls>
           {isChapterMarkerModalOpen && (
             <ChapterMarkerCreator

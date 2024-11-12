@@ -1,12 +1,62 @@
 import { __ } from "@wordpress/i18n";
-import { Modal, Button, TextControl } from "@wordpress/components";
+import {
+  Modal,
+  Button,
+  TextControl,
+  Notice,
+  __experimentalConfirmDialog as ConfirmDialog,
+} from "@wordpress/components";
 import { useState, useEffect } from "react";
-import { trash, justifyRight, justifyCenter, arrowDown } from "@wordpress/icons";
+import { trash, justifyRight, justifyCenter } from "@wordpress/icons";
 import { BlockAttributes } from "@wordpress/blocks";
 import { v4 as uuidv4 } from "uuid";
 
 // Utility function to generate unique IDs
 const generateUniqueId = () => uuidv4();
+
+// Function to parse time strings into seconds
+function parseTimeString(timeString: string): number | null {
+  const parts = timeString.split(":").map((part) => part.trim());
+  if (parts.length === 0) {
+    return null;
+  }
+
+  const numbers = parts.map((part) => parseInt(part, 10));
+  if (numbers.some((num) => isNaN(num) || num < 0)) {
+    return null;
+  }
+
+  let seconds = 0;
+
+  if (numbers.length === 1) {
+    // Only seconds
+    seconds = numbers[0];
+  } else if (numbers.length === 2) {
+    // minutes:seconds
+    seconds = numbers[0] * 60 + numbers[1];
+  } else if (numbers.length === 3) {
+    // hours:minutes:seconds
+    seconds = numbers[0] * 3600 + numbers[1] * 60 + numbers[2];
+  } else {
+    // More than 3 parts, invalid
+    return null;
+  }
+
+  return seconds;
+}
+
+// Function to format seconds into time strings
+function formatSecondsToTimeString(totalSeconds: number): string {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  const hoursString = hours > 0 ? `${hours}:` : '';
+  const minutesString = `${hours > 0 ? String(minutes).padStart(2, '0') : minutes}:`;
+  const secondsString = String(seconds).padStart(2, '0');
+
+  return `${hoursString}${minutesString}${secondsString}`;
+}
 
 export interface ChapterMarker {
   id: string;
@@ -14,6 +64,7 @@ export interface ChapterMarker {
   endTime: number;
   text: string;
 }
+
 
 interface ChapterMarkerCreatorProps {
   attributes: BlockAttributes;
@@ -54,46 +105,47 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
   const [newMarkerEndTime, setNewMarkerEndTime] = useState<number>(
     Math.round(times.playerCurrentTime) + 10
   );
+  const [newMarkerStartTimeInput, setNewMarkerStartTimeInput] = useState<string>(
+    formatSecondsToTimeString(newMarkerStartTime)
+  );
+  const [newMarkerEndTimeInput, setNewMarkerEndTimeInput] = useState<string>(
+    formatSecondsToTimeString(newMarkerEndTime)
+  );
+
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  // State for confirm dialog
+  const [showOverlapConfirm, setShowOverlapConfirm] = useState<boolean>(false);
+  const [pendingNewMarker, setPendingNewMarker] = useState<ChapterMarker | null>(
+    null
+  );
+
+  // State for editing marker
+  const [editingMarker, setEditingMarker] = useState<ChapterMarker | null>(null);
+  const [editingStartTimeInput, setEditingStartTimeInput] = useState<string>("");
+  const [editingEndTimeInput, setEditingEndTimeInput] = useState<string>("");
 
   useEffect(() => {
     setAttributes({ chapterMarkers: JSON.stringify(markers) });
   }, [markers]);
 
-  useEffect(() => {
-    // Find overlapping markers
-    const overlappingMarkers = markers.filter(
-      (marker) =>
-        marker.startTime <= newMarkerStartTime &&
-        marker.endTime > newMarkerStartTime
-    );
-
-    if (overlappingMarkers.length > 0) {
-      // If overlapping marker found, set endTime to its endTime
-      setNewMarkerEndTime(overlappingMarkers[0].endTime);
-    } else {
-      // If no overlapping marker, default to clip end time or startTime + 10
-      setNewMarkerEndTime(
-        Math.min(newMarkerStartTime + 10, times.playerClipEnd)
-      );
-    }
-  }, [newMarkerStartTime]);
-
-  const addMarker = () => {
-    const newMarker: ChapterMarker = {
-      id: generateUniqueId(),
-      startTime: newMarkerStartTime,
-      endTime: newMarkerEndTime,
-      text: newMarkerLabel,
-    };
-
-    sortMarker(newMarker);
-    setNewMarkerLabel("");
-    setNewMarkerStartTime(Math.round(times.playerCurrentTime));
-    setNewMarkerEndTime(Math.round(times.playerCurrentTime) + 10);
+  // Function to find overlapping markers
+  const findOverlappingMarkers = (
+    startTime: number,
+    endTime: number,
+    excludeId?: string
+  ) => {
+    return markers.filter((marker) => {
+      if (excludeId && marker.id === excludeId) {
+        return false;
+      }
+      return marker.startTime < endTime && marker.endTime > startTime;
+    });
   };
 
-  const sortMarker = (newMarker: ChapterMarker) => {
-    let newMarkers: ChapterMarker[] = [];
+  // Function to adjust existing markers based on overlaps
+  const adjustMarkers = (newMarker: ChapterMarker) => {
+    let adjustedMarkers: ChapterMarker[] = [];
 
     markers.forEach((marker) => {
       // No overlap
@@ -101,67 +153,210 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
         marker.endTime <= newMarker.startTime ||
         marker.startTime >= newMarker.endTime
       ) {
-        newMarkers.push(marker);
-      }
-      // Existing marker completely within new marker
-      else if (
-        marker.startTime >= newMarker.startTime &&
-        marker.endTime <= newMarker.endTime
-      ) {
-        // Do not add the existing marker; it's completely overlapped
-      }
-      // Existing marker overlaps at the start
-      else if (
-        marker.startTime < newMarker.startTime &&
-        marker.endTime > newMarker.startTime &&
-        marker.endTime <= newMarker.endTime
-      ) {
-        // Adjust existing marker to end at newMarker.startTime
-        newMarkers.push({ ...marker, endTime: newMarker.startTime });
-      }
-      // Existing marker overlaps at the end
-      else if (
-        marker.startTime >= newMarker.startTime &&
-        marker.startTime < newMarker.endTime &&
-        marker.endTime > newMarker.endTime
-      ) {
-        // Adjust existing marker to start at newMarker.endTime
-        newMarkers.push({ ...marker, startTime: newMarker.endTime });
-      }
-      // Existing marker completely encompasses new marker
-      else if (
-        marker.startTime < newMarker.startTime &&
-        marker.endTime > newMarker.endTime
-      ) {
-        // Split the existing marker into two parts
-        newMarkers.push({ ...marker, endTime: newMarker.startTime });
-        newMarkers.push({
-          ...marker,
-          startTime: newMarker.endTime,
-          id: generateUniqueId(),
-        });
+        adjustedMarkers.push(marker);
+      } else {
+        // Handle overlaps
+        if (
+          marker.startTime < newMarker.startTime &&
+          marker.endTime > newMarker.startTime &&
+          marker.endTime <= newMarker.endTime
+        ) {
+          // Adjust existing marker to end at newMarker.startTime
+          adjustedMarkers.push({
+            ...marker,
+            endTime: newMarker.startTime,
+          });
+        } else if (
+          marker.startTime >= newMarker.startTime &&
+          marker.startTime < newMarker.endTime &&
+          marker.endTime > newMarker.endTime
+        ) {
+          // Adjust existing marker to start at newMarker.endTime
+          adjustedMarkers.push({
+            ...marker,
+            startTime: newMarker.endTime,
+          });
+        } else if (
+          marker.startTime < newMarker.startTime &&
+          marker.endTime > newMarker.endTime
+        ) {
+          // Split existing marker into two
+          adjustedMarkers.push({
+            ...marker,
+            endTime: newMarker.startTime,
+          });
+          adjustedMarkers.push({
+            ...marker,
+            startTime: newMarker.endTime,
+            id: generateUniqueId(),
+          });
+        }
+        // Fully overlapped markers are not added
       }
     });
 
-    // Insert the new marker
-    newMarkers.push(newMarker);
-
-    // Sort the markers by startTime
-    newMarkers.sort((a, b) => a.startTime - b.startTime);
-
-    setMarkers(newMarkers);
+    return adjustedMarkers;
   };
 
-  const updateMarker = (id: string, updatedMarker: ChapterMarker) => {
-    const newMarkers = markers.map((marker) =>
-      marker.id === id ? updatedMarker : marker
+  // Function to handle adding a new marker
+  const handleAddMarker = () => {
+    // Validate start and end times
+    if (newMarkerEndTime <= newMarkerStartTime) {
+      setErrorMessage(__("End time must be greater than start time.", "rrze-video"));
+      return;
+    }
+
+    // Find overlapping markers
+    const overlappingMarkers = findOverlappingMarkers(
+      newMarkerStartTime,
+      newMarkerEndTime
     );
-    setMarkers(newMarkers);
+
+    const newMarker: ChapterMarker = {
+      id: generateUniqueId(),
+      startTime: newMarkerStartTime,
+      endTime: newMarkerEndTime,
+      text: newMarkerLabel,
+    };
+
+    if (overlappingMarkers.length > 0) {
+      // Show confirmation dialog
+      setPendingNewMarker(newMarker);
+      setShowOverlapConfirm(true);
+    } else {
+      // No overlaps, proceed to add marker
+      addMarker(newMarker);
+    }
   };
 
+  // Function to add marker after confirmation
+  const addMarker = (newMarker: ChapterMarker) => {
+    let adjustedMarkers = adjustMarkers(newMarker);
+
+    // Add new marker
+    adjustedMarkers.push(newMarker);
+
+    // Sort markers by startTime
+    adjustedMarkers.sort((a, b) => a.startTime - b.startTime);
+
+    setMarkers(adjustedMarkers);
+    setNewMarkerLabel("");
+    setNewMarkerStartTime(Math.round(times.playerCurrentTime));
+    setNewMarkerEndTime(Math.round(times.playerCurrentTime) + 10);
+    setNewMarkerStartTimeInput(newMarkerStartTime.toString());
+    setNewMarkerEndTimeInput(newMarkerEndTime.toString());
+    setErrorMessage("");
+  };
+
+  // Function to start editing a marker
+  const startEditingMarker = (marker: ChapterMarker) => {
+    setEditingMarker({ ...marker }); // Create a copy to edit
+    setEditingStartTimeInput(marker.startTime.toString());
+    setEditingEndTimeInput(marker.endTime.toString());
+  };
+
+  // Function to cancel editing
+  const cancelEditing = () => {
+    setEditingMarker(null);
+    setErrorMessage("");
+  };
+
+  // Function to save edited marker
+  const saveEditedMarker = () => {
+    if (editingMarker) {
+      // Validate start and end times
+      if (editingMarker.endTime <= editingMarker.startTime) {
+        setErrorMessage(__("End time must be greater than start time.", "rrze-video"));
+        return;
+      }
+
+      // Find overlapping markers
+      const overlappingMarkers = findOverlappingMarkers(
+        editingMarker.startTime,
+        editingMarker.endTime,
+        editingMarker.id
+      );
+
+      if (overlappingMarkers.length > 0) {
+        // Show confirmation dialog
+        setPendingNewMarker(editingMarker);
+        setShowOverlapConfirm(true);
+      } else {
+        // No overlaps, proceed to update marker
+        proceedToUpdateMarker(editingMarker);
+        setEditingMarker(null);
+      }
+    }
+  };
+
+  const proceedToUpdateMarker = (updatedMarker: ChapterMarker) => {
+    let adjustedMarkers = adjustMarkers(updatedMarker);
+
+    // Add updated marker
+    adjustedMarkers.push(updatedMarker);
+
+    // Sort markers by startTime
+    adjustedMarkers.sort((a, b) => a.startTime - b.startTime);
+
+    setMarkers(adjustedMarkers);
+    setErrorMessage("");
+  };
+
+  // ConfirmDialog handlers
+  const handleConfirm = () => {
+    if (pendingNewMarker) {
+      if (markers.find((marker) => marker.id === pendingNewMarker.id)) {
+        // Updating an existing marker
+        proceedToUpdateMarker(pendingNewMarker);
+        setEditingMarker(null);
+      } else {
+        // Adding a new marker
+        addMarker(pendingNewMarker);
+      }
+    }
+    setPendingNewMarker(null);
+    setShowOverlapConfirm(false);
+  };
+
+  const handleCancel = () => {
+    setPendingNewMarker(null);
+    setShowOverlapConfirm(false);
+  };
+
+  // Function to remove a marker
   const removeMarker = (id: string) => {
     const newMarkers = markers.filter((marker) => marker.id !== id);
     setMarkers(newMarkers);
+  };
+
+  // Function to delete marker at current position
+  const deleteMarkerAtPosition = () => {
+    const position = times.playerCurrentTime;
+
+    // Find markers at the current position
+    const overlappingMarkers = markers.filter(
+      (marker) => marker.startTime <= position && marker.endTime >= position
+    );
+
+    if (overlappingMarkers.length === 0) {
+      setErrorMessage(__("No marker at the current position to delete.", "rrze-video"));
+      return;
+    }
+
+    // Choose the marker whose startTime is closest to the current position
+    const markerToDelete = overlappingMarkers.reduce((prev, curr) => {
+      const prevDistance = Math.abs(prev.startTime - position);
+      const currDistance = Math.abs(curr.startTime - position);
+      return currDistance < prevDistance ? curr : prev;
+    });
+
+    // Remove the marker
+    const newMarkers = markers.filter(
+      (marker) => marker.id !== markerToDelete.id
+    );
+
+    setMarkers(newMarkers);
+    setErrorMessage("");
   };
 
   return (
@@ -171,6 +366,11 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
       className="chapter-marker-modal"
       size="large"
     >
+      {errorMessage && (
+        <Notice status="error" isDismissible={false}>
+          {errorMessage}
+        </Notice>
+      )}
       <div style={{ marginTop: "20px" }}>
         <TextControl
           label={__("Marker Label", "rrze-video")}
@@ -179,17 +379,37 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
         />
         <div style={{ display: "flex", alignItems: "end" }}>
           <TextControl
-            label={__("Start Time (seconds)", "rrze-video")}
-            type="number"
-            value={newMarkerStartTime.toString()}
-            onChange={(value) => setNewMarkerStartTime(parseFloat(value))}
+            label={__("Start Time", "rrze-video")}
+            type="text"
+            value={newMarkerStartTimeInput}
+            onChange={(value) => {
+              setNewMarkerStartTimeInput(value);
+              const parsedSeconds = parseTimeString(value);
+              if (parsedSeconds !== null) {
+                setNewMarkerStartTime(parsedSeconds);
+                setErrorMessage("");
+              } else {
+                setErrorMessage(__("Invalid time format.", "rrze-video"));
+              }
+            }}
+            onBlur={() => {
+              if (newMarkerEndTime <= newMarkerStartTime) {
+                setErrorMessage(
+                  __("End time must be greater than start time.", "rrze-video")
+                );
+              } else {
+                setErrorMessage("");
+              }
+            }}
           />
           <Button
             variant="secondary"
             icon={justifyCenter}
-            onClick={() =>
-              setNewMarkerStartTime(Math.round(times.playerCurrentTime))
-            }
+            onClick={() => {
+              const currentTime = Math.round(times.playerCurrentTime);
+              setNewMarkerStartTime(currentTime);
+              setNewMarkerStartTimeInput(formatSecondsToTimeString(currentTime));
+            }}
             style={{ marginLeft: "10px", marginTop: "22px" }}
           >
             {__("Set to Current Time", "rrze-video")}
@@ -197,17 +417,37 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
         </div>
         <div style={{ display: "flex", alignItems: "end" }}>
           <TextControl
-            label={__("End Time (seconds)", "rrze-video")}
-            type="number"
-            value={newMarkerEndTime.toString()}
-            onChange={(value) => setNewMarkerEndTime(parseFloat(value))}
+            label={__("End Time", "rrze-video")}
+            type="text"
+            value={newMarkerEndTimeInput}
+            onChange={(value) => {
+              setNewMarkerEndTimeInput(value);
+              const parsedSeconds = parseTimeString(value);
+              if (parsedSeconds !== null) {
+                setNewMarkerEndTime(parsedSeconds);
+                setErrorMessage("");
+              } else {
+                setErrorMessage(__("Invalid time format.", "rrze-video"));
+              }
+            }}
+            onBlur={() => {
+              if (newMarkerEndTime <= newMarkerStartTime) {
+                setErrorMessage(
+                  __("End time must be greater than start time.", "rrze-video")
+                );
+              } else {
+                setErrorMessage("");
+              }
+            }}
           />
           <Button
             variant="secondary"
             icon={justifyCenter}
-            onClick={() =>
-              setNewMarkerEndTime(Math.round(times.playerCurrentTime))
-            }
+            onClick={() => {
+              const currentTime = Math.round(times.playerCurrentTime);
+              setNewMarkerEndTime(currentTime);
+              setNewMarkerStartTimeInput(formatSecondsToTimeString(currentTime));
+            }}
             style={{ marginLeft: "10px", marginTop: "22px" }}
           >
             {__("Set to Current Time", "rrze-video")}
@@ -216,14 +456,17 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
             icon={justifyRight}
             variant="secondary"
             label={__("Set to End of Video", "rrze-video")}
-            onClick={() =>
-              setNewMarkerEndTime(Math.round(times.playerDuration))
-            }
+            onClick={() => {
+              const duration = Math.round(times.playerDuration);
+              setNewMarkerEndTime(duration);
+              setNewMarkerEndTimeInput(formatSecondsToTimeString(duration));
+            }}
+            style={{ marginLeft: "10px", marginTop: "22px" }}
           />
         </div>
         <Button
           icon="plus"
-          onClick={addMarker}
+          onClick={handleAddMarker}
           variant="secondary"
           style={{ marginTop: "10px" }}
         >
@@ -234,89 +477,202 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
       {markers.length > 0 && (
         <div style={{ marginTop: "20px" }}>
           <h3>{__("Markers", "rrze-video")}</h3>
-          {markers.map((marker) => (
-            <div key={marker.id} className="marker-item">
-              <TextControl
-                label={__("Marker Label", "rrze-video")}
-                value={marker.text}
-                onChange={(value) =>
-                  updateMarker(marker.id, { ...marker, text: value })
-                }
-              />
-              <div style={{ display: "flex", alignItems: "end" }}>
-                <TextControl
-                  label={__("Start Time (seconds)", "rrze-video")}
-                  type="number"
-                  value={marker.startTime.toString()}
-                  onChange={(value) =>
-                    updateMarker(marker.id, {
-                      ...marker,
-                      startTime: parseFloat(value),
-                    })
-                  }
-                />
-                <Button
-                  variant="secondary"
-                  icon={justifyCenter}
-                  label={__("Set to Current Time", "rrze-video")}
-                  onClick={() =>
-                    updateMarker(marker.id, {
-                      ...marker,
-                      startTime: Math.round(times.playerCurrentTime),
-                    })
-                  }
-                  style={{ marginLeft: "10px", marginTop: "22px" }}
-                />
-              </div>
-              <div style={{ display: "flex", alignItems: "end" }}>
-                <TextControl
-                  label={__("End Time (seconds)", "rrze-video")}
-                  type="number"
-                  value={marker.endTime.toString()}
-                  onChange={(value) =>
-                    updateMarker(marker.id, {
-                      ...marker,
-                      endTime: parseFloat(value),
-                    })
-                  }
-                />
-                <Button
-                  variant="secondary"
-                  icon={justifyCenter}
-                  label={__("Set to Current Time", "rrze-video")}
-                  onClick={() =>
-                    updateMarker(marker.id, {
-                      ...marker,
-                      endTime: Math.round(times.playerCurrentTime),
-                    })
-                  }
-                  style={{ marginLeft: "10px", marginTop: "22px" }}
-                />
-                <Button
-                icon={justifyRight}
-                variant="secondary"
-                label={__("Set to End of Video", "rrze-video")}
-                onClick={() =>
-                  updateMarker(marker.id, {
-                    ...marker,
-                    endTime: Math.round(times.playerDuration),
-                  })
-                }
-              />
-              </div>
-              <Button
-                icon={trash}
-                label={__("Delete Marker", "rrze-video")}
-                onClick={() => removeMarker(marker.id)}
-                isDestructive
-              />
-            </div>
-          ))}
+          <table className="markers-table">
+            <thead>
+              <tr>
+                <th>{__("Label", "rrze-video")}</th>
+                <th>{__("Start Time", "rrze-video")}</th>
+                <th>{__("End Time", "rrze-video")}</th>
+                <th>{__("Actions", "rrze-video")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {markers.map((marker) => (
+                <tr key={marker.id}>
+                  <td>{marker.text}</td>
+                  <td>{formatSecondsToTimeString(marker.startTime)}</td>
+                  <td>{formatSecondsToTimeString(marker.endTime)}</td>
+                  <td>
+                    <Button
+                      icon="edit"
+                      label={__("Edit Marker", "rrze-video")}
+                      onClick={() => startEditingMarker(marker)}
+                    />
+                    <Button
+                      icon={trash}
+                      label={__("Delete Marker", "rrze-video")}
+                      onClick={() => removeMarker(marker.id)}
+                      isDestructive
+                      style={{ marginLeft: "5px" }}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
-      <Button onClick={onClose} style={{ marginTop: "20px" }} variant="primary" >
-        {__("Close", "rrze-video")}
-      </Button>
+      <div style={{ marginTop: "20px" }}>
+        <Button onClick={deleteMarkerAtPosition} variant="secondary">
+          {__("Delete Marker at Current Position", "rrze-video")}
+        </Button>
+        <Button
+          onClick={onClose}
+          style={{ marginLeft: "10px" }}
+          variant="primary"
+        >
+          {__("Close", "rrze-video")}
+        </Button>
+      </div>
+
+      {/* Editing Modal */}
+      {editingMarker && (
+        <Modal
+          title={__("Edit Marker", "rrze-video")}
+          onRequestClose={cancelEditing}
+          className="edit-marker-modal"
+          size="medium"
+        >
+          {errorMessage && (
+            <Notice status="error" isDismissible={false}>
+              {errorMessage}
+            </Notice>
+          )}
+          <TextControl
+            label={__("Marker Label", "rrze-video")}
+            value={editingMarker.text}
+            onChange={(value) =>
+              setEditingMarker({ ...editingMarker, text: value })
+            }
+          />
+          <div style={{ display: "flex", alignItems: "end" }}>
+            <TextControl
+              label={__("Start Time", "rrze-video")}
+              type="text"
+              value={editingStartTimeInput}
+              onChange={(value) => {
+                setEditingStartTimeInput(value);
+                const parsedSeconds = parseTimeString(value);
+                if (parsedSeconds !== null) {
+                  setEditingMarker({
+                    ...editingMarker,
+                    startTime: parsedSeconds,
+                  });
+                  setErrorMessage("");
+                } else {
+                  setErrorMessage(__("Invalid time format.", "rrze-video"));
+                }
+              }}
+              onBlur={() => {
+                if (editingMarker.endTime <= editingMarker.startTime) {
+                  setErrorMessage(
+                    __("End time must be greater than start time.", "rrze-video")
+                  );
+                } else {
+                  setErrorMessage("");
+                }
+              }}
+            />
+            <Button
+              variant="secondary"
+              icon={justifyCenter}
+              label={__("Set to Current Time", "rrze-video")}
+              onClick={() => {
+                const currentTime = Math.round(times.playerCurrentTime);
+                setEditingMarker({
+                  ...editingMarker,
+                  startTime: currentTime,
+                });
+                setEditingStartTimeInput(formatSecondsToTimeString(currentTime));
+              }}
+              style={{ marginLeft: "10px", marginTop: "22px" }}
+            />
+          </div>
+          <div style={{ display: "flex", alignItems: "end" }}>
+            <TextControl
+              label={__("End Time", "rrze-video")}
+              type="text"
+              value={editingEndTimeInput}
+              onChange={(value) => {
+                setEditingEndTimeInput(value);
+                const parsedSeconds = parseTimeString(value);
+                if (parsedSeconds !== null) {
+                  setEditingMarker({
+                    ...editingMarker,
+                    endTime: parsedSeconds,
+                  });
+                  setErrorMessage("");
+                } else {
+                  setErrorMessage(__("Invalid time format.", "rrze-video"));
+                }
+              }}
+              onBlur={() => {
+                if (editingMarker.endTime <= editingMarker.startTime) {
+                  setErrorMessage(
+                    __("End time must be greater than start time.", "rrze-video")
+                  );
+                } else {
+                  setErrorMessage("");
+                }
+              }}
+            />
+            <Button
+              variant="secondary"
+              icon={justifyCenter}
+              label={__("Set to Current Time", "rrze-video")}
+              onClick={() => {
+                const currentTime = Math.round(times.playerCurrentTime);
+                setEditingMarker({
+                  ...editingMarker,
+                  endTime: currentTime,
+                });
+                setEditingEndTimeInput(formatSecondsToTimeString(currentTime));
+              }}
+              style={{ marginLeft: "10px", marginTop: "22px" }}
+            />
+            <Button
+              icon={justifyRight}
+              variant="secondary"
+              label={__("Set to End of Video", "rrze-video")}
+              onClick={() => {
+                const duration = Math.round(times.playerDuration);
+                setEditingMarker({
+                  ...editingMarker,
+                  endTime: duration,
+                });
+                setEditingEndTimeInput(formatSecondsToTimeString(duration));
+              }}
+              style={{ marginLeft: "10px", marginTop: "22px" }}
+            />
+          </div>
+          <div style={{ marginTop: "20px" }}>
+            <Button onClick={saveEditedMarker} variant="primary">
+              {__("Save", "rrze-video")}
+            </Button>
+            <Button
+              onClick={cancelEditing}
+              variant="secondary"
+              style={{ marginLeft: "10px" }}
+            >
+              {__("Cancel", "rrze-video")}
+            </Button>
+          </div>
+        </Modal>
+      )}
+
+      {/* ConfirmDialog for overlaps */}
+      {showOverlapConfirm && (
+        <ConfirmDialog
+          title={__("Marker Overlap", "rrze-video")}
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+        >
+          {__(
+            "The new marker overlaps with existing markers. Overlapping markers will be adjusted or removed. Do you want to proceed?",
+            "rrze-video"
+          )}
+        </ConfirmDialog>
+      )}
     </Modal>
   );
 };
