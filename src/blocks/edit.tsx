@@ -1,3 +1,4 @@
+////////////////////////////////////////
 // Imports for necessary WordPress libraries
 import { __ } from "@wordpress/i18n";
 import {
@@ -8,37 +9,44 @@ import {
 } from "@wordpress/components";
 import { trash, plus, reset, edit } from "@wordpress/icons";
 import { useBlockProps, BlockControls } from "@wordpress/block-editor";
-// @ts-ignore
 import ServerSideRender from "@wordpress/server-side-render";
-import { useState, useEffect, useRef, useMemo, useCallback } from "@wordpress/element";
-import ChapterMarkerCreator from "./CustomComponents/ChapterMarkerCreator";
-import { type ChapterMarker } from "./CustomComponents/ChapterMarkerCreator";
+import {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "@wordpress/element";
 
-import { isHLSProvider, type TextTrackInit } from "vidstack";
-
+////////////////////////////////////////
 // Imports for custom components
-// @ts-ignore
+import { type ChapterMarker } from "./CustomComponents/ChapterMarkerCreator";
+import ChapterMarkerCreator from "./CustomComponents/ChapterMarkerCreator";
+import { RRZEVidstackPlayer } from "./CustomComponents/Vidstack";
 import { HeadingSelector } from "./CustomComponents/HeadingSelector";
 // @ts-ignore
 import CustomInspectorControls from "./InspectorControlAreaComponents/CustomInspectorControls";
 // @ts-ignore
 import CustomPlaceholder from "./CustomComponents/CustomPlaceholder";
 
-import apiFetch from "@wordpress/api-fetch";
-
-// Imports for helper functions
-// @ts-ignore
-import { isTextInString, whichProviderIsUsed } from "./Utils/utils";
+// Imports for Utils
+import {
+  isTextInString,
+  whichProviderIsUsed,
+  isFauVideoUrl,
+  isYouTubeUrl,
+} from "./Utils/utils";
 import { Video, ApiResponse, OEmbedData } from "./Utils/types";
 import { sendUrlToApi } from "./Utils/apiService";
-
-import { RRZEVidstackPlayer } from "./CustomComponents/Vidstack";
 
 // Import the Editor Styles for the block editor
 import "./editor.scss";
 import "./player.scss";
 
-// Define the attributes type
+////////////////////////////////////////
+
+////////////////////////////////////////
+// Types and Interfaces
 interface BlockAttributes {
   id: string | number;
   url: string;
@@ -59,27 +67,6 @@ interface BlockAttributes {
   chapterMarkers?: string;
 }
 
-// Known FAU domains
-const fauDomains = [
-  "video.uni-erlangen.de",
-  "video.fau.de",
-  "www.video.uni-erlangen.de",
-  "www.video.fau.de",
-  "fau.tv",
-  "www.fau.tv",
-];
-
-function isFauVideoUrl(url: string): boolean {
-  const urlDomain = new URL(url).hostname;
-  return fauDomains.includes(urlDomain);
-}
-
-function isYouTubeUrl(url: string): boolean {
-  const youtubeDomains = ["youtube.com", "www.youtube.com", "youtu.be"];
-  const urlDomain = new URL(url).hostname;
-  return youtubeDomains.includes(urlDomain);
-}
-
 interface EditProps {
   attributes: BlockAttributes;
   setAttributes: (attributes: Partial<BlockAttributes>) => void;
@@ -95,27 +82,44 @@ const DynamicHeading: React.FC<DynamicHeadingProps> = ({ tag, title }) => {
   return <Tag>{title}</Tag>;
 };
 
+////////////////////////////////////////
+// Main Edit Component
 export default function Edit(props: EditProps): JSX.Element {
-  const uniqueId = Math.random().toString(36).substring(2, 15);
-  const containerRef = useRef<HTMLDivElement | null>(null);
   const blockProps = useBlockProps();
+  // Destructure the attributes and setAttributes from the props
   const { attributes, setAttributes } = props;
   const { id, url, rand, aspectratio, secureclipid, mediaurl } = attributes;
+
+  // Generate a unique ID for the video container
+  const uniqueId = Math.random().toString(36).substring(2, 15);
+
+  // Create a reference to the container div
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  ////////////////////////////////////////
+  // State variables
   const [inputURL, setInputURL] = useState<string>(attributes.url);
+  const [title, setTitle] = useState<string>("");
+  const [author, setAuthor] = useState<string>("");
+
   const [responseMessage, setResponseMessage] = useState("");
   const [oEmbedData, setOEmbedData] = useState(null);
-  const [title, setTitle] = useState<string>("");
+
   const [description, setDescription] = useState<string>("");
-  const [providerURL, setProviderURL] = useState<string>("");
-  const [providerAudioURL, setProviderAudioURL] = useState<string>("");
-  const [author, setAuthor] = useState<string>("");
-  const [providerName, setProviderName] = useState<string>("");
-  const [isChapterMarkerModalOpen, setIsChapterMarkerModalOpen] =
-    useState(false);
+
+  // Player state
   const [playerCurrentTime, setPlayerCurrentTime] = useState<number>(0);
   const [playerClipStart, setPlayerClipStart] = useState<number>(0);
   const [playerClipEnd, setPlayerClipEnd] = useState<number>(0);
   const [playerDuration, setPlayerDuration] = useState<number>(0);
+
+  const [providerURL, setProviderURL] = useState<string>("");
+  const [providerAudioURL, setProviderAudioURL] = useState<string>("");
+  const [providerName, setProviderName] = useState<string>("");
+
+  // Popup and Confirmation state
+  const [isChapterMarkerModalOpen, setIsChapterMarkerModalOpen] =
+    useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [confirmVal, setConfirmVal] = useState("");
 
@@ -126,6 +130,10 @@ export default function Edit(props: EditProps): JSX.Element {
       : [];
   }, [attributes.chapterMarkers]);
 
+  ////////////////////////////////////////
+  // Event Handlers
+
+  // Handle the confirmation dialog
   const handleConfirm = () => {
     setConfirmVal("Confirmed");
     setIsOpen(false);
@@ -137,6 +145,46 @@ export default function Edit(props: EditProps): JSX.Element {
     setIsOpen(false);
   };
 
+  const handleDeleteCurrentMarker = () => {
+    const newMarkers = markers.filter(
+      (marker: ChapterMarker) =>
+        playerCurrentTime < marker.startTime ||
+        playerCurrentTime > marker.endTime
+    );
+
+    setAttributes({ chapterMarkers: JSON.stringify(newMarkers) });
+  };
+
+  const resetUrl = () => {
+    setAttributes({
+      id: "",
+      url: "",
+      titletag: "h2",
+      poster: "",
+      rand: "",
+      show: "",
+      provider: "fauvideo",
+      textAlign: "",
+      secureclipid: undefined,
+      loop: false,
+      start: 0,
+      clipstart: 0,
+      clipend: 0,
+      mediaurl: "",
+      chapterMarkers: "",
+    });
+
+    // Reset internal state variables
+    setInputURL("");
+    setTitle("");
+    setDescription("");
+    setProviderURL("");
+    setProviderAudioURL("");
+    setOEmbedData(null);
+    setAuthor("");
+  };
+
+  // Send the URL to the API
   const handleSendUrlToApi = async (
     url?: string,
     id?: number,
@@ -160,6 +208,9 @@ export default function Edit(props: EditProps): JSX.Element {
     }
   };
 
+  ////////////////////////////////////////
+  // Use Effects
+
   useEffect(() => {
     if (url && isFauVideoUrl(url)) {
       handleSendUrlToApi(url);
@@ -180,6 +231,55 @@ export default function Edit(props: EditProps): JSX.Element {
       handleSendUrlToApi(undefined, undefined, rand);
     }
   }, [id, rand]);
+
+  useEffect(() => {
+    const url = inputURL;
+
+    switch (whichProviderIsUsed(url)) {
+      case "youtube":
+      case "youtubeShorts":
+        setAttributes({ provider: "youtube" });
+        break;
+      case "vimeo":
+        setAttributes({ provider: "vimeo" });
+        break;
+      case "fauvideo":
+        setAttributes({ provider: "fauvideo" });
+        break;
+      case "br":
+        setAttributes({ provider: "br" });
+        break;
+      case "ard":
+        setAttributes({ provider: "ard" });
+        break;
+      default:
+        setAttributes({ provider: "fauvideo" });
+        break;
+    }
+  }, [inputURL, setAttributes]);
+
+  const onTimeUpdate = useCallback(
+    ({
+      currentPlayerTime,
+      playerClipStart,
+      playerClipEnd,
+      playerDuration,
+    }: {
+      currentPlayerTime: number;
+      playerClipStart: number;
+      playerClipEnd: number;
+      playerDuration: number;
+    }) => {
+      setPlayerCurrentTime(currentPlayerTime);
+      setPlayerClipStart(playerClipStart);
+      setPlayerClipEnd(playerClipEnd);
+      setPlayerDuration(playerDuration);
+    },
+    []
+  );
+
+  ////////////////////////////////////////
+  // Functions
 
   const updateAttributesFromOEmbedData = (data: OEmbedData) => {
     if (!data || typeof data !== "object") {
@@ -220,89 +320,8 @@ export default function Edit(props: EditProps): JSX.Element {
     }
   };
 
-  const deleteCurrentMarker = () => {
-    const newMarkers = markers.filter(
-      (marker: ChapterMarker) =>
-        playerCurrentTime < marker.startTime ||
-        playerCurrentTime > marker.endTime
-    );
-
-    setAttributes({ chapterMarkers: JSON.stringify(newMarkers) });
-  };
-
-  useEffect(() => {
-    const url = inputURL;
-
-    switch (whichProviderIsUsed(url)) {
-      case "youtube":
-      case "youtubeShorts":
-        setAttributes({ provider: "youtube" });
-        break;
-      case "vimeo":
-        setAttributes({ provider: "vimeo" });
-        break;
-      case "fauvideo":
-        setAttributes({ provider: "fauvideo" });
-        break;
-      case "br":
-        setAttributes({ provider: "br" });
-        break;
-      case "ard":
-        setAttributes({ provider: "ard" });
-        break;
-      default:
-        setAttributes({ provider: "fauvideo" });
-        break;
-    }
-  }, [inputURL, setAttributes]);
-
-  const resetUrl = () => {
-    setAttributes({
-      id: "",
-      url: "",
-      titletag: "h2",
-      poster: "",
-      rand: "",
-      show: "",
-      provider: "fauvideo",
-      textAlign: "",
-      secureclipid: undefined,
-      loop: false,
-      start: 0,
-      clipstart: 0,
-      clipend: 0,
-      mediaurl: "",
-      chapterMarkers: "",
-    });
-
-    // Reset internal state variables
-    setInputURL("");
-    setTitle("");
-    setDescription("");
-    setProviderURL("");
-    setProviderAudioURL("");
-    setOEmbedData(null);
-    setAuthor("");
-  };
-
-  const onTimeUpdate = useCallback(
-    ({
-      currentPlayerTime,
-      playerClipStart,
-      playerClipEnd,
-      playerDuration,
-    }: {
-      currentPlayerTime: number;
-      playerClipStart: number;
-      playerClipEnd: number;
-      playerDuration: number;
-    }) => {
-      setPlayerCurrentTime(currentPlayerTime);
-      setPlayerClipStart(playerClipStart);
-      setPlayerClipEnd(playerClipEnd);
-      setPlayerDuration(playerDuration);
-    },
-    []);
+  ////////////////////////////////////////
+  // Render the Edit Component
 
   return (
     <div {...blockProps}>
@@ -339,38 +358,38 @@ export default function Edit(props: EditProps): JSX.Element {
                   />
                 )}
               </ToolbarItem>
-              </ToolbarGroup>
-              {(url && isFauVideoUrl(url)) || providerName === "FAU" ? (
-              <ToolbarGroup>
-              <ToolbarItem>
-                {() => (
-                  <>
-                    <ToolbarButton
-                      icon={plus}
-                      label={__("Add Chapter Markers", "rrze-video")}
-                      onClick={() => setIsChapterMarkerModalOpen(true)}
-                    />
-                    <ToolbarButton
-                      icon={reset}
-                      label={__("Delete Current Marker", "rrze-video")}
-                      onClick={deleteCurrentMarker}
-                      disabled={
-                        !markers.some(
-                          (marker: ChapterMarker) =>
-                            playerCurrentTime >= marker.startTime &&
-                            playerCurrentTime <= marker.endTime
-                        )
-                      }
-                    />
-                    <ToolbarButton
-                      icon={edit}
-                      label={__("Edit Markers", "rrze-video")}
-                      onClick={() => setIsChapterMarkerModalOpen(true)}
-                    />
-                  </>
-                )}
-              </ToolbarItem>
             </ToolbarGroup>
+            {(url && isFauVideoUrl(url)) || providerName === "FAU" ? (
+              <ToolbarGroup>
+                <ToolbarItem>
+                  {() => (
+                    <>
+                      <ToolbarButton
+                        icon={plus}
+                        label={__("Add Chapter Markers", "rrze-video")}
+                        onClick={() => setIsChapterMarkerModalOpen(true)}
+                      />
+                      <ToolbarButton
+                        icon={reset}
+                        label={__("Delete Current Marker", "rrze-video")}
+                        onClick={handleDeleteCurrentMarker}
+                        disabled={
+                          !markers.some(
+                            (marker: ChapterMarker) =>
+                              playerCurrentTime >= marker.startTime &&
+                              playerCurrentTime <= marker.endTime
+                          )
+                        }
+                      />
+                      <ToolbarButton
+                        icon={edit}
+                        label={__("Edit Markers", "rrze-video")}
+                        onClick={() => setIsChapterMarkerModalOpen(true)}
+                      />
+                    </>
+                  )}
+                </ToolbarItem>
+              </ToolbarGroup>
             ) : null}
           </BlockControls>
           {isChapterMarkerModalOpen && (

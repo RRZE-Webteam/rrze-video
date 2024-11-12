@@ -18,6 +18,9 @@ import {
 import { v4 as uuidv4 } from "uuid";
 const generateUniqueId = () => uuidv4();
 
+/////////////////////////////////////////////
+// Types and Interfaces
+
 export interface ChapterMarker {
   id: string;
   startTime: number;

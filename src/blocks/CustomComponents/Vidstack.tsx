@@ -1,3 +1,8 @@
+///////////////////////////////
+// Import WordPress Dependencies
+import { useState, useEffect, useRef, memo } from "@wordpress/element";
+
+// Import Vidstack Dependencies
 import {
   MediaPlayer,
   MediaProvider,
@@ -14,9 +19,12 @@ import {
   DefaultAudioLayout,
 } from "@vidstack/react/player/layouts/default";
 import { Poster } from "@vidstack/react";
-import { type ChapterMarker } from "./ChapterMarkerCreator";
-import { useState, useEffect, useRef, memo } from "@wordpress/element";
 
+// Import Types
+import { type ChapterMarker } from "./ChapterMarkerCreator";
+
+///////////////////////////////
+// Interfaces
 interface CustomVidStackProps {
   title: string;
   mediaurl: string;
@@ -34,6 +42,8 @@ interface CustomVidStackProps {
   markers: ChapterMarker[];
 }
 
+///////////////////////////////
+// Custom Vidstack Player with Memo
 const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
   ({
     title,
@@ -49,20 +59,12 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
     let player = useRef<MediaPlayerInstance>(null);
     const [cues, setCues] = useState<ChapterMarker[]>([]);
     const [showPoster, setShowPoster] = useState(true);
-
-    useEffect(() => {
-      setCues(markers);
-    }, [markers]);
-
     const content: VTTContent = {
       cues: cues,
     };
 
-    const handleProviderChange = (provider: MediaProviderAdapter | null) => {
-      if (isYouTubeProvider(provider)) {
-        provider.cookies = true;
-      }
-    };
+    ///////////////////////////////
+    // Use Effects
 
     const MediaStateObserver: React.FC = () => {
       const paused = useMediaState("paused");
@@ -85,6 +87,20 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
       return null;
     };
 
+    useEffect(() => {
+      setCues(markers);
+    }, [markers]);
+
+    ///////////////////////////////
+    // Event handlers
+    const handleProviderChange = (provider: MediaProviderAdapter | null) => {
+      if (isYouTubeProvider(provider)) {
+        provider.cookies = true;
+      }
+    };
+
+    ///////////////////////////////
+    // Render
     return (
       <MediaPlayer
         title={title}
