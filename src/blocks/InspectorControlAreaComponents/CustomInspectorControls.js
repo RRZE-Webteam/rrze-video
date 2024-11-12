@@ -22,7 +22,7 @@ import CategorySelector from "./CategorySelector";
 import VideoIDSelector from "./VideoIDSelector";
 import ImageSelectorEdit from "./ImageSelector";
 import ShowSelector from "./ShowSelector";
-import { whichProviderIsUsed } from "../HelperFunctions/utils";
+import { whichProviderIsUsed } from "../Utils/utils";
 
 /**
  * Controls the sidebar for videoblock in the blockeditor

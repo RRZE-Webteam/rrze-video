@@ -28,9 +28,9 @@ import apiFetch from "@wordpress/api-fetch";
 
 // Imports for helper functions
 // @ts-ignore
-import { isTextInString, whichProviderIsUsed } from "./HelperFunctions/utils";
-import { Video, ApiResponse, OEmbedData } from "./HelperFunctions/types";
-import { sendUrlToApi } from "./HelperFunctions/apiService";
+import { isTextInString, whichProviderIsUsed } from "./Utils/utils";
+import { Video, ApiResponse, OEmbedData } from "./Utils/types";
+import { sendUrlToApi } from "./Utils/apiService";
 
 import { RRZEVidstackPlayer } from "./CustomComponents/Vidstack";
 

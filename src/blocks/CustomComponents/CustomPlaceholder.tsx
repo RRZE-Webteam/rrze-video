@@ -5,7 +5,7 @@ import { video } from "@wordpress/icons";
 import { useState } from "@wordpress/element";
 
 // @ts-ignore
-import { whichProviderIsUsed } from "../HelperFunctions/utils";
+import { whichProviderIsUsed } from "../Utils/utils";
 
 interface CustomPlaceholderProps {
   attributes: {

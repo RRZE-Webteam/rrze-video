@@ -4,7 +4,7 @@ import {HeadingSelectorInspector} from "../CustomComponents/HeadingSelector";
 import { __ } from "@wordpress/i18n";
 
 //Imports for helper functions
-import { isTextInString } from "../HelperFunctions/utils";
+import { isTextInString } from "../Utils/utils";
 
 
 /**

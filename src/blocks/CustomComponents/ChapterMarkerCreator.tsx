@@ -6,57 +6,17 @@ import {
   Notice,
   __experimentalConfirmDialog as ConfirmDialog,
 } from "@wordpress/components";
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "@wordpress/element";
 import { trash, justifyRight, justifyCenter } from "@wordpress/icons";
 import { BlockAttributes } from "@wordpress/blocks";
+import {
+  formatSecondsToTimeString,
+  parseTimeString,
+} from "../Utils/timeProcessing";
+
+// For generation of unique ID's
 import { v4 as uuidv4 } from "uuid";
-
-// Utility function to generate unique IDs
 const generateUniqueId = () => uuidv4();
-
-// Function to parse time strings into seconds
-function parseTimeString(timeString: string): number | null {
-  const parts = timeString.split(":").map((part) => part.trim());
-  if (parts.length === 0) {
-    return null;
-  }
-
-  const numbers = parts.map((part) => parseInt(part, 10));
-  if (numbers.some((num) => isNaN(num) || num < 0)) {
-    return null;
-  }
-
-  let seconds = 0;
-
-  if (numbers.length === 1) {
-    // Only seconds
-    seconds = numbers[0];
-  } else if (numbers.length === 2) {
-    // minutes:seconds
-    seconds = numbers[0] * 60 + numbers[1];
-  } else if (numbers.length === 3) {
-    // hours:minutes:seconds
-    seconds = numbers[0] * 3600 + numbers[1] * 60 + numbers[2];
-  } else {
-    // More than 3 parts, invalid
-    return null;
-  }
-
-  return seconds;
-}
-
-// Function to format seconds into time strings
-function formatSecondsToTimeString(totalSeconds: number): string {
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-
-  const hoursString = hours > 0 ? `${hours}:` : '';
-  const minutesString = `${hours > 0 ? String(minutes).padStart(2, '0') : minutes}:`;
-  const secondsString = String(seconds).padStart(2, '0');
-
-  return `${hoursString}${minutesString}${secondsString}`;
-}
 
 export interface ChapterMarker {
   id: string;
@@ -64,7 +24,6 @@ export interface ChapterMarker {
   endTime: number;
   text: string;
 }
-
 
 interface ChapterMarkerCreatorProps {
   attributes: BlockAttributes;
@@ -84,6 +43,10 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
   times,
   onClose,
 }) => {
+
+  /////////////////////////////////////////////
+  // States
+
   // Initialize markers state from attributes.chapterMarkers
   const [markers, setMarkers] = useState<ChapterMarker[]>(() => {
     const storedMarkers = attributes.chapterMarkers
@@ -105,9 +68,8 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
   const [newMarkerEndTime, setNewMarkerEndTime] = useState<number>(
     Math.round(times.playerCurrentTime) + 10
   );
-  const [newMarkerStartTimeInput, setNewMarkerStartTimeInput] = useState<string>(
-    formatSecondsToTimeString(newMarkerStartTime)
-  );
+  const [newMarkerStartTimeInput, setNewMarkerStartTimeInput] =
+    useState<string>(formatSecondsToTimeString(newMarkerStartTime));
   const [newMarkerEndTimeInput, setNewMarkerEndTimeInput] = useState<string>(
     formatSecondsToTimeString(newMarkerEndTime)
   );
@@ -116,18 +78,26 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
 
   // State for confirm dialog
   const [showOverlapConfirm, setShowOverlapConfirm] = useState<boolean>(false);
-  const [pendingNewMarker, setPendingNewMarker] = useState<ChapterMarker | null>(
-    null
-  );
+  const [pendingNewMarker, setPendingNewMarker] =
+    useState<ChapterMarker | null>(null);
 
   // State for editing marker
-  const [editingMarker, setEditingMarker] = useState<ChapterMarker | null>(null);
-  const [editingStartTimeInput, setEditingStartTimeInput] = useState<string>("");
+  const [editingMarker, setEditingMarker] = useState<ChapterMarker | null>(
+    null
+  );
+  const [editingStartTimeInput, setEditingStartTimeInput] =
+    useState<string>("");
   const [editingEndTimeInput, setEditingEndTimeInput] = useState<string>("");
+
+  /////////////////////////////////////////////
+  // Effects
 
   useEffect(() => {
     setAttributes({ chapterMarkers: JSON.stringify(markers) });
   }, [markers]);
+
+  /////////////////////////////////////////////
+  // Functions
 
   // Function to find overlapping markers
   const findOverlappingMarkers = (
@@ -202,7 +172,9 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
   const handleAddMarker = () => {
     // Validate start and end times
     if (newMarkerEndTime <= newMarkerStartTime) {
-      setErrorMessage(__("End time must be greater than start time.", "rrze-video"));
+      setErrorMessage(
+        __("End time must be greater than start time.", "rrze-video")
+      );
       return;
     }
 
@@ -266,7 +238,9 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
     if (editingMarker) {
       // Validate start and end times
       if (editingMarker.endTime <= editingMarker.startTime) {
-        setErrorMessage(__("End time must be greater than start time.", "rrze-video"));
+        setErrorMessage(
+          __("End time must be greater than start time.", "rrze-video")
+        );
         return;
       }
 
@@ -289,6 +263,7 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
     }
   };
 
+  // Function to update marker after confirmation
   const proceedToUpdateMarker = (updatedMarker: ChapterMarker) => {
     let adjustedMarkers = adjustMarkers(updatedMarker);
 
@@ -301,6 +276,47 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
     setMarkers(adjustedMarkers);
     setErrorMessage("");
   };
+
+  // Function to remove a marker
+  const removeMarker = (id: string) => {
+    const newMarkers = markers.filter((marker) => marker.id !== id);
+    setMarkers(newMarkers);
+  };
+
+  // Function to delete marker at current position
+  const deleteMarkerAtPosition = () => {
+    const position = times.playerCurrentTime;
+
+    // Find markers at the current position
+    const overlappingMarkers = markers.filter(
+      (marker) => marker.startTime <= position && marker.endTime >= position
+    );
+
+    if (overlappingMarkers.length === 0) {
+      setErrorMessage(
+        __("No marker at the current position to delete.", "rrze-video")
+      );
+      return;
+    }
+
+    // Choose the marker whose startTime is closest to the current position
+    const markerToDelete = overlappingMarkers.reduce((prev, curr) => {
+      const prevDistance = Math.abs(prev.startTime - position);
+      const currDistance = Math.abs(curr.startTime - position);
+      return currDistance < prevDistance ? curr : prev;
+    });
+
+    // Remove the marker
+    const newMarkers = markers.filter(
+      (marker) => marker.id !== markerToDelete.id
+    );
+
+    setMarkers(newMarkers);
+    setErrorMessage("");
+  };
+
+  /////////////////////////////////////////////
+  // Event Handlers
 
   // ConfirmDialog handlers
   const handleConfirm = () => {
@@ -321,42 +337,6 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
   const handleCancel = () => {
     setPendingNewMarker(null);
     setShowOverlapConfirm(false);
-  };
-
-  // Function to remove a marker
-  const removeMarker = (id: string) => {
-    const newMarkers = markers.filter((marker) => marker.id !== id);
-    setMarkers(newMarkers);
-  };
-
-  // Function to delete marker at current position
-  const deleteMarkerAtPosition = () => {
-    const position = times.playerCurrentTime;
-
-    // Find markers at the current position
-    const overlappingMarkers = markers.filter(
-      (marker) => marker.startTime <= position && marker.endTime >= position
-    );
-
-    if (overlappingMarkers.length === 0) {
-      setErrorMessage(__("No marker at the current position to delete.", "rrze-video"));
-      return;
-    }
-
-    // Choose the marker whose startTime is closest to the current position
-    const markerToDelete = overlappingMarkers.reduce((prev, curr) => {
-      const prevDistance = Math.abs(prev.startTime - position);
-      const currDistance = Math.abs(curr.startTime - position);
-      return currDistance < prevDistance ? curr : prev;
-    });
-
-    // Remove the marker
-    const newMarkers = markers.filter(
-      (marker) => marker.id !== markerToDelete.id
-    );
-
-    setMarkers(newMarkers);
-    setErrorMessage("");
   };
 
   return (
@@ -408,7 +388,9 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
             onClick={() => {
               const currentTime = Math.round(times.playerCurrentTime);
               setNewMarkerStartTime(currentTime);
-              setNewMarkerStartTimeInput(formatSecondsToTimeString(currentTime));
+              setNewMarkerStartTimeInput(
+                formatSecondsToTimeString(currentTime)
+              );
             }}
             style={{ marginLeft: "10px", marginTop: "22px" }}
           >
@@ -446,7 +428,9 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
             onClick={() => {
               const currentTime = Math.round(times.playerCurrentTime);
               setNewMarkerEndTime(currentTime);
-              setNewMarkerStartTimeInput(formatSecondsToTimeString(currentTime));
+              setNewMarkerStartTimeInput(
+                formatSecondsToTimeString(currentTime)
+              );
             }}
             style={{ marginLeft: "10px", marginTop: "22px" }}
           >
@@ -566,7 +550,10 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
               onBlur={() => {
                 if (editingMarker.endTime <= editingMarker.startTime) {
                   setErrorMessage(
-                    __("End time must be greater than start time.", "rrze-video")
+                    __(
+                      "End time must be greater than start time.",
+                      "rrze-video"
+                    )
                   );
                 } else {
                   setErrorMessage("");
@@ -583,7 +570,9 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
                   ...editingMarker,
                   startTime: currentTime,
                 });
-                setEditingStartTimeInput(formatSecondsToTimeString(currentTime));
+                setEditingStartTimeInput(
+                  formatSecondsToTimeString(currentTime)
+                );
               }}
               style={{ marginLeft: "10px", marginTop: "22px" }}
             />
@@ -609,7 +598,10 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
               onBlur={() => {
                 if (editingMarker.endTime <= editingMarker.startTime) {
                   setErrorMessage(
-                    __("End time must be greater than start time.", "rrze-video")
+                    __(
+                      "End time must be greater than start time.",
+                      "rrze-video"
+                    )
                   );
                 } else {
                   setErrorMessage("");
