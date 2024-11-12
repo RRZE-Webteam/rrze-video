@@ -27,18 +27,25 @@ class Gutenberg
         // Pass chapter markers data specific to this video instance if available.
         if (!empty($attributes['chapterMarkers'])) {
             $chapter_markers = json_decode($attributes['chapterMarkers'], true);
-    
+        
+            // Sanitize chapter markers data
+            foreach ($chapter_markers as &$marker) {
+                $marker['id'] = sanitize_text_field($marker['id']);
+                $marker['startTime'] = floatval($marker['startTime']);
+                $marker['endTime'] = floatval($marker['endTime']);
+                $marker['text'] = sanitize_text_field($marker['text']);
+            }
+        
             // Register the localized script for frontend
             wp_enqueue_script('rrze-video-front-js');
-    
-            // Localize script with chapter markers data, keyed by video ID.
-            $localized_data = wp_scripts()->get_data('rrze-video-front-js', 'data') ?: '{}';
-            $video_data = json_decode(trim(str_replace('var rrzeVideoData =', '', $localized_data), ';'), true) ?: [];
+        
+            // Prepare data for localization
+            $video_data = [];
             $video_data[$video_id] = ['chapterMarkers' => $chapter_markers];
-    
+        
             wp_localize_script('rrze-video-front-js', 'rrzeVideoData', $video_data);
         }
-    
+        
         // Add the unique ID as an HTML data attribute to identify the player.
         return sprintf('<div class="rrze-video-container" data-video-id="%s">%s</div>', esc_attr($video_id), $result);
     }
