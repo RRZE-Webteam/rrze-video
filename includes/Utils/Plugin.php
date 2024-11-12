@@ -56,13 +56,16 @@ class Plugin
     public function getPath(string $path = ''): string
     {
         $path = $path ?? '';
-        return $this->directory . ltrim($path, DIRECTORY_SEPARATOR);
+        return $this->directory . ltrim((string)$path, DIRECTORY_SEPARATOR);
     }
+    
 
     public function getUrl(string $path = ''): string
     {
-        return $this->url . ltrim($path ?? '', DIRECTORY_SEPARATOR);
+        $path = $path ?? '';
+        return $this->url . ltrim((string)$path, DIRECTORY_SEPARATOR);
     }
+    
 
     public function setUrl(): object
     {

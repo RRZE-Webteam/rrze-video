@@ -270,7 +270,7 @@ class Shortcode
                     if (!preg_match("/^(\d*\.?\d+)\/(\d*\.?\d+)$/", $value)) {
                         Utils\Helper::debug('The following invalid aspect ratio was entered inside a video shortcode: ' . $value . '. Using the default value 16/9 instead.', 'i');
                         $value = '16/9';
-                    } 
+                    }
                     break;
                 case 'slug':
                     $value = sanitize_title($value);
@@ -283,7 +283,11 @@ class Shortcode
                     $value = sanitize_email($value);
                     break;
                 case 'url':
-                    $value = esc_url_raw($value);
+                    if (! empty($value) && is_string($value)) {
+                        $value = esc_url_raw($value);
+                    } else {
+                        $value = '';
+                    }
                     break;
                 case 'key':
                     $value = sanitize_key($value);

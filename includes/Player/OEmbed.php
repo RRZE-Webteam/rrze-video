@@ -45,12 +45,13 @@ class OEmbed
 
     public static function is_oembed_provider($url)
     {
-        if (!isset($url)) {
+        if ( empty( $url ) || ! is_string( $url ) ) {
             return '';
         }
-
+        
         $known = self::get_known_provider();
-        $url = esc_url_raw($url);
+        $url = esc_url_raw( $url );
+        
         $searchdom = parse_url($url, PHP_URL_HOST);
         $res = '';
 
@@ -229,30 +230,35 @@ class OEmbed
             'alternative_Video_size_medium_height'
         ];
 
-        if (is_array($data)) {
-            if (isset($data['error'])) {
-                $data['error'] = wp_kses_post($data['error']);
+        if ( is_array( $data ) ) {
+            if ( isset( $data['error'] ) ) {
+                $data['error'] = wp_kses_post( $data['error'] );
             }
-            if (is_array($data['video'])) {
-                foreach ($data['video'] as $key => $value) {
-                    if (in_array($key, $urllist)) {
-                        $data['video'][$key] = esc_url_raw($data['video'][$key]);
-                    } elseif (in_array($key, $textstrings)) {
-                        $data['video'][$key] = esc_html($data['video'][$key]);
-                    } elseif (in_array($key, $textareastrings)) {
-                        $data['video'][$key] = sanitize_textarea_field($data['video'][$key]);
-                    } elseif (in_array($key, $htmllist)) {
-                        // stay intact
-                        $data['video'][$key] = $data['video'][$key];
-                    } elseif (in_array($key, $numbers)) {
-                        $data['video'][$key] = intval($data['video'][$key]);
+            if ( is_array( $data['video'] ) ) {
+                foreach ( $data['video'] as $key => $value ) {
+                    if ( in_array( $key, $urllist ) ) {
+                        if ( ! empty( $data['video'][ $key ] ) && is_string( $data['video'][ $key ] ) ) {
+                            $data['video'][ $key ] = esc_url_raw( $data['video'][ $key ] );
+                        } else {
+                            $data['video'][ $key ] = '';
+                        }
+                    } elseif ( in_array( $key, $textstrings ) ) {
+                        $data['video'][ $key ] = esc_html( $data['video'][ $key ] );
+                    } elseif ( in_array( $key, $textareastrings ) ) {
+                        $data['video'][ $key ] = sanitize_textarea_field( $data['video'][ $key ] );
+                    } elseif ( in_array( $key, $htmllist ) ) {
+                        // Keep the value as is.
+                        $data['video'][ $key ] = $data['video'][ $key ];
+                    } elseif ( in_array( $key, $numbers ) ) {
+                        $data['video'][ $key ] = intval( $data['video'][ $key ] );
                     } else {
-                        $data['video'][$key] = esc_html($data['video'][$key]);
+                        $data['video'][ $key ] = esc_html( $data['video'][ $key ] );
                     }
                 }
             }
         }
         
         return $data;
+        
     }
 }

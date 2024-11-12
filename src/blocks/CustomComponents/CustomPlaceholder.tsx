@@ -4,17 +4,28 @@ import { Placeholder, Button, BaseControl } from "@wordpress/components";
 import { video } from "@wordpress/icons";
 import { useState } from "@wordpress/element";
 
-import { whichProviderIsUsed } from "../HelperFunctions/utils";
+// @ts-ignore
+import { whichProviderIsUsed } from "../Utils/utils";
+
+interface CustomPlaceholderProps {
+  attributes: {
+    url: string;
+  };
+  setAttributes: (newAttributes: { [key: string]: string }) => void;
+}
 
 /**
  * Creates the Placeholder for the default videoblock.
  * @param {*} props
  * @returns JSX element
  */
-const CustomPlaceholder = ({ attributes, setAttributes }) => {
+const CustomPlaceholder = ({
+  attributes,
+  setAttributes,
+}: CustomPlaceholderProps) => {
   const [inputURL, setInputURL] = useState(attributes.url);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const url = inputURL;
 
@@ -58,7 +69,7 @@ const CustomPlaceholder = ({ attributes, setAttributes }) => {
     setAttributes(newAttributes);
   };
 
-  const onChangeURL = (event) => {
+  const onChangeURL = (event: React.ChangeEvent<HTMLInputElement>) => {
     const url = event.target.value;
     setInputURL(url);
   };
@@ -78,6 +89,7 @@ const CustomPlaceholder = ({ attributes, setAttributes }) => {
           id="rrze-video-url"
           style={{ width: "100%" }}
           className="rrze-video-editor-input"
+          as="div"
         >
           <input
             className="rrze-video-input-field"
@@ -88,7 +100,7 @@ const CustomPlaceholder = ({ attributes, setAttributes }) => {
             style={{ width: "100%" }}
           />
         </BaseControl>
-        <Button isPrimary type="submit">
+        <Button variant="primary" type="submit">
           {__("Embed Video from URL", "rrze-video")}
         </Button>
       </form>
