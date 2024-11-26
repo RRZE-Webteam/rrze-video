@@ -119,28 +119,29 @@ class Player
         if (empty($token)) {
             return Utils\Error::handleError(
                 __('Error getting the video', 'rrze-video') . '<br>' .
-                __('No API Key is stored inside the Video Plugin settings.', 'rrze-video')
+                    __('No API Key is stored inside the Video Plugin settings.', 'rrze-video')
             );
         }
-    
+
         $clipId = $arguments['secureclipid'];
         $videoData = Providers\FAUAPI::getStreamingURI($clipId);
-    
+
         // Check if $videoData is null
         if ($videoData === null) {
             return Utils\Error::handleError(
-                __('Error getting the video', 'rrze-video') . '<br>' .
-                __('The video is not accessible from outside the FAU Network. Please use the FAU VPN for video access.', 'rrze-video')
+                __('Geschütztes Video.', 'rrze-video') . '<br>' .
+                    __('Dieses Video ist zugriffsgeschützt. Sie können es im Videoportal der FAU ansehen:', 'rrze-video') .
+                    ' <a href="https://www.fau.tv/clip/id/' . $clipId . '" target="_blank">' . __('Das Video im Videoportal ansehen', 'rrze-video') . '</a>'
             );
         }
-    
+
         // Now it's safe to access $videoData elements
         $vtt = $videoData['vtt'];
         $language = $videoData['language'];
         $title = $videoData['title'];
         $desc = $videoData['description'];
         $poster = $videoData['poster'];
-    
+
         $streamUrl = '';
         if (isset($videoData['url'])) {
             $streamUrl = $videoData['url'];
@@ -152,16 +153,16 @@ class Player
             $arguments['video']['title'] = $title;
             $arguments['video']['description'] = $desc;
             $arguments['poster'] = $poster;
-    
+
             $this->enqueueFrontendStyles(true, [], $id);
             return $this->get_player_html('fauApi', $arguments, $id);
         } else {
             return Utils\Error::handleError(
                 __('Error getting the video', 'rrze-video') . '<br>' .
-                __('Video data could not be obtained.', 'rrze-video')
+                    __('Video data could not be obtained.', 'rrze-video')
             );
         }
-    }    
+    }
 
     /**
      * Processes an iFrame video source.
@@ -312,9 +313,9 @@ class Player
                 $meta[] =  '</dd>';
             }
 
-            $url = isset( $data['url'] ) ? esc_url( $data['url'] ) : '';
-            $altVideofolienUrl = isset( $data['video']['alternative_VideoFolien_size_large'] ) && is_string( $data['video']['alternative_VideoFolien_size_large'] ) ? esc_url( $data['video']['alternative_VideoFolien_size_large'] ) : '';
-            $altAudioUrl = isset( $data['video']['alternative_Audio'] ) && is_string( $data['video']['alternative_Audio'] ) ? esc_url( $data['video']['alternative_Audio'] ) : '';
+            $url = isset($data['url']) ? esc_url($data['url']) : '';
+            $altVideofolienUrl = isset($data['video']['alternative_VideoFolien_size_large']) && is_string($data['video']['alternative_VideoFolien_size_large']) ? esc_url($data['video']['alternative_VideoFolien_size_large']) : '';
+            $altAudioUrl = isset($data['video']['alternative_Audio']) && is_string($data['video']['alternative_Audio']) ? esc_url($data['video']['alternative_Audio']) : '';
 
             if ($url) {
                 $meta[] = '<dt>' . __('Source', 'rrze-video') . '</dt><dd><a href="' . $url . '">' . $url . '</a></dd>';
