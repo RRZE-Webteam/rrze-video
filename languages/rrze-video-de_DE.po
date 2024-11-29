@@ -5,29 +5,37 @@ msgstr ""
 "Project-Id-Version: RRZE Video 3.5.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-video\n"
 "Last-Translator: \n"
-"Language-Team: German (Formal)\n"
+"Language-Team: Deutsch\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2023-07-03T06:11:20+00:00\n"
-"PO-Revision-Date: 2024-02-14 14:21+0000\n"
+"PO-Revision-Date: 2024-11-29 13:40+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: rrze-video\n"
-"Language: de_DE_formal\n"
+"Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Loco-Version: 2.6.4; wp-6.2.2"
 
-#: build/blocks/index.js:1 build/blocks/index.js:1048
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Actions"
+msgstr "Aktionen"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Activate looping"
 msgstr "Endlosschleife aktivieren"
 
-#: build/blocks/index.js:1 build/blocks/index.js:1039
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Activates the loop feature. The video will be played in a loop."
 msgstr ""
 "Aktiviert das Loop-Feature. Das Video wird in einer Endlosschleife gespielt, "
 "bis Nutzer das Video wieder pausieren."
 
-#: build/blocks/index.js:1 build/blocks/index.js:332
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid ""
 "Add Categories via Dashboard > Video Library > Categories to use this "
 "feature."
@@ -35,122 +43,155 @@ msgstr ""
 "Fügen Sie Kategorien in Ihrer Mediathek über \"Dashboard > Videothek > "
 "Kategorien\" hinzu, um diese Funktion zu nutzen.\n"
 
-#: build/blocks/index.js:1 build/blocks/index.js:433
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Add Chapter Markers"
+msgstr "Kapitelmarker hinzufügen"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Add Marker"
+msgstr "Kapitelmarker hinzufügen"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Add Videos via Dashboard > Video Library to use this feature."
 msgstr ""
 "Fügen Sie individuelle Videos zu Ihrer Videothek unter \"Dashboard > "
 "Videothek > Neu\" hinzu, um diese Funktion zu nutzen."
 
-#: build/blocks/index.js:1 build/blocks/index.js:1178
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Add your Video URL"
 msgstr "Video-URL eingeben"
 
-#: build/blocks/index.js:1 build/blocks/index.js:1180
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Add your Video URL from FAU Videoportal, YouTube, ARD, ZDF or Vimeo."
 msgstr ""
 "Fügen Sie Ihre Video-URL aus dem FAU Videoportal, YouTube, ARD- oder BR-"
 "Mediathek hinzu."
 
-#: build/blocks/index.js:1 build/blocks/index.js:924
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Alignment"
 msgstr "Positionierung"
 
-#: includes/Widget.php:144
+#: includes/WordPress/Widget.php:144
 msgid "Alternative chose a video by list"
 msgstr "Alternativ wählen Sie ein Video aus der Liste"
 
-#: settings/shortcode.php:107 build/blocks/index.js:1 build/blocks/index.js:877
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Are you sure you want to reset the video block to factory settings?"
+msgstr "Möchten Sie den Videoblock auf die Standardeinstellungen zurücksetzen?"
+
+#: includes/Shortcode.php:131 build/blocks.js:1 build/blocks/index.js:1
+#: dist/blocks/blocks.js:1 dist/blocks/index.js:1
 msgid "Aspect Ratio"
 msgstr "Seitenverhältnis"
 
-#: build/blocks/index.js:1 build/blocks/index.js:951
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Aspect ratio"
 msgstr "Seitenverhältnis"
 
-#: settings/shortcode.php:108
+#: includes/Shortcode.php:132
 msgid "Aspect ratio of the video."
 msgstr "Seitenverhältnis des Videos."
 
-#: includes/Player.php:507
+#: includes/Player/Player.php:329
 msgid "Audio Format"
 msgstr "Audioformat"
 
-#: includes/Player.php:481
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Audioformat"
+msgstr "Audioformat"
+
+#: includes/Player/Player.php:303
 msgid "Author"
 msgstr "Autor"
 
-#: includes/Widget.php:198
+#: includes/WordPress/Widget.php:198
 msgid "Author, copyright, link to source and description if given."
 msgstr "Autor, Copyright, Link zur Quelle und Beschreibung, falls vorhanden."
 
-#: build/blocks/index.js:1 build/blocks/index.js:515
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Autor"
+msgstr "Autor"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Background image"
 msgstr "Hintergrundbild"
 
-#: build/blocks/block.json
+#: build/blocks/block.json dist/blocks/block.json
 msgctxt "block description"
 msgid "Embeds videos from FAUVideo, YouTube & Co."
 msgstr "Bindet ein Video von FAUVideo, YouTube & Co ein."
 
-#: build/blocks/block.json
+#: build/blocks/block.json dist/blocks/block.json
 msgctxt "block keyword"
 msgid "embed"
 msgstr "einbinden"
 
-#: build/blocks/block.json
+#: build/blocks/block.json dist/blocks/block.json
 msgctxt "block keyword"
 msgid "fautv"
 msgstr "faut"
 
-#: build/blocks/block.json
+#: build/blocks/block.json dist/blocks/block.json
 msgctxt "block keyword"
 msgid "fauvideo"
 msgstr "fauvideo"
 
-#: build/blocks/block.json
+#: build/blocks/block.json dist/blocks/block.json
 msgctxt "block keyword"
 msgid "rrze"
 msgstr "rrze"
 
-#: build/blocks/block.json
+#: build/blocks/block.json dist/blocks/block.json
 msgctxt "block keyword"
 msgid "rrze video"
 msgstr "rrze video"
 
-#: build/blocks/block.json
+#: build/blocks/block.json dist/blocks/block.json
 msgctxt "block keyword"
 msgid "video"
 msgstr "video"
 
-#: build/blocks/block.json
+#: build/blocks/block.json dist/blocks/block.json
 msgctxt "block keyword"
 msgid "vimeo"
 msgstr "vimeo"
 
-#: build/blocks/block.json
+#: build/blocks/block.json dist/blocks/block.json
 msgctxt "block keyword"
 msgid "youtube"
 msgstr "youtube"
 
-#: build/blocks/block.json
+#: build/blocks/block.json dist/blocks/block.json
 msgctxt "block title"
 msgid "Video"
 msgstr "Video"
 
-#. translators: %s: File name of the video.
-#: includes/Player.php:716
-msgid "Call the video file %s directly."
-msgstr "Rufen Sie das Video %s direkt auf."
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Cancel"
+msgstr "Abbrechen"
 
-#: build/blocks/index.js:1 build/blocks/index.js:300
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Categories"
 msgstr "Kategorien"
 
-#: includes/CPT.php:149 settings/shortcode.php:72
+#: includes/Shortcode.php:96 includes/WordPress/CPT.php:147
 msgid "Category"
 msgstr "Kategorie"
 
-#: settings/shortcode.php:73
+#: includes/Shortcode.php:97
 msgid ""
 "Category (slug) of the video library from which a video is to be shown "
 "randomly."
@@ -158,43 +199,51 @@ msgstr ""
 "Kategorie (slug) aus der Videothek, um ein zufälliges Video daraus "
 "auszugeben."
 
-#: build/blocks/index.js:1 build/blocks/index.js:937
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Center"
 msgstr "Zentrieren"
 
-#: includes/Widget.php:167
+#: includes/WordPress/Widget.php:167
 msgid "Choose a category"
 msgstr "Wählen Sie eine Kategorie"
 
-#: settings/shortcode.php:18
+#: includes/Shortcode.php:42
 msgid "Clip ID Number"
 msgstr "Video ClipId"
 
-#: settings/shortcode.php:19
+#: includes/Shortcode.php:43
 msgid "Clip ID number of the video Clip"
 msgstr "ID des einzubindenden Videos"
 
-#: settings/shortcode.php:40
+#: includes/Shortcode.php:64
 msgid "Clips the beginning of the video. Number in seconds"
 msgstr "Startet das Video in der Endlosschleife bei der angegebenen Sekunde"
 
-#: settings/shortcode.php:33
+#: includes/Shortcode.php:57
 msgid "Clips the end of the video. Number in seconds"
 msgstr "Endet das Video vorzeitig in der Endlosschleife"
 
-#: settings/shortcode.php:32
+#: includes/Shortcode.php:56
 msgid "Clips the of the video for looping video content"
 msgstr "Definiert das Videoende für die Endlosschleife"
 
-#: settings/shortcode.php:39
+#: includes/Shortcode.php:63
 msgid "Clips the start of the video for looping video content"
 msgstr "Definiert den Videostart für die Endlosschleife"
 
-#: build/blocks/index.js:1 build/blocks/index.js:917
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Close"
+msgstr "Schließen"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Controls the video alignment for vertical Videos."
 msgstr "Steuert die Positionierung von Videos im Hochformat."
 
-#: build/blocks/index.js:1 build/blocks/index.js:892
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid ""
 "Controls the video orientation. Vertical videos are displayed in portrait "
 "mode."
@@ -202,124 +251,176 @@ msgstr ""
 "Steuert das Videoformat. Videos im Hochformat werden mit dem Portrait-Modus "
 "ausgegeben."
 
-#: includes/CPT.php:37
+#: includes/WordPress/CPT.php:35
 msgid "Create video collection"
 msgstr "Erstellen Sie eine Videosammlung"
 
-#: settings/shortcode.php:79 settings/shortcode.php:114
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid ""
+"Crops the video to a specific section. The video will start and end at the "
+"specified times. The duration of the video will update accordingly."
+msgstr ""
+"Begrenzt die Videolänge auf das angegebene Intervall. Die Videolänge in der "
+"Timeline passt sich automatisch an."
+
+#: includes/Shortcode.php:103 includes/Shortcode.php:138
 msgid "CSS Classes"
 msgstr "CSS Klassen"
 
-#: settings/shortcode.php:80 settings/shortcode.php:115
+#: includes/Shortcode.php:104 includes/Shortcode.php:139
 msgid "CSS classes that the shortcode should receive."
 msgstr "CSS Klassen, die dem Shortcode übergeben werden sollen."
 
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Delete Current Marker"
+msgstr "Kapitelmarker löschen"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Delete Marker"
+msgstr "Kapitelmarker löschen"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Delete Marker at Current Position"
+msgstr "Kapitelmarker an der gesetzten Positionen löschen"
+
 #. translators: %s: Categories.
-#: includes/CPT.php:129
+#: includes/WordPress/CPT.php:127
 msgid "Display all %s"
 msgstr "Alle %s anzeigen"
 
-#: settings/shortcode.php:87
+#: includes/Shortcode.php:111
 msgid "Display the title over the video."
 msgstr "Gibt den Titel über dem Video aus."
 
-#: includes/Widget.php:22
+#: includes/WordPress/Widget.php:22
 msgid "Displays videos in the sidebar or in the footer."
 msgstr "Gibt Videos in der Sidebar oder im Footer der Website aus."
 
-#: build/blocks/index.js:1 build/blocks/index.js:303
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Don't show random videos."
 msgstr "Zeige keine zufälligen Videos."
 
-#: includes/Widget.php:137
+#: includes/WordPress/Widget.php:137
 msgid "e.g. https://www.video.uni-erlangen.de/webplayer/id/13953"
 msgstr "z.B. https://www.video.uni-erlangen.de/webplayer/id/13953"
 
-#: build/blocks/index.js:1 build/blocks/index.js:1030
-msgid "Embed secure video"
-msgstr "Geschütztes Video einbinden"
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Edit Chapter Markers"
+msgstr "Kapitelmarker bearbeiten"
 
-#: build/blocks/index.js:1 build/blocks/index.js:840 build/blocks/index.js:1203
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Edit Marker"
+msgstr "Kapitelmarker bearbeiten"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Edit Markers"
+msgstr "Kapitelmarker bearbeiten"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Eine Vorschau zugriffsgeschützter Videos im Editor ist nicht möglich."
+msgstr "Eine Vorschau zugriffsgeschützter Videos im Editor ist nicht möglich."
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Embed Video from URL"
 msgstr "Video einbinden"
 
 #. Description of the plugin
+#: rrze-video.php
 msgid ""
 "Embedding videos via a shortcode or widget based on the Plyr video player."
 msgstr ""
 "Videos über einen Shortcode oder ein Widget einbinden. Basiert auf dem Plyr "
 "Videoplayer."
 
-#: build/blocks/index.js:1 build/blocks/index.js:1064
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "End of the looping section"
 msgstr "Ende der Endlosschleife"
 
-#: includes/Widget.php:133
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "End Time"
+msgstr "Videoende"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "End time must be greater than start time."
+msgstr "Der Endwert muss größer als der Anfangswert sein."
+
+#: includes/WordPress/Widget.php:133
 msgid "Enter a URL to the video you want:"
 msgstr "Geben Sie eine Video-URL ein:"
 
-#: build/blocks/index.js:1 build/blocks/index.js:818
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid ""
 "Enter a video url from FAU Videoportal, YouTube, Vimeo, ARD, BR or Twitter."
 msgstr ""
 "Fügen Sie Ihre Video-URL aus dem FAU Videoportal, YouTube, ARD- oder BR-"
 "Mediathek hinzu."
 
-#: build/blocks/index.js:1 build/blocks/index.js:1019
-msgid ""
-"Enter the ID of your SSO-secured video here. You need a working FAU Video "
-"API key for this feature."
-msgstr ""
-"ID des SSO-geschützten Videos eingeben. Ein gültiger FAU Video API-Key muss "
-"in den Plugin-Einstellungen vergeben sein."
-
-#: includes/Player.php:218 includes/Player.php:220 includes/Player.php:233
-#: includes/Player.php:257 includes/Player.php:279 includes/Player.php:281
-#: includes/Player.php:321
+#: includes/Player/Player.php:105 includes/Player/Player.php:107
+#: includes/Player/Player.php:121 includes/Player/Player.php:161
+#: includes/Player/Player.php:185 includes/Player/Player.php:187
+#: includes/Utils/Error.php:22
 msgid "Error getting the video"
 msgstr "Fehler beim Abruf des Videos"
 
-#: includes/Player.php:64
+#: includes/Player/Player.php:61
 msgid ""
 "Error when displaying the video player: Insufficient data was transferred."
 msgstr ""
 "Fehler bei der Ausgabe des Videoplayers: Nur ein Bruchteil der benötigten "
 "Daten wurde übertragen."
 
-#: settings/shortcode.php:100
+#: includes/Shortcode.php:124
 msgid "Fields"
 msgstr "Felder"
 
-#: settings/shortcode.php:101
+#: includes/Shortcode.php:125
 msgid "Fields to be displayed, overwriting the above checkboxes."
 msgstr ""
 "Felder, die ausgegeben werden überschreiben die gewählten Kontrollkästen."
 
-#: build/blocks/index.js:1 build/blocks/index.js:189
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Heading level"
 msgstr "Überschriftebene"
 
 #. Author URI of the plugin
+#: rrze-video.php
 msgid "http://blogs.fau.de/webworking/"
 msgstr "http://blogs.fau.de/webworking/"
 
 #. Plugin URI of the plugin
+#: rrze-video.php
 msgid "https://github.com/RRZE-Webteam/rrze-video"
 msgstr "https://github.com/RRZE-Webteam/rrze-video"
 
-#: includes/CPT.php:150
+#: includes/WordPress/CPT.php:148
 msgid "ID"
 msgstr "ID"
 
-#: settings/shortcode.php:11
+#: includes/Shortcode.php:35
 msgid "ID Number"
 msgstr "ID-Nummer"
 
-#: settings/shortcode.php:12
+#: includes/Shortcode.php:36
 msgid "ID number of the video in the video library in the backend."
 msgstr "ID-Nummer des Videos in der Videothek im Backend."
 
-#: build/blocks/index.js:1 build/blocks/index.js:880
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid ""
 "In rare cases it can be useful to select an aspect ratio to prevent black "
 "borders. Only affects FAU Video embeds."
@@ -328,53 +429,92 @@ msgstr ""
 "auszuwählen, um schwarze Ränder zu vermeiden. Diese Einstellung betrifft nur "
 "Videos aus dem FAU Videoportal."
 
-#: build/blocks/index.js:1 build/blocks/index.js:859
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Individual Thumbnail"
 msgstr "Individuelles Vorschaubild"
 
-#: build/blocks/index.js:1 build/blocks/index.js:992
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Individual Videos"
 msgstr "Individuelle Videos"
 
-#: build/blocks/index.js:1 build/blocks/index.js:906
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Invalid time format."
+msgstr "Ungültiges Zeitformat."
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Label"
+msgstr "Beschriftung"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Landscape mode"
 msgstr "Querformat"
 
-#: build/blocks/index.js:1 build/blocks/index.js:933
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Left"
 msgstr "Links"
 
-#: includes/Player.php:291
+#: includes/Player/Player.php:197
 msgid "Link"
 msgstr "Link"
 
-#: includes/Widget.php:192
+#: includes/WordPress/Widget.php:192
 msgid "Link to source"
 msgstr "Link zur Quelle"
 
-#: build/blocks/index.js:1 build/blocks/index.js:1037
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Loop mode"
 msgstr "Loop mode"
 
-#: settings/shortcode.php:46 settings/shortcode.php:47
+#: includes/Shortcode.php:70 includes/Shortcode.php:71
 msgid "Loops the video"
 msgstr "Spielt das Video in einer Endlosschleife"
 
-#: includes/Widget.php:203
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Marker Label"
+msgstr "Kapitelbeschriftung"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Marker Overlap"
+msgstr "Kapitelmarker überdecken sich"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Markers"
+msgstr "Kapitelmarker"
+
+#: includes/WordPress/Widget.php:203
 msgid "Metadata, link to source and description if given."
 msgstr "Metadaten, Link zur Quelle und Beschreibung, falls gegeben."
 
-#: includes/Player.php:329
+#: includes/Utils/Error.php:30
 msgid "Neither a valid ID nor a valid URL was specified for a video."
 msgstr ""
 "Weder eine gültige ID, noch eine gültige URL wurden für das Video angegeben."
 
-#: includes/Player.php:233
-msgid "No API is stored inside the Video Plugin settings."
+#: includes/Player/Player.php:122
+#, fuzzy
+#| msgid "No API is stored inside the Video Plugin settings."
+msgid "No API Key is stored inside the Video Plugin settings."
 msgstr ""
 "Es wurde noch kein API-Key in den Einstellungen des Videoplugins hinterlegt."
 
-#: includes/Player.php:452
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "No marker at the current position to delete."
+msgstr ""
+"An der gewählten Stelle gibt es keine Kapitelmarker, die gelöscht werden "
+"könnten."
+
+#: includes/Player/Player.php:274
 msgid ""
 "No valid video provider was found. As a result, the video cannot be played "
 "or could not be recognized."
@@ -382,15 +522,16 @@ msgstr ""
 "Kein gültiger Videoprovider wurde gefunden. Aus diesem Grund kann das Video "
 "nicht abgespielt oder erkannt werden."
 
-#: includes/Player.php:326
+#: includes/Utils/Error.php:27
 msgid "No video from the specified category could be found."
 msgstr "In der gewählten Kategorie wurde kein Video gefunden."
 
-#: build/blocks/index.js:1 build/blocks/index.js:419
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "No video selected"
 msgstr "Kein Video aus der Videothek ausgeben"
 
-#: includes/Widget.php:148
+#: includes/WordPress/Widget.php:148
 msgid ""
 "Or select a category from your local video library to display a random video "
 "from this:"
@@ -398,177 +539,204 @@ msgstr ""
 "Oder wählen Sie eine Kategorie aus Ihrer lokalen Videothek, um ein "
 "zufälliges Video daraus anzuzeigen:"
 
-#: build/blocks/index.js:1 build/blocks/index.js:899
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Orientation"
 msgstr "Ausrichtung"
 
-#: build/blocks/index.js:1 build/blocks/index.js:1033
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Player controls"
 msgstr "Bedienungselemente"
 
-#: includes/Widget.php:110
+#: includes/WordPress/Widget.php:110
 msgid "Please select a video from your local video library:"
 msgstr "Bitte wählen Sie ein Video aus Ihrer Videothek:"
 
-#: includes/CPT.php:30
+#: includes/WordPress/CPT.php:28
 msgctxt "Post Type General Name"
 msgid "Videothek"
 msgstr "Videothek"
 
-#: includes/CPT.php:31
+#: includes/WordPress/CPT.php:29
 msgctxt "Post Type Singular Name"
 msgid "Video"
 msgstr "Video"
 
-#: includes/Widget.php:193
+#: includes/WordPress/Widget.php:193
 msgid "Provide a link to the original source at the video provider."
 msgstr "Gibt einen Link zum Originalvideo des Videoproviders an."
 
-#: includes/Player.php:511
+#: includes/Player/Player.php:333 build/blocks.js:1 build/blocks/index.js:1
+#: dist/blocks/blocks.js:1 dist/blocks/index.js:1
 msgid "Provider"
 msgstr "Provider"
 
-#: build/blocks/index.js:1 build/blocks/index.js:978
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Quelle"
+msgstr "Quelle"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Random Output"
 msgstr "Zufällige Ausgabe"
 
-#: build/blocks/index.js:1 build/blocks/index.js:563
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Remove Video Thumbnail"
 msgstr "Vorschaubild des Videos entfernen"
 
-#: build/blocks/index.js:1 build/blocks/index.js:554
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Replace Video Thumbnail"
 msgstr "Video Vorschaubild ersetzen"
 
-#: build/blocks/index.js:1 build/blocks/index.js:862
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Replaces the Thumbnail with the image you selected."
 msgstr "Ersetzt das Vorschaubild durch das gewählte Bild."
 
-#: build/blocks/index.js:1 build/blocks/index.js:1431
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Reset Video block"
 msgstr "Videoblock zurücksetzen."
 
-#: build/blocks/index.js:1 build/blocks/index.js:941
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Right"
 msgstr "Rechts"
 
 #. Plugin Name of the plugin
+#: rrze-video.php
 msgid "RRZE Video"
 msgstr "RRZE Video"
 
-#: includes/Settings.php:20
+#: includes/WordPress/Settings.php:21
 msgid "RRZE Video Settings"
 msgstr "RRZE Video Einstellungen"
 
 #. Author of the plugin
+#: rrze-video.php
 msgid "RRZE-Webteam"
 msgstr "RRZE-Webteam"
 
-#: build/blocks/index.js:1 build/blocks/index.js:1017
-msgid "Secure video embed"
-msgstr "Einbinden geschützter Medien"
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Save"
+msgstr "Speichern"
 
-#: build/blocks/index.js:1 build/blocks/index.js:1026
-msgid "Secure Video ID"
-msgstr "ClipID des geschützten Videos"
+#: includes/Player/Player.php:132
+msgid "Secured Video embed."
+msgstr "Zugriffsgeschütztes Video"
 
-#: includes/Widget.php:112
+#: includes/WordPress/Widget.php:112
 msgid "Select a video from the video library"
 msgstr "Wählen Sie ein Video aus der Videothek"
 
-#: includes/Widget.php:130
+#: includes/WordPress/Widget.php:130
 msgid "Selection via URL"
 msgstr "Auswahl über die URL"
 
-#: build/blocks/index.js:1 build/blocks/index.js:528
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Set to Current Time"
+msgstr "An Position im Videoplayer angleichen"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Set to End of Video"
+msgstr "Auf die Endzeit des Videos setzen"
+
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Set Video Thumbnail"
 msgstr "Video Vorschaubild festlegen"
 
-#: includes/Settings.php:32
+#: includes/WordPress/Settings.php:33
 msgid "Settings options for the RRZE Video plugin."
 msgstr "Einstellungen für das Videoplugin"
 
-#: includes/Widget.php:202
+#: includes/WordPress/Widget.php:202
 msgid "Show complete information"
 msgstr "Alle Informationen ausgeben"
 
-#: build/blocks/index.js:1 build/blocks/index.js:696
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Show Description"
 msgstr "Beschreibung ausgeben"
 
-#: settings/shortcode.php:93
+#: includes/Shortcode.php:117
 msgid "Show Info"
 msgstr "Info ausgeben"
 
-#: build/blocks/index.js:1 build/blocks/index.js:691
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Show Metadata"
 msgstr "Metadaten ausgeben"
 
-#: includes/Widget.php:197
+#: includes/WordPress/Widget.php:197
 msgid "Show metadata"
 msgstr "Metadaten ausgeben"
 
-#: settings/shortcode.php:94
+#: includes/Shortcode.php:118
 msgid "Show metainfo under the video."
 msgstr "Metadaten unter dem Video ausgeben"
 
-#: settings/shortcode.php:86 build/blocks/index.js:1 build/blocks/index.js:675
+#: includes/Shortcode.php:110 build/blocks.js:1 build/blocks/index.js:1
+#: dist/blocks/blocks.js:1 dist/blocks/index.js:1
 msgid "Show Title"
 msgstr "Titel ausgeben"
 
-#: includes/Widget.php:187
+#: includes/WordPress/Widget.php:187
 msgid "Show title"
 msgstr "Titel ausgeben"
 
-#: includes/Widget.php:188
+#: includes/WordPress/Widget.php:188
 msgid "Show video title above the video; override widget title if set."
 msgstr ""
 "Videotitel über dem Video ausgeben; Überschreibt den Widget-Titel, falls "
 "dieser gesetzt wurde."
 
-#: build/blocks/index.js:1 build/blocks/index.js:686
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Show Videolink"
 msgstr "Videolink ausgeben"
 
-#: includes/Player.php:302
+#: includes/Player/Player.php:208
 msgid "So please call up the video by directly following the link below:"
 msgstr ""
 "Rufen Sie das Video also bitte direkt über den unten stehenden Link auf:"
 
-#: includes/Player.php:294 includes/Player.php:499 includes/Player.php:527
+#: includes/Player/Player.php:200 includes/Player/Player.php:321
+#: includes/Player/Player.php:349
 msgid "Source"
 msgstr "Quelle"
 
-#: build/blocks/index.js:1 build/blocks/index.js:1006
-msgid "SSO secured video embed"
-msgstr "Einbindung SSO-geschützter Videos"
-
-#: build/blocks/index.js:1 build/blocks/index.js:1059
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Start of the looping section"
 msgstr "Start der Endlosschleife"
 
-#: build/blocks/index.js:1 build/blocks/index.js:1085
-msgid "Start of the video"
-msgstr "Start des Videos"
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Start Time"
+msgstr "Startzeit"
 
-#: build/blocks/index.js:1 build/blocks/index.js:1076
-msgid "Start position on first play"
-msgstr "Startposition beim ersten Abspielen durch den Nutzer"
-
-#: settings/shortcode.php:25
+#: includes/Shortcode.php:49
 msgid "Starting time of the Clip"
 msgstr "Startposition des Videos"
 
-#: settings/shortcode.php:26
+#: includes/Shortcode.php:50
 msgid "Starts the player at the selected time"
 msgstr "Startet den Videoplayer an der ausgewählten Sekunde"
 
-#: includes/Widget.php:138
+#: includes/WordPress/Widget.php:138
 msgid ""
 "Supported video sources are currently: FAU video portal, YouTube and Vimeo."
 msgstr "Unterstützte Videoprovider: FAU Videoportal, YouTube, Vimeo, ARD, BR."
 
-#: includes/OEmbed.php:149
+#: includes/Player/OEmbed.php:152
 msgid ""
 "The call refers to a collection of courses. This cannot be integrated. So "
 "call up the video directly under the URL:"
@@ -576,7 +744,7 @@ msgstr ""
 "Der Aufruf bezieht sich auf eine Sammlung von Kursen. Diese kann nicht "
 "eingebunden werden. Rufen Sie daher das Video direkt unter der URL auf:"
 
-#: includes/OEmbed.php:146
+#: includes/Player/OEmbed.php:149
 msgid ""
 "The call refers to a video collection. This cannot be integrated. So call up "
 "the video directly under the URL:"
@@ -584,20 +752,12 @@ msgstr ""
 "Der Aufruf bezieht sich auf eine Videosammlung. Diese kann nicht integriert "
 "werden. Rufen Sie daher das Video direkt unter der URL auf:"
 
-#: includes/OEmbed.php:144
+#: includes/Player/OEmbed.php:147
 msgid "The FAU-Video URL does not contain a valid video ID"
 msgstr ""
 "Die FAUVideo-URL enthält keine gültige VideoID. Überprüfen Sie die VideoURL."
 
-#: build/blocks/index.js:1 build/blocks/index.js:1079
-msgid ""
-"The first time the video plays, start it at the following position in "
-"seconds:"
-msgstr ""
-"Starte das Video beim ersten Abspielen an der folgenden Position (in "
-"Sekunden):"
-
-#: includes/Player.php:302
+#: includes/Player/Player.php:208
 msgid ""
 "The following address could not be assigned to a known video provider or it "
 "does not have a suitable interface for retrieving videos."
@@ -605,35 +765,31 @@ msgstr ""
 "Die folgende URL konnte zu keinem bekannten Videoprovider zugeordnet werden "
 "oder nutzt kein passendes Interface, um Videodaten abzurufen."
 
-#: build/blocks/index.js:1 build/blocks/index.js:1053
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid ""
-"The loop mode is activated. The video will be played in a loop. If your "
-"video contains branding, the default settings should be sufficient. Else you "
-"can control the position in the clip where the loop should get triggered "
-"(clipend) and the position where the looped video should start (clipstart) "
-"with the following settings:"
+"The new marker overlaps with existing markers. Overlapping markers will be "
+"adjusted or removed. Do you want to proceed?"
 msgstr ""
-"Loop-Feature aktiviert. Das Videos wird in einer Endlosschleife spielen. "
-"Falls das Video Branding-Elemente enthält, sorgen die Default-Einstellungen "
-"dafür, dass das Video nur beim ersten Spielen das FAU-Intro anzeigt. "
-"Ansonsten können die Einstellungen über die Einstellungen für Videostart und "
-"Videoende festgelegt werden:"
+"Der neue Kapitelmarker überschneidet sich mit bestehenden Kapitelmarker. "
+"Andere Marker an der Stelle werden angepasst oder entfernt. Möchten Sie "
+"fortfahren?"
 
-#: includes/IFrames.php:107
+#: includes/Player/IFrames.php:105
 msgid "The URL for the ARD Mediathek is invalid or incorrect."
 msgstr "Die URL für die ARD Mediathek ist ungültig oder falsch."
 
-#: includes/IFrames.php:130
+#: includes/Player/IFrames.php:128
 msgid "The URL for the BR Mediathek is invalid or incorrect."
 msgstr "Die URL für die BR Mediathek ist ungültig oder falsch."
 
-#: includes/Player.php:324
+#: includes/Utils/Error.php:25
 msgid "The video ID used is invalid or could not be assigned to a video."
 msgstr ""
 "Die verwendete Video-ID ist ungültig oder konnte keinem Video zugeordnet "
 "werden."
 
-#: includes/IFrames.php:44
+#: includes/Player/IFrames.php:44
 msgid ""
 "The video provider is unknown. It is therefore not possible to embed the "
 "video."
@@ -641,146 +797,158 @@ msgstr ""
 "Der Videoprovider ist unbekannt. Es ist deshalb nicht möglich, ein Video von "
 "der Quelle einzubinden."
 
-#: includes/Widget.php:120
+#: includes/WordPress/Widget.php:120
 msgid "There are no videos in your video library yet."
 msgstr "Aktuell sind keine Videos in Ihrer Videothek."
 
-#. translators: %s: URL of the video.
-#: includes/Player.php:709
-msgid "Therefore call up the video %s from the FAU video portal."
-msgstr "Deshalb rufen Sie Ihr Video %s direkt aus dem FAU Videoportal auf."
-
-#: build/blocks/index.js:1 build/blocks/index.js:1010
-msgid ""
-"This feature only works with a FAU Videoportal API key. You can add a FAU "
-"Videoportal API key in the settings of this plugin."
-msgstr ""
-"Dieses Feature funktioniert nur bei aktivem FAU Videoportal API key. Der API-"
-"Key kann in den Videoplugin-Einstellungen im Dashboard hinzugefügt werden."
-
-#: includes/Player.php:530
+#: includes/Player/Player.php:352
 msgid "This video is part of a video collection"
 msgstr "Dieses Video ist Teil einer Videosammlung"
 
-#: includes/CPT.php:152
+#: includes/WordPress/CPT.php:150
 msgid "Thumbnail"
 msgstr "Vorschaubild"
 
-#: includes/CPT.php:148
+#: includes/WordPress/CPT.php:146
 msgid "Title"
 msgstr "Titel"
 
-#: settings/shortcode.php:66
+#: includes/Shortcode.php:90
 msgid "Titletag"
 msgstr "Titletag"
 
-#: build/blocks/index.js:1 build/blocks/index.js:484
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "To edit the background image, you need permission to upload media."
 msgstr ""
 "Um das Vorschaubild zu bearbeiten, benötigen Sie die passende Berechtigung, "
 "um Medien in die WordPress-Mediathek hochzuladen."
 
-#: includes/Player.php:701 includes/Player.php:821
-msgid "Unfortunately, your browser does not support HTML5 video formats."
-msgstr "Leider unterstützt Ihr Browser keine HTML5 Videoformate."
-
-#: includes/Player.php:84 includes/Player.php:302
+#: includes/Player/Player.php:81 includes/Player/Player.php:208
 msgid "Unknown video source"
 msgstr "Unbekannte Videoquelle"
 
-#: build/blocks/index.js:1 build/blocks/index.js:1072
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Update loop settings"
 msgstr "Loop Einstellungen aktualisieren"
 
-#: build/blocks/index.js:1 build/blocks/index.js:1089
-msgid "Update start position"
-msgstr "Startposition aktualisieren"
-
-#: build/blocks/index.js:1 build/blocks/index.js:835 build/blocks/index.js:1198
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Update the Video URL"
 msgstr "Geben Sie hier die Video-URL ein."
 
-#: includes/CPT.php:151 includes/Metabox.php:36 includes/Widget.php:134
+#: includes/WordPress/CPT.php:149 includes/WordPress/Metabox.php:36
+#: includes/WordPress/Widget.php:134
 msgid "URL"
 msgstr "URL"
 
-#: settings/shortcode.php:60
+#: includes/Shortcode.php:84
 msgid "URL (thumbnail)"
 msgstr "URL (Vorschaubild)"
 
-#: settings/shortcode.php:54
+#: includes/Shortcode.php:78
 msgid "URL (Video)"
 msgstr "URL(Video)"
 
-#: build/blocks/index.js:1 build/blocks/index.js:812
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "URL Settings"
 msgstr "URL-Einstellungen"
 
-#: build/blocks/index.js:1 build/blocks/index.js:910
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Vertical video"
 msgstr "Hochformat"
 
-#: includes/CPT.php:36
+#: includes/WordPress/CPT.php:34
 msgid "Video"
 msgstr "Video"
 
-#: includes/Metabox.php:23
+#: includes/WordPress/Metabox.php:23
 msgid "Video data"
 msgstr "Videodaten"
 
-#: includes/Player.php:220 includes/Player.php:257 includes/Player.php:281
+#: includes/Player/Player.php:107 includes/Player/Player.php:162
+#: includes/Player/Player.php:187
 msgid "Video data could not be obtained."
 msgstr "Videodaten konnten nicht abgerufen werden."
 
-#: build/blocks/index.js:1 build/blocks/index.js:845
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Video Display Settings"
 msgstr "Video-Anzeigeoptionen"
 
-#: includes/IFrames.php:100
+#: includes/Player/IFrames.php:98
 msgid "Video from ARD Mediathek"
 msgstr "Video aus der ARD Mediathek"
 
-#: includes/IFrames.php:123
+#: includes/Player/IFrames.php:121
 msgid "Video from BR Mediathek"
 msgstr "Video aus der BR Mediathek"
 
-#: build/blocks/index.js:1 build/blocks/index.js:965
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Video Library"
 msgstr "Videothek"
 
-#: includes/Widget.php:180
+#: includes/WordPress/Widget.php:180
 msgid "Video options"
 msgstr "Video-Optionen"
 
-#: includes/Player.php:470
+#: includes/Player/Player.php:292
 msgid "Video provider incorrectly defined."
 msgstr "Der Videoprovider wurde falsch definiert."
 
-#: includes/Settings.php:19
+#: includes/WordPress/Settings.php:20
 msgid "Video Settings"
 msgstr "Video Einstellungen"
 
-#: includes/Widget.php:128
+#: includes/WordPress/Widget.php:128
 msgid "Video source"
 msgstr "Videoquelle"
 
-#: build/blocks/index.js:1 build/blocks/index.js:537 build/blocks/index.js:548
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Video Thumbnail"
 msgstr "Video-Vorschaubild"
 
-#: build/blocks/index.js:1 build/blocks/index.js:827 build/blocks/index.js:1188
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "Video URL"
 msgstr "Video-URL"
 
-#: includes/Player.php:503
+#: includes/Player/Player.php:325
 msgid "Video with presentation slides"
 msgstr "Video mit Präsentationsfolien"
 
-#: includes/CPT.php:32
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Videoportal der FAU (Friedrich-Alexander-Universität Erlangen-Nürnberg)"
+msgstr "Videoportal der FAU"
+
+#: includes/WordPress/CPT.php:30
 msgid "Videothek"
 msgstr "Videothek"
 
-#: includes/Metabox.php:34
+#: includes/Player/Player.php:134
+msgid "Watch the video on the video portal"
+msgstr "Schauen Sie das Video im Videoportal der FAU"
+
+#: includes/Player/Player.php:133
+msgid ""
+"We are sorry, but you cannot view this video because you are currently not "
+"connected to the university network. <br> Please use the following link to "
+"watch the video on the FAU video portal directly or restart your webbrowser "
+"after connecting to the university network: "
+msgstr ""
+"Es tut uns leid, aber Sie können dieses Video leider nicht ansehen, da Sie "
+"sich nicht im Universitätsnetzwerk befinden. \n"
+"\n"
+"Bitte nutzen Sie den folgenden Link, um das Video im Videoportal der FAU "
+"anzusehen, oder melden Sie sich via VPN im Universitätsnetzwerk an: "
+
+#: includes/WordPress/Metabox.php:34
 msgid ""
 "Web address (URL) for the video on the video portal used (FAU video portal, "
 "YouTube, Vimeo or others)."
@@ -788,11 +956,12 @@ msgstr ""
 "Webadresse (URL) für das Video, wie Sie im Videoportal genutzt wird (FAU "
 "Videoportal, YouTube, Vimeo und andere)."
 
-#: includes/Widget.php:182
+#: includes/WordPress/Widget.php:182
 msgid "Widget Title:"
 msgstr "Widget-Titel:"
 
-#: build/blocks/index.js:1 build/blocks/index.js:970
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid ""
 "You can add videos to your video library by navigating to Dashboard\n"
 "            | Video library | Add new."
@@ -800,11 +969,13 @@ msgstr ""
 "Sie können Videos über \"Dashboard > Videothek > Neu\" zu Ihrer Videothek "
 "hinzufügen."
 
-#: build/blocks/index.js:1 build/blocks/index.js:994
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid "You can select a Video from within your Video library."
 msgstr "Sie können ein Video aus Ihrer Videothek auswählen."
 
-#: build/blocks/index.js:1 build/blocks/index.js:980
+#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
 msgid ""
 "You can select a Video library category and a random video will be displayed "
 "from this category."

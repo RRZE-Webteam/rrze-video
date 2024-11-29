@@ -2,7 +2,7 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
   "name": "rrze/rrze-video",
-  "version": "5.0.5",
+  "version": "5.0.3",
   "title": "Video",
   "keywords": [
     "video",
@@ -20,7 +20,9 @@
     "html": false
   },
   "textdomain": "rrze-video",
-  "editorScript": ["file:./index.js"],
+  "editorScript": [
+    "file:./index.js"
+  ],
   "editorStyle": "file:./index.css",
   "style": "file:./style-index.css",
   "attributes": {
