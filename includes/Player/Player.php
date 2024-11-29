@@ -129,9 +129,9 @@ class Player
         // Check if $videoData is null
         if ($videoData === null) {
             return Utils\Error::handleError(
-                __('Geschütztes Video.', 'rrze-video') . '<br>' .
-                    __('Dieses Video ist zugriffsgeschützt. Sie können es im Videoportal der FAU ansehen:', 'rrze-video') .
-                    ' <a href="https://www.fau.tv/clip/id/' . $clipId . '" target="_blank">' . __('Das Video im Videoportal ansehen', 'rrze-video') . '</a>'
+                '<h2>'.__('Secured Video embed.', 'rrze-video') . '</h2><br>' .
+                    __("We are sorry, but you cannot view this video because you are currently not connected to the university network. <br> Please use the following link to watch the video on the FAU video portal directly or restart your webbrowser after connecting to the university network: ", 'rrze-video') .
+                    ' <a href="https://www.fau.tv/clip/id/' . $clipId . '" target="_blank">' . '<br>' . __('Watch the video on the video portal', 'rrze-video') . '</a>'
             );
         }
 
@@ -236,7 +236,7 @@ class Player
             $id = $this->getRenderID();
         }
         $res = [];
-        $res[] = '<div class="rrze-video rrze-video-container-' . $id;
+        $res[] = '<div class="rrze-video rrze-video-container';
 
         if (!empty($data['class'])) {
             $res[] = ' ' . $data['class'];

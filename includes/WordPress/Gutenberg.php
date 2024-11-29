@@ -61,6 +61,26 @@ class Gutenberg
             'render_callback' => [self::class, 'rrze_video_render_block'],
         ]);
     }
+
+    /**
+     * Adds custom block category for grouping RRZE Video block in the block editor underneath the category RRZE.
+     *
+     * @param array $categories Existing block categories.
+     * @param WP_Post $post Current post object.
+     * @return array Modified block categories.
+     */
+    public function my_custom_block_category($categories, $post)
+    {
+        $custom_category = [
+            'slug'  => 'rrze_elements',
+            'title' => __('RRZE Elements', 'rrze-elements-blocks'),
+            'icon'  => 'layout',
+        ];
+
+        array_unshift($categories, $custom_category);
+
+        return $categories;
+    }
 }
 
 add_action('init', [Gutenberg::class, 'register_block']);
