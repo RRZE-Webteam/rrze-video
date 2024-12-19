@@ -14,12 +14,12 @@ class Main
     public function __construct()
     {
         // Set the video custom post type.
-        new WordPress\CPT();
+        new UI\CPT();
 
         // Metabox
-        new WordPress\Metabox();
-        new WordPress\Settings();
-        new WordPress\RESTAPI();
+        new UI\Metabox();
+        new UI\Settings();
+        new UI\RESTAPI();
 
         // Set the video shortcode.
         Shortcode::instance()->loaded();
@@ -37,7 +37,7 @@ class Main
      */
     public function registerWidget()
     {
-        register_widget(__NAMESPACE__ . '\WordPress\Widget');
+        register_widget(__NAMESPACE__ . '\UI\Widget');
     }
 
     /**

@@ -16,7 +16,7 @@ namespace RRZE\Video;
 
 defined('ABSPATH') || exit;
 use RRZE\Video\Utils\Plugin;
-use RRZE\Video\WordPress\Gutenberg;
+use RRZE\Video\UI\Gutenberg;
 
 const RRZE_PHP_VERSION = '7.4';
 const RRZE_WP_VERSION  = '6.0';
@@ -53,6 +53,7 @@ register_activation_hook(__FILE__, __NAMESPACE__ . '\activation');
 register_deactivation_hook(__FILE__, __NAMESPACE__ . '\deactivation');
 
 add_action('plugins_loaded', __NAMESPACE__ . '\loaded');
+add_action('init', __NAMESPACE__ . '\loadTextdomain');
 
 /**
  * Loads a plugin’s translated strings.
@@ -78,8 +79,8 @@ function systemRequirements(): string
         );
     } elseif (version_compare($GLOBALS['wp_version'], RRZE_WP_VERSION, '<')) {
         $error = sprintf(
-            /* translators: 1: Server WordPress version number, 2: Required WordPress version number. */
-            __('The server is running WordPress version %1$s. The Plugin requires at least WordPress version %2$s.', 'rrze-legal'),
+            /* translators: 1: Server UI version number, 2: Required UI version number. */
+            __('The server is running UI version %1$s. The Plugin requires at least UI version %2$s.', 'rrze-legal'),
             $GLOBALS['wp_version'],
             RRZE_WP_VERSION
         );
@@ -92,7 +93,6 @@ function systemRequirements(): string
  */
 function activation()
 {
-    loadTextdomain();
     if ($error = systemRequirements()) {
         deactivate_plugins(plugin_basename(__FILE__));
         wp_die(
@@ -104,7 +104,7 @@ function activation()
             )
         );
     } else {
-        WordPress\Roles::addRoleCaps();
+        UI\Roles::addRoleCaps();
         flush_rewrite_rules();
     }
 }
@@ -115,7 +115,7 @@ function activation()
  */
 function deactivation()
 {
-    WordPress\Roles::removeRoleCaps();
+    UI\Roles::removeRoleCaps();
     flush_rewrite_rules();
 }
 

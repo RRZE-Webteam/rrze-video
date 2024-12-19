@@ -77,7 +77,7 @@ msgstr ""
 msgid "Alignment"
 msgstr "Positionierung"
 
-#: includes/WordPress/Widget.php:144
+#: includes/UI/Widget.php:144
 msgid "Alternative chose a video by list"
 msgstr "Alternativ wählen Sie ein Video aus der Liste"
 
@@ -113,7 +113,7 @@ msgstr "Audioformat"
 msgid "Author"
 msgstr "Autor"
 
-#: includes/WordPress/Widget.php:198
+#: includes/UI/Widget.php:198
 msgid "Author, copyright, link to source and description if given."
 msgstr "Autor, Copyright, Link zur Quelle und Beschreibung, falls vorhanden."
 
@@ -187,7 +187,7 @@ msgstr "Abbrechen"
 msgid "Categories"
 msgstr "Kategorien"
 
-#: includes/Shortcode.php:96 includes/WordPress/CPT.php:147
+#: includes/Shortcode.php:96 includes/UI/CPT.php:147
 msgid "Category"
 msgstr "Kategorie"
 
@@ -204,7 +204,7 @@ msgstr ""
 msgid "Center"
 msgstr "Zentrieren"
 
-#: includes/WordPress/Widget.php:167
+#: includes/UI/Widget.php:167
 msgid "Choose a category"
 msgstr "Wählen Sie eine Kategorie"
 
@@ -251,7 +251,7 @@ msgstr ""
 "Steuert das Videoformat. Videos im Hochformat werden mit dem Portrait-Modus "
 "ausgegeben."
 
-#: includes/WordPress/CPT.php:35
+#: includes/UI/CPT.php:35
 msgid "Create video collection"
 msgstr "Erstellen Sie eine Videosammlung"
 
@@ -288,7 +288,7 @@ msgid "Delete Marker at Current Position"
 msgstr "Kapitelmarker an der gesetzten Positionen löschen"
 
 #. translators: %s: Categories.
-#: includes/WordPress/CPT.php:127
+#: includes/UI/CPT.php:127
 msgid "Display all %s"
 msgstr "Alle %s anzeigen"
 
@@ -296,7 +296,7 @@ msgstr "Alle %s anzeigen"
 msgid "Display the title over the video."
 msgstr "Gibt den Titel über dem Video aus."
 
-#: includes/WordPress/Widget.php:22
+#: includes/UI/Widget.php:22
 msgid "Displays videos in the sidebar or in the footer."
 msgstr "Gibt Videos in der Sidebar oder im Footer der Website aus."
 
@@ -305,7 +305,7 @@ msgstr "Gibt Videos in der Sidebar oder im Footer der Website aus."
 msgid "Don't show random videos."
 msgstr "Zeige keine zufälligen Videos."
 
-#: includes/WordPress/Widget.php:137
+#: includes/UI/Widget.php:137
 msgid "e.g. https://www.video.uni-erlangen.de/webplayer/id/13953"
 msgstr "z.B. https://www.video.uni-erlangen.de/webplayer/id/13953"
 
@@ -357,7 +357,7 @@ msgstr "Videoende"
 msgid "End time must be greater than start time."
 msgstr "Der Endwert muss größer als der Anfangswert sein."
 
-#: includes/WordPress/Widget.php:133
+#: includes/UI/Widget.php:133
 msgid "Enter a URL to the video you want:"
 msgstr "Geben Sie eine Video-URL ein:"
 
@@ -407,7 +407,7 @@ msgstr "http://blogs.fau.de/webworking/"
 msgid "https://github.com/RRZE-Webteam/rrze-video"
 msgstr "https://github.com/RRZE-Webteam/rrze-video"
 
-#: includes/WordPress/CPT.php:148
+#: includes/UI/CPT.php:148
 msgid "ID"
 msgstr "ID"
 
@@ -463,7 +463,7 @@ msgstr "Links"
 msgid "Link"
 msgstr "Link"
 
-#: includes/WordPress/Widget.php:192
+#: includes/UI/Widget.php:192
 msgid "Link to source"
 msgstr "Link zur Quelle"
 
@@ -491,7 +491,7 @@ msgstr "Kapitelmarker überdecken sich"
 msgid "Markers"
 msgstr "Kapitelmarker"
 
-#: includes/WordPress/Widget.php:203
+#: includes/UI/Widget.php:203
 msgid "Metadata, link to source and description if given."
 msgstr "Metadaten, Link zur Quelle und Beschreibung, falls gegeben."
 
@@ -531,7 +531,7 @@ msgstr "In der gewählten Kategorie wurde kein Video gefunden."
 msgid "No video selected"
 msgstr "Kein Video aus der Videothek ausgeben"
 
-#: includes/WordPress/Widget.php:148
+#: includes/UI/Widget.php:148
 msgid ""
 "Or select a category from your local video library to display a random video "
 "from this:"
@@ -549,21 +549,21 @@ msgstr "Ausrichtung"
 msgid "Player controls"
 msgstr "Bedienungselemente"
 
-#: includes/WordPress/Widget.php:110
+#: includes/UI/Widget.php:110
 msgid "Please select a video from your local video library:"
 msgstr "Bitte wählen Sie ein Video aus Ihrer Videothek:"
 
-#: includes/WordPress/CPT.php:28
+#: includes/UI/CPT.php:28
 msgctxt "Post Type General Name"
 msgid "Videothek"
 msgstr "Videothek"
 
-#: includes/WordPress/CPT.php:29
+#: includes/UI/CPT.php:29
 msgctxt "Post Type Singular Name"
 msgid "Video"
 msgstr "Video"
 
-#: includes/WordPress/Widget.php:193
+#: includes/UI/Widget.php:193
 msgid "Provide a link to the original source at the video provider."
 msgstr "Gibt einen Link zum Originalvideo des Videoproviders an."
 
@@ -612,7 +612,7 @@ msgstr "Rechts"
 msgid "RRZE Video"
 msgstr "RRZE Video"
 
-#: includes/WordPress/Settings.php:21
+#: includes/UI/Settings.php:21
 msgid "RRZE Video Settings"
 msgstr "RRZE Video Einstellungen"
 
@@ -630,11 +630,11 @@ msgstr "Speichern"
 msgid "Secured Video embed."
 msgstr "Zugriffsgeschütztes Video"
 
-#: includes/WordPress/Widget.php:112
+#: includes/UI/Widget.php:112
 msgid "Select a video from the video library"
 msgstr "Wählen Sie ein Video aus der Videothek"
 
-#: includes/WordPress/Widget.php:130
+#: includes/UI/Widget.php:130
 msgid "Selection via URL"
 msgstr "Auswahl über die URL"
 
@@ -653,11 +653,11 @@ msgstr "Auf die Endzeit des Videos setzen"
 msgid "Set Video Thumbnail"
 msgstr "Video Vorschaubild festlegen"
 
-#: includes/WordPress/Settings.php:33
+#: includes/UI/Settings.php:33
 msgid "Settings options for the RRZE Video plugin."
 msgstr "Einstellungen für das Videoplugin"
 
-#: includes/WordPress/Widget.php:202
+#: includes/UI/Widget.php:202
 msgid "Show complete information"
 msgstr "Alle Informationen ausgeben"
 
@@ -675,7 +675,7 @@ msgstr "Info ausgeben"
 msgid "Show Metadata"
 msgstr "Metadaten ausgeben"
 
-#: includes/WordPress/Widget.php:197
+#: includes/UI/Widget.php:197
 msgid "Show metadata"
 msgstr "Metadaten ausgeben"
 
@@ -688,11 +688,11 @@ msgstr "Metadaten unter dem Video ausgeben"
 msgid "Show Title"
 msgstr "Titel ausgeben"
 
-#: includes/WordPress/Widget.php:187
+#: includes/UI/Widget.php:187
 msgid "Show title"
 msgstr "Titel ausgeben"
 
-#: includes/WordPress/Widget.php:188
+#: includes/UI/Widget.php:188
 msgid "Show video title above the video; override widget title if set."
 msgstr ""
 "Videotitel über dem Video ausgeben; Überschreibt den Widget-Titel, falls "
@@ -731,7 +731,7 @@ msgstr "Startposition des Videos"
 msgid "Starts the player at the selected time"
 msgstr "Startet den Videoplayer an der ausgewählten Sekunde"
 
-#: includes/WordPress/Widget.php:138
+#: includes/UI/Widget.php:138
 msgid ""
 "Supported video sources are currently: FAU video portal, YouTube and Vimeo."
 msgstr "Unterstützte Videoprovider: FAU Videoportal, YouTube, Vimeo, ARD, BR."
@@ -797,7 +797,7 @@ msgstr ""
 "Der Videoprovider ist unbekannt. Es ist deshalb nicht möglich, ein Video von "
 "der Quelle einzubinden."
 
-#: includes/WordPress/Widget.php:120
+#: includes/UI/Widget.php:120
 msgid "There are no videos in your video library yet."
 msgstr "Aktuell sind keine Videos in Ihrer Videothek."
 
@@ -805,11 +805,11 @@ msgstr "Aktuell sind keine Videos in Ihrer Videothek."
 msgid "This video is part of a video collection"
 msgstr "Dieses Video ist Teil einer Videosammlung"
 
-#: includes/WordPress/CPT.php:150
+#: includes/UI/CPT.php:150
 msgid "Thumbnail"
 msgstr "Vorschaubild"
 
-#: includes/WordPress/CPT.php:146
+#: includes/UI/CPT.php:146
 msgid "Title"
 msgstr "Titel"
 
@@ -822,7 +822,7 @@ msgstr "Titletag"
 msgid "To edit the background image, you need permission to upload media."
 msgstr ""
 "Um das Vorschaubild zu bearbeiten, benötigen Sie die passende Berechtigung, "
-"um Medien in die WordPress-Mediathek hochzuladen."
+"um Medien in die UI-Mediathek hochzuladen."
 
 #: includes/Player/Player.php:81 includes/Player/Player.php:208
 msgid "Unknown video source"
@@ -838,8 +838,8 @@ msgstr "Loop Einstellungen aktualisieren"
 msgid "Update the Video URL"
 msgstr "Geben Sie hier die Video-URL ein."
 
-#: includes/WordPress/CPT.php:149 includes/WordPress/Metabox.php:36
-#: includes/WordPress/Widget.php:134
+#: includes/UI/CPT.php:149 includes/UI/Metabox.php:36
+#: includes/UI/Widget.php:134
 msgid "URL"
 msgstr "URL"
 
@@ -861,11 +861,11 @@ msgstr "URL-Einstellungen"
 msgid "Vertical video"
 msgstr "Hochformat"
 
-#: includes/WordPress/CPT.php:34
+#: includes/UI/CPT.php:34
 msgid "Video"
 msgstr "Video"
 
-#: includes/WordPress/Metabox.php:23
+#: includes/UI/Metabox.php:23
 msgid "Video data"
 msgstr "Videodaten"
 
@@ -892,7 +892,7 @@ msgstr "Video aus der BR Mediathek"
 msgid "Video Library"
 msgstr "Videothek"
 
-#: includes/WordPress/Widget.php:180
+#: includes/UI/Widget.php:180
 msgid "Video options"
 msgstr "Video-Optionen"
 
@@ -900,11 +900,11 @@ msgstr "Video-Optionen"
 msgid "Video provider incorrectly defined."
 msgstr "Der Videoprovider wurde falsch definiert."
 
-#: includes/WordPress/Settings.php:20
+#: includes/UI/Settings.php:20
 msgid "Video Settings"
 msgstr "Video Einstellungen"
 
-#: includes/WordPress/Widget.php:128
+#: includes/UI/Widget.php:128
 msgid "Video source"
 msgstr "Videoquelle"
 
@@ -927,7 +927,7 @@ msgstr "Video mit Präsentationsfolien"
 msgid "Videoportal der FAU (Friedrich-Alexander-Universität Erlangen-Nürnberg)"
 msgstr "Videoportal der FAU"
 
-#: includes/WordPress/CPT.php:30
+#: includes/UI/CPT.php:30
 msgid "Videothek"
 msgstr "Videothek"
 
@@ -948,7 +948,7 @@ msgstr ""
 "Bitte nutzen Sie den folgenden Link, um das Video im Videoportal der FAU "
 "anzusehen, oder melden Sie sich via VPN im Universitätsnetzwerk an: "
 
-#: includes/WordPress/Metabox.php:34
+#: includes/UI/Metabox.php:34
 msgid ""
 "Web address (URL) for the video on the video portal used (FAU video portal, "
 "YouTube, Vimeo or others)."
@@ -956,7 +956,7 @@ msgstr ""
 "Webadresse (URL) für das Video, wie Sie im Videoportal genutzt wird (FAU "
 "Videoportal, YouTube, Vimeo und andere)."
 
-#: includes/WordPress/Widget.php:182
+#: includes/UI/Widget.php:182
 msgid "Widget Title:"
 msgstr "Widget-Titel:"
 
