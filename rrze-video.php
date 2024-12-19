@@ -3,7 +3,7 @@
 Plugin Name:    RRZE Video
 Plugin URI:     https://github.com/RRZE-Webteam/rrze-video
 Description:    Embedding videos via a shortcode or widget based on the Plyr video player.
-Version:        5.0.5
+Version:        5.0.6
 Author:         RRZE-Webteam
 Author URI:     http://blogs.fau.de/webworking/
 License:        GNU General Public License Version 3
@@ -15,6 +15,7 @@ Text Domain:    rrze-video
 namespace RRZE\Video;
 
 defined('ABSPATH') || exit;
+
 use RRZE\Video\Utils\Plugin;
 use RRZE\Video\UI\Gutenberg;
 
@@ -25,7 +26,15 @@ const RRZE_WP_VERSION  = '6.0';
  * Composer autoload
  */
 // require_once __DIR__ . '/vendor/autoload.php';
-
+// add_action(
+//     'doing_it_wrong_run',
+//     static function ( $function_name ) {
+//         if ( '_load_textdomain_just_in_time' === $function_name ) {
+//             $backtrace = debug_backtrace();
+//             error_log( print_r( $backtrace, true ) );
+//         }
+//     }
+// );
 /**
  * SPL Autoloader (PSR-4).
  * @param string $class The fully-qualified class name.
@@ -51,17 +60,9 @@ spl_autoload_register(function ($class) {
 // Register plugin hooks.
 register_activation_hook(__FILE__, __NAMESPACE__ . '\activation');
 register_deactivation_hook(__FILE__, __NAMESPACE__ . '\deactivation');
-
+add_action('init', fn() => load_plugin_textdomain('rrze-video', false, dirname(plugin_basename(__FILE__)) . '/languages'), 1);
+add_action('init', __NAMESPACE__ . '\create_block_rrze_video_block_init', 10);
 add_action('plugins_loaded', __NAMESPACE__ . '\loaded');
-add_action('init', __NAMESPACE__ . '\loadTextdomain');
-
-/**
- * Loads a plugin’s translated strings.
- */
-function loadTextdomain()
-{
-    load_plugin_textdomain('rrze-video', false, dirname(plugin_basename(__FILE__)) . '/languages');
-}
 
 /**
  * System requirements verification.
@@ -73,14 +74,14 @@ function systemRequirements(): string
     if (version_compare(PHP_VERSION, RRZE_PHP_VERSION, '<')) {
         $error = sprintf(
             /* translators: 1: Server PHP version number, 2: Required PHP version number. */
-            __('The server is running PHP version %1$s. The Plugin requires at least PHP version %2$s.', 'rrze-legal'),
+            'The server is running PHP version %1$s. The Plugin requires at least PHP version %2$s.',
             PHP_VERSION,
             RRZE_PHP_VERSION
         );
     } elseif (version_compare($GLOBALS['wp_version'], RRZE_WP_VERSION, '<')) {
         $error = sprintf(
-            /* translators: 1: Server UI version number, 2: Required UI version number. */
-            __('The server is running UI version %1$s. The Plugin requires at least UI version %2$s.', 'rrze-legal'),
+            /* translators: 1: Server WordPress version number, 2: Required WordPress version number. */
+            'The server is running WordPress version %1$s. The Plugin requires at least WordPress version %2$s.',
             $GLOBALS['wp_version'],
             RRZE_WP_VERSION
         );
@@ -97,8 +98,8 @@ function activation()
         deactivate_plugins(plugin_basename(__FILE__));
         wp_die(
             sprintf(
-                /* translators: 1: The plugin name, 2: The error string. */
-                __('Plugins: %1$s: %2$s', 'rrze-legal'),
+                /* translators: 1: The plugin basename, 2: The error string. (No domain used here) */
+                'Plugins: %1$s: %2$s',
                 plugin_basename(__FILE__),
                 $error
             )
@@ -148,8 +149,8 @@ function create_block_rrze_video_block_init()
         'render_callback' => [$gutenberg_instance, 'rrze_video_render_block']
     ]);
 
-    $script_handle = generate_block_asset_handle( 'rrze/rrze-video', 'editorScript' );
-    wp_set_script_translations( $script_handle, 'rrze-video', plugin_dir_path( __FILE__ ) . 'languages' );
+    $script_handle = generate_block_asset_handle('rrze/rrze-video', 'editorScript');
+    wp_set_script_translations($script_handle, 'rrze-video', plugin_dir_path(__FILE__) . 'languages');
 }
 
 /**
@@ -158,19 +159,18 @@ function create_block_rrze_video_block_init()
  */
 function loaded()
 {
-    loadTextdomain();
     plugin()->loaded();
     if ($error = systemRequirements()) {
         add_action('admin_init', function () use ($error) {
             if (current_user_can('activate_plugins')) {
-                $pluginData = get_plugin_data(plugin()->getFile());
+                $pluginData = get_plugin_data(plugin()->getFile(), true, false);
                 $pluginName = $pluginData['Name'];
                 $tag = is_plugin_active_for_network(plugin()->getBaseName()) ? 'network_admin_notices' : 'admin_notices';
                 add_action($tag, function () use ($pluginName, $error) {
                     printf(
                         '<div class="notice notice-error"><p>' .
                             /* translators: 1: The plugin name, 2: The error string. */
-                            __('Plugins: %1$s: %2$s', 'rrze-legal') .
+                            'Plugins: %1$s: %2$s'.
                             '</p></div>',
                         esc_html($pluginName),
                         esc_html($error)
@@ -180,6 +180,6 @@ function loaded()
         });
         return;
     }
-    new Main;
-    add_action('init', __NAMESPACE__ . '\create_block_rrze_video_block_init');
+        new Main;
+    
 }

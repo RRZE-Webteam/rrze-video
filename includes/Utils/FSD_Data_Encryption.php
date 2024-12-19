@@ -59,7 +59,7 @@ class FSD_Data_Encryption {
 			return false;
 		}
 
-		return base64_encode( $iv . $raw_value ); // phpcs:ignore UI.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+		return base64_encode( $iv . $raw_value ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 	}
 
 	/**
@@ -77,7 +77,7 @@ class FSD_Data_Encryption {
 			return $raw_value;
 		}
 
-		$raw_value = base64_decode( $raw_value, true ); // phpcs:ignore UI.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+		$raw_value = base64_decode( $raw_value, true ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 
 		$method = 'aes-256-ctr';
 		$ivlen  = openssl_cipher_iv_length( $method );

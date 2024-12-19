@@ -26,7 +26,19 @@ class Shortcode
         return self::$instance;
     }
 
-    private function __construct()
+    private function __construct() {}
+
+    public function loaded()
+    {
+        add_shortcode('rrzevideo', [$this, 'shortcodeVideo']);
+        add_shortcode('fauvideo', [$this, 'shortcodeVideo']);
+    }
+
+    /**
+     * Gibt die Default-Werte eines gegebenen Feldes aus den Shortcodesettings zurück
+     * @return array [description]
+     */
+    public function getShortcodeDefaults($field = '')
     {
         $this->settings = $settings = [
             'rrzevideo' => [
@@ -141,20 +153,7 @@ class Shortcode
                 ],
             ],
         ];
-    }
 
-    public function loaded()
-    {
-        add_shortcode('rrzevideo', [$this, 'shortcodeVideo']);
-        add_shortcode('fauvideo', [$this, 'shortcodeVideo']);
-    }
-
-    /**
-     * Gibt die Default-Werte eines gegebenen Feldes aus den Shortcodesettings zurück
-     * @return array [description]
-     */
-    public function getShortcodeDefaults($field = '')
-    {
         $res = [];
         if (empty($field) || empty($this->settings[$field])) {
             return $res;

@@ -362,7 +362,7 @@ class Player
      * Enqueues the necessary styles and scripts for the frontend video player.
      *
      * This function is responsible for adding the required CSS and JavaScript resources 
-     * for rendering the video player on the frontend. It uses the UI `wp_enqueue_style` 
+     * for rendering the video player on the frontend. It uses the WordPress `wp_enqueue_style` 
      * and `wp_enqueue_script` functions to load the relevant files. 
      *
      * @param bool   $plyr   Determines whether the Plyr script should be enqueued. Default is true.
