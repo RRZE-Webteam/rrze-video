@@ -431,7 +431,7 @@ const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
             onClick={() => {
               const currentTime = Math.round(times.playerCurrentTime);
               setNewMarkerEndTime(currentTime);
-              setNewMarkerStartTimeInput(
+              setNewMarkerEndTimeInput(
                 formatSecondsToTimeString(currentTime)
               );
             }}

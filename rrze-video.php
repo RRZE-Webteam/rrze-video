@@ -20,7 +20,7 @@ use RRZE\Video\Utils\Plugin;
 use RRZE\Video\UI\Gutenberg;
 
 const RRZE_PHP_VERSION = '7.4';
-const RRZE_WP_VERSION  = '6.0';
+const RRZE_WP_VERSION = '6.0';
 
 /**
  * Composer autoload
@@ -73,14 +73,14 @@ function systemRequirements(): string
     $error = '';
     if (version_compare(PHP_VERSION, RRZE_PHP_VERSION, '<')) {
         $error = sprintf(
-            /* translators: 1: Server PHP version number, 2: Required PHP version number. */
+        /* translators: 1: Server PHP version number, 2: Required PHP version number. */
             'The server is running PHP version %1$s. The Plugin requires at least PHP version %2$s.',
             PHP_VERSION,
             RRZE_PHP_VERSION
         );
     } elseif (version_compare($GLOBALS['wp_version'], RRZE_WP_VERSION, '<')) {
         $error = sprintf(
-            /* translators: 1: Server WordPress version number, 2: Required WordPress version number. */
+        /* translators: 1: Server WordPress version number, 2: Required WordPress version number. */
             'The server is running WordPress version %1$s. The Plugin requires at least WordPress version %2$s.',
             $GLOBALS['wp_version'],
             RRZE_WP_VERSION
@@ -98,7 +98,7 @@ function activation()
         deactivate_plugins(plugin_basename(__FILE__));
         wp_die(
             sprintf(
-                /* translators: 1: The plugin basename, 2: The error string. (No domain used here) */
+            /* translators: 1: The plugin basename, 2: The error string. (No domain used here) */
                 'Plugins: %1$s: %2$s',
                 plugin_basename(__FILE__),
                 $error
@@ -157,7 +157,7 @@ function create_block_rrze_video_block_init()
  * Execute on 'plugins_loaded' API/action.
  * @return void
  */
-function loaded()
+function loaded(): void
 {
     plugin()->loaded();
     if ($error = systemRequirements()) {
@@ -169,9 +169,9 @@ function loaded()
                 add_action($tag, function () use ($pluginName, $error) {
                     printf(
                         '<div class="notice notice-error"><p>' .
-                            /* translators: 1: The plugin name, 2: The error string. */
-                            'Plugins: %1$s: %2$s'.
-                            '</p></div>',
+                        /* translators: 1: The plugin name, 2: The error string. */
+                        'Plugins: %1$s: %2$s' .
+                        '</p></div>',
                         esc_html($pluginName),
                         esc_html($error)
                     );
@@ -180,6 +180,6 @@ function loaded()
         });
         return;
     }
-        new Main;
-    
+    new Main;
+
 }

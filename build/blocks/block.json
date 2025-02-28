@@ -14,7 +14,7 @@
     "rrze video",
     "rrze"
   ],
-  "category": "embed",
+  "category": "rrze",
   "description": "Embeds videos from FAUVideo, YouTube & Co.",
   "supports": {
     "html": false
@@ -96,6 +96,11 @@
     "chapterMarkers": {
       "type": "string",
       "default": "[]"
+    }
+  },
+  "example": {
+    "attributes": {
+      "url": "https://www.fau.tv/clip/id/14146"
     }
   }
 }
