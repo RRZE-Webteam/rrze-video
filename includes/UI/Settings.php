@@ -1,6 +1,6 @@
 <?php
 
-namespace RRZE\Video\WordPress;
+namespace RRZE\Video\UI;
 use RRZE\Video\Utils;
 
 defined('ABSPATH') || exit;
