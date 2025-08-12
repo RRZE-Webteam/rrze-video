@@ -22,7 +22,7 @@ class OEmbed
                     'www.fau.tv',
                 ],
                 'home'    => 'https://www.fau.tv',
-                'api-endpoint'  => 'https://www.fau.tv/services/oembed'
+                'api-endpoint'  => 'https://api.video.uni-erlangen.de/services/oembed'
             ],
             'youtube'    => [
                 'domains'   => [
@@ -48,10 +48,10 @@ class OEmbed
         if ( empty( $url ) || ! is_string( $url ) ) {
             return '';
         }
-        
+
         $known = self::get_known_provider();
         $url = esc_url_raw( $url );
-        
+
         $searchdom = parse_url($url, PHP_URL_HOST);
         $res = '';
 
@@ -257,8 +257,8 @@ class OEmbed
                 }
             }
         }
-        
+
         return $data;
-        
+
     }
 }
