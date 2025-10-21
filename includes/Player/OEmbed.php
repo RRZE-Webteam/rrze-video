@@ -6,6 +6,7 @@ defined('ABSPATH') || exit;
 defined('META_EXPIRATION') || define('META_EXPIRATION', 60 * 60 * 4);
 
 use RRZE\Video\Utils\Helper;
+use RRZE\Video\Utils;
 
 class OEmbed
 {
@@ -73,6 +74,7 @@ class OEmbed
         }
 
         if ($provider == 'fau') {
+            Helper::debug(self::sanitize_oembed_data(self::fetch_fau_video($url)));
             return self::sanitize_oembed_data(self::fetch_fau_video($url));
         } elseif ($provider == 'youtube') {
             return self::sanitize_oembed_data(self::fetch_youtube_video($url));
@@ -154,33 +156,57 @@ class OEmbed
         } else {
             $transient = 'rrze_video_fau_' . md5($url);
             $fau_video['video'] = get_transient($transient);
-            if (false === $fau_video['video']) {
-                $oembed_url    = $known['fau']['api-endpoint'] . '?url=' . $url . '&format=json';
-                $remote_get    = wp_safe_remote_get($oembed_url, array('sslverify' => true));
+            if ( ! is_array($fau_video['video']) || empty($fau_video['video']) ) {
+                $oembed_url = add_query_arg(
+                    [
+                        'url'    => $url,
+                        'format' => 'json',
+                    ],
+                    $known['fau']['api-endpoint']
+                );
+
+                $remote_get = wp_safe_remote_get($oembed_url, [
+                    'sslverify' => true,
+                    'timeout'   => 10,
+                    'headers'   => [
+                        'Accept'     => 'application/json',
+                        'User-Agent' => 'RRZE-Video/1.0; ' . get_bloginfo('url'),
+                    ],
+                ]);
                 $fau_video['oembed_api_url'] = $oembed_url;
+
                 if (is_wp_error($remote_get)) {
                     $fau_video['error'] = $remote_get->get_error_message();
                 } else {
-                    $fau_video['video'] = json_decode(wp_remote_retrieve_body($remote_get), true);
+                    $body   = wp_remote_retrieve_body($remote_get);
+                    $json   = json_decode($body, true);
 
-                    if ((isset($fau_video['video']['provider_videoindex_url'])) && (preg_match('/^\//', $fau_video['video']['provider_videoindex_url']))) {
-                        $fau_video['video']['provider_videoindex_url'] = $endpoint_url = $known['fau']['home'] . $fau_video['video']['provider_videoindex_url'];
-                    }
-                    if ((isset($fau_video['video']['alternative_VideoFolien_size_large'])) && (preg_match('/^\//', $fau_video['video']['alternative_VideoFolien_size_large']))) {
-                        $fau_video['video']['alternative_VideoFolien_size_large'] = $endpoint_url = $known['fau']['home'] . $fau_video['video']['alternative_VideoFolien_size_large'];
-                    }
-                    if ((isset($fau_video['video']['alternative_Audio'])) && (preg_match('/^\//', $fau_video['video']['alternative_Audio']))) {
-                        $fau_video['video']['alternative_Audio'] = $endpoint_url = $known['fau']['home'] . $fau_video['video']['alternative_Audio'];
-                    }
+                    if (!is_array($json)) {
+                        $fau_video['error'] = __('Invalid oEmbed response (not JSON)', 'rrze-video');
+                        $fau_video['video'] = [];
 
-                    if (isset($fau_video['video']['status']) && ($fau_video['video']['status'] >= 400)) {
-                        // neue Fehlerausgabe; Derzeit leider noch nicht implementiert
-                        if (isset($fau_video['video']['message'])) {
-                            $fau_video['error'] = $fau_video['video']['message'];
+                        if (defined('WP_DEBUG') && WP_DEBUG) {
+                            \RRZE\Video\Utils\Helper::debug('oEmbed raw body (first 200): ' . substr((string)$body, 0, 200));
+                        }
+                    } else {
+                        $fau_video['video'] = $json;
+
+                        if (!empty($fau_video['video']['provider_videoindex_url']) && preg_match('/^\//', $fau_video['video']['provider_videoindex_url'])) {
+                            $fau_video['video']['provider_videoindex_url'] = $known['fau']['home'] . $fau_video['video']['provider_videoindex_url'];
+                        }
+                        if (!empty($fau_video['video']['alternative_VideoFolien_size_large']) && preg_match('/^\//', $fau_video['video']['alternative_VideoFolien_size_large'])) {
+                            $fau_video['video']['alternative_VideoFolien_size_large'] = $known['fau']['home'] . $fau_video['video']['alternative_VideoFolien_size_large'];
+                        }
+                        if (!empty($fau_video['video']['alternative_Audio']) && preg_match('/^\//', $fau_video['video']['alternative_Audio'])) {
+                            $fau_video['video']['alternative_Audio'] = $known['fau']['home'] . $fau_video['video']['alternative_Audio'];
+                        }
+
+                        if (!empty($fau_video['video']['status']) && (int)$fau_video['video']['status'] >= 400) {
+                            $fau_video['error'] = !empty($fau_video['video']['message'])
+                                ? $fau_video['video']['message']
+                                : __('Provider returned error status', 'rrze-video');
                         }
                     }
-
-                    set_transient($transient, $fau_video['video'], META_EXPIRATION);
                 }
             }
         }
@@ -189,76 +215,35 @@ class OEmbed
 
     public static function sanitize_oembed_data($data)
     {
-        $urllist = [
-            'file',
-            'url',
-            'preview_image',
-            'poster',
-            'thumbnail_url',
-            'alternative_Video_size_large_url',
-            'alternative_Video_size_medium_url',
-            'transcript',
-            'provider_url'
-        ];
+        $data = is_array($data) ? $data : [];
 
-        $textstrings = [
-            'inLanguage',
-            'author_name',
-            'title',
-            'provider_name',
-            'type',
-            'version',
-            'name'
-        ];
+        $error = '';
+        if (isset($data['error'])) {
+            $error = is_string($data['error']) ? wp_kses_post($data['error']) : '';
+        }
 
-        $textareastrings  = [
-            'description'
-        ];
-
-        $htmllist = [
-            'html'
-        ];
-
-        $numbers = [
-            'width',
-            'height',
-            'thumbnail_width',
-            'thumbnail_height',
-            'alternative_Video_size_large_width',
-            'alternative_Video_size_large_height',
-            'alternative_Video_size_medium_width',
-            'alternative_Video_size_medium_height'
-        ];
-
-        if ( is_array( $data ) ) {
-            if ( isset( $data['error'] ) ) {
-                $data['error'] = wp_kses_post( $data['error'] );
-            }
-            if ( is_array( $data['video'] ) ) {
-                foreach ( $data['video'] as $key => $value ) {
-                    if ( in_array( $key, $urllist ) ) {
-                        if ( ! empty( $data['video'][ $key ] ) && is_string( $data['video'][ $key ] ) ) {
-                            $data['video'][ $key ] = esc_url_raw( $data['video'][ $key ] );
-                        } else {
-                            $data['video'][ $key ] = '';
-                        }
-                    } elseif ( in_array( $key, $textstrings ) ) {
-                        $data['video'][ $key ] = esc_html( $data['video'][ $key ] );
-                    } elseif ( in_array( $key, $textareastrings ) ) {
-                        $data['video'][ $key ] = sanitize_textarea_field( $data['video'][ $key ] );
-                    } elseif ( in_array( $key, $htmllist ) ) {
-                        // Keep the value as is.
-                        $data['video'][ $key ] = $data['video'][ $key ];
-                    } elseif ( in_array( $key, $numbers ) ) {
-                        $data['video'][ $key ] = intval( $data['video'][ $key ] );
-                    } else {
-                        $data['video'][ $key ] = esc_html( $data['video'][ $key ] );
-                    }
-                }
+        $payload = [];
+        if (isset($data['video']) && is_array($data['video'])) {
+            $payload = $data['video'];
+        } elseif (!isset($data['video'])) {
+            $candidateKeys = ['type','title','file','width','height','provider_name','provider_url'];
+            $found = array_intersect($candidateKeys, array_keys($data));
+            if (!empty($found)) {
+                $payload = $data;
             }
         }
 
-        return $data;
+        $clean = \RRZE\Video\Utils\SanitizeOembed::sanitize_oembed_data($payload);
 
+        $oembed_api_url = '';
+        if (!empty($data['oembed_api_url']) && is_string($data['oembed_api_url'])) {
+            $oembed_api_url = esc_url_raw($data['oembed_api_url'], ['https']);
+        }
+
+        return [
+            'error'          => $error,
+            'video'          => $clean,
+            'oembed_api_url' => $oembed_api_url,
+        ];
     }
 }
