@@ -74,7 +74,6 @@ class OEmbed
         }
 
         if ($provider == 'fau') {
-            Helper::debug(self::sanitize_oembed_data(self::fetch_fau_video($url)));
             return self::sanitize_oembed_data(self::fetch_fau_video($url));
         } elseif ($provider == 'youtube') {
             return self::sanitize_oembed_data(self::fetch_youtube_video($url));

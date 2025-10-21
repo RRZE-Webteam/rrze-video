@@ -72,7 +72,6 @@ class SanitizeOembed {
     ];
 
     public static function sanitize_oembed_data( $data, $keep_unknown_keys = false ) {
-        Helper::debug('ok');
         if ( ! is_array( $data ) ) {
             return [];
         }
