@@ -74,7 +74,7 @@ class OEmbed
         }
 
         if ($provider == 'fau') {
-            return self::sanitize_oembed_data(self::fetch_fau_video($url));
+            return self::sanitize_FAU_oembed_data(self::fetch_fau_video($url));
         } elseif ($provider == 'youtube') {
             return self::sanitize_oembed_data(self::fetch_youtube_video($url));
         } else {
@@ -212,7 +212,7 @@ class OEmbed
         return $fau_video;
     }
 
-    public static function sanitize_oembed_data($data)
+    public static function sanitize_FAU_oembed_data($data)
     {
         $data = is_array($data) ? $data : [];
 
@@ -244,5 +244,80 @@ class OEmbed
             'video'          => $clean,
             'oembed_api_url' => $oembed_api_url,
         ];
+    }
+
+    public static function sanitize_oembed_data($data)
+    {
+        $urllist = [
+            'file',
+            'url',
+            'preview_image',
+            'poster',
+            'thumbnail_url',
+            'alternative_Video_size_large_url',
+            'alternative_Video_size_medium_url',
+            'transcript',
+            'provider_url'
+        ];
+
+        $textstrings = [
+            'inLanguage',
+            'author_name',
+            'title',
+            'provider_name',
+            'type',
+            'version',
+            'name'
+        ];
+
+        $textareastrings  = [
+            'description'
+        ];
+
+        $htmllist = [
+            'html'
+        ];
+
+        $numbers = [
+            'width',
+            'height',
+            'thumbnail_width',
+            'thumbnail_height',
+            'alternative_Video_size_large_width',
+            'alternative_Video_size_large_height',
+            'alternative_Video_size_medium_width',
+            'alternative_Video_size_medium_height'
+        ];
+
+        if ( is_array( $data ) ) {
+            if ( isset( $data['error'] ) ) {
+                $data['error'] = wp_kses_post( $data['error'] );
+            }
+            if ( is_array( $data['video'] ) ) {
+                foreach ( $data['video'] as $key => $value ) {
+                    if ( in_array( $key, $urllist ) ) {
+                        if ( ! empty( $data['video'][ $key ] ) && is_string( $data['video'][ $key ] ) ) {
+                            $data['video'][ $key ] = esc_url_raw( $data['video'][ $key ] );
+                        } else {
+                            $data['video'][ $key ] = '';
+                        }
+                    } elseif ( in_array( $key, $textstrings ) ) {
+                        $data['video'][ $key ] = esc_html( $data['video'][ $key ] );
+                    } elseif ( in_array( $key, $textareastrings ) ) {
+                        $data['video'][ $key ] = sanitize_textarea_field( $data['video'][ $key ] );
+                    } elseif ( in_array( $key, $htmllist ) ) {
+                        // Keep the value as is.
+                        $data['video'][ $key ] = $data['video'][ $key ];
+                    } elseif ( in_array( $key, $numbers ) ) {
+                        $data['video'][ $key ] = intval( $data['video'][ $key ] );
+                    } else {
+                        $data['video'][ $key ] = esc_html( $data['video'][ $key ] );
+                    }
+                }
+            }
+        }
+
+        return $data;
+
     }
 }
