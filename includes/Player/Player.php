@@ -41,12 +41,12 @@ class Player
 
     /**
      * Fetches and processes the video player.
-     * 
+     *
      * This function tries to retrieve the video from the provided URL, ID, or
      * random genre. The video content can be either an oEmbed or an iFrame.
      *
-     * @param array $arguments Associative array containing one of the keys: 
-     *                         'url' (the video URL), 'id' (video post ID), 
+     * @param array $arguments Associative array containing one of the keys:
+     *                         'url' (the video URL), 'id' (video post ID),
      *                         'rand' (slug of the genre for random video fetching).
      * @return string HTML content of the video player or an error message.
      */
@@ -89,7 +89,7 @@ class Player
 
     /**
      * Processes an oEmbed video source.
-     * 
+     *
      * This function tries to retrieve video content using an oEmbed provider.
      * If successful, it returns the video player's HTML. Otherwise, it returns an error message.
      *
@@ -166,7 +166,7 @@ class Player
 
     /**
      * Processes an iFrame video source.
-     * 
+     *
      * This function tries to retrieve video content using an iFrame provider.
      * If successful, it returns the video player's HTML. Otherwise, it returns an error message.
      *
@@ -213,20 +213,20 @@ class Player
 
     /**
      * Generates the HTML output for a video player based on the provided video data and provider.
-     * 
-     * This function constructs and returns an HTML string which comprises the video player, the title, 
-     * description, and related metadata of the video. It first identifies the provider (e.g., YouTube, 
-     * Vimeo, FAU, etc.) of the video and then delegates the HTML generation to the appropriate helper 
-     * function. In addition to the video content, if specified in the `$data`, this function can render 
-     * a title, a description, and a list of related metadata (like author, source, alternative formats, 
+     *
+     * This function constructs and returns an HTML string which comprises the video player, the title,
+     * description, and related metadata of the video. It first identifies the provider (e.g., YouTube,
+     * Vimeo, FAU, etc.) of the video and then delegates the HTML generation to the appropriate helper
+     * function. In addition to the video content, if specified in the `$data`, this function can render
+     * a title, a description, and a list of related metadata (like author, source, alternative formats,
      * etc.).
-     * 
+     *
      * @param string $provider  The video provider (e.g., "youtube", "vimeo", "fau").
      * @param array  $data      Associative array containing video details and other settings.
-     * @param string $id        An optional ID to be used for this instance. If empty, a render ID is 
+     * @param string $id        An optional ID to be used for this instance. If empty, a render ID is
      *                          generated internally.
-     * 
-     * @return string           Returns the generated HTML string for the video player and its associated 
+     *
+     * @return string           Returns the generated HTML string for the video player and its associated
      *                          details.
      */
     private function get_player_html($provider, $data, $id = '')
@@ -361,9 +361,9 @@ class Player
     /**
      * Enqueues the necessary styles and scripts for the frontend video player.
      *
-     * This function is responsible for adding the required CSS and JavaScript resources 
-     * for rendering the video player on the frontend. It uses the WordPress `wp_enqueue_style` 
-     * and `wp_enqueue_script` functions to load the relevant files. 
+     * This function is responsible for adding the required CSS and JavaScript resources
+     * for rendering the video player on the frontend. It uses the WordPress `wp_enqueue_style`
+     * and `wp_enqueue_script` functions to load the relevant files.
      *
      * @param bool   $plyr   Determines whether the Plyr script should be enqueued. Default is true.
      * @param array  $args   An optional array of arguments. Currently unused but can be expanded for future functionality.

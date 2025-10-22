@@ -142,3 +142,15 @@ media-player {
     margin-inline: auto;
     max-width: 300px;
 }
+
+
+/*************************************************************************************************
+ * Width Limitation for FAU Elemental
+ *************************************************************************************************/
+
+.wp-theme-FAU-Elemental {
+  div.rrze-video, div.rrze-video-container{
+    margin-inline: auto;
+    max-width: var(--wide-max-width);
+  }
+}
