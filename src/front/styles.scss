@@ -154,3 +154,16 @@ media-player {
     max-width: var(--wide-max-width);
   }
 }
+
+.vds-load-container media-tooltip media-play-button{
+    background: #fff;
+    border-radius: 0 !important;
+    color: #04316a;
+    height: 80px;
+    width: 80px;
+}
+
+.vds-load-container media-tooltip media-play-button svg {
+    height: 44px;
+    width: 44px;
+}

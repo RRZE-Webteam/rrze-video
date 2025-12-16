@@ -1,6 +1,6 @@
 ///////////////////////////////
 // Import WordPress Dependencies
-import { useState, useEffect, useRef, memo } from "@wordpress/element";
+import {useState, useEffect, useRef, memo} from "@wordpress/element";
 
 // Import Vidstack Dependencies
 import {
@@ -18,10 +18,10 @@ import {
   DefaultVideoLayout,
   DefaultAudioLayout,
 } from "@vidstack/react/player/layouts/default";
-import { Poster } from "@vidstack/react";
+import {Poster} from "@vidstack/react";
 
 // Import Types
-import { type ChapterMarker } from "./ChapterMarkerCreator";
+import {type ChapterMarker} from "./ChapterMarkerCreator";
 
 ///////////////////////////////
 // Interfaces
@@ -40,22 +40,24 @@ interface CustomVidStackProps {
     playerDuration: number;
   }) => void;
   markers: ChapterMarker[];
+  viewType: 'video' | 'audio';
 }
 
 ///////////////////////////////
 // Custom Vidstack Player with Memo
 const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
   ({
-    title,
-    mediaurl,
-    aspectratio,
-    poster,
-    clipend,
-    clipstart,
-    loop,
-    onTimeUpdate,
-    markers,
-  }) => {
+     title,
+     mediaurl,
+     aspectratio,
+     poster,
+     clipend,
+     clipstart,
+     loop,
+     onTimeUpdate,
+     markers,
+     viewType
+   }) => {
     let player = useRef<MediaPlayerInstance>(null);
     const [cues, setCues] = useState<ChapterMarker[]>([]);
     const [showPoster, setShowPoster] = useState(true);
@@ -99,13 +101,17 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
       }
     };
 
+    const videoAspectRatio = viewType === 'video' && aspectratio
+      ? { aspectRatio: aspectratio }
+      : {};
+
     ///////////////////////////////
     // Render
     return (
       <MediaPlayer
         title={title}
         src={mediaurl}
-        aspectRatio={aspectratio}
+        {...videoAspectRatio}
         onProviderChange={handleProviderChange}
         clipEndTime={clipend}
         clipStartTime={clipstart}
@@ -113,9 +119,12 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
         ref={player}
         crossOrigin
         playsInline
+        viewType={viewType}
       >
         <MediaProvider>
-          <Poster src={poster} alt="" className="vds-poster" />
+          {viewType === 'video' && (
+            <Poster src={poster} alt="" className="vds-poster"/>
+          )}
           {markers && markers.length > 0 && (
             <Track
               content={content}
@@ -126,10 +135,10 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
             />
           )}
         </MediaProvider>
-        <MediaStateObserver />
+        <MediaStateObserver/>
         {/* Layouts */}
-        <DefaultAudioLayout icons={defaultLayoutIcons} />
-        <DefaultVideoLayout icons={defaultLayoutIcons} />
+        <DefaultAudioLayout icons={defaultLayoutIcons}/>
+        <DefaultVideoLayout icons={defaultLayoutIcons}/>
       </MediaPlayer>
     );
   },
@@ -148,4 +157,4 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
   }
 );
 
-export { RRZEVidstackPlayer };
+export {RRZEVidstackPlayer};
