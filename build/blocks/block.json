@@ -96,6 +96,14 @@
     "chapterMarkers": {
       "type": "string",
       "default": "[]"
+    },
+    "viewType": {
+      "type": "string",
+      "enum": [
+        "video",
+        "audio"
+      ],
+      "default": "video"
     }
   },
   "example": {
