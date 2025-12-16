@@ -65,6 +65,7 @@ interface BlockAttributes {
   orientation?: string;
   mediaurl: string;
   chapterMarkers?: string;
+  viewType: "video" | "audio";
 }
 
 interface EditProps {
@@ -314,6 +315,7 @@ export default function Edit(props: EditProps): JSX.Element {
         orientation:
           data.video.width > data.video.height ? "landscape" : "portrait",
         poster: attributes.poster || data.video.preview_image || "",
+        viewType: data.video.type === "video" ? "video" : "audio",
       });
     } else {
       setProviderName(data.video.provider_name || "");
@@ -434,6 +436,7 @@ export default function Edit(props: EditProps): JSX.Element {
                     loop={attributes.loop}
                     onTimeUpdate={onTimeUpdate}
                     markers={markers}
+                    viewType={attributes.viewType}
                   />
                 ) : (
                   <ServerSideRender
