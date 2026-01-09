@@ -7,7 +7,7 @@ import {
   ToolbarButton,
   __experimentalConfirmDialog as ConfirmDialog,
 } from "@wordpress/components";
-import { trash, plus, reset, edit } from "@wordpress/icons";
+import { trash, plus, reset, pencil } from "@wordpress/icons";
 import { useBlockProps, BlockControls } from "@wordpress/block-editor";
 import ServerSideRender from "@wordpress/server-side-render";
 import {
@@ -384,7 +384,7 @@ export default function Edit(props: EditProps): JSX.Element {
                         }
                       />
                       <ToolbarButton
-                        icon={edit}
+                        icon={pencil}
                         label={__("Edit Markers", "rrze-video")}
                         onClick={() => setIsChapterMarkerModalOpen(true)}
                       />

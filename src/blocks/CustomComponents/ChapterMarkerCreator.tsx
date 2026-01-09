@@ -15,6 +15,7 @@ import {
 } from "../Utils/timeProcessing";
 
 // For generation of unique ID's
+// @ts-ignore
 import { v4 as uuidv4 } from "uuid";
 const generateUniqueId = () => uuidv4();
 
@@ -40,12 +41,12 @@ interface ChapterMarkerCreatorProps {
   onClose: () => void;
 }
 
-const ChapterMarkerCreator: React.FC<ChapterMarkerCreatorProps> = ({
+const ChapterMarkerCreator = ({
   attributes,
   setAttributes,
   times,
   onClose,
-}) => {
+}: ChapterMarkerCreatorProps) => {
 
   /////////////////////////////////////////////
   // States
