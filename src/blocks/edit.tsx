@@ -291,16 +291,6 @@ export default function Edit(props: EditProps): JSX.Element {
     // if (data.video.provider_name contains FAU
     if (data.video.provider_name && data.video.provider_name.includes("FAU")) {
       setProviderName("FAU");
-      const gcd = (a: number, b: number): number =>
-        b === 0 ? a : gcd(b, a % b);
-      let aspectRatio = "16/9";
-
-      if (data.video.width && data.video.height) {
-        const gcdValue = gcd(data.video.width, data.video.height);
-        aspectRatio = `${data.video.width / gcdValue}/${
-          data.video.height / gcdValue
-        }`;
-      }
 
       setTitle(data.video.title || "");
       setDescription(data.video.description || "");
@@ -309,7 +299,6 @@ export default function Edit(props: EditProps): JSX.Element {
       setProviderAudioURL(data.video.alternative_Audio || "");
 
       setAttributes({
-        aspectratio: aspectRatio,
         mediaurl: data.video.file || "",
         textAlign: "has-text-align-left",
         orientation:
