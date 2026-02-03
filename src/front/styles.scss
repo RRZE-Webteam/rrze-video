@@ -110,6 +110,7 @@ media-player {
 
     &.ar-9-16 {
         aspect-ratio: 9/16;
+        max-width: calc(80vh / 16 * 9);
     }
 
     &.ar-4-3 {

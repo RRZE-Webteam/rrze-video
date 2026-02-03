@@ -22,6 +22,7 @@ import {Poster} from "@vidstack/react";
 
 // Import Types
 import {type ChapterMarker} from "./ChapterMarkerCreator";
+import {getAspectRatioClass} from "../Utils/utils";
 
 ///////////////////////////////
 // Interfaces
@@ -105,6 +106,8 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
       ? { aspectRatio: aspectratio }
       : {};
 
+    const aspectRatioClass = getAspectRatioClass(aspectratio);
+
     ///////////////////////////////
     // Render
     return (
@@ -112,6 +115,7 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
         title={title}
         src={mediaurl}
         {...videoAspectRatio}
+        className={aspectRatioClass}
         onProviderChange={handleProviderChange}
         clipEndTime={clipend}
         clipStartTime={clipstart}

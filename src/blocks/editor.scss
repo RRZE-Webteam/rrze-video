@@ -129,7 +129,7 @@ media-player[data-view-type='video'] {
     aspect-ratio: 16 /9;
 }
 
-media-player {
+div.wp-block-rrze-rrze-video div {
 
     &.ar-16-9 {
         aspect-ratio: 16/9;
@@ -137,6 +137,7 @@ media-player {
 
     &.ar-9-16 {
         aspect-ratio: 9/16;
+        max-width: calc(80vh / 16 * 9);
     }
 
     &.ar-4-3 {

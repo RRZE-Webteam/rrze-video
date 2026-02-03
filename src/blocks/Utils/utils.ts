@@ -70,3 +70,26 @@ export const isYouTubeUrl = (url: string): boolean => {
   const urlDomain = new URL(url).hostname;
   return youtubeDomains.includes(urlDomain);
 }
+
+/**
+ * Map aspect ratio strings to CSS helper classes so editor markup
+ * can reuse the same styling rules the frontend expects.
+ */
+export const getAspectRatioClass = (aspectratio?: string): string => {
+  switch (aspectratio) {
+    case "4/3":
+      return "ar-4-3";
+    case "21/9":
+      return "ar-21-9";
+    case "1/1":
+      return "ar-1-1";
+    case "2.35/1":
+      return "ar-235-1";
+    case "2.40/1":
+      return "ar-240-1";
+    case "9/16":
+      return "ar-9-16";
+    default:
+      return "ar-16-9";
+  }
+};
