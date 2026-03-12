@@ -9,14 +9,6 @@ class SanitizeOembed {
 
     private const DEFAULT_POLICY = 'drop';
 
-    private const URL_HOST_WHITELIST = [
-        'cdn.video.uni-erlangen.de',
-        'vp-cdn-balance.rrze.uni-erlangen.de',
-        'vp-cdn-balance.rrze.de',
-        'www.fau.tv',
-        'api.video.uni-erlangen.de',
-    ];
-
     private static array $URL_KEYS = [
         'file',
         'preview_image',
@@ -145,18 +137,7 @@ class SanitizeOembed {
             return '';
         }
 
-        $url = preg_replace( '#^http://#i', 'https://', $url );
-
-        $host = wp_parse_url( $url, PHP_URL_HOST );
-        if ( empty( $host ) ) {
-            return '';
-        }
-        $host = strtolower( $host );
-        if ( ! in_array( $host, self::URL_HOST_WHITELIST, true ) ) {
-            return '';
-        }
-
-        return $url;
+        return preg_replace( '#^http://#i', 'https://', $url );
     }
 
     private static function sanitize_text_nullable( $value ): string {
