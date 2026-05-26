@@ -23,6 +23,7 @@ import {
 import { type ChapterMarker } from "./CustomComponents/ChapterMarkerCreator";
 import ChapterMarkerCreator from "./CustomComponents/ChapterMarkerCreator";
 import { RRZEVidstackPlayer } from "./CustomComponents/Vidstack";
+import { YouTubeVidstackPlayer } from "./CustomComponents/YouTubeVidstack";
 import { HeadingSelector } from "./CustomComponents/HeadingSelector";
 // @ts-ignore
 import CustomInspectorControls from "./InspectorControlAreaComponents/CustomInspectorControls";
@@ -426,6 +427,18 @@ export default function Edit(props: EditProps): JSX.Element {
                     onTimeUpdate={onTimeUpdate}
                     markers={markers}
                     viewType={attributes.viewType}
+                  />
+                ) : attributes.provider === "youtube" ||
+                  (url && isYouTubeUrl(url)) ? (
+                  <YouTubeVidstackPlayer
+                    title={title}
+                    mediaurl={attributes.url}
+                    aspectratio={aspectratio}
+                    poster={attributes.poster}
+                    clipend={attributes.clipend}
+                    clipstart={attributes.clipstart}
+                    loop={attributes.loop}
+                    markers={markers}
                   />
                 ) : (
                   <ServerSideRender
