@@ -1,14 +1,14 @@
 ////////////////////////////////////////
 // Imports for necessary WordPress libraries
-import { __ } from "@wordpress/i18n";
+import {__} from "@wordpress/i18n";
 import {
   ToolbarGroup,
   ToolbarItem,
   ToolbarButton,
   __experimentalConfirmDialog as ConfirmDialog,
 } from "@wordpress/components";
-import { trash, plus, reset, pencil } from "@wordpress/icons";
-import { useBlockProps, BlockControls } from "@wordpress/block-editor";
+import {trash, plus, reset, pencil} from "@wordpress/icons";
+import {useBlockProps, BlockControls} from "@wordpress/block-editor";
 import ServerSideRender from "@wordpress/server-side-render";
 import {
   useState,
@@ -20,10 +20,10 @@ import {
 
 ////////////////////////////////////////
 // Imports for custom components
-import { type ChapterMarker } from "./CustomComponents/ChapterMarkerCreator";
+import {type ChapterMarker} from "./CustomComponents/ChapterMarkerCreator";
 import ChapterMarkerCreator from "./CustomComponents/ChapterMarkerCreator";
-import { RRZEVidstackPlayer } from "./CustomComponents/Vidstack";
-import { HeadingSelector } from "./CustomComponents/HeadingSelector";
+import {RRZEVidstackPlayer} from "./CustomComponents/Vidstack";
+import {HeadingSelector} from "./CustomComponents/HeadingSelector";
 // @ts-ignore
 import CustomInspectorControls from "./InspectorControlAreaComponents/CustomInspectorControls";
 // @ts-ignore
@@ -36,8 +36,8 @@ import {
   isFauVideoUrl,
   isYouTubeUrl,
 } from "./Utils/utils";
-import { Video, ApiResponse, OEmbedData } from "./Utils/types";
-import { sendUrlToApi } from "./Utils/apiService";
+import {Video, ApiResponse, OEmbedData} from "./Utils/types";
+import {sendUrlToApi} from "./Utils/apiService";
 
 // Import the Editor Styles for the block editor
 import "./editor.scss";
@@ -78,7 +78,7 @@ interface DynamicHeadingProps {
   title: string;
 }
 
-const DynamicHeading: React.FC<DynamicHeadingProps> = ({ tag, title }) => {
+const DynamicHeading: React.FC<DynamicHeadingProps> = ({tag, title}) => {
   const Tag = tag as keyof JSX.IntrinsicElements;
   return <Tag>{title}</Tag>;
 };
@@ -88,8 +88,8 @@ const DynamicHeading: React.FC<DynamicHeadingProps> = ({ tag, title }) => {
 export default function Edit(props: EditProps): JSX.Element {
   const blockProps = useBlockProps();
   // Destructure the attributes and setAttributes from the props
-  const { attributes, setAttributes } = props;
-  const { id, url, rand, aspectratio, secureclipid, mediaurl } = attributes;
+  const {attributes, setAttributes} = props;
+  const {id, url, rand, aspectratio, secureclipid, mediaurl} = attributes;
 
   // Generate a unique ID for the video container
   const uniqueId = Math.random().toString(36).substring(2, 15);
@@ -153,7 +153,7 @@ export default function Edit(props: EditProps): JSX.Element {
         playerCurrentTime > marker.endTime
     );
 
-    setAttributes({ chapterMarkers: JSON.stringify(newMarkers) });
+    setAttributes({chapterMarkers: JSON.stringify(newMarkers)});
   };
 
   const resetUrl = () => {
@@ -216,7 +216,7 @@ export default function Edit(props: EditProps): JSX.Element {
     if (url && isFauVideoUrl(url)) {
       handleSendUrlToApi(url);
     } else if (url && isYouTubeUrl(url)) {
-      setAttributes({ mediaurl: url, url: url });
+      setAttributes({mediaurl: url, url: url});
     }
   }, [url]);
 
@@ -239,33 +239,33 @@ export default function Edit(props: EditProps): JSX.Element {
     switch (whichProviderIsUsed(url)) {
       case "youtube":
       case "youtubeShorts":
-        setAttributes({ provider: "youtube" });
+        setAttributes({provider: "youtube"});
         break;
       case "vimeo":
-        setAttributes({ provider: "vimeo" });
+        setAttributes({provider: "vimeo"});
         break;
       case "fauvideo":
-        setAttributes({ provider: "fauvideo" });
+        setAttributes({provider: "fauvideo"});
         break;
       case "br":
-        setAttributes({ provider: "br" });
+        setAttributes({provider: "br"});
         break;
       case "ard":
-        setAttributes({ provider: "ard" });
+        setAttributes({provider: "ard"});
         break;
       default:
-        setAttributes({ provider: "fauvideo" });
+        setAttributes({provider: "fauvideo"});
         break;
     }
   }, [inputURL, setAttributes]);
 
   const onTimeUpdate = useCallback(
     ({
-      currentPlayerTime,
-      playerClipStart,
-      playerClipEnd,
-      playerDuration,
-    }: {
+       currentPlayerTime,
+       playerClipStart,
+       playerClipEnd,
+       playerDuration,
+     }: {
       currentPlayerTime: number;
       playerClipStart: number;
       playerClipEnd: number;
@@ -403,7 +403,7 @@ export default function Edit(props: EditProps): JSX.Element {
             ref={containerRef}
           >
             {isTextInString("Title", attributes.show) && (
-              <DynamicHeading tag={attributes.titletag || "h2"} title={title} />
+              <DynamicHeading tag={attributes.titletag || "h2"} title={title}/>
             )}
             {attributes.secureclipid ? (
               <p>
@@ -427,6 +427,10 @@ export default function Edit(props: EditProps): JSX.Element {
                     markers={markers}
                     viewType={attributes.viewType}
                   />
+                ) : (url && isYouTubeUrl(url)) || providerName === "YouTube" ? (
+                  <div className={"rrze-video youtube-error-513 " + "ar-" + attributes.aspectratio.replace("/", "-") + " " + attributes.textAlign.toLowerCase()}>
+                    <p>{__("YouTube Videos cannot be previewed inside the BlockEditor. Use the Site Preview instead to preview the Video instead.", "rrze-video")}</p>
+                  </div>
                 ) : (
                   <ServerSideRender
                     block="rrze/rrze-video"
