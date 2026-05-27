@@ -1,6 +1,6 @@
 {
     "name": "rrze-video",
-    "version": "5.0.10",
+    "version": "5.0.16",
     "main": "webpack.config.js",
     "scripts": {
         "start": "wp-scripts start",
@@ -11,7 +11,9 @@
         "lint:css": "wp-scripts lint-style",
         "lint:js": "wp-scripts lint-js",
         "packages-update": "wp-scripts packages-update",
-        "plugin-zip": "wp-scripts plugin-zip"
+        "plugin-zip": "wp-scripts plugin-zip",
+        "make-pot": "php -d memory_limit=512M $(which wp) i18n make-pot . languages/rrze-video.pot --slug=rrze-video --domain=rrze-video --exclude=node_modules,src",
+        "make-json": "wp i18n make-json languages/ --no-purge"
     },
     "repository": {
         "type": "git",
