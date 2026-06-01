@@ -237,24 +237,27 @@ export default function Edit(props: EditProps): JSX.Element {
     const url = inputURL;
 
     switch (whichProviderIsUsed(url)) {
-      case "youtube":
       case "youtubeShorts":
-        setAttributes({provider: "youtube"});
+        setAttributes({ provider: "youtube", aspectratio: "9/16" });
         break;
+      case "youtube":
+        setAttributes({ provider: "youtube" });
+        break;
+
       case "vimeo":
-        setAttributes({provider: "vimeo"});
+        setAttributes({ provider: "vimeo" });
         break;
       case "fauvideo":
-        setAttributes({provider: "fauvideo"});
+        setAttributes({ provider: "fauvideo" });
         break;
       case "br":
-        setAttributes({provider: "br"});
+        setAttributes({ provider: "br" });
         break;
       case "ard":
-        setAttributes({provider: "ard"});
+        setAttributes({ provider: "ard" });
         break;
       default:
-        setAttributes({provider: "fauvideo"});
+        setAttributes({ provider: "fauvideo" });
         break;
     }
   }, [inputURL, setAttributes]);
