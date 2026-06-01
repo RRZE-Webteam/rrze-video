@@ -10,9 +10,9 @@ class Utils
 {
     /**
      * Retrieves the appropriate aspect ratio class for FAU video embeds.
-     * 
-     * This function determines the correct CSS class to apply based on 
-     * the aspect ratio provided in the arguments. If no aspect ratio or an 
+     *
+     * This function determines the correct CSS class to apply based on
+     * the aspect ratio provided in the arguments. If no aspect ratio or an
      * unrecognized aspect ratio is provided, it defaults to 'ar-16-9'.
      *
      * Available aspect ratios and their corresponding CSS classes:
@@ -22,7 +22,7 @@ class Utils
      * - 2.35/1  -> ar-234-1
      * - 2.40/1  -> ar-240-1
      * - 9/16    -> ar-9-16
-     * 
+     *
      * @param array $arguments Associative array with the 'aspectratio' key potentially set to a string representing the desired aspect ratio.
      * @return string Returns the corresponding CSS class string based on the provided aspect ratio.
      * @since 3.5.1
@@ -59,11 +59,11 @@ class Utils
 
     /**
      * Generates the HTML <track> elements for video transcripts.
-     * 
-     * This function processes the provided data to produce the corresponding 
+     *
+     * This function processes the provided data to produce the corresponding
      * <track> elements that represent the video's transcript files. These tracks
-     * are usually used for subtitles or captions in HTML5 video players. The 
-     * function supports multiple transcript files for different languages, and 
+     * are usually used for subtitles or captions in HTML5 video players. The
+     * function supports multiple transcript files for different languages, and
      * can produce multiple <track> elements.
      *
      * @param array $data Array of video data, which may contain one or more transcript files.
@@ -133,16 +133,24 @@ class Utils
     // Helper function to convert duration to ISO 8601 format
     public static function format_duration_iso8601($duration)
     {
-        $parts = explode(':', $duration);
-        return sprintf('PT%uM%uS', $parts[1], $parts[2]);
+        $parts = explode(':', (string) $duration);
+        if (count($parts) === 3) {
+            return sprintf('PT%uH%uM%uS', $parts[0],
+                $parts[1], $parts[2]);
+        } elseif (count($parts) === 2) {
+            return sprintf('PT%uM%uS', $parts[0],
+                $parts[1]);
+        }
+        return 'PT0M0S';
     }
+
 
 
     /**
      * Evaluates the display preferences for a given media item based on the provided data.
      *
      * The function processes the 'show' key in `$data`, which contains a comma-separated list of
-     * values indicating which aspects of the media item should be displayed. The possible values 
+     * values indicating which aspects of the media item should be displayed. The possible values
      * are 'title', 'info', 'meta', 'desc', and 'link'.
      *
      * - 'title' indicates whether to show the title.
@@ -150,7 +158,7 @@ class Utils
      * - 'meta' indicates whether to show the metadata.
      * - 'desc' indicates whether to show the description.
      * - 'link' indicates whether to show the link.
-     * 
+     *
      * The function returns an associative array with keys 'showtitle', 'showmeta', 'showdesc', and 'showlink'
      * indicating the user's preferences.
      *
@@ -258,8 +266,8 @@ class Utils
 
     /**
      * Fetches the URL of a video by its post ID.
-     * 
-     * If the post with the provided ID is of type 'video', it retrieves its URL 
+     *
+     * If the post with the provided ID is of type 'video', it retrieves its URL
      * and optional poster image.
      *
      * @param array $arguments Associative array containing 'id' key to fetch the URL.
@@ -283,7 +291,7 @@ class Utils
 
     /**
      * Fetches a random video URL from a specified genre.
-     * 
+     *
      * This function tries to fetch a random video of a specific genre, based on the slug.
      * If found, it retrieves its URL and optional poster image.
      *
@@ -330,20 +338,20 @@ class Utils
 
     /**
      * Determines the URL for the video based on an ID or fetches a random video URL.
-     * 
-     * This function evaluates the provided arguments to either fetch a specific video's URL by its ID 
-     * or retrieve a random video URL based on the specified genre. 
-     * 
-     * If an 'id' is provided and valid, it will call `getUrlById()` to fetch the video URL 
+     *
+     * This function evaluates the provided arguments to either fetch a specific video's URL by its ID
+     * or retrieve a random video URL based on the specified genre.
+     *
+     * If an 'id' is provided and valid, it will call `getUrlById()` to fetch the video URL
      * and poster image associated with that ID.
-     * 
-     * If the 'id' is not provided or invalid, but a 'rand' key is present, it will call 
+     *
+     * If the 'id' is not provided or invalid, but a 'rand' key is present, it will call
      * `getUrlRandomly()` to fetch a random video from the specified genre.
-     * 
+     *
      * @param array $arguments Associative array that includes keys to determine which URL to fetch:
      *      - 'id' (int|string): The post ID of the video. If provided and valid, the function fetches the URL of the video associated with this ID.
      *      - 'rand' (string): The slug of the genre to fetch a random video. If 'id' is not set or invalid, and this key is provided, a random video from the specified genre is fetched.
-     * 
+     *
      * @return void The function modifies the $arguments array directly to include the fetched URL and poster image, if found.
      */
     public static function getUrlByIdOrRandom(&$arguments)
