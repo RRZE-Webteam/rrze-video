@@ -45,42 +45,47 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
     event.preventDefault();
     const url = inputURL;
 
+    // Strip tracking parameters (e.g. ?si=...)
+    const urlObj = new URL(url);
+    urlObj.searchParams.delete("si");
+    const cleanUrl = urlObj.toString();
+
     const shortsRegex = /((www\.)youtube\.com\/)shorts\//;
     const youtubeRegex = /((www\.)youtube\.com\/)watch\?v=|youtu\.be\//;
     const embedRegex = /((www\.)youtube\.com\/)embed\//;
 
     let newAttributes = {};
 
-    if (shortsRegex.test(url)) {
+    if (shortsRegex.test(cleanUrl)) {
       newAttributes = {
         aspectratio: "9/16",
         provider: "youtube",
         orientation: "vertical",
-        url: url.replace(shortsRegex, "$1embed/"),
+        url: cleanUrl.replace(shortsRegex, "$1embed/"),
       };
-    } else if (youtubeRegex.test(url)) {
+    } else if (youtubeRegex.test(cleanUrl)) {
       newAttributes = {
         aspectratio: "16/9",
         provider: "youtube",
         orientation: "landscape",
-        url: /((www\.)youtube\.com\/)watch\?v=/.test(url)
-          ? url.replace(/((www\.)youtube\.com\/)watch\?v=/, "$1embed/")
-          : url,
+        url: /((www\.)youtube\.com\/)watch\?v=/.test(cleanUrl)
+          ? cleanUrl.replace(/((www\.)youtube\.com\/)watch\?v=/, "$1embed/")
+          : cleanUrl,
       };
-    } else if (embedRegex.test(url)) {
+    } else if (embedRegex.test(cleanUrl)) {
       newAttributes = {
         aspectratio: "16/9",
         provider: "youtube",
         orientation: "landscape",
-        url: url, // no need to replace the url, since it's already an embed link
+        url: cleanUrl, // no need to replace the url, since it's already an embed link
       };
     } else {
-      let providername = whichProviderIsUsed(url);
+      let providername = whichProviderIsUsed(cleanUrl);
       newAttributes = {
         aspectratio: "16/9",
         provider: providername,
         orientation: "landscape",
-        url: url,
+        url: cleanUrl,
       };
     }
 
