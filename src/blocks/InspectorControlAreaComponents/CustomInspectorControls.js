@@ -50,9 +50,9 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
     urlObj.searchParams.delete("si");
     const cleanUrl = urlObj.toString();
 
-    const shortsRegex = /((www\.)youtube\.com\/)shorts\//;
-    const youtubeRegex = /((www\.)youtube\.com\/)watch\?v=|youtu\.be\//;
-    const embedRegex = /((www\.)youtube\.com\/)embed\//;
+    const shortsRegex = /((?:www\.)?youtube\.com\/)shorts\//;
+    const youtubeRegex = /((?:www\.)?youtube\.com\/)watch\?v=|youtu\.be\//;
+    const embedRegex = /((?:www\.)?youtube\.com\/)embed\//;
 
     let newAttributes = {};
 
