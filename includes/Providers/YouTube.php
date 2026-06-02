@@ -49,9 +49,9 @@ class YouTube
             $res[] = 'width="315"';
             $res[] = 'height="560"';
         }
-        if (!empty($data['video']['title'])) {
-            $res[] = ' title="' . esc_html($data['video']['title']) . '"';
-        }
+
+        $iframeTitle = !empty($data['video']['title']) ? esc_html($data['video']['title']) : esc_html__('YouTube Video', 'rrze-video');
+        $res[] = ' title="' . $iframeTitle . '"';
         $res[] = '  src="https://www.youtube-nocookie.com/embed/' . $data['video']['v'] . '?rel=0&showinfo=0&iv_load_policy=3&modestbranding=1"';
         $res[] = ' frameborder="0"';
         $res[] = ' referrerpolicy="strict-origin-when-cross-origin"';
