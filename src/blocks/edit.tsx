@@ -234,11 +234,15 @@ export default function Edit(props: EditProps): JSX.Element {
   }, [id, rand]);
 
   useEffect(() => {
-    const url = inputURL;
+    if (!url) return;
 
     switch (whichProviderIsUsed(url)) {
       case "youtubeShorts":
-        setAttributes({ provider: "youtube", aspectratio: "9/16" });
+        setAttributes({
+          provider: "youtube",
+          aspectratio: "9/16",
+          orientation: "vertical",
+        });
         break;
       case "youtube":
         setAttributes({ provider: "youtube" });
@@ -260,7 +264,7 @@ export default function Edit(props: EditProps): JSX.Element {
         setAttributes({ provider: "fauvideo" });
         break;
     }
-  }, [inputURL, setAttributes]);
+  }, [url]);
 
   const onTimeUpdate = useCallback(
     ({
