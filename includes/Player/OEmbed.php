@@ -126,8 +126,8 @@ class OEmbed
                 $videodata['error'] = $remote_get->get_error_message();
             } else {
                 $videodata['video'] = json_decode(wp_remote_retrieve_body($remote_get), true);
-                preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $url, $matches);
-                $videodata['video']['v'] = $matches[1];
+                preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:shorts\/|(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/)))([^\?&\"'>]+)/", $url, $matches);
+                $videodata['video']['v'] = $matches[1] ?? '';
                 set_transient($transient, $videodata['video'], META_EXPIRATION);
             }
         }
