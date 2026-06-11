@@ -18,8 +18,6 @@ class CPT
     {
         add_action('init', [$this, 'set']);
         add_action('admin_init', [$this, 'register']);
-        // Set thumbnail size
-        add_image_size('rrze_video_featured_image', 60, 60, false);
     }
 
     public function set()
@@ -170,7 +168,13 @@ class CPT
 
             case 'thumbnail':
                 if (has_post_thumbnail()) {
-                    echo the_post_thumbnail('rrze_video_featured_image');
+                    echo get_the_post_thumbnail(
+                        $post->ID,
+                        'thumbnail',
+                        [
+                            'style' => 'max-width: 60px; height: auto;',
+                        ]
+                    );
                 } else {
                     echo '&mdash;';
                 }
