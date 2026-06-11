@@ -21,6 +21,7 @@ use RRZE\Video\UI\Gutenberg;
 
 const RRZE_PHP_VERSION = '7.4';
 const RRZE_WP_VERSION = '6.0';
+const RRZE_CAPABILITY_MODEL_VERSION = '2';
 
 /**
  * Composer autoload
@@ -61,6 +62,7 @@ spl_autoload_register(function ($class) {
 register_activation_hook(__FILE__, __NAMESPACE__ . '\activation');
 register_deactivation_hook(__FILE__, __NAMESPACE__ . '\deactivation');
 add_action('init', fn() => load_plugin_textdomain('rrze-video', false, dirname(plugin_basename(__FILE__)) . '/languages'), 1);
+add_action('init', __NAMESPACE__ . '\maybeRemoveLegacyCapabilities', 5);
 add_action('init', __NAMESPACE__ . '\create_block_rrze_video_block_init', 10);
 add_action('plugins_loaded', __NAMESPACE__ . '\loaded');
 
@@ -105,7 +107,6 @@ function activation()
             )
         );
     } else {
-        UI\Roles::addRoleCaps();
         flush_rewrite_rules();
     }
 }
@@ -116,8 +117,51 @@ function activation()
  */
 function deactivation()
 {
-    UI\Roles::removeRoleCaps();
     flush_rewrite_rules();
+}
+
+/**
+ * Remove custom capabilities left behind by the previous capability model.
+ */
+function maybeRemoveLegacyCapabilities(): void
+{
+    if (get_option('rrze_video_capability_model_version') === RRZE_CAPABILITY_MODEL_VERSION) {
+        return;
+    }
+
+    $legacyCapabilities = [
+        'edit_video',
+        'read_video',
+        'delete_video',
+        'edit_videos',
+        'edit_others_videos',
+        'delete_videos',
+        'publish_videos',
+        'read_private_videos',
+        'delete_private_videos',
+        'delete_published_videos',
+        'delete_others_videos',
+        'edit_private_videos',
+        'edit_published_videos',
+    ];
+
+    foreach (['administrator', 'editor'] as $roleName) {
+        $role = get_role($roleName);
+        if (!$role) {
+            continue;
+        }
+
+        foreach ($legacyCapabilities as $capability) {
+            $role->remove_cap($capability);
+        }
+    }
+
+    delete_option('rrze_video_role_caps_version');
+    update_option(
+        'rrze_video_capability_model_version',
+        RRZE_CAPABILITY_MODEL_VERSION,
+        false
+    );
 }
 
 /**
