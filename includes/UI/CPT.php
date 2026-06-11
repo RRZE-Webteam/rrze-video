@@ -53,9 +53,8 @@ class CPT
             'rest_base'             => 'rrze-video',
             'rest_controller_class' => 'WP_REST_Posts_Controller',
 
-            'capability_type'       => Capabilities::getCptCapabilityType('video'),
-            'capabilities'          => (array) Capabilities::getCptCaps('video'),
-            'map_meta_cap'          => Capabilities::getCptMapMetaCap('video')
+            'capability_type'       => ['page', 'pages'],
+            'map_meta_cap'          => true,
         );
 
         register_post_type(self::POST_TYPE, $video_args);
@@ -71,10 +70,10 @@ class CPT
                 'show_in_nav_menus'           => true,
                 'show_in_rest'                => true,
                 'capabilities' => [
-                    'manage_terms' => 'edit_videos',
-                    'edit_terms' => 'edit_videos',
-                    'delete_terms' => 'edit_videos',
-                    'assign_terms' => 'edit_videos'
+                    'manage_terms' => 'edit_pages',
+                    'edit_terms' => 'edit_pages',
+                    'delete_terms' => 'edit_pages',
+                    'assign_terms' => 'edit_pages',
                 ]
             ]
         );
