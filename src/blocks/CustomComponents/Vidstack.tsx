@@ -94,6 +94,75 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
       setCues(markers);
     }, [markers]);
 
+    useEffect(() => {
+      const playerElement = player.current?.el;
+      const playerDocument = playerElement?.ownerDocument;
+      const outerDocument = document;
+      const playerWindow = playerDocument?.defaultView;
+      const PointerEventConstructor = outerDocument.defaultView?.PointerEvent;
+
+      if (
+        !playerElement ||
+        !playerDocument ||
+        !playerWindow ||
+        !PointerEventConstructor ||
+        playerDocument === outerDocument
+      ) {
+        return;
+      }
+
+      const handlePointerEnd = (event: PointerEvent) => {
+        const draggingTimeSlider = playerElement.querySelector(
+          "[data-media-time-slider][data-dragging], " +
+            ".vds-time-slider[data-dragging]"
+        );
+
+        if (!draggingTimeSlider) {
+          return;
+        }
+
+        // Vidstack listens on the outer document while Gutenberg portals the
+        // player into an iframe. Forward the missing release event so dragging
+        // cannot remain active after the pointer is released inside the iframe.
+        outerDocument.dispatchEvent(
+          new PointerEventConstructor("pointerup", {
+            bubbles: true,
+            cancelable: true,
+            composed: true,
+            pointerId: event.pointerId,
+            pointerType: event.pointerType,
+            isPrimary: event.isPrimary,
+            clientX: event.clientX,
+            clientY: event.clientY,
+            screenX: event.screenX,
+            screenY: event.screenY,
+            button: 0,
+            buttons: 0,
+            ctrlKey: event.ctrlKey,
+            shiftKey: event.shiftKey,
+            altKey: event.altKey,
+            metaKey: event.metaKey,
+          })
+        );
+      };
+
+      playerDocument.addEventListener("pointerup", handlePointerEnd, true);
+      playerDocument.addEventListener("pointercancel", handlePointerEnd, true);
+
+      return () => {
+        playerDocument.removeEventListener(
+          "pointerup",
+          handlePointerEnd,
+          true
+        );
+        playerDocument.removeEventListener(
+          "pointercancel",
+          handlePointerEnd,
+          true
+        );
+      };
+    }, []);
+
     ///////////////////////////////
     // Event handlers
     const handleProviderChange = (provider: MediaProviderAdapter | null) => {
