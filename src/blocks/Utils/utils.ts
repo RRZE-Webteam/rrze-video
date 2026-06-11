@@ -22,17 +22,17 @@ export const isTextInString = (text: string, commaSeparatedString: string) => {
 
 /**
  * Evaluates which Provider is used for the video
- * @param {String} url 
+ * @param {String} url
  * @returns String with the provider name
  */
 export const whichProviderIsUsed = (url: string) => {
-  const regexYoutubeShorts = /(www\.youtube\.com\/)shorts\//;
-  const regexYoutube = /(www\.youtube\.com\/embed\/)|(www\.youtube\.com\/)/;
+  const regexYoutubeShorts = /((?:www\.)?youtube\.com\/)shorts\//;
+  const regexYoutube = /((?:www\.)?youtube\.com\/embed\/)|((?:www\.)?youtube\.com\/)|(youtu\.be\/)/;
   const regexVimeo = /(www\.vimeo\.com\/)/;
   const regexFau = /(www\.fau\.de\/)/;
   const regexBr = /(www\.br\.de\/)/;
   const regexArd = /(www\.ard\.de\/)/;
-  
+
   if (regexYoutubeShorts.test(url)) {
     return "youtubeShorts";
   } else if (regexYoutube.test(url)) {

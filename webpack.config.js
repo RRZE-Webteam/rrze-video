@@ -33,11 +33,31 @@ module.exports = {
   devtool: devtool,
   module: {
     ...defaultConfig.module,
+    rules: [
+      ...defaultConfig.module.rules,
+      {
+        test: /\.js$/,
+        include: /node_modules\/@vidstack/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [
+              ["@babel/preset-env", { targets: { chrome: 58, ie: 11 } }],
+              "@babel/preset-react",
+            ],
+            plugins: [
+              "@babel/plugin-transform-private-methods",
+              "@babel/plugin-transform-class-properties",
+            ],
+          },
+        },
+      },
+    ],
   },
   // Erweitern Sie die Dateierweiterungen, die Webpack verarbeiten wird
   resolve: {
     ...defaultConfig.resolve,
-    extensions: [".tsx", ".ts", ".js", ".json"]
+    extensions: [".tsx", ".ts", ".js", ".json"],
   },
   optimization: optimization,
   performance: {

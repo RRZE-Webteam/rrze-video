@@ -38,9 +38,8 @@ class Vimeo
         $res[] = StructuredMeta::get_html_structuredmeta($data);
         $res[] = '<div class="plyr__video-embed">';
         $res[] = '<iframe';
-        if (!empty($data['video']['title'])) {
-            $res[] = ' title="' . esc_html($data['video']['title']) . '"';
-        }
+        $iframeTitle = !empty($data['video']['title']) ? esc_html($data['video']['title']) : esc_html__('Vimeo Video', 'rrze-video');
+        $res[] = ' title="' . $iframeTitle . '"';
         $res[] = '  src="https://player.vimeo.com/video/' . $data['video']['video_id'] . '?autoplay=0&loop=0&title=0&byline=0&portrait=0"';
         $res[] = '  allowfullscreen';
         $res[] = '  allowtransparency';

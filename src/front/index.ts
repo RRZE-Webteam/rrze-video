@@ -1,38 +1,75 @@
 import HLS from 'hls.js';
 import './styles.scss';
-import { isHLSProvider, MediaProviderAdapter, VTTContent } from 'vidstack';
+import { isHLSProvider, VTTContent } from 'vidstack';
 import 'vidstack/player/styles/default/theme.css';
 import 'vidstack/player/styles/default/layouts/video.css';
 import 'vidstack/player';
 import 'vidstack/player/layouts';
 import 'vidstack/player/ui';
 
-document.addEventListener('DOMContentLoaded', () => {
+interface ChapterMarker {
+  startTime: number;
+  endTime: number;
+  text: string;
+}
 
-  // Select all media-player elements on the page.
-  const playerContainers = document.querySelectorAll<HTMLElement>('.rrze-video-container');
+interface ChapterMarkerData {
+  chapterMarkers?: ChapterMarker[];
+}
 
-  if (!playerContainers.length) {
-    console.error('No media player elements found!');
+interface RRZEVideoWindow extends Window {
+  rrzeVideoData?: Record<string, ChapterMarkerData>;
+}
+
+const parseChapterMarkers = (
+  container: HTMLElement | null
+): ChapterMarker[] => {
+  if (!container) {
+    return [];
+  }
+
+  const serializedMarkers = container.dataset.chapterMarkers;
+
+  if (serializedMarkers) {
+    try {
+      const markers = JSON.parse(serializedMarkers);
+      return Array.isArray(markers) ? markers : [];
+    } catch (error) {
+      console.error('Invalid chapter marker data.', error);
+      return [];
+    }
+  }
+
+  // Backward compatibility for cached markup rendered by older plugin versions.
+  const videoId = container.dataset.videoId;
+  return videoId
+    ? (window as RRZEVideoWindow).rrzeVideoData?.[videoId]?.chapterMarkers ?? []
+    : [];
+};
+
+const initializePlayers = () => {
+  const players = document.querySelectorAll('media-player');
+
+  if (!players.length) {
     return;
   }
 
-  playerContainers.forEach((container) => {
-    const videoId = container.dataset.videoId;
-    const chapterMarkers = (window as any).rrzeVideoData?.[videoId]?.chapterMarkers;
-
-    // Select the media player within the container.
-    const player = container.querySelector('media-player');
-    if (!player) {
-      console.error(`No media player element found in container for video ID: ${videoId}`);
+  players.forEach((player) => {
+    if (player.dataset.rrzeVideoInitialized === 'true') {
       return;
     }
 
-    // Ensure chapter markers are available for this specific video.
-    if (chapterMarkers) {
+    player.dataset.rrzeVideoInitialized = 'true';
+
+    const container = player.closest<HTMLElement>(
+      '.rrze-video-container[data-video-id]'
+    );
+    const chapterMarkers = parseChapterMarkers(container);
+
+    if (chapterMarkers.length > 0) {
       // Format chapter markers into the VTTContent structure.
       const content: VTTContent = {
-        cues: chapterMarkers.map((marker: any) => ({
+        cues: chapterMarkers.map((marker) => ({
           startTime: marker.startTime,
           endTime: marker.endTime,
           text: marker.text,
@@ -57,4 +94,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-});
+};
+
+initializePlayers();
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializePlayers, {
+    once: true,
+  });
+}

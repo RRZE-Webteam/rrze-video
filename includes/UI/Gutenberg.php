@@ -20,36 +20,43 @@ class Gutenberg
         // Generate a unique ID for the video block instance.
         $video_id = uniqid('rrze-video-');
         $attributes['videoId'] = $video_id;
-    
+
         // Render the shortcode output.
         $result = Shortcode::instance()->shortcodeVideo($attributes);
-    
-        // Pass chapter markers data specific to this video instance if available.
+
+        $chapter_markers = [];
         if (!empty($attributes['chapterMarkers'])) {
-            $chapter_markers = json_decode($attributes['chapterMarkers'], true);
-        
-            // Sanitize chapter markers data
-            foreach ($chapter_markers as &$marker) {
-                $marker['id'] = sanitize_text_field($marker['id']);
-                $marker['startTime'] = floatval($marker['startTime']);
-                $marker['endTime'] = floatval($marker['endTime']);
-                $marker['text'] = sanitize_text_field($marker['text']);
+            $decoded_markers = json_decode($attributes['chapterMarkers'], true);
+
+            if (is_array($decoded_markers)) {
+                foreach ($decoded_markers as $marker) {
+                    if (!is_array($marker)) {
+                        continue;
+                    }
+
+                    $chapter_markers[] = [
+                        'id' => sanitize_text_field($marker['id'] ?? ''),
+                        'startTime' => floatval($marker['startTime'] ?? 0),
+                        'endTime' => floatval($marker['endTime'] ?? 0),
+                        'text' => sanitize_text_field($marker['text'] ?? ''),
+                    ];
+                }
             }
-        
-            // Register the localized script for frontend
-            wp_enqueue_script('rrze-video-front-js');
-        
-            // Prepare data for localization
-            $video_data = [];
-            $video_data[$video_id] = ['chapterMarkers' => $chapter_markers];
-        
-            wp_localize_script('rrze-video-front-js', 'rrzeVideoData', $video_data);
         }
-        
-        // Add the unique ID as an HTML data attribute to identify the player.
-        return sprintf('<div class="rrze-video-container" data-video-id="%s">%s</div>', esc_attr($video_id), $result);
+
+        $chapter_markers_json = wp_json_encode($chapter_markers);
+        if (false === $chapter_markers_json) {
+            $chapter_markers_json = '[]';
+        }
+
+        // Keep marker data on the block instance so multiple players cannot overwrite each other.
+        return sprintf(
+            '<div class="rrze-video-container" data-video-id="%s" data-chapter-markers="%s">%s</div>',
+            esc_attr($video_id),
+            esc_attr($chapter_markers_json),
+            $result
+        );
     }
-    
 
     /**
      * Register block assets and render callback

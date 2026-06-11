@@ -13,7 +13,7 @@ class YouTube
      * Generates the HTML for YouTube embeds.
      *
      * This function constructs the necessary HTML markup to embed a YouTube video
-     * using structured data and the provided video data. The function handles optional 
+     * using structured data and the provided video data. The function handles optional
      * video title information and creates unique class names based on the given video ID.
      * The generated embed link is privacy-enhanced using the "youtube-nocookie" domain.
      *
@@ -49,14 +49,15 @@ class YouTube
             $res[] = 'width="315"';
             $res[] = 'height="560"';
         }
-        if (!empty($data['video']['title'])) {
-            $res[] = ' title="' . esc_html($data['video']['title']) . '"';
-        }
+
+        $iframeTitle = !empty($data['video']['title']) ? esc_html($data['video']['title']) : esc_html__('YouTube Video', 'rrze-video');
+        $res[] = ' title="' . $iframeTitle . '"';
         $res[] = '  src="https://www.youtube-nocookie.com/embed/' . $data['video']['v'] . '?rel=0&showinfo=0&iv_load_policy=3&modestbranding=1"';
         $res[] = ' frameborder="0"';
+        $res[] = ' referrerpolicy="strict-origin-when-cross-origin"';
+        $res[] = ' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"';
         $res[] = '  allowfullscreen';
         $res[] = '  allowtransparency';
-        $res[] = '  allow="autoplay"';
         $res[] = '></iframe>';
         if ($aspectRatio !== '9/16') {
             $res[] = '</div>';

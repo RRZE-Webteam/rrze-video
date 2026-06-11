@@ -45,40 +45,47 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
     event.preventDefault();
     const url = inputURL;
 
-    const shortsRegex = /(www\.youtube\.com\/)shorts\//;
-    const youtubeRegex = /(www\.youtube\.com\/)watch\?v=/;
-    const embedRegex = /(www\.youtube\.com\/)embed\//;
+    // Strip tracking parameters (e.g. ?si=...)
+    const urlObj = new URL(url);
+    urlObj.searchParams.delete("si");
+    const cleanUrl = urlObj.toString();
+
+    const shortsRegex = /((?:www\.)?youtube\.com\/)shorts\//;
+    const youtubeRegex = /((?:www\.)?youtube\.com\/)watch\?v=|youtu\.be\//;
+    const embedRegex = /((?:www\.)?youtube\.com\/)embed\//;
 
     let newAttributes = {};
 
-    if (shortsRegex.test(url)) {
+    if (shortsRegex.test(cleanUrl)) {
       newAttributes = {
         aspectratio: "9/16",
         provider: "youtube",
         orientation: "vertical",
-        url: url.replace(shortsRegex, "$1embed/"),
+        url: cleanUrl.replace(shortsRegex, "$1embed/"),
       };
-    } else if (youtubeRegex.test(url)) {
+    } else if (youtubeRegex.test(cleanUrl)) {
       newAttributes = {
         aspectratio: "16/9",
         provider: "youtube",
         orientation: "landscape",
-        url: url.replace(youtubeRegex, "$1embed/"),
+        url: /((www\.)youtube\.com\/)watch\?v=/.test(cleanUrl)
+          ? cleanUrl.replace(/((www\.)youtube\.com\/)watch\?v=/, "$1embed/")
+          : cleanUrl,
       };
-    } else if (embedRegex.test(url)) {
+    } else if (embedRegex.test(cleanUrl)) {
       newAttributes = {
         aspectratio: "16/9",
         provider: "youtube",
         orientation: "landscape",
-        url: url, // no need to replace the url, since it's already an embed link
+        url: cleanUrl, // no need to replace the url, since it's already an embed link
       };
     } else {
-      let providername = whichProviderIsUsed(url);
+      let providername = whichProviderIsUsed(cleanUrl);
       newAttributes = {
         aspectratio: "16/9",
         provider: providername,
         orientation: "landscape",
-        url: url,
+        url: cleanUrl,
       };
     }
 
@@ -117,7 +124,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
           <Text>
             {__(
               "Enter a video url from FAU Videoportal, YouTube, Vimeo, ARD, BR or Twitter.",
-              "rrze-video"
+              "rrze-video",
             )}
           </Text>
         </Spacer>
@@ -161,7 +168,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
               <Text>
                 {__(
                   `Replaces the Thumbnail with the image you selected.`,
-                  "rrze-video"
+                  "rrze-video",
                 )}
               </Text>
             </Spacer>
@@ -179,7 +186,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
             <Text>
               {__(
                 "In rare cases it can be useful to select an aspect ratio to prevent black borders. Only affects FAU Video embeds.",
-                "rrze-video"
+                "rrze-video",
               )}
             </Text>
           )}
@@ -191,7 +198,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
               <Text>
                 {__(
                   "Controls the video orientation. Vertical videos are displayed in portrait mode.",
-                  "rrze-video"
+                  "rrze-video",
                 )}
               </Text>
             </Spacer>
@@ -216,7 +223,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
                   <Text>
                     {__(
                       "Controls the video alignment for vertical Videos.",
-                      "rrze-video"
+                      "rrze-video",
                     )}
                   </Text>
                 </Spacer>
@@ -271,7 +278,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
           {__(
             `You can add videos to your video library by navigating to Dashboard
             | Video library | Add new.`,
-            "rrze-video"
+            "rrze-video",
           )}
         </Text>
         <Divider />
@@ -280,7 +287,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
           <Text>
             {__(
               `You can select a Video library category and a random video will be displayed from this category.`,
-              "rrze-video"
+              "rrze-video",
             )}
           </Text>
         </Spacer>
@@ -294,7 +301,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
           <Text>
             {__(
               `You can select a Video from within your Video library.`,
-              "rrze-video"
+              "rrze-video",
             )}
           </Text>
         </Spacer>
@@ -313,7 +320,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
             <Text>
               {__(
                 `Activates the loop feature. The video will be played in a loop.`,
-                "rrze-video"
+                "rrze-video",
               )}
             </Text>
           </Spacer>
@@ -326,7 +333,7 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
             <Text>
               {__(
                 `Crops the video to a specific section. The video will start and end at the specified times. The duration of the video will update accordingly.`,
-                "rrze-video"
+                "rrze-video",
               )}
             </Text>
             <NumberControl
