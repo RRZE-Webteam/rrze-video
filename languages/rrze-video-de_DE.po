@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RRZE Video 3.5.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-video\n"
-"POT-Creation-Date: 2026-05-27T10:27:59+00:00\n"
-"PO-Revision-Date: 2026-05-27 12:30+0200\n"
+"POT-Creation-Date: 2026-06-16T12:10:17+00:00\n"
+"PO-Revision-Date: 2026-06-16 14:12+0200\n"
 "Last-Translator: \n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -198,14 +198,24 @@ msgstr "Video mit Präsentationsfolien"
 msgid "Audio Format"
 msgstr "Audioformat"
 
-#: includes/Player/Player.php:333 build/blocks.js:1 build/blocks/index.js:1
-#: dist/blocks/blocks.js:1 dist/blocks/index.js:1
+#: includes/Player/Player.php:333 build/blocks.js:2523
+#: build/blocks/index.js:2523 dist/blocks/blocks.js:1 dist/blocks/index.js:1
 msgid "Provider"
 msgstr "Provider"
 
 #: includes/Player/Player.php:352
 msgid "This video is part of a video collection"
 msgstr "Dieses Video ist Teil einer Videosammlung"
+
+#: includes/Providers/Vimeo.php:41
+#, fuzzy
+#| msgid "Video"
+msgid "Vimeo Video"
+msgstr "Video"
+
+#: includes/Providers/YouTube.php:53
+msgid "YouTube Video"
+msgstr ""
 
 #: includes/Shortcode.php:47
 msgid "ID Number"
@@ -263,7 +273,7 @@ msgstr "URL (Vorschaubild)"
 msgid "Titletag"
 msgstr "Titletag"
 
-#: includes/Shortcode.php:108 includes/UI/CPT.php:147
+#: includes/Shortcode.php:108 includes/UI/CPT.php:144
 msgid "Category"
 msgstr "Kategorie"
 
@@ -283,7 +293,7 @@ msgstr "CSS Klassen"
 msgid "CSS classes that the shortcode should receive."
 msgstr "CSS Klassen, die dem Shortcode übergeben werden sollen."
 
-#: includes/Shortcode.php:122 build/blocks.js:1 build/blocks/index.js:1
+#: includes/Shortcode.php:122 build/blocks.js:1726 build/blocks/index.js:1726
 #: dist/blocks/blocks.js:1 dist/blocks/index.js:1
 msgid "Show Title"
 msgstr "Titel ausgeben"
@@ -309,7 +319,7 @@ msgid "Fields to be displayed, overwriting the above checkboxes."
 msgstr ""
 "Felder, die ausgegeben werden überschreiben die gewählten Kontrollkästen."
 
-#: includes/Shortcode.php:143 build/blocks.js:1 build/blocks/index.js:1
+#: includes/Shortcode.php:143 build/blocks.js:1352 build/blocks/index.js:1352
 #: dist/blocks/blocks.js:1 dist/blocks/index.js:1
 msgid "Aspect Ratio"
 msgstr "Seitenverhältnis"
@@ -318,48 +328,48 @@ msgstr "Seitenverhältnis"
 msgid "Aspect ratio of the video."
 msgstr "Seitenverhältnis des Videos."
 
-#: includes/UI/CPT.php:28
+#: includes/UI/CPT.php:26
 msgctxt "Post Type General Name"
 msgid "Videothek"
 msgstr "Videothek"
 
-#: includes/UI/CPT.php:29
+#: includes/UI/CPT.php:27
 msgctxt "Post Type Singular Name"
 msgid "Video"
 msgstr "Video"
 
-#: includes/UI/CPT.php:30
+#: includes/UI/CPT.php:28
 msgid "Videothek"
 msgstr "Videothek"
 
-#: includes/UI/CPT.php:34
+#: includes/UI/CPT.php:32
 msgid "Video"
 msgstr "Video"
 
-#: includes/UI/CPT.php:35
+#: includes/UI/CPT.php:33
 msgid "Create video collection"
 msgstr "Erstellen Sie eine Videosammlung"
 
 #. translators: %s: Categories.
-#: includes/UI/CPT.php:127
+#: includes/UI/CPT.php:124
 #, php-format
 msgid "Display all %s"
 msgstr "Alle %s anzeigen"
 
-#: includes/UI/CPT.php:146
+#: includes/UI/CPT.php:143
 msgid "Title"
 msgstr "Titel"
 
-#: includes/UI/CPT.php:148
+#: includes/UI/CPT.php:145
 msgid "ID"
 msgstr "ID"
 
-#: includes/UI/CPT.php:149 includes/UI/Metabox.php:36
+#: includes/UI/CPT.php:146 includes/UI/Metabox.php:36
 #: includes/UI/Widget.php:134
 msgid "URL"
 msgstr "URL"
 
-#: includes/UI/CPT.php:150
+#: includes/UI/CPT.php:147
 msgid "Thumbnail"
 msgstr "Vorschaubild"
 
@@ -497,109 +507,119 @@ msgid "Neither a valid ID nor a valid URL was specified for a video."
 msgstr ""
 "Weder eine gültige ID, noch eine gültige URL wurden für das Video angegeben."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Edit Chapter Markers"
-msgstr "Kapitelmarker bearbeiten"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Marker Label"
-msgstr "Kapitelbeschriftung"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Start Time"
-msgstr "Startzeit"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Invalid time format."
-msgstr "Ungültiges Zeitformat."
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:147 build/blocks.js:207 build/blocks.js:328
+#: build/blocks.js:368 build/blocks.js:511 build/blocks.js:557
+#: build/blocks/index.js:147 build/blocks/index.js:207
+#: build/blocks/index.js:328 build/blocks/index.js:368
+#: build/blocks/index.js:511 build/blocks/index.js:557 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "End time must be greater than start time."
 msgstr "Der Endwert muss größer als der Anfangswert sein."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Set to Current Time"
-msgstr "An Position im Videoplayer angleichen"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "End Time"
-msgstr "Videoende"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Set to End of Video"
-msgstr "Auf die Endzeit des Videos setzen"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Add Marker"
-msgstr "Kapitelmarker hinzufügen"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Markers"
-msgstr "Kapitelmarker"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Label"
-msgstr "Beschriftung"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Actions"
-msgstr "Aktionen"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Edit Marker"
-msgstr "Kapitelmarker bearbeiten"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Delete Marker"
-msgstr "Kapitelmarker löschen"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:251 build/blocks/index.js:251 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "No marker at the current position to delete."
 msgstr ""
 "An der gewählten Stelle gibt es keine Kapitelmarker, die gelöscht werden "
 "könnten."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:291 build/blocks/index.js:291 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Edit Chapter Markers"
+msgstr "Kapitelmarker bearbeiten"
+
+#: build/blocks.js:304 build/blocks.js:481 build/blocks/index.js:304
+#: build/blocks/index.js:481 dist/blocks/blocks.js:1 dist/blocks/index.js:1
+msgid "Marker Label"
+msgstr "Kapitelbeschriftung"
+
+#: build/blocks.js:313 build/blocks.js:422 build/blocks.js:493
+#: build/blocks/index.js:313 build/blocks/index.js:422
+#: build/blocks/index.js:493 dist/blocks/blocks.js:1 dist/blocks/index.js:1
+msgid "Start Time"
+msgstr "Startzeit"
+
+#: build/blocks.js:323 build/blocks.js:363 build/blocks.js:506
+#: build/blocks.js:552 build/blocks/index.js:323 build/blocks/index.js:363
+#: build/blocks/index.js:506 build/blocks/index.js:552 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Invalid time format."
+msgstr "Ungültiges Zeitformat."
+
+#: build/blocks.js:345 build/blocks.js:385 build/blocks.js:519
+#: build/blocks.js:565 build/blocks/index.js:345 build/blocks/index.js:385
+#: build/blocks/index.js:519 build/blocks/index.js:565 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Set to Current Time"
+msgstr "An Position im Videoplayer angleichen"
+
+#: build/blocks.js:353 build/blocks.js:424 build/blocks.js:539
+#: build/blocks/index.js:353 build/blocks/index.js:424
+#: build/blocks/index.js:539 dist/blocks/blocks.js:1 dist/blocks/index.js:1
+msgid "End Time"
+msgstr "Videoende"
+
+#: build/blocks.js:389 build/blocks.js:581 build/blocks/index.js:389
+#: build/blocks/index.js:581 dist/blocks/blocks.js:1 dist/blocks/index.js:1
+msgid "Set to End of Video"
+msgstr "Auf die Endzeit des Videos setzen"
+
+#: build/blocks.js:407 build/blocks/index.js:407 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Add Marker"
+msgstr "Kapitelmarker hinzufügen"
+
+#: build/blocks.js:414 build/blocks/index.js:414 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Markers"
+msgstr "Kapitelmarker"
+
+#: build/blocks.js:420 build/blocks/index.js:420 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Label"
+msgstr "Beschriftung"
+
+#: build/blocks.js:426 build/blocks/index.js:426 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Actions"
+msgstr "Aktionen"
+
+#: build/blocks.js:440 build/blocks.js:472 build/blocks/index.js:440
+#: build/blocks/index.js:472 dist/blocks/blocks.js:1 dist/blocks/index.js:1
+msgid "Edit Marker"
+msgstr "Kapitelmarker bearbeiten"
+
+#: build/blocks.js:444 build/blocks/index.js:444 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Delete Marker"
+msgstr "Kapitelmarker löschen"
+
+#: build/blocks.js:462 build/blocks/index.js:462 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Delete Marker at Current Position"
 msgstr "Kapitelmarker an der gesetzten Positionen löschen"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:469 build/blocks/index.js:469 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Close"
 msgstr "Schließen"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:602 build/blocks/index.js:602 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Save"
 msgstr "Speichern"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:609 build/blocks/index.js:609 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:613 build/blocks/index.js:613 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Marker Overlap"
 msgstr "Kapitelmarker überdecken sich"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:616 build/blocks/index.js:616 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid ""
 "The new marker overlaps with existing markers. Overlapping markers will be "
@@ -609,22 +629,49 @@ msgstr ""
 "Andere Marker an der Stelle werden angepasst oder entfernt. Möchten Sie "
 "fortfahren?"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:708 build/blocks/index.js:708 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Add your Video URL"
+msgstr "Video-URL eingeben"
+
+#: build/blocks.js:710 build/blocks/index.js:710 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Add your Video URL from FAU Videoportal, YouTube, ARD, ZDF or Vimeo."
+msgstr ""
+"Fügen Sie Ihre Video-URL aus dem FAU Videoportal, YouTube, ARD- oder BR-"
+"Mediathek hinzu."
+
+#: build/blocks.js:714 build/blocks.js:1312 build/blocks/index.js:714
+#: build/blocks/index.js:1312 dist/blocks/blocks.js:1 dist/blocks/index.js:1
+msgid "Video URL"
+msgstr "Video-URL"
+
+#: build/blocks.js:726 build/blocks.js:1319 build/blocks/index.js:726
+#: build/blocks/index.js:1319 dist/blocks/blocks.js:1 dist/blocks/index.js:1
+msgid "Update the Video URL"
+msgstr "Geben Sie hier die Video-URL ein."
+
+#: build/blocks.js:734 build/blocks.js:1327 build/blocks/index.js:734
+#: build/blocks/index.js:1327 dist/blocks/blocks.js:1 dist/blocks/index.js:1
+msgid "Embed Video from URL"
+msgstr "Video einbinden"
+
+#: build/blocks.js:850 build/blocks/index.js:850 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Heading level"
 msgstr "Überschriftebene"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1133 build/blocks/index.js:1133 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Categories"
 msgstr "Kategorien"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1135 build/blocks/index.js:1135 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Don't show random videos."
 msgstr "Zeige keine zufälligen Videos."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1159 build/blocks/index.js:1159 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid ""
 "Add Categories via Dashboard > Video Library > Categories to use this "
@@ -633,71 +680,12 @@ msgstr ""
 "Fügen Sie Kategorien in Ihrer Mediathek über \"Dashboard > Videothek > "
 "Kategorien\" hinzu, um diese Funktion zu nutzen."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "No video selected"
-msgstr "Kein Video aus der Videothek ausgeben"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Add Videos via Dashboard > Video Library to use this feature."
-msgstr ""
-"Fügen Sie individuelle Videos zu Ihrer Videothek unter \"Dashboard > "
-"Videothek > Neu\" hinzu, um diese Funktion zu nutzen."
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "To edit the background image, you need permission to upload media."
-msgstr ""
-"Um das Vorschaubild zu bearbeiten, benötigen Sie die passende Berechtigung, "
-"um Medien in die WordPress-Mediathek hochzuladen."
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Background image"
-msgstr "Hintergrundbild"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Set Video Thumbnail"
-msgstr "Video Vorschaubild festlegen"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Video Thumbnail"
-msgstr "Video-Vorschaubild"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Replace Video Thumbnail"
-msgstr "Video Vorschaubild ersetzen"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Remove Video Thumbnail"
-msgstr "Vorschaubild des Videos entfernen"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Show Videolink"
-msgstr "Videolink ausgeben"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Show Metadata"
-msgstr "Metadaten ausgeben"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Show Description"
-msgstr "Beschreibung ausgeben"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1302 build/blocks/index.js:1302 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "URL Settings"
 msgstr "URL-Einstellungen"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1307 build/blocks/index.js:1307 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid ""
 "Enter a video url from FAU Videoportal, YouTube, Vimeo, ARD, BR or Twitter."
@@ -705,37 +693,22 @@ msgstr ""
 "Fügen Sie Ihre Video-URL aus dem FAU Videoportal, YouTube, ARD- oder BR-"
 "Mediathek hinzu."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Video URL"
-msgstr "Video-URL"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Update the Video URL"
-msgstr "Geben Sie hier die Video-URL ein."
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Embed Video from URL"
-msgstr "Video einbinden"
-
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1331 build/blocks/index.js:1331 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Video Display Settings"
 msgstr "Video-Anzeigeoptionen"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1341 build/blocks/index.js:1341 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Individual Thumbnail"
 msgstr "Individuelles Vorschaubild"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1343 build/blocks/index.js:1343 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Replaces the Thumbnail with the image you selected."
 msgstr "Ersetzt das Vorschaubild durch das gewählte Bild."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1354 build/blocks/index.js:1354 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid ""
 "In rare cases it can be useful to select an aspect ratio to prevent black "
@@ -745,7 +718,7 @@ msgstr ""
 "auszuwählen, um schwarze Ränder zu vermeiden. Diese Einstellung betrifft nur "
 "Videos aus dem FAU Videoportal."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1359 build/blocks/index.js:1359 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid ""
 "Controls the video orientation. Vertical videos are displayed in portrait "
@@ -754,57 +727,57 @@ msgstr ""
 "Steuert das Videoformat. Videos im Hochformat werden mit dem Portrait-Modus "
 "ausgegeben."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1362 build/blocks/index.js:1362 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Orientation"
 msgstr "Ausrichtung"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1368 build/blocks/index.js:1368 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Landscape mode"
 msgstr "Querformat"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1371 build/blocks/index.js:1371 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Vertical video"
 msgstr "Hochformat"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1376 build/blocks/index.js:1376 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Controls the video alignment for vertical Videos."
 msgstr "Steuert die Positionierung von Videos im Hochformat."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1379 build/blocks/index.js:1379 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Alignment"
 msgstr "Positionierung"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1389 build/blocks/index.js:1389 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Left"
 msgstr "Links"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1392 build/blocks/index.js:1392 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Center"
 msgstr "Zentrieren"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1395 build/blocks/index.js:1395 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Right"
 msgstr "Rechts"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1400 build/blocks/index.js:1400 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Aspect ratio"
 msgstr "Seitenverhältnis"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1425 build/blocks/index.js:1425 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Video Library"
 msgstr "Videothek"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1429 build/blocks/index.js:1429 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid ""
 "You can add videos to your video library by navigating to Dashboard\n"
@@ -813,12 +786,12 @@ msgstr ""
 "Sie können Videos über \"Dashboard > Videothek > Neu\" zu Ihrer Videothek "
 "hinzufügen."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1434 build/blocks/index.js:1434 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Random Output"
 msgstr "Zufällige Ausgabe"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1436 build/blocks/index.js:1436 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid ""
 "You can select a Video library category and a random video will be displayed "
@@ -827,105 +800,158 @@ msgstr ""
 "Sie können eine Kategorie aus Ihrer Videothek wählen, um ein zufälliges "
 "Video daraus auszugeben."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1444 build/blocks/index.js:1444 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Individual Videos"
 msgstr "Individuelle Videos"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1446 build/blocks/index.js:1446 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "You can select a Video from within your Video library."
 msgstr "Sie können ein Video aus Ihrer Videothek auswählen."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Player controls"
-msgstr "Bedienungselemente"
+#: build/blocks.js:1456 build/blocks/index.js:1456
+msgid "Playback Settings"
+msgstr "Wiedergabe Einstellungen"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1461 build/blocks/index.js:1461 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Loop mode"
-msgstr "Loop mode"
+msgstr "Loop Modus"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Activates the loop feature. The video will be played in a loop."
+#: build/blocks.js:1466 build/blocks/index.js:1466
+msgid "Loop is not available when clip times are set. Remove clip times first."
 msgstr ""
-"Aktiviert das Loop-Feature. Das Video wird in einer Endlosschleife gespielt, "
-"bis Nutzer das Video wieder pausieren."
+"Die Loop-Funktion ist nicht verfügbar, wenn Clip-Zeiten festgelegt sind. "
+"Entferne zuerst die Clip-Zeiten."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1472 build/blocks/index.js:1472 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Activate looping"
 msgstr "Endlosschleife aktivieren"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
+#: build/blocks.js:1476 build/blocks/index.js:1476
+msgid "Clip mode"
+msgstr "Clip Modus"
+
+#: build/blocks.js:1482 build/blocks/index.js:1482
+msgid "Crops the video to a specific section."
+msgstr "Schneidet das Video auf einen bestimmten Abschnitt zu."
+
+#: build/blocks.js:1487 build/blocks/index.js:1487
 msgid ""
-"Crops the video to a specific section. The video will start and end at the "
-"specified times. The duration of the video will update accordingly."
+"Clip settings are not available when loop mode is active. Deactivate loop "
+"first."
 msgstr ""
-"Begrenzt die Videolänge auf das angegebene Intervall. Die Videolänge in der "
-"Timeline passt sich automatisch an."
+"Die Clip-Einstellungen sind nicht verfügbar, wenn der Loop-Modus aktiv ist. "
+"Deaktiviere zuerst den Loop-Modus."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Start of the looping section"
-msgstr "Start der Endlosschleife"
+#: build/blocks.js:1490 build/blocks/index.js:1490
+msgid "Clip start time (seconds)"
+msgstr "Startzeit des Clips (Sekunden)"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "End of the looping section"
-msgstr "Ende der Endlosschleife"
+#: build/blocks.js:1495 build/blocks/index.js:1495
+msgid "Clip end time (seconds)"
+msgstr "Endzeit des Clips (Sekunden)"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Update loop settings"
-msgstr "Loop Einstellungen aktualisieren"
+#: build/blocks.js:1502 build/blocks/index.js:1502
+msgid "Start time must be less than end time."
+msgstr "Der Endwert muss größer als der Anfangswert sein."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
-#: dist/blocks/index.js:1
-msgid "Add your Video URL"
-msgstr "Video-URL eingeben"
+#: build/blocks.js:1510 build/blocks/index.js:1510
+msgid "Apply clip settings"
+msgstr "Clip Einstellungen aktualisieren"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1584 build/blocks/index.js:1584 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
-msgid "Add your Video URL from FAU Videoportal, YouTube, ARD, ZDF or Vimeo."
+msgid "To edit the background image, you need permission to upload media."
 msgstr ""
-"Fügen Sie Ihre Video-URL aus dem FAU Videoportal, YouTube, ARD- oder BR-"
-"Mediathek hinzu."
+"Um das Vorschaubild zu bearbeiten, benötigen Sie die passende Berechtigung, "
+"um Medien in die WordPress-Mediathek hochzuladen."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:1610 build/blocks/index.js:1610 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Background image"
+msgstr "Hintergrundbild"
+
+#: build/blocks.js:1619 build/blocks/index.js:1619 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Set Video Thumbnail"
+msgstr "Video Vorschaubild festlegen"
+
+#: build/blocks.js:1624 build/blocks.js:1631 build/blocks/index.js:1624
+#: build/blocks/index.js:1631 dist/blocks/blocks.js:1 dist/blocks/index.js:1
+msgid "Video Thumbnail"
+msgstr "Video-Vorschaubild"
+
+#: build/blocks.js:1640 build/blocks/index.js:1640 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Replace Video Thumbnail"
+msgstr "Video Vorschaubild ersetzen"
+
+#: build/blocks.js:1648 build/blocks/index.js:1648 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Remove Video Thumbnail"
+msgstr "Vorschaubild des Videos entfernen"
+
+#: build/blocks.js:1733 build/blocks/index.js:1733 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Show Videolink"
+msgstr "Videolink ausgeben"
+
+#: build/blocks.js:1737 build/blocks/index.js:1737 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Show Metadata"
+msgstr "Metadaten ausgeben"
+
+#: build/blocks.js:1741 build/blocks/index.js:1741 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Show Description"
+msgstr "Beschreibung ausgeben"
+
+#: build/blocks.js:1836 build/blocks/index.js:1836 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "No video selected"
+msgstr "Kein Video aus der Videothek ausgeben"
+
+#: build/blocks.js:1848 build/blocks/index.js:1848 dist/blocks/blocks.js:1
+#: dist/blocks/index.js:1
+msgid "Add Videos via Dashboard > Video Library to use this feature."
+msgstr ""
+"Fügen Sie individuelle Videos zu Ihrer Videothek unter \"Dashboard > "
+"Videothek > Neu\" hinzu, um diese Funktion zu nutzen."
+
+#: build/blocks.js:2407 build/blocks/index.js:2407 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Are you sure you want to reset the video block to factory settings?"
 msgstr "Möchten Sie den Videoblock auf die Standardeinstellungen zurücksetzen?"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:2416 build/blocks/index.js:2416 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Reset Video block"
 msgstr "Videoblock zurücksetzen."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:2425 build/blocks/index.js:2425 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Add Chapter Markers"
 msgstr "Kapitelmarker hinzufügen"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:2429 build/blocks/index.js:2429 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Delete Current Marker"
 msgstr "Kapitelmarker löschen"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:2434 build/blocks/index.js:2434 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Edit Markers"
 msgstr "Kapitelmarker bearbeiten"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:2457 build/blocks/index.js:2457 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Eine Vorschau zugriffsgeschützter Videos im Editor ist nicht möglich."
 msgstr "Eine Vorschau zugriffsgeschützter Videos im Editor ist nicht möglich."
 
-#: build/blocks.js:1 build/blocks/index.js:1
+#: build/blocks.js:2473 build/blocks/index.js:2473
 msgid ""
 "YouTube Videos cannot be previewed inside the BlockEditor. Use the Site "
 "Preview instead to preview the Video instead."
@@ -934,25 +960,55 @@ msgstr ""
 "werden. Verwenden Sie stattdessen die Seitenvorschau, um eine Vorschau des "
 "Videos anzuzeigen."
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:2505 build/blocks/index.js:2505 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Autor"
 msgstr "Autor"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:2509 build/blocks/index.js:2509 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Quelle"
 msgstr "Quelle"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:2516 build/blocks/index.js:2516 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Audioformat"
 msgstr "Audioformat"
 
-#: build/blocks.js:1 build/blocks/index.js:1 dist/blocks/blocks.js:1
+#: build/blocks.js:2525 build/blocks/index.js:2525 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1
 msgid "Videoportal der FAU (Friedrich-Alexander-Universität Erlangen-Nürnberg)"
 msgstr "Videoportal der FAU"
+
+#: dist/blocks/blocks.js:1 dist/blocks/index.js:1
+msgid "Player controls"
+msgstr "Bedienungselemente"
+
+#: dist/blocks/blocks.js:1 dist/blocks/index.js:1
+msgid "Activates the loop feature. The video will be played in a loop."
+msgstr ""
+"Aktiviert das Loop-Feature. Das Video wird in einer Endlosschleife gespielt, "
+"bis Nutzer das Video wieder pausieren."
+
+#: dist/blocks/blocks.js:1 dist/blocks/index.js:1
+msgid ""
+"Crops the video to a specific section. The video will start and end at the "
+"specified times. The duration of the video will update accordingly."
+msgstr ""
+"Begrenzt die Videolänge auf das angegebene Intervall. Die Videolänge in der "
+"Timeline passt sich automatisch an."
+
+#: dist/blocks/blocks.js:1 dist/blocks/index.js:1
+msgid "Start of the looping section"
+msgstr "Start der Endlosschleife"
+
+#: dist/blocks/blocks.js:1 dist/blocks/index.js:1
+msgid "End of the looping section"
+msgstr "Ende der Endlosschleife"
+
+#: dist/blocks/blocks.js:1 dist/blocks/index.js:1
+msgid "Update loop settings"
+msgstr "Loop Einstellungen aktualisieren"
 
 #: build/blocks/block.json dist/blocks/block.json
 msgctxt "block title"
@@ -1003,3 +1059,6 @@ msgstr "rrze"
 msgctxt "block description"
 msgid "Embeds videos from FAUVideo, YouTube & Co."
 msgstr "Bindet ein Video von FAUVideo, YouTube & Co ein."
+
+#~ msgid "Clip settings"
+#~ msgstr "Clip Einstellungen"

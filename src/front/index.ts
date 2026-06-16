@@ -55,14 +55,14 @@ const initializePlayers = () => {
   }
 
   players.forEach((player) => {
-    if (player.dataset.rrzeVideoInitialized === 'true') {
+    if (player.dataset.rrzeVideoInitialized === "true") {
       return;
     }
 
-    player.dataset.rrzeVideoInitialized = 'true';
+    player.dataset.rrzeVideoInitialized = "true";
 
     const container = player.closest<HTMLElement>(
-      '.rrze-video-container[data-video-id]'
+      ".rrze-video-container[data-video-id]",
     );
     const chapterMarkers = parseChapterMarkers(container);
 
@@ -78,21 +78,62 @@ const initializePlayers = () => {
 
       // Add JSON chapter markers to the media player using the Track API.
       player.textTracks.add({
-        type: 'json',
-        kind: 'chapters',
-        language: 'en-US',
+        type: "json",
+        kind: "chapters",
+        language: "en-US",
         default: true,
         content,
       });
     }
 
     // Add support for HLS playback.
-    player.addEventListener('provider-change', (event: CustomEvent) => {
+    player.addEventListener("provider-change", (event: CustomEvent) => {
       const provider = event.detail;
       if (isHLSProvider(provider)) {
         provider.library = HLS;
       }
     });
+    // Clip start/end handling
+    const clipStartAttr = player.getAttribute("data-clip-start");
+    const clipEndAttr = player.getAttribute("data-clip-end");
+
+    if (clipStartAttr || clipEndAttr) {
+      const clipStart = clipStartAttr ? parseFloat(clipStartAttr) : 0;
+      const clipEnd = clipEndAttr ? parseFloat(clipEndAttr) : Infinity;
+      let loopPending = false;
+
+      const setupClipHandling = (video: HTMLVideoElement) => {
+        video.addEventListener("timeupdate", () => {
+          if (loopPending) return;
+          if (video.currentTime < clipStart) {
+            video.currentTime = clipStart;
+            return;
+          }
+          if (clipEnd !== Infinity && video.currentTime >= clipEnd - 0.3) {
+            loopPending = true;
+            video.pause();
+            video.currentTime = clipStart;
+            setTimeout(() => {
+              loopPending = false;
+            }, 500);
+          }
+        });
+      };
+
+      const existingVideo = player.querySelector("video");
+      if (existingVideo) {
+        setupClipHandling(existingVideo as HTMLVideoElement);
+      } else {
+        const observer = new MutationObserver(() => {
+          const video = player.querySelector("video");
+          if (video) {
+            observer.disconnect();
+            setupClipHandling(video as HTMLVideoElement);
+          }
+        });
+        observer.observe(player, { childList: true, subtree: true });
+      }
+    }
   });
 };
 
