@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: RRZE Video 3.5.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-video\n"
 "POT-Creation-Date: 2026-06-16T12:10:17+00:00\n"
-"PO-Revision-Date: 2026-06-16 14:11+0200\n"
+"PO-Revision-Date: 2026-06-17 11:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -823,7 +823,7 @@ msgstr "Loop Modus"
 msgid "Loop is not available when clip times are set. Remove clip times first."
 msgstr ""
 "Die Loop-Funktion ist nicht verfügbar, wenn Clip-Zeiten festgelegt sind. "
-"Entferne zuerst die Clip-Zeiten."
+"Entfernen Sie zuerst die Clip-Zeiten."
 
 #: build/blocks.js:1472 build/blocks/index.js:1472 dist/blocks/blocks.js:1
 #: dist/blocks/index.js:1

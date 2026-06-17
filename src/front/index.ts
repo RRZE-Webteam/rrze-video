@@ -93,45 +93,48 @@ const initializePlayers = () => {
         provider.library = HLS;
       }
     });
-    // Clip start/end handling
+    // Reset to clip start after clip ends to allow replay
     const clipStartAttr = player.getAttribute("data-clip-start");
     const clipEndAttr = player.getAttribute("data-clip-end");
 
-    if (clipStartAttr || clipEndAttr) {
-      const clipStart = clipStartAttr ? parseFloat(clipStartAttr) : 0;
-      const clipEnd = clipEndAttr ? parseFloat(clipEndAttr) : Infinity;
-      let loopPending = false;
+    if (clipStartAttr && clipEndAttr) {
+      const clipStart = parseFloat(clipStartAttr);
+      const clipEnd = parseFloat(clipEndAttr);
+      const clipDuration = clipEnd - clipStart;
 
-      const setupClipHandling = (video: HTMLVideoElement) => {
-        video.addEventListener("timeupdate", () => {
-          if (loopPending) return;
-          if (video.currentTime < clipStart) {
-            video.currentTime = clipStart;
-            return;
-          }
-          if (clipEnd !== Infinity && video.currentTime >= clipEnd - 0.3) {
-            loopPending = true;
-            video.pause();
-            video.currentTime = clipStart;
-            setTimeout(() => {
-              loopPending = false;
-            }, 500);
+      if (
+        !Number.isNaN(clipStart) &&
+        !Number.isNaN(clipEnd) &&
+        clipEnd > clipStart
+      ) {
+        let clipFinished = false;
+
+        player.addEventListener("timeupdate", () => {
+          const media = player as any;
+          const currentTime = media.currentTime ?? 0;
+
+          if (!clipFinished && currentTime >= clipDuration - 0.05) {
+            clipFinished = true;
+            media.pause();
+            media.currentTime = 0;
           }
         });
-      };
 
-      const existingVideo = player.querySelector("video");
-      if (existingVideo) {
-        setupClipHandling(existingVideo as HTMLVideoElement);
-      } else {
-        const observer = new MutationObserver(() => {
-          const video = player.querySelector("video");
-          if (video) {
-            observer.disconnect();
-            setupClipHandling(video as HTMLVideoElement);
+        player.addEventListener("play", () => {
+          const media = player as any;
+
+          if (clipFinished || media.currentTime >= clipDuration - 0.05) {
+            media.currentTime = 0;
+            clipFinished = false;
           }
         });
-        observer.observe(player, { childList: true, subtree: true });
+
+        player.addEventListener("seeking", () => {
+          const media = player as any;
+          if (media.currentTime > clipDuration) {
+            media.currentTime = 0;
+          }
+        });
       }
     }
   });

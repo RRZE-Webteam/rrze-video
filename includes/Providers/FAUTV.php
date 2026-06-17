@@ -58,11 +58,11 @@ class FAUTV
      */
     public static function generate_fau_html($data, $id)
     {
-        $poster = Utils\Utils::evaluatePoster($data, $id);
         $has_clip  = ($data['clipstart'] !== 0 || $data['clipend'] !== 0);
-        $clipstart = $data['clipstart'] !== 0 ? 'data-clip-start="' . $data['clipstart'] . '"' : '';
-        $clipend   = $data['clipend']   !== 0 ? 'data-clip-end="'   . $data['clipend']   . '"' : '';
-        $loop_attr = ($data['loop'] == 1 && !$has_clip) ? 'loop="true"' : 'loop="false"';
+        $clipstart = $data['clipstart'] !== 0 ? 'clip-start-time="' . $data['clipstart'] . '" data-clip-start="' . $data['clipstart'] . '"' : '';
+        $clipend   = $data['clipend']   !== 0 ? 'clip-end-time="' . $data['clipend'] . '" data-clip-end="' . $data['clipend'] . '"' : '';
+        $loop_attr = ($data['loop'] == 1 && !$has_clip) ? 'loop' : '';
+        $poster    = Utils\Utils::evaluatePoster($data, $id);
 
         $res = [];
 

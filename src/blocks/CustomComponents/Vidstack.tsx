@@ -2,10 +2,12 @@
 // Import WordPress Dependencies
 import {useState, useEffect, useRef, memo} from "@wordpress/element";
 
+import HLS from "hls.js";
 // Import Vidstack Dependencies
 import {
   MediaPlayer,
   MediaProvider,
+  isHLSProvider,
   isYouTubeProvider,
   useMediaState,
   Track,
@@ -13,11 +15,13 @@ import {
   type VTTContent,
   type MediaPlayerInstance,
 } from "@vidstack/react";
+
 import {
   defaultLayoutIcons,
   DefaultVideoLayout,
   DefaultAudioLayout,
 } from "@vidstack/react/player/layouts/default";
+
 import {Poster} from "@vidstack/react";
 
 // Import Types
@@ -68,13 +72,23 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
 
     ///////////////////////////////
     // Use Effects
-
+    const hasJustEndedRef = useRef(false);
     const MediaStateObserver: React.FC = () => {
       const paused = useMediaState("paused");
       const currentTime = useMediaState("currentTime");
       const clipStartTime = useMediaState("clipStartTime");
       const clipEndTime = useMediaState("clipEndTime");
       const clipDuration = useMediaState("duration");
+      const ended = useMediaState("ended");
+
+      // Reset to clip start when clip has ended
+      useEffect(() => {
+        if (ended && player.current) {
+          hasJustEndedRef.current = true;
+          player.current.pause();
+          player.current.currentTime = 0;
+        }
+      }, [ended]);
 
       useEffect(() => {
         if (paused && onTimeUpdate) {
@@ -88,6 +102,21 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
       }, [paused, currentTime, clipStartTime, clipEndTime]);
 
       return null;
+    };
+
+    const handlePlay = () => {
+      if (!player.current) return;
+
+      const current = player.current.currentTime ?? 0;
+      const duration = player.current.duration ?? 0;
+
+      if (
+        hasJustEndedRef.current ||
+        (duration > 0 && current >= duration - 0.05)
+      ) {
+        player.current.currentTime = 0;
+        hasJustEndedRef.current = false;
+      }
     };
 
     useEffect(() => {
@@ -169,6 +198,9 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
       if (isYouTubeProvider(provider)) {
         provider.cookies = true;
       }
+      if (isHLSProvider(provider)) {
+        provider.library = HLS; // ← neu
+      }
     };
 
     const videoAspectRatio = viewType === 'video' && aspectratio
@@ -193,10 +225,11 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
         crossOrigin
         playsInline
         viewType={viewType}
+        onPlay={handlePlay}
       >
         <MediaProvider>
-          {viewType === 'video' && (
-            <Poster src={poster} alt="" className="vds-poster"/>
+          {viewType === "video" && (
+            <Poster src={poster} alt="" className="vds-poster" />
           )}
           {markers && markers.length > 0 && (
             <Track
@@ -208,10 +241,10 @@ const RRZEVidstackPlayer: React.FC<CustomVidStackProps> = memo(
             />
           )}
         </MediaProvider>
-        <MediaStateObserver/>
+        <MediaStateObserver />
         {/* Layouts */}
-        <DefaultAudioLayout icons={defaultLayoutIcons}/>
-        <DefaultVideoLayout icons={defaultLayoutIcons}/>
+        <DefaultAudioLayout icons={defaultLayoutIcons} />
+        <DefaultVideoLayout icons={defaultLayoutIcons} />
       </MediaPlayer>
     );
   },
