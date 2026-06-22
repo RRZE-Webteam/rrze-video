@@ -55,14 +55,14 @@ const initializePlayers = () => {
   }
 
   players.forEach((player) => {
-    if (player.dataset.rrzeVideoInitialized === 'true') {
+    if (player.dataset.rrzeVideoInitialized === "true") {
       return;
     }
 
-    player.dataset.rrzeVideoInitialized = 'true';
+    player.dataset.rrzeVideoInitialized = "true";
 
     const container = player.closest<HTMLElement>(
-      '.rrze-video-container[data-video-id]'
+      ".rrze-video-container[data-video-id]",
     );
     const chapterMarkers = parseChapterMarkers(container);
 
@@ -78,21 +78,65 @@ const initializePlayers = () => {
 
       // Add JSON chapter markers to the media player using the Track API.
       player.textTracks.add({
-        type: 'json',
-        kind: 'chapters',
-        language: 'en-US',
+        type: "json",
+        kind: "chapters",
+        language: "en-US",
         default: true,
         content,
       });
     }
 
     // Add support for HLS playback.
-    player.addEventListener('provider-change', (event: CustomEvent) => {
+    player.addEventListener("provider-change", (event: CustomEvent) => {
       const provider = event.detail;
       if (isHLSProvider(provider)) {
         provider.library = HLS;
       }
     });
+    // Reset to clip start after clip ends to allow replay
+    const clipStartAttr = player.getAttribute("data-clip-start");
+    const clipEndAttr = player.getAttribute("data-clip-end");
+
+    if (clipStartAttr && clipEndAttr) {
+      const clipStart = parseFloat(clipStartAttr);
+      const clipEnd = parseFloat(clipEndAttr);
+      const clipDuration = clipEnd - clipStart;
+
+      if (
+        !Number.isNaN(clipStart) &&
+        !Number.isNaN(clipEnd) &&
+        clipEnd > clipStart
+      ) {
+        let clipFinished = false;
+
+        player.addEventListener("timeupdate", () => {
+          const media = player as any;
+          const currentTime = media.currentTime ?? 0;
+
+          if (!clipFinished && currentTime >= clipDuration - 0.05) {
+            clipFinished = true;
+            media.pause();
+            media.currentTime = 0;
+          }
+        });
+
+        player.addEventListener("play", () => {
+          const media = player as any;
+
+          if (clipFinished || media.currentTime >= clipDuration - 0.05) {
+            media.currentTime = 0;
+            clipFinished = false;
+          }
+        });
+
+        player.addEventListener("seeking", () => {
+          const media = player as any;
+          if (media.currentTime > clipDuration) {
+            media.currentTime = 0;
+          }
+        });
+      }
+    }
   });
 };
 

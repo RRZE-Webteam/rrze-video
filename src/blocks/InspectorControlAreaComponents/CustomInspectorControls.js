@@ -2,6 +2,7 @@
 import { __ } from "@wordpress/i18n";
 import {
   Button,
+  Notice,
   PanelBody,
   BaseControl,
   ToggleControl,
@@ -112,6 +113,9 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
     const url = event.target.value;
     setInputURL(url);
   };
+
+  const clipStartInvalid = tempClipEnd > 0 && tempClipStart >= tempClipEnd;
+
 
   return (
     <InspectorControls>
@@ -310,62 +314,99 @@ const CustomInspectorControls = ({ attributes, setAttributes }) => {
           setAttributes={setAttributes}
         />
       </PanelBody>
-      {attributes.provider === "fauvideo" && (
-        <PanelBody
-          title={__("Player controls", "rrze-video")}
-          initialOpen={false}
-        >
-          <Spacer>
-            <Heading level={3}>{__("Loop mode", "rrze-video")}</Heading>
-            <Text>
-              {__(
-                `Activates the loop feature. The video will be played in a loop.`,
-                "rrze-video",
-              )}
-            </Text>
-          </Spacer>
-          <ToggleControl
-            checked={attributes.loop}
-            onChange={(loop) => setAttributes({ loop: loop })}
-            label={__("Activate looping", "rrze-video")}
-          />
-          <Spacer>
-            <Text>
-              {__(
-                `Crops the video to a specific section. The video will start and end at the specified times. The duration of the video will update accordingly.`,
-                "rrze-video",
-              )}
-            </Text>
-            <NumberControl
-              label={__("Start of the looping section", "rrze-video")}
-              value={tempClipStart}
-              onChange={(clipstart) => setTempClipStart(clipstart)}
-              min={0}
-            />
-            <NumberControl
-              label={__("End of the looping section", "rrze-video")}
-              value={tempClipEnd}
-              onChange={(clipend) => setTempClipEnd(clipend)}
-              min={0}
-            />
-            <Button
-              isPrimary
-              disabled={
-                tempClipStart === attributes.clipstart &&
-                tempClipEnd === attributes.clipend
-              }
-              onClick={() =>
-                setAttributes({
-                  clipstart: tempClipStart,
-                  clipend: tempClipEnd,
-                })
-              }
+      {attributes.provider === "fauvideo" &&
+        (() => {
+          const hasClip =
+            (attributes.clipstart ?? 0) !== 0 ||
+            (attributes.clipend ?? 0) !== 0;
+          const hasLoop = !!attributes.loop;
+
+          return (
+            <PanelBody
+              title={__("Playback Settings", "rrze-video")}
+              initialOpen={false}
             >
-              {__("Update loop settings", "rrze-video")}
-            </Button>
-          </Spacer>
-        </PanelBody>
-      )}
+              {/* Loop section */}
+              <Spacer>
+                <Heading level={3}>{__("Loop mode", "rrze-video")}</Heading>
+              </Spacer>
+              {hasClip ? (
+                <Notice status="warning" isDismissible={false}>
+                  {__(
+                    "Loop is not available when clip times are set. Remove clip times first.",
+                    "rrze-video",
+                  )}
+                </Notice>
+              ) : (
+                <ToggleControl
+                  checked={attributes.loop}
+                  onChange={(loop) => setAttributes({ loop: loop })}
+                  label={__("Activate looping", "rrze-video")}
+                />
+              )}
+
+              <Divider />
+
+              {/* Clip section */}
+              <Spacer>
+                <Heading level={3}>{__("Clip mode", "rrze-video")}</Heading>
+                <Text style={{ marginBottom: "0.75rem", display: "block" }}>
+                  {__("Crops the video to a specific section.", "rrze-video")}
+                </Text>
+              </Spacer>
+              {hasLoop ? (
+                <Notice status="warning" isDismissible={false}>
+                  {__(
+                    "Clip settings are not available when loop mode is active. Deactivate loop first.",
+                    "rrze-video",
+                  )}
+                </Notice>
+              ) : (
+                <>
+                  <NumberControl
+                    label={__("Clip start time (seconds)", "rrze-video")}
+                    value={tempClipStart}
+                    onChange={(clipstart) =>
+                      setTempClipStart(parseInt(clipstart, 10) || 0)
+                    }
+                    min={0}
+                  />
+                  <NumberControl
+                    label={__("Clip end time (seconds)", "rrze-video")}
+                    value={tempClipEnd}
+                    onChange={(clipend) =>
+                      setTempClipEnd(parseInt(clipend, 10) || 0)
+                    }
+                    min={0}
+                  />
+
+                  {clipStartInvalid && (
+                    <Notice status="error" isDismissible={false}>
+                      {__("Start time must be less than end time.", "rrze-video",)}
+                    </Notice>
+                  )}
+
+                  <Button
+                    isPrimary
+                    disabled={
+                    clipStartInvalid ||
+                      (tempClipStart === attributes.clipstart &&
+                      tempClipEnd === attributes.clipend)
+                    }
+                    onClick={() =>
+                      setAttributes({
+                        clipstart: tempClipStart,
+                        clipend: tempClipEnd,
+                      })
+                    }
+                  >
+                    {__("Apply clip settings", "rrze-video")}
+                  </Button>
+                </>
+              )}
+            </PanelBody>
+          );
+        })()}
     </InspectorControls>
   );
 };
